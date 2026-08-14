@@ -1,0 +1,1 @@
+{"version":3,"file":"tsdown-plugin.d.ts","sourceRoot":"","sources":["../../src/tsdown-plugin.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AAOH,0HAA0H;AAC1H,UAAU,YAAY;IACpB,IAAI,EAAE,MAAM,CAAA;IACZ,WAAW,EAAE,CAAC,OAAO,EAAE;QAAE,GAAG,CAAC,EAAE,MAAM,CAAA;KAAE,KAAK,IAAI,CAAA;CACjD;AAED;;;GAGG;AACH,wBAAgB,YAAY,IAAI,YAAY,CA8B3C"}

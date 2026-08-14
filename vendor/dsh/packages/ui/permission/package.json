@@ -1,0 +1,64 @@
+{
+  "name": "@deepseek-ai/dsh-permission",
+  "description": "User-facing permission presets (ctx.permission) for the DeepSeek Harness: one product-level Permissions select bundling the sandbox-mode and approval-policy knobs, written through to their own session events",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./lib/types/types.js"
+    },
+    "./client": {
+      "types": "./lib/types/client.d.ts",
+      "default": "./lib/types/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "BSD-3-Clause",
+  "peerDependencies": {
+    "@deepseek-ai/dsh-bash": "^0.0.1",
+    "@deepseek-ai/dsh-commands": "^0.0.1",
+    "@deepseek-ai/dsh-invariants": "^0.0.1",
+    "@deepseek-ai/dsh-sandbox": "^0.0.1",
+    "@deepseek-ai/dsh-sandbox-policy": "^0.0.1",
+    "@deepseek-ai/dsh-session": "^0.0.1",
+    "@deepseek-ai/dsh-session-projection": "^0.0.1",
+    "@deepseek-ai/dsh-settings": "^0.0.1",
+    "@deepseek-ai/dsh-user-approval": "^0.0.1",
+    "cordis": "^4.0.0-rc.7"
+  },
+  "dependencies": {
+    "schemastery": "^3.18.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@deepseek-ai/dsh-bash": "file:../../bash/bash",
+    "@deepseek-ai/dsh-commands": "file:../commands",
+    "@deepseek-ai/dsh-invariants": "file:../../support/invariants",
+    "@deepseek-ai/dsh-sandbox": "file:../../sandbox/sandbox",
+    "@deepseek-ai/dsh-sandbox-policy": "file:../../sandbox/sandbox-policy",
+    "@deepseek-ai/dsh-session": "file:../../core/session",
+    "@deepseek-ai/dsh-session-projection": "file:../../session-projection/session-projection",
+    "@deepseek-ai/dsh-settings": "file:../../settings/settings",
+    "@deepseek-ai/dsh-user-approval": "file:../user-approval",
+    "cordis": "^4.0.0-rc.7"
+  }
+}

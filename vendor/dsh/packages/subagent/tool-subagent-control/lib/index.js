@@ -1,0 +1,67 @@
+import { defineTool } from "@deepseek-ai/dsh-tools";
+import { SessionId } from "@deepseek-ai/dsh-session";
+//#region lib/types/index.js
+/**
+* The globally named `send_message` tool: a thin model-facing adapter over
+* `ctx.subagents.followup()`. It performs no lifecycle routing of its own —
+* residency and cold resume belong to the subagent service — and it lives apart
+* from the provider-bound `@deepseek-ai/dsh-tool-subagent` instances so multiple
+* delegation tools share one control tool.
+* @module @deepseek-ai/dsh-tool-subagent-control
+*/
+const name = "tool-subagent-control";
+const inject = ["tools", "subagents"];
+/**
+* Register the `send_message` tool.
+* @param ctx - context carrying the tool registry and subagent service.
+*/
+function apply(ctx) {
+	ctx.tools.register(defineTool({
+		name: "send_message",
+		description: "Send a message to a background subagent by its subagent id, continuing the same conversation. It becomes the subagent's next turn: if it is still working, the message waits until its current turn finishes, so it cannot redirect work already underway. This call returns no answer from the subagent — only confirmation that the message was delivered — so use it to give it more work. A failure means the message was NOT delivered.",
+		parameters: {
+			subagent_id: {
+				type: "string",
+				required: true,
+				description: "The subagent id returned when the background subagent was started."
+			},
+			message: {
+				type: "string",
+				required: true,
+				description: "The message to deliver to the subagent."
+			}
+		},
+		output: {
+			schema: {
+				type: "object",
+				additionalProperties: false,
+				properties: { messageId: {
+					type: "string",
+					required: true
+				} }
+			},
+			render: (args, _value) => [{
+				type: "text",
+				text: `message queued as the next turn for subagent ${args.subagent_id}`
+			}]
+		},
+		async execute(args, exec) {
+			const parent = exec.agent;
+			if (!parent) throw new Error("send_message requires a calling agent (exec.agent was undefined)");
+			const message = [{
+				type: "text",
+				text: args.message
+			}];
+			return { messageId: await ctx.subagents.followup(parent, SessionId(args.subagent_id), message, {
+				source: {
+					kind: "coordinator",
+					form: "relay",
+					senderSessionId: parent.id
+				},
+				signal: exec.signal
+			}) };
+		}
+	}));
+}
+//#endregion
+export { apply, inject, name };

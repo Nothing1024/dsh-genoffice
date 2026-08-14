@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "incremental": false,
+    "emitDeclarationOnly": true,
+    "rootDir": ".",
+    "outDir": "lib/types",
+    "paths": {
+      "@deepseek-ai/dsh-document": [
+        "../document/src/index.ts"
+      ],
+      "@deepseek-ai/dsh-document/client": [
+        "../document/src/client/index.ts"
+      ],
+      "dsh-better-sidebar": [
+        "../../../../better-sidebar/plugin/lib/types/index.d.ts"
+      ]
+    }
+  },
+  "include": [
+    "src"
+  ]
+}

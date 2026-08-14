@@ -1,0 +1,116 @@
+import { describe, expect, it, vi } from 'vitest'
+import { existsSync, readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { CAPABILITY, EXPOSED_COUNT, isExposed } from '../src/host/capability.ts'
+import { createControlTools, registeredToolNames } from '../src/host/tools.ts'
+import { apply as applyHost } from '../src/index.ts'
+import { CONTROL_TOOL_TABLE } from '../src/host/tool-schema.ts'
+
+const fakeAssets = {
+  available: true,
+  publish: async () => ({ url: 'http://127.0.0.1:9/dsh-artifact/genoffice-asset/t', token: 't', dispose: () => {} }),
+}
+
+const UP = resolve(import.meta.dirname, '../../../../../../genoffice/upstream')
+
+describe('capability filter', () => {
+  it('exposes 51 tools when the asset channel is available', () => {
+    expect(EXPOSED_COUNT).toBe(51)
+    expect(Object.keys(CAPABILITY)).toHaveLength(81)
+    const names = registeredToolNames({ assets: fakeAssets })
+    expect(names).toHaveLength(51)
+    expect(names).toContain('docx_insert_image')
+    expect(names).not.toContain('pptx_add_chart')
+    expect(names).not.toContain('docx_web_search')
+    expect(names).not.toContain('docx_image_search')
+    expect(names).not.toContain('pptx_generate_image')
+  })
+
+  it('skips insert_image without httpServer and still registers the other 50', () => {
+    const names = registeredToolNames()
+    expect(names).toHaveLength(50)
+    expect(names).not.toContain('docx_insert_image')
+  })
+
+  it('DSH_GENOFFICE_ALL_TOOLS registers 81 and labels egress tools', () => {
+    const tools = createControlTools({ allTools: true, assets: fakeAssets })
+    expect(tools).toHaveLength(81)
+    const search = tools.find((t) => t.name === 'docx_web_search')
+    expect(search?.description).toMatch(/会向公网发起请求/)
+  })
+
+  it('handover wins over status: available + handover stays unregistered', () => {
+    expect(isExposed({
+      status: 'available',
+      netEgress: false,
+      handover: 'dsh:pending',
+      evidence: 'test',
+    })).toBe(false)
+    expect(registeredToolNames({ assets: fakeAssets })).not.toContain('pptx_generate_image')
+  })
+
+  it('exposed set has zero netEgress and no public url parameter', () => {
+    for (const [key, entry] of Object.entries(CAPABILITY)) {
+      if (!isExposed(entry)) continue
+      expect(entry.netEgress, `${key} leaked netEgress`).toBe(false)
+    }
+    const names = new Set(registeredToolNames({ assets: fakeAssets }))
+    for (const row of CONTROL_TOOL_TABLE) {
+      if (!names.has(row.name)) continue
+      expect(row.parameters.url, `${row.name} still accepts url (BR-015)`).toBeUndefined()
+    }
+  })
+})
+
+describe('bridge-missing drift', () => {
+  const bridge = resolve(UP, 'apps/slides/src/renderer/web-bridge.ts')
+  const present = existsSync(bridge)
+
+  it.skipIf(!present)('slides bridge-missing skills are still stubs (can un-skip when upstream implements)', () => {
+    const src = readFileSync(bridge, 'utf8')
+    const hints: Record<string, string> = {
+      add_table: 'addTable',
+      add_chart: 'addChart',
+      add_smartart: 'addSmartArt',
+      edit_table_cell: 'editTableCell',
+      edit_table_structure: 'tableStructure',
+      edit_table_style: 'editTableStyle',
+      edit_chart: 'editChart',
+      insert_web_image: 'insertImageUrl',
+      replace_image: 'replacePictureUrl',
+      crop_image: 'editPictureSrcRect',
+      set_picture_opacity: 'editPictureOpacity',
+      ungroup_element: 'ungroupElement',
+    }
+    for (const [skill, hint] of Object.entries(hints)) {
+      const cap = CAPABILITY[`slides:${skill}`]
+      if (cap?.status !== 'bridge-missing') continue
+      expect(
+        src.includes(`notAvailable('${hint}')`),
+        `${skill} 的桥接 ${hint} 已不是 stub，可以放开该工具`,
+      ).toBe(true)
+    }
+  })
+})
+
+describe('dsh web_search exists', () => {
+  it('the vendored tool catalog still lists web_search', () => {
+    const catalog = resolve(
+      import.meta.dirname,
+      '../../../vendor/dsh/packages/core/tools/tests/gen-tool-catalog.spec.ts',
+    )
+    expect(existsSync(catalog)).toBe(true)
+    expect(readFileSync(catalog, 'utf8')).toContain("'web_search'")
+  })
+})
+
+describe('host apply without httpServer', () => {
+  it('does not throw', () => {
+    const ctx = {
+      inject: vi.fn(() => {}),
+      tools: { register: vi.fn() },
+    }
+    expect(() => applyHost(ctx as never)).not.toThrow()
+    expect(ctx.tools.register).toHaveBeenCalled()
+  })
+})

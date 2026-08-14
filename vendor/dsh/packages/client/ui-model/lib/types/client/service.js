@@ -1,0 +1,64 @@
+/**
+ * ModelService (`ctx.models`): the root owner of per-session
+ * {@link ModelDirectory} instances. Both selection entries (the /model popup
+ * and the composer model seat) resolve their session's directory through
+ * this service, which is what makes the dual entry one shared state.
+ *
+ * Per-session storage follows the client service pattern (SlashService /
+ * CommandService): a lazy service-internal map whose entry is deleted by the
+ * owning scope's disposer. The host `dsh-scope` ScopedLayers registry does
+ * not transplant here: it derives scope from the host carrier mechanism
+ * (object-keyed), while client scopes tag contexts with branded SessionId
+ * strings, and it models global+shadow named registries — this is a
+ * per-session singleton with no global layer to merge.
+ */
+import { Service } from 'cordis';
+import { ModelDirectory } from "./directory.js";
+/** The `ctx.models` session model-selection service. */
+export class ModelService extends Service {
+    static inject = ['connection', 'sessions'];
+    live = { directories: new Map() };
+    /**
+     * @param ctx - owning root context (the service registers itself as `models`).
+     */
+    constructor(ctx) {
+        super(ctx, 'models');
+        ctx.on('connection/reset', () => {
+            for (const directory of this.live.directories.values())
+                directory.resetConnected();
+        });
+        // Provider topology changed on the host (a settings-born route appeared
+        // or dropped): refresh every open directory in the background so pickers
+        // show the new catalog without a reopen. Failures stay on each store.
+        ctx.on('models/changed', () => {
+            for (const directory of this.live.directories.values()) {
+                directory.load().catch(() => undefined);
+            }
+        });
+    }
+    /**
+     * Resolve the per-session shared directory (lazy; the scope disposer
+     * removes and disposes it). Unknown sessions fail loud.
+     * @param sessionId - the owning session.
+     * @returns the resident directory both entries share.
+     */
+    directoryFor(sessionId) {
+        const { live } = this;
+        const existing = live.directories.get(sessionId);
+        if (existing !== undefined)
+            return existing;
+        const sessions = this.ctx.get('sessions');
+        const actx = sessions.scope(sessionId);
+        if (actx === undefined)
+            throw new Error(`ui-model: session "${String(sessionId)}" resolved no scope`);
+        const connection = this.ctx.get('connection');
+        const directory = new ModelDirectory(connection.api.sessions, sessionId, () => sessions.subagentAddress(sessionId) === undefined);
+        live.directories.set(sessionId, directory);
+        actx.effect(() => () => {
+            directory.dispose();
+            live.directories.delete(sessionId);
+        }, 'ui-model: session directory');
+        return directory;
+    }
+}
+//# sourceMappingURL=service.js.map

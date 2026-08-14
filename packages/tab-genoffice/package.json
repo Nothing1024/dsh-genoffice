@@ -1,0 +1,60 @@
+{
+  "name": "@deepseek-ai/dsh-tab-genoffice",
+  "description": "GenOffice sidebar tab artifact: a relay-backed file browser + control-mode preview (docx via a FileViewer; md stays in the list tab). Registers on ctx.betterSidebar as an optional consumer of dsh-better-sidebar.",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/src/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "types": "./lib/types/src/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "lib/client.js.map",
+    "lib/types/**/*.d.ts"
+  ],
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json && tsdown"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "@deepseek-ai/dsh-client-locale": "file:../../vendor/dsh/packages/client/locale",
+    "@deepseek-ai/dsh-client-runtime": "file:../../vendor/dsh/packages/client/runtime",
+    "@deepseek-ai/dsh-client-ui-slots": "file:../../vendor/dsh/packages/client/ui-slots"
+  },
+  "dsh": {
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-locale"
+      ],
+      "platform": "web"
+    }
+  },
+  "dshClient": {
+    "inject": [
+      "@deepseek-ai/dsh-client-runtime",
+      "@deepseek-ai/dsh-client-locale"
+    ],
+    "platform": "web"
+  },
+  "peerDependencies": {
+    "cordis": "^4.0.0-rc.7",
+    "react": "^18.2.0",
+    "dsh-better-sidebar": "*"
+  },
+  "peerDependenciesMeta": {
+    "dsh-better-sidebar": { "optional": true }
+  }
+}

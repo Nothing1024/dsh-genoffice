@@ -1,0 +1,59 @@
+{
+  "name": "@deepseek-ai/dsh-client-ui-skill",
+  "description": "Skill reference source: '/' menu candidates from skill.list, inserts <skill>name</skill> references",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/types/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "dshClient": {
+    "inject": [
+      "@deepseek-ai/dsh-client-runtime",
+      "@deepseek-ai/dsh-client-ui-slash"
+    ],
+    "platform": "web"
+  },
+  "scripts": {
+    "bundle": "tsdown",
+    "watch": "tsdown --watch"
+  },
+  "license": "BSD-3-Clause",
+  "peerDependencies": {
+    "@deepseek-ai/dsh-client-connection": "^0.0.1",
+    "@deepseek-ai/dsh-client-runtime": "^0.0.1",
+    "@deepseek-ai/dsh-client-ui-slash": "^0.0.1",
+    "@deepseek-ai/dsh-client-ui-slots": "^0.0.1",
+    "@deepseek-ai/dsh-invariants": "^0.0.1",
+    "cordis": "^4.0.0-rc.7"
+  },
+  "devDependencies": {
+    "@deepseek-ai/dsh-client-connection": "file:../connection",
+    "@deepseek-ai/dsh-client-runtime": "file:../runtime",
+    "@deepseek-ai/dsh-client-ui-slash": "file:../ui-slash",
+    "@deepseek-ai/dsh-client-ui-slots": "file:../ui-slots",
+    "@deepseek-ai/dsh-invariants": "file:../../support/invariants",
+    "cordis": "^4.0.0-rc.7"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/invariant.js",
+    "lib/client.js",
+    "lib/types/**/*.d.ts"
+  ]
+}
