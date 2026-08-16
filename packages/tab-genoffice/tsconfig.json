@@ -1,19 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": [
-    "src"
-  ],
   "compilerOptions": {
+    "noEmit": true,
     "paths": {
-      "@deepseek-ai/dsh-document": [
-        "../document/src/index.ts"
-      ],
-      "@deepseek-ai/dsh-document/client": [
-        "../document/src/client/index.ts"
-      ],
-      "dsh-better-sidebar": [
-        "../../../../better-sidebar/plugin/lib/types/index.d.ts"
-      ]
+      "@deepseek-ai/dsh-tab-genoffice/client": ["./src/client/index.ts"],
+      "@deepseek-ai/dsh-tab-genoffice": ["./src/index.ts"]
     }
-  }
+  },
+  "include": ["src", "tests"]
 }

@@ -1,9 +1,9 @@
 /**
  * External profile plugins do not share the web-app isolate map, so
- * `ctx.inject(['httpServer'])` stays PENDING and `ctx.httpServer` throws.
+ * `ctx.inject(['webServer'])` stays PENDING and `ctx.webServer` throws.
  * The reflect store is process-wide; look up by shape.
  */
-import type { Context } from 'cordis'
+import type { Context } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-host-webserver'
 import type {} from '@deepseek-ai/dsh-system-prompt'
 
@@ -18,10 +18,10 @@ export function lookupService<T>(ctx: Context, pred: (value: unknown) => value i
   return undefined
 }
 
-export function lookupHttpServer(ctx: Context): Context['httpServer'] | undefined {
+export function lookupWebServer(ctx: Context): Context['webServer'] | undefined {
   return lookupService(
     ctx,
-    (v): v is Context['httpServer'] =>
+    (v): v is Context['webServer'] =>
       typeof v === 'object' && v !== null && typeof (v as { register?: unknown }).register === 'function'
         && typeof (v as { port?: unknown }).port === 'number',
   )

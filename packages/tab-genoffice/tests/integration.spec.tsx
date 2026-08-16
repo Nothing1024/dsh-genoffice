@@ -1,9 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/react'
-import { SlotTestRuntime } from '@deepseek-ai/dsh-client-test-runtime'
-import { LocaleService } from '@deepseek-ai/dsh-client-locale/client'
-import { apply as genofficeApply, inject as genofficeInject } from '@deepseek-ai/dsh-tab-genoffice/client'
+import { apply as genofficeApply } from '@deepseek-ai/dsh-tab-genoffice/client'
 import { ControlModeViewer } from '../src/tabs/control-mode.tsx'
 import { DocxControlViewer } from '../src/tabs/docx-control-viewer.tsx'
 import { CLAIMED_EXTS } from '../src/tabs/coexist.ts'
@@ -58,14 +56,49 @@ function fakeBetterSidebar() {
   }
 }
 
+/** A minimal locale double exposing the two faces `apply(ctx)` touches. */
+function fakeLocale(active: 'zh' | 'en' = 'zh') {
+  const dicts = new Map<string, { zh: Record<string, string>; en: Record<string, string> }>()
+  let current: 'zh' | 'en' = active
+  return {
+    bind: (ns: string) => (key: string) => dicts.get(ns)?.[current]?.[key] ?? key,
+    register: (ns: string, dict: { zh: Record<string, string>; en: Record<string, string> }) => {
+      dicts.set(ns, dict)
+      return () => { dicts.delete(ns) }
+    },
+    setActive(locale: 'zh' | 'en') { current = locale },
+  }
+}
+
+/**
+ * Lightweight Cordis-shaped bench for the registration contract. The full
+ * `@deepseek-ai/dsh-client-test-runtime` is an in-repository vitest suite
+ * (its README: the built lib re-exports the browser-loader client bundle,
+ * not importable under plain Node), so out-of-tree specs drive a small
+ * ctx with the two services `apply` touches: `locale` + optional
+ * `betterSidebar`. Registration/dispose semantics mirror cordis
+ * (`ctx.effect` runs the callback and collects the disposer).
+ */
 async function bench(withSidebar = true) {
-  const runtime = await SlotTestRuntime.create()
-  const locale = new LocaleService(runtime.ctx)
-  runtime.provide('locale', locale)
   const sidebar = fakeBetterSidebar()
-  if (withSidebar) runtime.provide('betterSidebar', sidebar)
-  const plugin = await runtime.mount({ inject: [...genofficeInject], apply: genofficeApply })
-  return { runtime, plugin, sidebar }
+  const disposers: Array<() => void> = []
+  const locale = fakeLocale()
+  const ctx = {
+    locale,
+    effect: (fn: () => void | (() => void)) => {
+      const d = fn()
+      if (typeof d === 'function') disposers.push(d)
+    },
+    inject: (names: string[], cb: (c: unknown) => void) => {
+      if (withSidebar && names.includes('betterSidebar')) cb({ ...ctx, betterSidebar: sidebar })
+    },
+  }
+  genofficeApply(ctx as never)
+  return {
+    sidebar,
+    runtime: { dispose: () => { for (const d of disposers.splice(0)) d() } },
+    plugin: { dispose: () => { for (const d of disposers.splice(0)) d() } },
+  }
 }
 
 function stubRelay(ok: boolean): void {
@@ -100,10 +133,24 @@ describe('genoffice better-sidebar registration', () => {
     await b.runtime.dispose()
   })
 
-  it('skips registration without throwing when betterSidebar is absent (BR-003)', async () => {
+  it('optional peer: skips registration without throwing when betterSidebar is absent (BR-003)', async () => {
     const b = await bench(false)
     expect(b.sidebar.registered).toHaveLength(0)
     await b.runtime.dispose()
+  })
+})
+
+describe('genoffice locale dictionaries', () => {
+  it('registers the tabs.genoffice namespace with zh/en both resolved after apply', () => {
+    const locale = fakeLocale()
+    const ctx = { locale, effect: (fn: () => void | (() => void)) => { fn() }, inject: () => {} }
+    genofficeApply(ctx as never)
+    // zh active → zh dict resolves the key; en active → en dict resolves it too.
+    expect(locale.bind('tabs.genoffice')('tab.genoffice')).toBe('GenOffice')
+    locale.setActive('en')
+    expect(locale.bind('tabs.genoffice')('tab.genoffice')).toBe('GenOffice')
+    // A key outside the registered namespace falls back to the key itself.
+    expect(locale.bind('tabs.genoffice')('tab.missing')).toBe('tab.missing')
   })
 })
 
@@ -119,7 +166,7 @@ describe('coexist degrade modes', () => {
     const sidebar = fakeBetterSidebar()
     sidebar.viewers.push(builtin)
     const props: FileViewerProps = {
-      ctx: { betterSidebar: sidebar } as FileViewerProps['ctx'],
+      ctx: { betterSidebar: sidebar } as unknown as FileViewerProps['ctx'],
       store: {} as FileViewerProps['store'],
       scope: { sessionId: 's' },
       path: '/tmp/a.docx',

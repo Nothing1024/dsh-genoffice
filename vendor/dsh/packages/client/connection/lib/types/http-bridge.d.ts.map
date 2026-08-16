@@ -1,1 +1,0 @@
-{"version":3,"file":"http-bridge.d.ts","sourceRoot":"","sources":["../../src/http-bridge.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAEH,OAAO,KAAK,EAAE,eAAe,EAAE,cAAc,EAAE,MAAM,WAAW,CAAA;AAEhE;;;;;;GAMG;AACH,wBAAsB,MAAM,CAAC,GAAG,EAAE,eAAe,EAAE,GAAG,EAAE,cAAc,EAAE,UAAU,EAAE;IAAE,KAAK,EAAE,OAAO,KAAK,CAAA;CAAE,GAAG,OAAO,CAAC,IAAI,CAAC,CA4C1H"}

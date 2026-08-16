@@ -1,0 +1,12 @@
+# dsh-tab-genoffice bundle patch
+#
+# `dsh.bundle.patch` layer of the published package: `dsh plugin --profile
+# <name> add @deepseek-ai/dsh-tab-genoffice` appends this single `insert`
+# row to the bundle stack; profile boot merges it like a manual mount line.
+# The plugin row id must not collide with dsh-better-sidebar's `better-sidebar`.
+#
+# If the profile still carries a manual mount line for this plugin, remove it
+# before switching to the bundle channel to avoid double-mounting.
+- insert:
+    - id: tab-genoffice
+      name: '@deepseek-ai/dsh-tab-genoffice'

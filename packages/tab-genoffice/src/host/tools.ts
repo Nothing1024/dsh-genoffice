@@ -166,7 +166,7 @@ async function executeInsertImage(
   const path = String(input.path ?? '')
   const imagePath = String(input.imagePath ?? '')
   if (assets === undefined || assets === null || !assets.available) {
-    fail('资产通道不可用：当前组合没有 httpServer', path, 'capability')
+    fail('资产通道不可用：当前组合没有 webServer', path, 'capability')
   }
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
     fail('插图只接受本机路径，不接受公网 URL（BR-016）', path, 'local')

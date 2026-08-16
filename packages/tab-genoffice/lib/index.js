@@ -11,7 +11,7 @@ function lookupService(ctx, pred) {
 		if (pred(value)) return value;
 	}
 }
-function lookupHttpServer(ctx) {
+function lookupWebServer(ctx) {
 	return lookupService(ctx, (v) => typeof v === "object" && v !== null && typeof v.register === "function" && typeof v.port === "number");
 }
 function lookupSystemPrompt(ctx) {
@@ -21,7 +21,7 @@ function lookupSystemPrompt(ctx) {
 //#region src/host/assets.ts
 /**
 * One-shot loopback asset channel for `docx_insert_image` (BR-016).
-* Token dies on first GET or after TTL; missing httpServer → channel unavailable.
+* Token dies on first GET or after TTL; missing webServer → channel unavailable.
 *
 * Reads bytes with node:fs — this plugin has no `ctx.fs` service.
 */
@@ -131,7 +131,7 @@ async function serveAsset(store, req, res) {
 /**
 * Prefer `reflect.get` when the service is already provided (external plugins
 * often cannot `inject()` undeclared services). Fall back to nested inject so
-* Electron compositions without httpServer still load.
+* Electron compositions without webServer still load.
 */
 function createAssetChannel(ctx) {
 	const store = createAssetStore();
@@ -157,15 +157,15 @@ function createAssetChannel(ctx) {
 			store.clear();
 		};
 	};
-	const existing = lookupHttpServer(ctx);
+	const existing = lookupWebServer(ctx);
 	if (existing !== void 0) ctx.effect(() => mount(existing));
-	else ctx.inject(["httpServer"], (c) => mount(c.httpServer));
+	else ctx.inject(["webServer"], (c) => mount(c.webServer));
 	return {
 		get available() {
 			return bind.ready;
 		},
 		publish(absPath) {
-			if (!bind.ready) return Promise.reject(/* @__PURE__ */ new Error("资产通道不可用：当前组合没有 httpServer"));
+			if (!bind.ready) return Promise.reject(/* @__PURE__ */ new Error("资产通道不可用：当前组合没有 webServer"));
 			return store.publish(absPath, {
 				host: bind.host,
 				port: bind.port
@@ -722,12 +722,12 @@ function applySyncRoute(ctx) {
 			}
 		});
 	};
-	const existing = lookupHttpServer(ctx);
+	const existing = lookupWebServer(ctx);
 	if (existing !== void 0) {
 		ctx.effect(() => mount(existing));
 		return;
 	}
-	ctx.inject(["httpServer"], (c) => mount(c.httpServer));
+	ctx.inject(["webServer"], (c) => mount(c.webServer));
 }
 //#endregion
 //#region src/host/errors.ts
@@ -2548,7 +2548,7 @@ function callKindFor(entry) {
 async function executeInsertImage(entry, input, signal, assets) {
 	const path = String(input.path ?? "");
 	const imagePath = String(input.imagePath ?? "");
-	if (assets === void 0 || assets === null || !assets.available) fail("资产通道不可用：当前组合没有 httpServer", path, "capability");
+	if (assets === void 0 || assets === null || !assets.available) fail("资产通道不可用：当前组合没有 webServer", path, "capability");
 	if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) fail("插图只接受本机路径，不接受公网 URL（BR-016）", path, "local");
 	let published;
 	try {
@@ -2640,7 +2640,7 @@ function createControlTools(opts = {}) {
 //#region src/index.ts
 /** Plugin name (host half). */
 const name = "dsh-tab-genoffice";
-/** Required services: the host tool registry. httpServer / systemPrompt are nested. */
+/** Required services: the host tool registry. webServer / systemPrompt are nested. */
 const inject = ["tools"];
 /**
 * Plugin host body.

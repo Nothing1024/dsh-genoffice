@@ -1,0 +1,16 @@
+{
+  "id": "dsh-external/dsh-tab-genoffice",
+  "version": "0.2.0",
+  "main": "./lib/index.js",
+  "description": "GenOffice sidebar tab: relay-backed file browser + control-mode docx/xlsx/pptx preview. Registers on ctx.betterSidebar (optional peer) and exposes the genoffice control tools on the host half.",
+  "engines": {
+    "dsh": ">=0.0.1"
+  },
+  "contributes": {
+    "tools": [],
+    "skills": []
+  },
+  "client": {
+    "main": "./lib/client.js"
+  }
+}

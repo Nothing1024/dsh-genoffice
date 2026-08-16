@@ -1,0 +1,30 @@
+{
+  // Type-check plane for the dsh-genoffice plugin (self-contained, npm-based).
+  // Platform `@deepseek-ai/*` and `dsh-better-sidebar` resolve through the
+  // hoisted node_modules (pinned 0.1.0-rc.6 / 0.12.2). `allowImportingTsExtensions`
+  // + `rewriteRelativeImportExtensions` let src import sibling files with their
+  // real `.ts`/`.tsx` extension while tsc still emits `.js`-suffixed d.ts.
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["es2023", "dom", "dom.iterable"],
+    "jsx": "react-jsx",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+    "verbatimModuleSyntax": false,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "types": ["node"]
+  }
+}

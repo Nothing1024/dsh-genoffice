@@ -6,9 +6,9 @@
  * Host `*_save` also marks the window after a successful export.
  */
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import type { Context } from 'cordis'
+import type { Context } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-host-webserver'
-import { lookupHttpServer } from './lookup.ts'
+import { lookupWebServer } from './lookup.ts'
 
 export const SYNC_ROUTE = '/dsh-artifact/genoffice-sync'
 export const SYNC_WINDOW_MS = 8_000
@@ -73,17 +73,17 @@ export async function handleSyncRequest(req: IncomingMessage, res: ServerRespons
 }
 
 export function applySyncRoute(ctx: Context): void {
-  const mount = (http: Context['httpServer']): (() => void) => {
+  const mount = (http: Context['webServer']): (() => void) => {
     return http.register({
       kind: 'exact',
       path: SYNC_ROUTE,
       handler: (req, res) => { void handleSyncRequest(req, res) },
     })
   }
-  const existing = lookupHttpServer(ctx)
+  const existing = lookupWebServer(ctx)
   if (existing !== undefined) {
     ctx.effect(() => mount(existing))
     return
   }
-  ctx.inject(['httpServer'], (c) => mount(c.httpServer))
+  ctx.inject(['webServer'], (c) => mount(c.webServer))
 }

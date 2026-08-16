@@ -2,7 +2,7 @@
  * Deployment-boundary system prompt, generated from CAPABILITY (BR-002 / BR-015 / BR-017).
  * Nested inject so a composition without systemPrompt still loads.
  */
-import type { Context } from 'cordis'
+import type { Context } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-system-prompt'
 import { lookupSystemPrompt } from './lookup.ts'
 import {

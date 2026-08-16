@@ -1,6 +1,6 @@
 /**
  * One-shot loopback asset channel for `docx_insert_image` (BR-016).
- * Token dies on first GET or after TTL; missing httpServer → channel unavailable.
+ * Token dies on first GET or after TTL; missing webServer → channel unavailable.
  *
  * Reads bytes with node:fs — this plugin has no `ctx.fs` service.
  */
@@ -8,9 +8,9 @@ import { readFile, stat } from 'node:fs/promises'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { extname } from 'node:path'
 import { randomUUID } from 'node:crypto'
-import type { Context } from 'cordis'
+import type { Context } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-host-webserver'
-import { lookupHttpServer } from './lookup.ts'
+import { lookupWebServer } from './lookup.ts'
 
 export const ASSET_PREFIX = '/dsh-artifact/genoffice-asset'
 export const TOKEN_TTL_MS = 60_000
@@ -159,13 +159,13 @@ export async function serveAsset(
 /**
  * Prefer `reflect.get` when the service is already provided (external plugins
  * often cannot `inject()` undeclared services). Fall back to nested inject so
- * Electron compositions without httpServer still load.
+ * Electron compositions without webServer still load.
  */
 export function createAssetChannel(ctx: Context): AssetChannel {
   const store = createAssetStore()
   const bind = { host: '127.0.0.1', port: 0, ready: false }
 
-  const mount = (http: Context['httpServer']): (() => void) => {
+  const mount = (http: Context['webServer']): (() => void) => {
     bind.host = http.host === '0.0.0.0' ? '127.0.0.1' : http.host
     bind.port = http.port
     bind.ready = true
@@ -181,11 +181,11 @@ export function createAssetChannel(ctx: Context): AssetChannel {
     }
   }
 
-  const existing = lookupHttpServer(ctx)
+  const existing = lookupWebServer(ctx)
   if (existing !== undefined) {
     ctx.effect(() => mount(existing))
   } else {
-    ctx.inject(['httpServer'], (c) => mount(c.httpServer))
+    ctx.inject(['webServer'], (c) => mount(c.webServer))
   }
 
   return {
@@ -194,7 +194,7 @@ export function createAssetChannel(ctx: Context): AssetChannel {
     },
     publish(absPath) {
       if (!bind.ready) {
-        return Promise.reject(new Error('资产通道不可用：当前组合没有 httpServer'))
+        return Promise.reject(new Error('资产通道不可用：当前组合没有 webServer'))
       }
       return store.publish(absPath, { host: bind.host, port: bind.port })
     },

@@ -1,6 +1,5 @@
 packages:
-  - .
+  - packages/*
 nodeLinker: hoisted
-autoInstallPeers: false
 allowBuilds:
-  esbuild: set this to true or false
+  esbuild: true

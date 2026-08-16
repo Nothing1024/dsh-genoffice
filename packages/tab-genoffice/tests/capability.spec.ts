@@ -26,7 +26,7 @@ describe('capability filter', () => {
     expect(names).not.toContain('pptx_generate_image')
   })
 
-  it('skips insert_image without httpServer and still registers the other 50', () => {
+  it('skips insert_image without webServer and still registers the other 50', () => {
     const names = registeredToolNames()
     expect(names).toHaveLength(50)
     expect(names).not.toContain('docx_insert_image')
@@ -94,17 +94,20 @@ describe('bridge-missing drift', () => {
 })
 
 describe('dsh web_search exists', () => {
-  it('the vendored tool catalog still lists web_search', () => {
-    const catalog = resolve(
-      import.meta.dirname,
-      '../../../vendor/dsh/packages/core/tools/tests/gen-tool-catalog.spec.ts',
-    )
-    expect(existsSync(catalog)).toBe(true)
-    expect(readFileSync(catalog, 'utf8')).toContain("'web_search'")
+  it('the npm dsh-tools platform still references web_search', () => {
+    // Migration (BR-002): the vendored tool catalog under vendor/dsh is gone;
+    // the public source of truth is the installed @deepseek-ai/dsh-tools
+    // package. Assert the web_search tool family is still part of the
+    // platform's presentation vocabulary.
+    const toolsRoot = resolve(import.meta.dirname, '../../../node_modules/@deepseek-ai/dsh-tools')
+    expect(existsSync(toolsRoot)).toBe(true)
+    const presentation = resolve(toolsRoot, 'lib/types/presentation.d.ts')
+    expect(existsSync(presentation)).toBe(true)
+    expect(readFileSync(presentation, 'utf8')).toContain('web_search')
   })
 })
 
-describe('host apply without httpServer', () => {
+describe('host apply without webServer', () => {
   it('does not throw', () => {
     const ctx = {
       inject: vi.fn(() => {}),

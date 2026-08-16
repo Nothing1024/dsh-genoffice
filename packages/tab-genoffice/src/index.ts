@@ -2,7 +2,7 @@
  * Host half of the GenOffice tab artifact: control tools, deployment prompt,
  * loopback asset channel, and the post-save sync window route.
  */
-import type { Context } from 'cordis'
+import type { Context } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-host-webserver'
 import type {} from '@deepseek-ai/dsh-system-prompt'
 import { createAssetChannel } from './host/assets.ts'
@@ -13,7 +13,7 @@ import { createControlTools } from './host/tools.ts'
 /** Plugin name (host half). */
 export const name = 'dsh-tab-genoffice'
 
-/** Required services: the host tool registry. httpServer / systemPrompt are nested. */
+/** Required services: the host tool registry. webServer / systemPrompt are nested. */
 export const inject = ['tools']
 
 /**

@@ -109,6 +109,6 @@ export async function notifyHostSync(path: string): Promise<void> {
       body: JSON.stringify({ path }),
     })
   } catch {
-    // Electron / missing httpServer: host saveViaRelay still marks the window.
+    // Electron / missing webServer: host saveViaRelay still marks the window.
   }
 }

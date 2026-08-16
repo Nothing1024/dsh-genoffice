@@ -1,7 +1,7 @@
 import { mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { createAssetChannel, createAssetStore, serveAsset } from '../src/host/assets.ts'
 import { apply as applyHost } from '../src/index.ts'
 
@@ -65,7 +65,7 @@ describe('asset channel', () => {
     expect(res.rec.status).toBe(404)
   })
 
-  it('createAssetChannel without httpServer does not throw', () => {
+  it('createAssetChannel without webServer does not throw', () => {
     const ctx = { inject: vi.fn(() => {}) }
     expect(() => createAssetChannel(ctx as never)).not.toThrow()
     expect(() => applyHost({ inject: vi.fn(() => {}), tools: { register: vi.fn() } } as never)).not.toThrow()
