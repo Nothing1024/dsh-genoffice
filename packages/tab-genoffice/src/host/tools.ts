@@ -276,6 +276,12 @@ export function createOpenTools(): ReturnType<typeof defineTool>[] {
       async execute(args, exec) {
         const input = args as Record<string, unknown>
         const filePath = String(input.path ?? '')
+        if (!filePath.startsWith('/')) fail('path 必须是目标文件的本机绝对路径', filePath, 'local')
+        const slash = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'))
+        const base = slash < 0 ? filePath : filePath.slice(slash + 1)
+        if (!base.toLowerCase().endsWith(`.${ext}`)) {
+          fail(`path 必须是 .${ext} 文件`, filePath, 'local')
+        }
         let resp: Response
         try {
           resp = await fetch(`${RELAY_BASE}/api/open`, {

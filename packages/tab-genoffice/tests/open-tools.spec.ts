@@ -67,6 +67,22 @@ describe('createOpenTools', () => {
     )
   })
 
+  it('rejects a relative path before calling the relay', async () => {
+    const fetch = vi.fn()
+    vi.stubGlobal('fetch', fetch)
+    const tool = createOpenTools().find((t) => t.name === 'docx_open')
+    await expect(tool!.execute({ path: 'foo.docx' }, exec)).rejects.toThrow('绝对路径')
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
+  it('rejects a path whose extension does not match the tool', async () => {
+    const fetch = vi.fn()
+    vi.stubGlobal('fetch', fetch)
+    const tool = createOpenTools().find((t) => t.name === 'pptx_open')
+    await expect(tool!.execute({ path: '/tmp/a.docx' }, exec)).rejects.toThrow('.pptx')
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
   it('fails when the relay is down', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => {
       throw new Error('fetch failed')

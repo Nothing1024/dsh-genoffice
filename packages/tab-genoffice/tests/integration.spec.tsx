@@ -307,14 +307,25 @@ describe('open-file SSE client', () => {
     expect(FakeEventSource.instances[0]?.closed).toBe(true)
   })
 
-  it('file event opens the tab and emits the path after mount delay', async () => {
-    vi.useFakeTimers()
+  it('file event opens the tab and emits immediately when the panel is already listening', async () => {
     const seen: string[] = []
     const stop = subscribeOpenFile((p) => { seen.push(p) })
     const b = await bench(true)
     FakeEventSource.instances[0]?.emit('file', JSON.stringify({ path: '/tmp/demo.docx' }))
     expect(b.sidebar.openTab).toHaveBeenCalledWith({ type: 'dsh-genoffice:tab', path: '/tmp/demo.docx' })
+    expect(seen).toEqual(['/tmp/demo.docx'])
+    stop()
+    await b.runtime.dispose()
+  })
+
+  it('file event waits for the panel when no listener is mounted yet', async () => {
+    vi.useFakeTimers()
+    const seen: string[] = []
+    const b = await bench(true)
+    FakeEventSource.instances[0]?.emit('file', JSON.stringify({ path: '/tmp/demo.docx' }))
+    expect(b.sidebar.openTab).toHaveBeenCalledWith({ type: 'dsh-genoffice:tab', path: '/tmp/demo.docx' })
     expect(seen).toEqual([])
+    const stop = subscribeOpenFile((p) => { seen.push(p) })
     await vi.advanceTimersByTimeAsync(300)
     expect(seen).toEqual(['/tmp/demo.docx'])
     stop()

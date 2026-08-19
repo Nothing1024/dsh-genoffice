@@ -19,7 +19,7 @@ import { GenOfficeIcon } from '../tabs/icon.tsx'
 import { DocxControlViewer } from '../tabs/docx-control-viewer.tsx'
 import { CLAIMED_EXTS } from '../tabs/coexist.ts'
 import { en, NS, zh } from '../tabs/locales.ts'
-import { RELAY_BASE, emitOpenFile } from '../tabs/relay.ts'
+import { RELAY_BASE, scheduleOpenFile } from '../tabs/relay.ts'
 
 /** Locale is required; betterSidebar is awaited inside apply so its absence
  *  skips registration instead of leaving this fiber PENDING (BR-003). */
@@ -80,16 +80,21 @@ export function apply(ctx: ClientContext): void {
     // never lost even when the sidebar tab hasn't been opened yet (BR-M03).
     sidebarCtx.effect(() => {
       const es = new EventSource(`${RELAY_BASE}/api/open/stream`)
+      let cancelOpen: (() => void) | undefined
       es.addEventListener('file', (ev: MessageEvent) => {
         try {
           const data = JSON.parse(ev.data) as { path?: unknown }
           const filePath = typeof data.path === 'string' ? data.path : ''
           if (filePath === '') return
           betterSidebar.openTab({ type: 'dsh-genoffice:tab', path: filePath })
-          setTimeout(() => emitOpenFile(filePath), 300)
+          cancelOpen?.()
+          cancelOpen = scheduleOpenFile(filePath)
         } catch { /* malformed event — ignore */ }
       })
-      return () => es.close()
+      return () => {
+        cancelOpen?.()
+        es.close()
+      }
     }, 'dsh-tab-genoffice: open-file-stream')
   })
 }

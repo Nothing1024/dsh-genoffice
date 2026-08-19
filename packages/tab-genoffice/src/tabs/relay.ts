@@ -127,7 +127,20 @@ export function emitOpenFile(filePath: string): void {
   for (const fn of openFileListeners) fn(filePath)
 }
 
-/** Called by GenOfficePanel on mount; drives the EventSource for LLM-triggered open events. */
+/**
+ * Deliver an open path to the mounted panel. If no listener is up yet
+ * (tab still opening), wait `delayMs` once; cancel the timer on dispose.
+ */
+export function scheduleOpenFile(filePath: string, delayMs = 300): () => void {
+  if (openFileListeners.size > 0) {
+    emitOpenFile(filePath)
+    return () => {}
+  }
+  const timer = setTimeout(() => emitOpenFile(filePath), delayMs)
+  return () => clearTimeout(timer)
+}
+
+/** Test helper: EventSource → emitOpenFile. Production uses apply()'s single stream. */
 export function startOpenFileStream(): () => void {
   const es = new EventSource(`${RELAY_BASE}/api/open/stream`)
   es.addEventListener('file', (ev: MessageEvent) => {

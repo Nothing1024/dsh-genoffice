@@ -4,6 +4,7 @@ import {
   getRelayOk,
   probeRelay,
   resetRelayStore,
+  scheduleOpenFile,
   startOpenFileStream,
   subscribeOpenFile,
   subscribeRelay,
@@ -76,6 +77,37 @@ describe('open-file subscribe/emit', () => {
     stop()
     emitOpenFile('/tmp/c.xlsx')
     expect(seen).toEqual(['/tmp/a.docx', '/tmp/b.pptx'])
+  })
+
+  it('scheduleOpenFile emits immediately when a listener is already mounted', () => {
+    const seen: string[] = []
+    const stop = subscribeOpenFile((p) => { seen.push(p) })
+    const cancel = scheduleOpenFile('/tmp/ready.docx')
+    expect(seen).toEqual(['/tmp/ready.docx'])
+    cancel()
+    stop()
+  })
+
+  it('scheduleOpenFile waits then emits when no listener is mounted, and cancel drops it', () => {
+    vi.useFakeTimers()
+    try {
+      const seen: string[] = []
+      const cancel = scheduleOpenFile('/tmp/late.docx', 300)
+      const stop = subscribeOpenFile((p) => { seen.push(p) })
+      expect(seen).toEqual([])
+      vi.advanceTimersByTime(300)
+      expect(seen).toEqual(['/tmp/late.docx'])
+      stop()
+      cancel()
+      const cancelDropped = scheduleOpenFile('/tmp/dropped.docx', 300)
+      const stop2 = subscribeOpenFile((p) => { seen.push(p) })
+      cancelDropped()
+      vi.advanceTimersByTime(300)
+      expect(seen).toEqual(['/tmp/late.docx'])
+      stop2()
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   it('startOpenFileStream forwards SSE file events', () => {
