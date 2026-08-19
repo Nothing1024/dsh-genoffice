@@ -13,5 +13,7 @@ export interface ControlToolsOptions {
 }
 /** Build the control tool definitions from the contract mirror table. */
 export declare function createControlTools(opts?: ControlToolsOptions): ReturnType<typeof defineTool>[];
+/** Open tools: POST /api/open — bypasses the control plane (no docId needed). */
+export declare function createOpenTools(): ReturnType<typeof defineTool>[];
 export declare function registeredToolNames(opts?: ControlToolsOptions): string[];
 //# sourceMappingURL=tools.d.ts.map

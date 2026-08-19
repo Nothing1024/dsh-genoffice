@@ -14,29 +14,40 @@ const fakeAssets = {
 const UP = resolve(import.meta.dirname, '../../../../../../genoffice/upstream')
 
 describe('capability filter', () => {
-  it('exposes 51 tools when the asset channel is available', () => {
+  it('exposes 51 control tools plus 4 open tools when the asset channel is available', () => {
     expect(EXPOSED_COUNT).toBe(51)
     expect(Object.keys(CAPABILITY)).toHaveLength(81)
     const names = registeredToolNames({ assets: fakeAssets })
-    expect(names).toHaveLength(51)
+    expect(names).toHaveLength(55)
     expect(names).toContain('docx_insert_image')
+    expect(names).toContain('docx_open')
+    expect(names).toContain('pptx_open')
+    expect(names).toContain('xlsx_open')
+    expect(names).toContain('md_open')
     expect(names).not.toContain('pptx_add_chart')
     expect(names).not.toContain('docx_web_search')
     expect(names).not.toContain('docx_image_search')
     expect(names).not.toContain('pptx_generate_image')
   })
 
-  it('skips insert_image without webServer and still registers the other 50', () => {
+  it('skips insert_image without webServer and still registers the other 50 control tools plus 4 open tools', () => {
     const names = registeredToolNames()
-    expect(names).toHaveLength(50)
+    expect(names).toHaveLength(54)
     expect(names).not.toContain('docx_insert_image')
+    expect(names).toContain('docx_open')
   })
 
-  it('DSH_GENOFFICE_ALL_TOOLS registers 81 and labels egress tools', () => {
+  it('DSH_GENOFFICE_ALL_TOOLS registers 81 control tools plus 4 open tools and labels egress tools', () => {
     const tools = createControlTools({ allTools: true, assets: fakeAssets })
-    expect(tools).toHaveLength(81)
+    expect(tools).toHaveLength(85)
     const search = tools.find((t) => t.name === 'docx_web_search')
     expect(search?.description).toMatch(/会向公网发起请求/)
+    expect(tools.filter((t) => t.name.endsWith('_open')).map((t) => t.name)).toEqual([
+      'pptx_open',
+      'docx_open',
+      'xlsx_open',
+      'md_open',
+    ])
   })
 
   it('handover wins over status: available + handover stays unregistered', () => {

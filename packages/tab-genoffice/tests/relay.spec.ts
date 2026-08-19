@@ -1,5 +1,13 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
-import { getRelayOk, probeRelay, resetRelayStore, subscribeRelay } from '../src/tabs/relay.ts'
+import {
+  emitOpenFile,
+  getRelayOk,
+  probeRelay,
+  resetRelayStore,
+  startOpenFileStream,
+  subscribeOpenFile,
+  subscribeRelay,
+} from '../src/tabs/relay.ts'
 
 describe('shared relay store', () => {
   beforeEach(() => {
@@ -30,5 +38,57 @@ describe('shared relay store', () => {
     expect(fetch).toHaveBeenCalledTimes(1)
     await probeRelay(true)
     expect(fetch).toHaveBeenCalledTimes(2)
+  })
+})
+
+describe('open-file subscribe/emit', () => {
+  class FakeEventSource {
+    static last: FakeEventSource | undefined
+    url: string
+    closed = false
+    private readonly listeners = new Map<string, Set<(ev: MessageEvent) => void>>()
+    constructor(url: string) {
+      this.url = url
+      FakeEventSource.last = this
+    }
+    addEventListener(type: string, fn: (ev: MessageEvent) => void): void {
+      const set = this.listeners.get(type) ?? new Set()
+      set.add(fn)
+      this.listeners.set(type, set)
+    }
+    close(): void { this.closed = true }
+    emit(type: string, data: string): void {
+      for (const fn of this.listeners.get(type) ?? []) fn({ data } as MessageEvent)
+    }
+  }
+
+  beforeEach(() => {
+    FakeEventSource.last = undefined
+    vi.stubGlobal('EventSource', FakeEventSource)
+  })
+
+  it('dispatches subscribeOpenFile listeners via emitOpenFile', () => {
+    const seen: string[] = []
+    const stop = subscribeOpenFile((p) => { seen.push(p) })
+    emitOpenFile('/tmp/a.docx')
+    emitOpenFile('/tmp/b.pptx')
+    expect(seen).toEqual(['/tmp/a.docx', '/tmp/b.pptx'])
+    stop()
+    emitOpenFile('/tmp/c.xlsx')
+    expect(seen).toEqual(['/tmp/a.docx', '/tmp/b.pptx'])
+  })
+
+  it('startOpenFileStream forwards SSE file events', () => {
+    const seen: string[] = []
+    const stopSub = subscribeOpenFile((p) => { seen.push(p) })
+    const stop = startOpenFileStream()
+    expect(FakeEventSource.last?.url).toBe('http://localhost:8787/api/open/stream')
+    FakeEventSource.last?.emit('file', JSON.stringify({ path: '/tmp/deck.pptx' }))
+    FakeEventSource.last?.emit('file', JSON.stringify({ path: '' }))
+    FakeEventSource.last?.emit('file', 'nope')
+    expect(seen).toEqual(['/tmp/deck.pptx'])
+    stop()
+    stopSub()
+    expect(FakeEventSource.last?.closed).toBe(true)
   })
 })

@@ -189,7 +189,7 @@ async function executeInsertImage(
 export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<typeof defineTool>[] {
   const allTools = opts.allTools ?? process.env.DSH_GENOFFICE_ALL_TOOLS === '1'
   const assetsAvailable = opts.assets?.available === true
-  return CONTROL_TOOL_TABLE.filter((entry) => shouldRegister(entry, { allTools, assetsAvailable })).map((entry) => {
+  const controlTools = CONTROL_TOOL_TABLE.filter((entry) => shouldRegister(entry, { allTools, assetsAvailable })).map((entry) => {
     const isSave = isSaveEntry(entry)
     const cap = capabilityOf(entry.app, entry.skillName)
     return defineTool({
@@ -233,6 +233,74 @@ export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<t
       },
     })
   })
+  return [...controlTools, ...createOpenTools()]
+}
+
+const OPEN_TOOL_EXTS = ['pptx', 'docx', 'xlsx', 'md'] as const
+type OpenExt = (typeof OPEN_TOOL_EXTS)[number]
+
+const OPEN_TOOL_DESC =
+  '用 GenOffice 侧栏打开指定本地文件（控制模式）。调用后侧栏会自动切换到该文件的编辑器；文件必须存在于本机。path 为本机绝对路径。'
+
+/** Open tools: POST /api/open — bypasses the control plane (no docId needed). */
+export function createOpenTools(): ReturnType<typeof defineTool>[] {
+  return OPEN_TOOL_EXTS.map((ext: OpenExt) =>
+    defineTool({
+      name: `${ext}_open` as const,
+      description: OPEN_TOOL_DESC,
+      parameters: {
+        path: { type: 'string', description: '目标文件的本机绝对路径', required: true },
+      },
+      output: {
+        schema: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            ok: { type: 'boolean', required: true },
+            output: { type: 'string', required: true },
+            summary: { type: 'string', required: true },
+          },
+        },
+        render: (_args, value) => [{ type: 'text', text: value.output }],
+      },
+      presentCall: (args) => ({
+        card: 'generic',
+        title: `${ext}_open`,
+        kind: 'read',
+        rawInput: String((args as Record<string, unknown>).path ?? ''),
+      }),
+      presentResult: (_args, result) => ({
+        card: 'generic',
+        title: result.isError ? `${ext}_open 失败` : `${ext}_open`,
+      }),
+      async execute(args, exec) {
+        const input = args as Record<string, unknown>
+        const filePath = String(input.path ?? '')
+        let resp: Response
+        try {
+          resp = await fetch(`${RELAY_BASE}/api/open`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ path: filePath }),
+            signal: exec.signal,
+          })
+        } catch (e) {
+          throw new Error(`open failed: ${e instanceof Error ? e.message : String(e)}`)
+        }
+        if (!resp.ok) {
+          const body = (await resp.json().catch(() => ({}))) as Record<string, unknown>
+          const msg = typeof body['error'] === 'string' ? body['error'] : `HTTP ${resp.status}`
+          throw new Error(`open failed: ${msg}`)
+        }
+        const data = (await resp.json()) as Record<string, unknown>
+        if (data['ok'] !== true) {
+          const msg = typeof data['error'] === 'string' ? data['error'] : '未知错误'
+          throw new Error(`open failed: ${msg}`)
+        }
+        return { ok: true, output: `已发送打开指令：${filePath}`, summary: '打开文件' }
+      },
+    }),
+  )
 }
 
 export function registeredToolNames(opts: ControlToolsOptions = {}): string[] {

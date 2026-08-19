@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/react'
 import { GenOfficePanel } from '../src/tabs/genoffice.tsx'
-import { resetRelayStore } from '../src/tabs/relay.ts'
+import { emitOpenFile, resetRelayStore } from '../src/tabs/relay.ts'
 import type { TabComponentProps } from 'dsh-better-sidebar'
 
 afterEach(() => {
@@ -11,8 +11,16 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
+class FakeEventSource {
+  url: string
+  constructor(url: string) { this.url = url }
+  addEventListener(): void {}
+  close(): void {}
+}
+
 beforeEach(() => {
   resetRelayStore()
+  vi.stubGlobal('EventSource', FakeEventSource)
 })
 
 function panel(cwd?: string) {
@@ -109,5 +117,27 @@ describe('path bar', () => {
     fireEvent.keyDown(input, { key: 'Enter' })
     expect(view.getByText(/绝对路径/)).toBeTruthy()
     expect(fetch.mock.calls.length).toBe(before)
+  })
+})
+
+describe('open-file hook', () => {
+  it('subscribeOpenFile from the panel opens a previewable path', async () => {
+    const fetch = vi.fn(async (input: RequestInfo) => {
+      const url = String(input)
+      if (url.includes('/api/dir')) {
+        const path = new URL(url).searchParams.get('path') ?? ''
+        return {
+          ok: true,
+          json: async () => ({ ok: true, path: path || '/tmp', parent: '/', entries: [] }),
+        }
+      }
+      return { ok: true, json: async () => ({ ok: true }) }
+    })
+    vi.stubGlobal('fetch', fetch)
+    const view = panel('/tmp')
+    await waitFor(() => { expect(view.getByRole('button', { name: '主目录' })).toBeTruthy() })
+    emitOpenFile('/tmp/a.docx')
+    await waitFor(() => { expect(view.getByText('a.docx')).toBeTruthy() })
+    expect(view.getByRole('button', { name: '返回' })).toBeTruthy()
   })
 })

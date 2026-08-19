@@ -6,22 +6,47 @@ import { ControlModeViewer } from '../src/tabs/control-mode.tsx'
 import { DocxControlViewer } from '../src/tabs/docx-control-viewer.tsx'
 import { CLAIMED_EXTS } from '../src/tabs/coexist.ts'
 import { resetActiveDocs } from '../src/tabs/doc-registry.ts'
-import { previewUrlFor, resetRelayStore } from '../src/tabs/relay.ts'
+import { previewUrlFor, resetRelayStore, subscribeOpenFile } from '../src/tabs/relay.ts'
 import type { FileViewerDescriptor, FileViewerProps, TabDescriptor } from 'dsh-better-sidebar'
 
 afterEach(() => {
   cleanup()
   resetActiveDocs()
   resetRelayStore()
+  vi.useRealTimers()
   vi.unstubAllGlobals()
   vi.restoreAllMocks()
 })
+
+class FakeEventSource {
+  static instances: FakeEventSource[] = []
+  url: string
+  closed = false
+  private readonly listeners = new Map<string, Set<(ev: MessageEvent) => void>>()
+  constructor(url: string) {
+    this.url = url
+    FakeEventSource.instances.push(this)
+  }
+  addEventListener(type: string, fn: (ev: MessageEvent) => void): void {
+    const set = this.listeners.get(type) ?? new Set()
+    set.add(fn)
+    this.listeners.set(type, set)
+  }
+  close(): void {
+    this.closed = true
+  }
+  emit(type: string, data: string): void {
+    for (const fn of this.listeners.get(type) ?? []) fn({ data } as MessageEvent)
+  }
+}
 
 beforeEach(() => {
   localStorage.clear()
   localStorage.setItem('dsh.locale', 'zh')
   resetActiveDocs()
   resetRelayStore()
+  FakeEventSource.instances = []
+  vi.stubGlobal('EventSource', FakeEventSource)
 })
 
 function fakeBetterSidebar() {
@@ -111,15 +136,15 @@ function stubRelay(ok: boolean): void {
 describe('genoffice better-sidebar registration', () => {
   it('registers a prefixed tab and one viewer per claimed ext', async () => {
     const b = await bench(true)
-    expect(b.sidebar.registered.map((t) => t.id)).toEqual(['dsh-artifact:genoffice'])
+    expect(b.sidebar.registered.map((t) => t.id)).toEqual(['dsh-genoffice:tab'])
     expect(b.sidebar.viewers.map((v) => v.id)).toEqual(
-      CLAIMED_EXTS.map((ext) => `dsh-artifact:genoffice-${ext}`),
+      CLAIMED_EXTS.map((ext) => `dsh-genoffice:viewer-${ext}`),
     )
     expect(b.sidebar.viewers.map((v) => v.exts[0])).toEqual([...CLAIMED_EXTS])
     for (const viewer of b.sidebar.viewers) {
       expect(viewer.priority).toBe(10)
       expect(viewer.fetchStrategy).toBe('none')
-      expect(viewer.id.startsWith('dsh-artifact:')).toBe(true)
+      expect(viewer.id.startsWith('dsh-genoffice:')).toBe(true)
     }
     await b.runtime.dispose()
   })
@@ -171,7 +196,7 @@ describe('coexist degrade modes', () => {
       scope: { sessionId: 's' },
       path: '/tmp/a.docx',
       title: 'a.docx',
-      viewerId: 'dsh-artifact:genoffice-docx',
+      viewerId: 'dsh-genoffice:viewer-docx',
     }
     const view = render(<DocxControlViewer {...props} />)
     const button = await view.findByRole('button', { name: '用内置预览打开' })
@@ -270,5 +295,37 @@ describe('preview URL semantics', () => {
     expect(previewUrlFor('/tmp/a.docx', 'docx', true)).toContain('control=1')
     expect(previewUrlFor('/tmp/a.docx', 'docx', false)).not.toContain('control=1')
     expect(previewUrlFor('/tmp/a.docx', 'docx', true, 'abc')).toContain('_r=abc')
+  })
+})
+
+describe('open-file SSE client', () => {
+  it('connects EventSource in apply even before the panel mounts', async () => {
+    const b = await bench(true)
+    expect(FakeEventSource.instances).toHaveLength(1)
+    expect(FakeEventSource.instances[0]?.url).toBe('http://localhost:8787/api/open/stream')
+    await b.runtime.dispose()
+    expect(FakeEventSource.instances[0]?.closed).toBe(true)
+  })
+
+  it('file event opens the tab and emits the path after mount delay', async () => {
+    vi.useFakeTimers()
+    const seen: string[] = []
+    const stop = subscribeOpenFile((p) => { seen.push(p) })
+    const b = await bench(true)
+    FakeEventSource.instances[0]?.emit('file', JSON.stringify({ path: '/tmp/demo.docx' }))
+    expect(b.sidebar.openTab).toHaveBeenCalledWith({ type: 'dsh-genoffice:tab', path: '/tmp/demo.docx' })
+    expect(seen).toEqual([])
+    await vi.advanceTimersByTimeAsync(300)
+    expect(seen).toEqual(['/tmp/demo.docx'])
+    stop()
+    await b.runtime.dispose()
+    vi.useRealTimers()
+  })
+
+  it('ignores malformed SSE payloads', async () => {
+    const b = await bench(true)
+    expect(() => FakeEventSource.instances[0]?.emit('file', '{not-json')).not.toThrow()
+    expect(b.sidebar.openTab).not.toHaveBeenCalled()
+    await b.runtime.dispose()
   })
 })

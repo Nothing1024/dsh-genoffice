@@ -45,6 +45,7 @@ window.__ModuleLoader__.load({
 		let lastProbeAt = 0;
 		let inFlight = null;
 		const listeners$1 = /* @__PURE__ */ new Set();
+		const openFileListeners = /* @__PURE__ */ new Set();
 		function getRelayOk() {
 			return relayOk;
 		}
@@ -114,6 +115,27 @@ window.__ModuleLoader__.load({
 				});
 			} catch {}
 		}
+		function subscribeOpenFile(fn) {
+			openFileListeners.add(fn);
+			return () => {
+				openFileListeners.delete(fn);
+			};
+		}
+		/** Dispatch a file path to all subscribeOpenFile listeners (used by the client-level SSE handler). */
+		function emitOpenFile(filePath) {
+			for (const fn of openFileListeners) fn(filePath);
+		}
+		/** Called by GenOfficePanel on mount; drives the EventSource for LLM-triggered open events. */
+		function startOpenFileStream() {
+			const es = new EventSource(`${RELAY_BASE}/api/open/stream`);
+			es.addEventListener("file", (ev) => {
+				try {
+					const data = JSON.parse(ev.data);
+					if (typeof data.path === "string" && data.path !== "") emitOpenFile(data.path);
+				} catch {}
+			});
+			return () => es.close();
+		}
 		//#endregion
 		//#region src/tabs/coexist.ts
 		/**
@@ -164,8 +186,8 @@ window.__ModuleLoader__.load({
 			};
 		}
 		//#endregion
-		//#region \0dsh-css:/home/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/packages/tab-genoffice/src/tabs/genoffice.module.css.mjs
-		const css = ".n2sFFq_panel{height:100%;min-height:0;color:var(--dsw-alias-label-primary);flex-direction:column;font-size:13px;display:flex}.n2sFFq_toolbar{border-bottom:1px solid var(--dsw-alias-border-l1);flex:none;align-items:center;gap:2px;padding:6px 12px 8px;display:flex}.n2sFFq_btn{cursor:pointer;height:26px;color:var(--dsw-alias-label-secondary);font:inherit;transition:background-color .15s var(--ds-ease-in-out,ease), color .15s var(--ds-ease-in-out,ease);background:0 0;border:0;border-radius:8px;flex:none;align-items:center;gap:6px;padding:0 8px;font-size:12px;display:inline-flex}.n2sFFq_btn:hover:not(:disabled){background:var(--dsw-specific-sidebar-nav-item-hover);color:var(--dsw-alias-label-primary)}.n2sFFq_btn:disabled{color:var(--dsw-alias-label-dimmed);cursor:default}.n2sFFq_pathText{background:var(--dsw-specific-sidebar-nav-item-hover);min-width:0;color:var(--dsw-alias-label-tertiary);white-space:nowrap;text-overflow:ellipsis;border-radius:6px;flex:1;margin-left:2px;padding:3px 8px;font-size:11px;overflow:hidden}.n2sFFq_pathBar{background:var(--dsw-specific-sidebar-nav-item-hover);cursor:text;border-radius:6px;flex:1;align-items:center;gap:2px;min-width:0;min-height:26px;margin-left:2px;padding:0 4px;display:flex;overflow:hidden}.n2sFFq_crumb{color:var(--dsw-alias-label-secondary);font:inherit;cursor:pointer;white-space:nowrap;text-overflow:ellipsis;background:0 0;border:0;border-radius:6px;flex:none;max-width:10em;padding:2px 4px;font-size:11px;overflow:hidden}.n2sFFq_crumb:hover{background:var(--dsw-alias-border-l1);color:var(--dsw-alias-label-primary)}.n2sFFq_pathInput{min-width:0;color:var(--dsw-alias-label-primary);font:inherit;background:0 0;border:0;outline:none;flex:1;padding:3px 4px;font-size:11px}.n2sFFq_homeNote{color:var(--dsw-alias-label-tertiary);white-space:nowrap;flex:none;padding:0 8px;font-size:10.5px}.n2sFFq_fileName{white-space:nowrap;text-overflow:ellipsis;flex:1;min-width:0;font-size:12px;font-weight:600;overflow:hidden}.n2sFFq_hint{color:var(--dsw-alias-label-secondary);align-items:center;gap:8px;padding:10px 12px;font-size:12px;display:flex}.n2sFFq_list{flex:1;min-height:0;padding:6px;overflow-y:auto}.n2sFFq_row{cursor:default;border-radius:8px;align-items:center;gap:9px;height:30px;padding:0 8px;font-size:12.5px;display:flex}.n2sFFq_rowClickable{cursor:pointer;transition:background-color .15s var(--ds-ease-in-out,ease)}.n2sFFq_rowClickable:hover{background:var(--dsw-specific-sidebar-nav-item-hover)}.n2sFFq_rowDisabled{opacity:.55}.n2sFFq_rowIcon{width:16px;height:16px;color:var(--dsw-alias-label-tertiary);flex:none;justify-content:center;align-items:center;display:inline-flex}.n2sFFq_rowName{white-space:nowrap;text-overflow:ellipsis;flex:1;min-width:0;overflow:hidden}.n2sFFq_rowTag{color:var(--dsw-alias-label-tertiary);border:1px solid var(--dsw-alias-border-l2);border-radius:999px;flex:none;padding:1px 6px;font-size:10.5px}.n2sFFq_iframe{background:#fff;border:0;border-radius:8px;flex:1;min-height:0;margin:0 12px 12px}";
+		//#region \0dsh-css:/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/packages/tab-genoffice/src/tabs/genoffice.module.css.mjs
+		const css = ".p8QEMa_panel{height:100%;min-height:0;color:var(--dsw-alias-label-primary);flex-direction:column;font-size:13px;display:flex}.p8QEMa_toolbar{border-bottom:1px solid var(--dsw-alias-border-l1);flex:none;align-items:center;gap:2px;padding:6px 12px 8px;display:flex}.p8QEMa_btn{cursor:pointer;height:26px;color:var(--dsw-alias-label-secondary);font:inherit;transition:background-color .15s var(--ds-ease-in-out,ease), color .15s var(--ds-ease-in-out,ease);background:0 0;border:0;border-radius:8px;flex:none;align-items:center;gap:6px;padding:0 8px;font-size:12px;display:inline-flex}.p8QEMa_btn:hover:not(:disabled){background:var(--dsw-specific-sidebar-nav-item-hover);color:var(--dsw-alias-label-primary)}.p8QEMa_btn:disabled{color:var(--dsw-alias-label-dimmed);cursor:default}.p8QEMa_pathText{background:var(--dsw-specific-sidebar-nav-item-hover);min-width:0;color:var(--dsw-alias-label-tertiary);white-space:nowrap;text-overflow:ellipsis;border-radius:6px;flex:1;margin-left:2px;padding:3px 8px;font-size:11px;overflow:hidden}.p8QEMa_pathBar{background:var(--dsw-specific-sidebar-nav-item-hover);cursor:text;border-radius:6px;flex:1;align-items:center;gap:2px;min-width:0;min-height:26px;margin-left:2px;padding:0 4px;display:flex;overflow:hidden}.p8QEMa_crumb{color:var(--dsw-alias-label-secondary);font:inherit;cursor:pointer;white-space:nowrap;text-overflow:ellipsis;background:0 0;border:0;border-radius:6px;flex:none;max-width:10em;padding:2px 4px;font-size:11px;overflow:hidden}.p8QEMa_crumb:hover{background:var(--dsw-alias-border-l1);color:var(--dsw-alias-label-primary)}.p8QEMa_pathInput{min-width:0;color:var(--dsw-alias-label-primary);font:inherit;background:0 0;border:0;outline:none;flex:1;padding:3px 4px;font-size:11px}.p8QEMa_homeNote{color:var(--dsw-alias-label-tertiary);white-space:nowrap;flex:none;padding:0 8px;font-size:10.5px}.p8QEMa_fileName{white-space:nowrap;text-overflow:ellipsis;flex:1;min-width:0;font-size:12px;font-weight:600;overflow:hidden}.p8QEMa_hint{color:var(--dsw-alias-label-secondary);align-items:center;gap:8px;padding:10px 12px;font-size:12px;display:flex}.p8QEMa_list{flex:1;min-height:0;padding:6px;overflow-y:auto}.p8QEMa_row{cursor:default;border-radius:8px;align-items:center;gap:9px;height:30px;padding:0 8px;font-size:12.5px;display:flex}.p8QEMa_rowClickable{cursor:pointer;transition:background-color .15s var(--ds-ease-in-out,ease)}.p8QEMa_rowClickable:hover{background:var(--dsw-specific-sidebar-nav-item-hover)}.p8QEMa_rowDisabled{opacity:.55}.p8QEMa_rowIcon{width:16px;height:16px;color:var(--dsw-alias-label-tertiary);flex:none;justify-content:center;align-items:center;display:inline-flex}.p8QEMa_rowName{white-space:nowrap;text-overflow:ellipsis;flex:1;min-width:0;overflow:hidden}.p8QEMa_rowTag{color:var(--dsw-alias-label-tertiary);border:1px solid var(--dsw-alias-border-l2);border-radius:999px;flex:none;padding:1px 6px;font-size:10.5px}.p8QEMa_iframe{background:#fff;border:0;border-radius:8px;flex:1;min-height:0;margin:0 12px 12px}";
 		const tagId = "@deepseek-ai/dsh-tab-genoffice/genoffice.module.css";
 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
 			const tag = document.createElement("style");
@@ -175,24 +197,24 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var genoffice_module_css_default = {
-			"fileName": "n2sFFq_fileName",
-			"btn": "n2sFFq_btn",
-			"crumb": "n2sFFq_crumb",
-			"rowClickable": "n2sFFq_rowClickable",
-			"rowTag": "n2sFFq_rowTag",
-			"toolbar": "n2sFFq_toolbar",
-			"rowName": "n2sFFq_rowName",
-			"pathInput": "n2sFFq_pathInput",
-			"iframe": "n2sFFq_iframe",
-			"rowDisabled": "n2sFFq_rowDisabled",
-			"row": "n2sFFq_row",
-			"pathText": "n2sFFq_pathText",
-			"panel": "n2sFFq_panel",
-			"pathBar": "n2sFFq_pathBar",
-			"hint": "n2sFFq_hint",
-			"homeNote": "n2sFFq_homeNote",
-			"list": "n2sFFq_list",
-			"rowIcon": "n2sFFq_rowIcon"
+			"pathText": "p8QEMa_pathText",
+			"pathBar": "p8QEMa_pathBar",
+			"pathInput": "p8QEMa_pathInput",
+			"list": "p8QEMa_list",
+			"rowClickable": "p8QEMa_rowClickable",
+			"fileName": "p8QEMa_fileName",
+			"crumb": "p8QEMa_crumb",
+			"rowIcon": "p8QEMa_rowIcon",
+			"panel": "p8QEMa_panel",
+			"toolbar": "p8QEMa_toolbar",
+			"btn": "p8QEMa_btn",
+			"rowTag": "p8QEMa_rowTag",
+			"rowDisabled": "p8QEMa_rowDisabled",
+			"iframe": "p8QEMa_iframe",
+			"rowName": "p8QEMa_rowName",
+			"hint": "p8QEMa_hint",
+			"row": "p8QEMa_row",
+			"homeNote": "p8QEMa_homeNote"
 		};
 		//#endregion
 		//#region src/tabs/control-mode.tsx
@@ -740,6 +762,14 @@ window.__ModuleLoader__.load({
 					ext
 				});
 			};
+			(0, react.useEffect)(() => {
+				const stopStream = startOpenFileStream();
+				const unsubscribe = subscribeOpenFile(openPreviewByPath);
+				return () => {
+					stopStream();
+					unsubscribe();
+				};
+			}, []);
 			const pickFile = (entry) => {
 				if (entry.dir || entry.symlink) {
 					loadList(joinPath(path, entry.name), false);
@@ -960,23 +990,44 @@ window.__ModuleLoader__.load({
 			ctx.inject(["betterSidebar"], (raw) => {
 				const sidebarCtx = raw;
 				const { betterSidebar } = sidebarCtx;
-				sidebarCtx.effect(() => betterSidebar.registerTab({
-					id: "dsh-artifact:genoffice",
-					title: () => t("tab.genoffice"),
-					icon: (size) => (0, react.createElement)(GenOfficeIcon, { size }),
-					order: 20,
-					single: true,
-					component: (props) => (0, react.createElement)(GenOfficePanel, props)
-				}), "dsh-tab-genoffice: registerTab");
-				for (const ext of CLAIMED_EXTS) sidebarCtx.effect(() => betterSidebar.registerFileViewer({
-					id: `dsh-artifact:genoffice-${ext}`,
-					title: () => `GenOffice · .${ext}`,
-					icon: (size) => (0, react.createElement)(GenOfficeIcon, { size }),
-					exts: [ext],
-					priority: 10,
-					fetchStrategy: "none",
-					component: DocxControlViewer
-				}), `dsh-tab-genoffice: registerFileViewer:${ext}`);
+				sidebarCtx.effect(() => {
+					return betterSidebar.registerTab({
+						id: "dsh-genoffice:tab",
+						title: () => t("tab.genoffice"),
+						icon: (size) => (0, react.createElement)(GenOfficeIcon, { size }),
+						order: 20,
+						single: true,
+						component: (props) => (0, react.createElement)(GenOfficePanel, props)
+					});
+				}, "dsh-tab-genoffice: registerTab");
+				for (const ext of CLAIMED_EXTS) sidebarCtx.effect(() => {
+					const viewer = {
+						id: `dsh-genoffice:viewer-${ext}`,
+						title: () => `GenOffice · .${ext}`,
+						icon: (size) => (0, react.createElement)(GenOfficeIcon, { size }),
+						exts: [ext],
+						priority: 10,
+						fetchStrategy: "none",
+						component: DocxControlViewer
+					};
+					return betterSidebar.registerFileViewer(viewer);
+				}, `dsh-tab-genoffice: registerFileViewer:${ext}`);
+				sidebarCtx.effect(() => {
+					const es = new EventSource(`${RELAY_BASE}/api/open/stream`);
+					es.addEventListener("file", (ev) => {
+						try {
+							const data = JSON.parse(ev.data);
+							const filePath = typeof data.path === "string" ? data.path : "";
+							if (filePath === "") return;
+							betterSidebar.openTab({
+								type: "dsh-genoffice:tab",
+								path: filePath
+							});
+							setTimeout(() => emitOpenFile(filePath), 300);
+						} catch {}
+					});
+					return () => es.close();
+				}, "dsh-tab-genoffice: open-file-stream");
 			});
 		}
 		//#endregion

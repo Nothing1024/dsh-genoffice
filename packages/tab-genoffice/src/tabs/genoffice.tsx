@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent, ReactNode } from 'react'
 import type { TabComponentProps } from 'dsh-better-sidebar'
 import { TAB_ICON_PROPS } from './icon.tsx'
-import { PREVIEWABLE, RELAY_BASE, docIdFor, extOf, getRelayOk, noteRelayOk, probeRelay, subscribeRelay } from './relay.ts'
+import { PREVIEWABLE, RELAY_BASE, docIdFor, extOf, getRelayOk, noteRelayOk, probeRelay, subscribeRelay, startOpenFileStream, subscribeOpenFile } from './relay.ts'
 import { ControlModeViewer } from './control-mode.tsx'
 import { lookupActive } from './doc-registry.ts'
 import css from './genoffice.module.css'
@@ -256,6 +256,16 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
     setOccupiedHint(null)
     setView({ kind: 'preview', path: absPath, name, ext })
   }
+
+  useEffect(() => {
+    const stopStream = startOpenFileStream()
+    const unsubscribe = subscribeOpenFile(openPreviewByPath)
+    return () => {
+      stopStream()
+      unsubscribe()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount
+  }, [])
 
   const pickFile = (entry: DirEntry): void => {
     if (entry.dir || entry.symlink) {

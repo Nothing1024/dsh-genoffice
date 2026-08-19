@@ -1,0 +1,10 @@
+# dependencies — pnpm-managed, never commit
+node_modules/
+
+# test / tool caches
+.vite/
+coverage/
+*.tsbuildinfo
+
+# logs
+*.log

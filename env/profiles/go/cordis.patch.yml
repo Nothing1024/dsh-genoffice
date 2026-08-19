@@ -1,0 +1,4 @@
+# User overlay for profile `go`. Keep empty.
+# tab-genoffice and dsh-better-sidebar already ship their own bundle patches.
+# Do not re-insert those rows here (double mount).
+[]

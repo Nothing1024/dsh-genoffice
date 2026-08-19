@@ -23,6 +23,9 @@ let lastProbeAt = 0
 let inFlight: Promise<boolean> | null = null
 const listeners = new Set<RelayListener>()
 
+type OpenFileListener = (path: string) => void
+const openFileListeners = new Set<OpenFileListener>()
+
 export function getRelayOk(): boolean | null {
   return relayOk
 }
@@ -49,6 +52,7 @@ export function resetRelayStore(): void {
   relayOk = null
   lastProbeAt = 0
   inFlight = null
+  openFileListeners.clear()
 }
 
 export function extOf(path: string): string {
@@ -111,4 +115,26 @@ export async function notifyHostSync(path: string): Promise<void> {
   } catch {
     // Electron / missing webServer: host saveViaRelay still marks the window.
   }
+}
+
+export function subscribeOpenFile(fn: OpenFileListener): () => void {
+  openFileListeners.add(fn)
+  return () => { openFileListeners.delete(fn) }
+}
+
+/** Dispatch a file path to all subscribeOpenFile listeners (used by the client-level SSE handler). */
+export function emitOpenFile(filePath: string): void {
+  for (const fn of openFileListeners) fn(filePath)
+}
+
+/** Called by GenOfficePanel on mount; drives the EventSource for LLM-triggered open events. */
+export function startOpenFileStream(): () => void {
+  const es = new EventSource(`${RELAY_BASE}/api/open/stream`)
+  es.addEventListener('file', (ev: MessageEvent) => {
+    try {
+      const data = JSON.parse(ev.data) as { path?: unknown }
+      if (typeof data.path === 'string' && data.path !== '') emitOpenFile(data.path)
+    } catch { /* malformed event, ignore */ }
+  })
+  return () => es.close()
 }
