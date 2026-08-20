@@ -14,7 +14,7 @@ describe('genoffice system prompt', () => {
 
   it('lists deleted capabilities as 不可做, not as instructions to call them', () => {
     expect(text).toMatch(/不可做/)
-    expect(text).toMatch(/pptx:add_chart/)
+    expect(text).toMatch(/pptx:add_smartart/)
     expect(text).toMatch(/docx:web_search/)
     expect(text).not.toMatch(/请调用 docx_web_search/)
   })
