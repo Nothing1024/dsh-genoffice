@@ -826,15 +826,31 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     },
   },
   {
-    // UNREGISTERED (bridge-missing) — 上游放开后需先修键（kind→layout/items）再暴露
     name: 'pptx_add_smartart',
     skillName: 'add_smartart',
     app: 'slides',
-    description: SLIDES_CONTROL_NOTE + '添加 SmartArt（网页版不可用，返回错误）。',
+    description:
+      SLIDES_CONTROL_NOTE +
+      '插入 SmartArt 风格示意图（list=纵向列表、process=流程箭头、cycle=循环、hierarchy=层级、pyramid=金字塔、matrix=2x2、venn=维恩）。items 为节点文本。省略 x/y/w/h 时居中。空白 deck 会被上游守卫拒绝。',
     parameters: {
       path: PATH_PARAM,
       slideIndex: { type: 'integer', required: true },
-      kind: { type: 'string', required: true },
+      layout: {
+        type: 'string',
+        required: true,
+        enum: ['list', 'process', 'cycle', 'hierarchy', 'pyramid', 'matrix', 'venn'],
+        description: '示意图布局',
+      },
+      items: {
+        type: 'array',
+        required: true,
+        items: { type: 'string' },
+        description: '节点文本（建议 2–8 项）',
+      },
+      x: { type: 'number' },
+      y: { type: 'number' },
+      w: { type: 'number' },
+      h: { type: 'number' },
     },
   },
   {

@@ -14,25 +14,26 @@ const fakeAssets = {
 const UP = resolve(import.meta.dirname, '../../../../../../genoffice/upstream')
 
 describe('capability filter', () => {
-  it('exposes 62 control tools plus 4 open tools when the asset channel is available', () => {
-    expect(EXPOSED_COUNT).toBe(62)
+  it('exposes 63 control tools plus 4 open tools when the asset channel is available', () => {
+    expect(EXPOSED_COUNT).toBe(63)
     expect(Object.keys(CAPABILITY)).toHaveLength(81)
     const names = registeredToolNames({ assets: fakeAssets })
-    expect(names).toHaveLength(66)
+    expect(names).toHaveLength(67)
     expect(names).toContain('docx_insert_image')
     expect(names).toContain('docx_open')
     expect(names).toContain('pptx_open')
     expect(names).toContain('xlsx_open')
     expect(names).toContain('md_open')
     expect(names).toContain('pptx_add_chart')
+    expect(names).toContain('pptx_add_smartart')
     expect(names).not.toContain('docx_web_search')
     expect(names).not.toContain('docx_image_search')
     expect(names).not.toContain('pptx_generate_image')
   })
 
-  it('skips insert_image without webServer and still registers the other 61 control tools plus 4 open tools', () => {
+  it('skips insert_image without webServer and still registers the other 62 control tools plus 4 open tools', () => {
     const names = registeredToolNames()
-    expect(names).toHaveLength(65)
+    expect(names).toHaveLength(66)
     expect(names).not.toContain('docx_insert_image')
     expect(names).toContain('docx_open')
   })

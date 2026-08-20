@@ -72,7 +72,7 @@ export const CAPABILITY: Record<CapabilityKey, CapabilityEntry> = {
   'slides:add_text_box': { status: 'guarded', netEgress: false, evidence: 'slides-skill.ts:1498-1521 blockScratchBuild：deck 带文字非装饰元素 ≤2 且 htmlGenerated=false 即拒绝；skillStateCache（line 1448）跨调用持久化 htmlGenerated，generate_deck 后可解锁' },
   'slides:add_shape': { status: 'guarded', netEgress: false, evidence: 'slides-skill.ts:1498-1521 blockScratchBuild：deck 带文字非装饰元素 ≤2 且 htmlGenerated=false 即拒绝；skillStateCache（line 1448）跨调用持久化 htmlGenerated，generate_deck 后可解锁' },
   'slides:add_chart': { status: 'available', netEgress: false, evidence: 'web-bridge.ts addChart → pptx-engine addChart' },
-  'slides:add_smartart': { status: 'bridge-missing', netEgress: false, evidence: 'web-bridge.ts addSmartArt → notAvailable()' },
+  'slides:add_smartart': { status: 'guarded', netEgress: false, evidence: 'web-bridge.ts:1001-1022 addSmartArt → pptx-engine addSmartArt (pushHistory before mutation); slides-skill.ts:3086-3124 already wired; blockScratchBuild（slides-skill.ts:1498-1521）同 add_text_box/add_shape' },
   'slides:add_table': { status: 'available', netEgress: false, evidence: 'web-bridge.ts addTable → pptx-engine addTable' },
   'slides:edit_table_cell': { status: 'available', netEgress: false, evidence: 'web-bridge.ts editTableCell → pptx-engine editTableCellText' },
   'slides:edit_table_structure': { status: 'available', netEgress: false, evidence: 'web-bridge.ts tableStructure / tableMerge → pptx-engine' },
@@ -114,6 +114,6 @@ export function capabilityOf(app: CapabilityApp, skillName: string): CapabilityE
   return CAPABILITY[`${app}:${skillName}`]
 }
 
-/** Exposed set size used by drift tests (updated after slides picture/table/chart/clarify bridge). */
+/** Exposed set size used by drift tests (updated after slides SmartArt bridge). */
 export const EXPOSED_COUNT = Object.values(CAPABILITY).filter(isExposed).length
 
