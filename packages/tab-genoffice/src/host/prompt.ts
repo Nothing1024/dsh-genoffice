@@ -68,7 +68,7 @@ export function buildGenOfficePromptText(): string {
     `可做：\n${can}`,
     `不可做（不要调用、不要向用户承诺）：\n${blocked.join('；')}`,
     '需要联网资料时用 DSH 自己的 web_search。GenOffice 侧没有检索工具。',
-    '图片：不提供搜图与生图。本地已有图片时用 docx_insert_image，参数 imagePath 为本机绝对路径。',
+    '图片：不提供搜图与生图。本地已有图片时用 docx_insert_image 或 pdf_insert_image，参数 imagePath 为本机绝对路径。',
     '「在浏览器中打开」会离开控制模式；网页版 AI 面板可直连第三方模型服务商，可能出网。',
   ].join('\n')
 }

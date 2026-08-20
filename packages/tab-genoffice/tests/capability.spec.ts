@@ -14,11 +14,11 @@ const fakeAssets = {
 const UP = resolve(import.meta.dirname, '../../../../../../genoffice/upstream')
 
 describe('capability filter', () => {
-  it('exposes 63 control tools plus 4 open tools when the asset channel is available', () => {
-    expect(EXPOSED_COUNT).toBe(63)
+  it('exposes 70 control tools plus 4 open tools when the asset channel is available', () => {
+    expect(EXPOSED_COUNT).toBe(70)
     expect(Object.keys(CAPABILITY)).toHaveLength(81)
     const names = registeredToolNames({ assets: fakeAssets })
-    expect(names).toHaveLength(67)
+    expect(names).toHaveLength(74)
     expect(names).toContain('docx_insert_image')
     expect(names).toContain('docx_open')
     expect(names).toContain('pptx_open')
@@ -26,16 +26,28 @@ describe('capability filter', () => {
     expect(names).toContain('md_open')
     expect(names).toContain('pptx_add_chart')
     expect(names).toContain('pptx_add_smartart')
+    expect(names).toContain('pptx_analyze_media')
+    expect(names).toContain('pdf_list_page_images')
+    expect(names).toContain('pdf_insert_image')
+    expect(names).toContain('pdf_transform_image')
+    expect(names).toContain('pdf_rotate_image')
+    expect(names).toContain('pdf_replace_image')
+    expect(names).toContain('pdf_delete_image')
     expect(names).not.toContain('docx_web_search')
     expect(names).not.toContain('docx_image_search')
     expect(names).not.toContain('pptx_generate_image')
+    expect(names).not.toContain('pdf_generate_image')
   })
 
-  it('skips insert_image without webServer and still registers the other 62 control tools plus 4 open tools', () => {
+  it('skips insert/replace image tools without webServer and still registers the other 67 control tools plus 4 open tools', () => {
     const names = registeredToolNames()
-    expect(names).toHaveLength(66)
+    expect(names).toHaveLength(71)
     expect(names).not.toContain('docx_insert_image')
+    expect(names).not.toContain('pdf_insert_image')
+    expect(names).not.toContain('pdf_replace_image')
     expect(names).toContain('docx_open')
+    expect(names).toContain('pdf_list_page_images')
+    expect(names).toContain('pdf_delete_image')
   })
 
   it('DSH_GENOFFICE_ALL_TOOLS registers 81 control tools plus 4 open tools and labels egress tools', () => {
@@ -76,7 +88,24 @@ describe('capability filter', () => {
 
 describe('bridge-missing drift', () => {
   const bridge = resolve(UP, 'apps/slides/src/renderer/web-bridge.ts')
+  const pdfBridge = resolve(UP, 'apps/pdf/src/renderer/web-bridge.ts')
+  const pdfSave = resolve(UP, 'apps/pdf/src/renderer/web-pdf-save.ts')
   const present = existsSync(bridge)
+
+  it.skipIf(!present)('image generate/analyze and pdf image ops are wired (not hardcoded stubs)', () => {
+    const slides = readFileSync(bridge, 'utf8')
+    expect(slides).not.toContain("网页版暂不支持 Genspark 图片生成")
+    expect(slides).not.toContain("网页版暂不支持媒体分析")
+    expect(slides).toContain('/generate-image')
+    expect(slides).toContain('/analyze-media')
+    const pdf = readFileSync(pdfBridge, 'utf8')
+    expect(pdf).not.toContain("网页版暂不支持 Genspark 图片生成")
+    expect(pdf).toContain('web-image-edit')
+    expect(pdf).toContain('/generate-image')
+    const save = readFileSync(pdfSave, 'utf8')
+    expect(save).not.toContain('网页版暂不支持图片编辑')
+    expect(save).toContain("import('./web-image-edit')")
+  })
 
   it.skipIf(!present)('slides bridge-missing skills are still stubs (can un-skip when upstream implements)', () => {
     const src = readFileSync(bridge, 'utf8')

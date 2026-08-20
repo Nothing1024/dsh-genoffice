@@ -593,11 +593,11 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     },
   },
   {
-    // UNREGISTERED (handover: dsh:pending + bridge-missing) — 即使上游补桥接也不放开
+    // UNREGISTERED (handover: dsh:pending) — 桥接已接 Genspark，本包仍不暴露
     name: 'pptx_generate_image',
     skillName: 'generate_image',
     app: 'slides',
-    description: SLIDES_CONTROL_NOTE + 'Genspark AI 图片生成/编辑（网页版不可用，返回错误）。',
+    description: SLIDES_CONTROL_NOTE + 'Genspark AI 图片生成/编辑。经本地中继调用，浏览器不直连公网。',
     parameters: {
       path: PATH_PARAM,
       prompt: { type: 'string', required: true },
@@ -608,7 +608,7 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     name: 'pptx_analyze_media',
     skillName: 'analyze_media',
     app: 'slides',
-    description: SLIDES_CONTROL_NOTE + '媒体内容理解分析（网页版不可用，返回错误）。',
+    description: SLIDES_CONTROL_NOTE + '媒体内容理解分析。mediaUrls 为图片/音视频链接；经本地中继调用 Genspark。',
     parameters: {
       path: PATH_PARAM,
       mediaUrls: { type: 'array', required: true, items: { type: 'string' } },
@@ -1066,10 +1066,11 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     },
   },
   {
+    // UNREGISTERED (handover: dsh:pending) — 桥接已接 Genspark，本包仍不暴露
     name: 'pdf_generate_image',
     skillName: 'generate_image',
     app: 'pdf',
-    description: PDF_CONTROL_NOTE + 'AI 图片生成（网页版不可用，返回错误）。',
+    description: PDF_CONTROL_NOTE + 'AI 图片生成。经本地中继调用 Genspark，浏览器不直连公网。',
     parameters: {
       path: PATH_PARAM,
       prompt: { type: 'string', required: true },
@@ -1080,76 +1081,80 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     name: 'pdf_list_page_images',
     skillName: 'list_page_images',
     app: 'pdf',
-    description: PDF_CONTROL_NOTE + '列出页内图片（网页版不可用，返回空）。',
+    description: PDF_CONTROL_NOTE + '列出页内嵌入图片（位置/尺寸，1 起编号）。改图前先调用。',
     parameters: {
       path: PATH_PARAM,
-      page: { type: 'integer', required: true },
+      page: { type: 'integer', description: '页码（1 起）；省略则列出每一页' },
     },
   },
   {
-    // UNREGISTERED (bridge-missing) — 上游放开后需先修键（w/h→width 等）再暴露
     name: 'pdf_insert_image',
     skillName: 'insert_image',
     app: 'pdf',
-    description: PDF_CONTROL_NOTE + '插入图片（网页版不可用，返回错误）。',
+    description:
+      PDF_CONTROL_NOTE +
+      '插入本地图片到指定页。imagePath 为本机绝对路径。省略 x/y 时居中；width 为显示宽度（点），高度按比例。',
     parameters: {
       path: PATH_PARAM,
       page: { type: 'integer', required: true },
-      url: { type: 'string', required: true },
-      x: { type: 'number' },
-      y: { type: 'number' },
-      w: { type: 'number' },
-      h: { type: 'number' },
+      imagePath: { type: 'string', required: true, description: '本机图片绝对路径' },
+      x: { type: 'number', description: '左边缘（点，从页左缘）' },
+      y: { type: 'number', description: '上边缘（点，从页顶）' },
+      width: { type: 'number', description: '显示宽度（点）；高度按图片比例' },
+      anchor_text: { type: 'string', description: '页内原文片段，用于相对定位' },
+      placement: { type: 'string', enum: ['below', 'above', 'right', 'left'] },
+      layer: { type: 'string', enum: ['above_text', 'below_text'] },
     },
   },
   {
     name: 'pdf_transform_image',
     skillName: 'transform_image',
     app: 'pdf',
-    description: PDF_CONTROL_NOTE + '移动/缩放图片（网页版不可用，返回错误）。',
+    description: PDF_CONTROL_NOTE + '移动/缩放已有页内图片。image_number 来自 list_page_images。',
     parameters: {
       path: PATH_PARAM,
       page: { type: 'integer', required: true },
-      image_index: { type: 'integer', required: true },
+      image_number: { type: 'integer', required: true, description: 'list_page_images 的 1 起编号' },
       x: { type: 'number' },
       y: { type: 'number' },
-      w: { type: 'number' },
-      h: { type: 'number' },
+      width: { type: 'number' },
+      height: { type: 'number' },
+      layer: { type: 'string', enum: ['above_text', 'below_text'] },
     },
   },
   {
     name: 'pdf_rotate_image',
     skillName: 'rotate_image',
     app: 'pdf',
-    description: PDF_CONTROL_NOTE + '旋转图片（网页版不可用，返回错误）。',
+    description: PDF_CONTROL_NOTE + '旋转已有页内图片。cw=顺时针 90°，ccw=逆时针 90°，180=半圈。',
     parameters: {
       path: PATH_PARAM,
       page: { type: 'integer', required: true },
-      image_index: { type: 'integer', required: true },
-      direction: { type: 'string', enum: ['left', 'right'], required: true },
+      image_number: { type: 'integer', required: true, description: 'list_page_images 的 1 起编号' },
+      direction: { type: 'string', enum: ['cw', 'ccw', '180'], required: true },
     },
   },
   {
     name: 'pdf_replace_image',
     skillName: 'replace_image',
     app: 'pdf',
-    description: PDF_CONTROL_NOTE + '原地替换图片（网页版不可用，返回错误）。',
+    description: PDF_CONTROL_NOTE + '原地替换页内图片像素（位置/层级不变）。imagePath 为本机绝对路径。',
     parameters: {
       path: PATH_PARAM,
       page: { type: 'integer', required: true },
-      image_index: { type: 'integer', required: true },
-      url: { type: 'string', required: true },
+      image_number: { type: 'integer', required: true, description: 'list_page_images 的 1 起编号' },
+      imagePath: { type: 'string', required: true, description: '本机图片绝对路径' },
     },
   },
   {
     name: 'pdf_delete_image',
     skillName: 'delete_image',
     app: 'pdf',
-    description: PDF_CONTROL_NOTE + '删除图片（网页版不可用，返回错误）。',
+    description: PDF_CONTROL_NOTE + '删除页内图片。image_number 来自 list_page_images。',
     parameters: {
       path: PATH_PARAM,
       page: { type: 'integer', required: true },
-      image_index: { type: 'integer', required: true },
+      image_number: { type: 'integer', required: true, description: 'list_page_images 的 1 起编号' },
     },
   },
   {

@@ -45,7 +45,14 @@ function shouldRegister(
   if (opts.allTools) return true
   const cap = capabilityOf(entry.app, entry.skillName)
   if (cap === undefined || !isExposed(cap)) return false
-  if (entry.name === 'docx_insert_image' && !opts.assetsAvailable) return false
+  if (
+    (entry.name === 'docx_insert_image' ||
+      entry.name === 'pdf_insert_image' ||
+      entry.name === 'pdf_replace_image') &&
+    !opts.assetsAvailable
+  ) {
+    return false
+  }
   return true
 }
 
@@ -221,7 +228,11 @@ export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<t
       }),
       async execute(args, exec) {
         const input = args as unknown as Record<string, unknown>
-        if (entry.name === 'docx_insert_image') {
+        if (
+          entry.name === 'docx_insert_image' ||
+          entry.name === 'pdf_insert_image' ||
+          entry.name === 'pdf_replace_image'
+        ) {
           return await executeInsertImage(entry, input, exec.signal, opts.assets)
         }
         if (isSave) {

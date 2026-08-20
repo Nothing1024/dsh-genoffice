@@ -55,8 +55,8 @@ export const CAPABILITY: Record<CapabilityKey, CapabilityEntry> = {
   'slides:set_element_stroke': { status: 'available', netEgress: false, evidence: 'web-bridge.ts:226,308-336,356-421 均为真实实现' },
   'slides:web_search': { status: 'relay-fetch', netEgress: true, handover: 'dsh:web_search', evidence: 'web-bridge.ts:606-627 → relay /api/search/*' },
   'slides:image_search': { status: 'relay-fetch', netEgress: true, handover: 'dsh:pending', evidence: 'web-bridge.ts:606-627 → relay /api/search/*' },
-  'slides:generate_image': { status: 'bridge-missing', netEgress: false, handover: 'dsh:pending', evidence: 'web-bridge.ts:629-630 硬编码错误串' },
-  'slides:analyze_media': { status: 'bridge-missing', netEgress: false, evidence: 'web-bridge.ts:629-630 硬编码错误串' },
+  'slides:generate_image': { status: 'available', netEgress: false, handover: 'dsh:pending', evidence: 'web-bridge.ts generateImage → relay POST /api/generate-image → gsk img (browser netEgress false)' },
+  'slides:analyze_media': { status: 'available', netEgress: false, evidence: 'web-bridge.ts analyzeMedia → relay POST /api/analyze-media → gsk media-analyze (browser netEgress false)' },
   'slides:insert_web_image': { status: 'available', netEgress: true, evidence: 'web-bridge.ts insertImageUrl → fetch + addPicture' },
   'slides:crop_image': { status: 'available', netEgress: false, evidence: 'web-bridge.ts editPictureSrcRect → pptx-engine editPictureSrcRect' },
   'slides:set_picture_opacity': { status: 'available', netEgress: false, evidence: 'web-bridge.ts editPictureOpacity → pptx-engine setPictureOpacity' },
@@ -89,13 +89,13 @@ export const CAPABILITY: Record<CapabilityKey, CapabilityEntry> = {
   'pdf:edit_text': { status: 'available', netEgress: false, evidence: 'pdf/tools.ts:461-1325 + web-pdf-save.ts:414-463' },
   'pdf:edit_block': { status: 'available', netEgress: false, evidence: 'pdf/tools.ts:461-1325 + web-pdf-save.ts:414-463' },
   'pdf:image_search': { status: 'relay-fetch', netEgress: true, handover: 'dsh:pending', evidence: 'pdf/web-bridge.ts:208-219 → relay /api/search/image' },
-  'pdf:generate_image': { status: 'bridge-missing', netEgress: false, handover: 'dsh:pending', evidence: 'pdf/web-bridge.ts:226 GenSpark 图片生成 stub' },
-  'pdf:list_page_images': { status: 'bridge-missing', netEgress: false, evidence: 'pdf/web-bridge.ts:192-197 listPageImages 恒 []；web-pdf-save.ts:422-426 图片编辑被跳过' },
-  'pdf:insert_image': { status: 'bridge-missing', netEgress: false, evidence: 'pdf/web-bridge.ts:192-197 listPageImages 恒 []；web-pdf-save.ts:422-426 图片编辑被跳过' },
-  'pdf:transform_image': { status: 'bridge-missing', netEgress: false, evidence: 'pdf/web-bridge.ts:192-197 listPageImages 恒 []；web-pdf-save.ts:422-426 图片编辑被跳过' },
-  'pdf:rotate_image': { status: 'bridge-missing', netEgress: false, evidence: 'pdf/web-bridge.ts:192-197 listPageImages 恒 []；web-pdf-save.ts:422-426 图片编辑被跳过' },
-  'pdf:replace_image': { status: 'bridge-missing', netEgress: false, evidence: 'pdf/web-bridge.ts:192-197 listPageImages 恒 []；web-pdf-save.ts:422-426 图片编辑被跳过' },
-  'pdf:delete_image': { status: 'bridge-missing', netEgress: false, evidence: 'pdf/web-bridge.ts:192-197 listPageImages 恒 []；web-pdf-save.ts:422-426 图片编辑被跳过' },
+  'pdf:generate_image': { status: 'available', netEgress: false, handover: 'dsh:pending', evidence: 'pdf/web-bridge.ts generateImage → relay POST /api/generate-image → gsk img (browser netEgress false)' },
+  'pdf:list_page_images': { status: 'available', netEgress: false, evidence: 'pdf/web-bridge.ts listPageImages → web-image-edit.ts listPageImages (pdfium wasm)' },
+  'pdf:insert_image': { status: 'available', netEgress: false, evidence: 'pdf/web-bridge.ts listPageImages + web-pdf-save.ts applyImageEdits → web-image-edit.ts applyImageEdits (pdfium wasm)' },
+  'pdf:transform_image': { status: 'available', netEgress: false, evidence: 'pdf/web-bridge.ts listPageImages + web-pdf-save.ts applyImageEdits → web-image-edit.ts applyImageEdits (pdfium wasm)' },
+  'pdf:rotate_image': { status: 'available', netEgress: false, evidence: 'pdf/web-bridge.ts listPageImages + web-pdf-save.ts applyImageEdits → web-image-edit.ts applyImageEdits (pdfium wasm)' },
+  'pdf:replace_image': { status: 'available', netEgress: false, evidence: 'pdf/web-bridge.ts listPageImages + web-pdf-save.ts applyImageEdits → web-image-edit.ts applyImageEdits (pdfium wasm)' },
+  'pdf:delete_image': { status: 'available', netEgress: false, evidence: 'pdf/web-bridge.ts listPageImages + web-pdf-save.ts applyImageEdits → web-image-edit.ts applyImageEdits (pdfium wasm)' },
   'pdf:list_form_fields': { status: 'available', netEgress: false, evidence: 'pdf/tools.ts:461-1325 + web-pdf-save.ts:414-463' },
   'pdf:fill_form_field': { status: 'available', netEgress: false, evidence: 'pdf/tools.ts:461-1325 + web-pdf-save.ts:414-463' },
   'pdf:rotate_page': { status: 'available', netEgress: false, evidence: 'pdf/tools.ts:461-1325 + web-pdf-save.ts:414-463' },
@@ -114,6 +114,6 @@ export function capabilityOf(app: CapabilityApp, skillName: string): CapabilityE
   return CAPABILITY[`${app}:${skillName}`]
 }
 
-/** Exposed set size used by drift tests (updated after slides SmartArt bridge). */
+/** Exposed set size used by drift tests (updated after slides/pdf image + media bridge). */
 export const EXPOSED_COUNT = Object.values(CAPABILITY).filter(isExposed).length
 
