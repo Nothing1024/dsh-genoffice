@@ -404,6 +404,76 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     },
   },
   {
+    name: 'xlsx_aggregate_range',
+    skillName: 'aggregate_range',
+    app: 'sheets',
+    description:
+      SHEETS_CONTROL_NOTE +
+      '对区域做统计（非空数、去重数、数值 sum/avg/min/max、高频值），不逐格读。大表问「多少个不同供应商」必须用它，禁止循环 read_range 或写昂贵 COUNTIF。一列一次。',
+    parameters: {
+      path: PATH_PARAM,
+      range: { type: 'string', required: true, description: '区域如 "D2:D88588"（通常一列，不含表头）' },
+      sheetId: { type: 'string', description: '目标工作表 id；省略读当前表' },
+      topValues: { type: 'number', description: '返回多少个最高频值（0-50，默认 10）' },
+    },
+  },
+  {
+    name: 'xlsx_find_cells',
+    skillName: 'find_cells',
+    app: 'sheets',
+    description:
+      SHEETS_CONTROL_NOTE +
+      '在整本或一张表里搜索值/公式匹配的单元格，返回 Sheet!Address。明文是大小写不敏感子串；regex=true 当 JS 正则；errors_only=true 找公式错误格（此时可省略 query）。定位数据或审计错误优先用它，不要分页 read_range。',
+    parameters: {
+      path: PATH_PARAM,
+      query: { type: 'string', description: '文本或正则；仅 errors_only=true 时可省略' },
+      regex: { type: 'boolean', description: '将 query 当作 JS 正则（默认 false）' },
+      look_in: { type: 'string', enum: ['values', 'formulas', 'both'], description: '匹配范围（默认 both）' },
+      sheetId: { type: 'string', description: '限制到一张表；省略搜全部表' },
+      errors_only: { type: 'boolean', description: '只找公式错误值（默认 false）' },
+      max_results: { type: 'integer', description: '最多返回条数' },
+    },
+  },
+  {
+    name: 'xlsx_select_range',
+    skillName: 'select_range',
+    app: 'sheets',
+    description:
+      SHEETS_CONTROL_NOTE +
+      '选中区域并滚到可见（激活该表）。纯视图导航，不改数据。',
+    parameters: {
+      path: PATH_PARAM,
+      range: { type: 'string', required: true, description: '区域如 "A1:D20"；单格也可' },
+      sheetId: { type: 'string', description: '目标工作表 id；省略当前表' },
+    },
+  },
+  {
+    name: 'xlsx_trace_precedents',
+    skillName: 'trace_precedents',
+    app: 'sheets',
+    description:
+      SHEETS_CONTROL_NOTE +
+      '列出公式单元格读取的引用（precedents）及当前值，并标出错误值。深度 1；对可疑引用再调一次可往上走。定义名称不展开。',
+    parameters: {
+      path: PATH_PARAM,
+      address: { type: 'string', required: true, description: '要审计的公式格，如 "C10"' },
+      sheetId: { type: 'string', description: '单元格所在表；省略当前表' },
+    },
+  },
+  {
+    name: 'xlsx_trace_dependents',
+    skillName: 'trace_dependents',
+    app: 'sheets',
+    description:
+      SHEETS_CONTROL_NOTE +
+      '找出工作簿里所有读取该单元格的公式（dependents）。改/删单元格前用它看谁会断。经定义名称间接引用的检测不到。',
+    parameters: {
+      path: PATH_PARAM,
+      address: { type: 'string', required: true, description: '目标单元格，如 "B2"' },
+      sheetId: { type: 'string', description: '单元格所在表；省略当前表' },
+    },
+  },
+  {
     name: 'xlsx_propose_operations',
     skillName: 'propose_operations',
     app: 'sheets',
@@ -950,6 +1020,26 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     },
   },
   {
+    name: 'pptx_apply_ops',
+    skillName: 'apply_ops',
+    app: 'slides',
+    description:
+      SLIDES_CONTROL_NOTE +
+      '以一笔事务应用一组官方原子编辑 op（默认 atomic：失败全回滚）。dry_run=true 只校验不改稿。多页/大量元素批处理用这个；单页排版优先 execute_slide_script，单个编辑优先专用工具。' +
+      '网页版 applyTxn 若未实现会返回未执行（与 ungroup 同类）。',
+    parameters: {
+      path: PATH_PARAM,
+      ops: {
+        type: 'array',
+        required: true,
+        description: 'op 列表，按顺序作为一笔事务（最多 50）',
+        items: { type: 'object', additionalProperties: true },
+      },
+      dry_run: { type: 'boolean', description: '只校验计划，不改稿' },
+      isolation: { type: 'string', enum: ['atomic', 'per_op'], description: 'atomic 默认全成或全败；per_op 失败跳过' },
+    },
+  },
+  {
     name: 'pptx_save',
     skillName: 'save',
     app: 'slides',
@@ -1049,6 +1139,28 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
       new_text: { type: 'string', required: true, description: '整段替换文本' },
       font_size: { type: 'number' },
       color: { type: 'string', description: '#RRGGBB' },
+      font: { type: 'string', enum: ['arial', 'times', 'courier'] },
+      bold: { type: 'boolean' },
+      italic: { type: 'boolean' },
+    },
+  },
+  {
+    name: 'pdf_insert_text',
+    skillName: 'insert_text',
+    app: 'pdf',
+    description:
+      PDF_CONTROL_NOTE +
+      '在页面上新增文本（叠在页面上，保存时生效）。空白页/空白区域用它；改已有文字用 edit_text / edit_block。x/y 是显示坐标系下文本块左上角（pt，从页顶/页左算）；省略则水平居中靠上。',
+    parameters: {
+      path: PATH_PARAM,
+      page: { type: 'integer', required: true, description: '页码（1 起）' },
+      text: { type: 'string', required: true, description: '要插入的文本；"\\n" 换行' },
+      x: { type: 'number', description: '文本块左边缘，距页左（pt）' },
+      y: { type: 'number', description: '文本块上边缘，距页顶（pt）' },
+      font_size: { type: 'number', description: '字号 pt，默认 14' },
+      color: { type: 'string', description: '颜色 #RRGGBB，默认黑' },
+      max_width: { type: 'number', description: '换行宽度（pt）；省略保持给定换行' },
+      align: { type: 'string', enum: ['left', 'center', 'right'], description: '行对齐，默认 left' },
       font: { type: 'string', enum: ['arial', 'times', 'courier'] },
       bold: { type: 'boolean' },
       italic: { type: 'boolean' },
