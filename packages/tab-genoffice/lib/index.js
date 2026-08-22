@@ -351,40 +351,40 @@ const CAPABILITY = {
 		evidence: "web-bridge.ts:606-627 → relay /api/search/*"
 	},
 	"slides:generate_image": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
 		handover: "dsh:pending",
-		evidence: "web-bridge.ts:629-630 硬编码错误串"
+		evidence: "web-bridge.ts generateImage → relay POST /api/generate-image → gsk img (browser netEgress false)"
 	},
 	"slides:analyze_media": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "web-bridge.ts:629-630 硬编码错误串"
+		evidence: "web-bridge.ts analyzeMedia → relay POST /api/analyze-media → gsk media-analyze (browser netEgress false)"
 	},
 	"slides:insert_web_image": {
-		status: "bridge-missing",
-		netEgress: false,
-		evidence: "web-bridge.ts:347,354,397,428,430,431,438,439,486 → notAvailable()"
+		status: "available",
+		netEgress: true,
+		evidence: "web-bridge.ts insertImageUrl → fetch + addPicture"
 	},
 	"slides:crop_image": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "web-bridge.ts:347,354,397,428,430,431,438,439,486 → notAvailable()"
+		evidence: "web-bridge.ts editPictureSrcRect → pptx-engine editPictureSrcRect"
 	},
 	"slides:set_picture_opacity": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "web-bridge.ts:347,354,397,428,430,431,438,439,486 → notAvailable()"
+		evidence: "web-bridge.ts editPictureOpacity → pptx-engine setPictureOpacity"
 	},
 	"slides:replace_image": {
-		status: "bridge-missing",
-		netEgress: false,
-		evidence: "web-bridge.ts:347,354,397,428,430,431,438,439,486 → notAvailable()"
+		status: "available",
+		netEgress: true,
+		evidence: "web-bridge.ts replacePictureUrl / replacePictureBytes → pptx-engine replacePictureBytes"
 	},
 	"slides:ask_clarification": {
-		status: "state-locked",
+		status: "available",
 		netEgress: false,
-		evidence: "App.tsx:982-989 控制面 DeckAccess 无 askClarification"
+		evidence: "App.tsx control mode getDeckAccess adds askClarification via React state; ClarifyCard overlay rendered in App root"
 	},
 	"slides:plan_deck": {
 		status: "available",
@@ -407,14 +407,14 @@ const CAPABILITY = {
 		evidence: "web-bridge.ts:220-224 cloudGenStatus.enabled=false / htmlToPptx 报错"
 	},
 	"slides:save_style_template": {
-		status: "state-locked",
+		status: "available",
 		netEgress: false,
-		evidence: "control.ts:135 每次调用新建 skill → state.lastStyleSkill 恒空"
+		evidence: "slides-skill.ts:1444-1459 skillStateCache persists lastStyleSkill across tool calls per docPath"
 	},
 	"slides:list_style_templates": {
-		status: "partial",
+		status: "available",
 		netEgress: false,
-		evidence: "web-bridge.ts:490 恒返回 []"
+		evidence: "web-bridge.ts listStyleTemplates → localStorage genoffice-style-templates"
 	},
 	"slides:add_slide": {
 		status: "available",
@@ -424,47 +424,47 @@ const CAPABILITY = {
 	"slides:add_text_box": {
 		status: "guarded",
 		netEgress: false,
-		evidence: "slides-skill.ts:1486-1508 blockScratchBuild：deck 带文字非装饰元素 ≤2 且 htmlGenerated=false 即拒绝；控制面 state 每次重建恒 false（control.ts:135），空白 deck 无解锁路径"
+		evidence: "slides-skill.ts:1498-1521 blockScratchBuild：deck 带文字非装饰元素 ≤2 且 htmlGenerated=false 即拒绝；skillStateCache（line 1448）跨调用持久化 htmlGenerated，generate_deck 后可解锁"
 	},
 	"slides:add_shape": {
 		status: "guarded",
 		netEgress: false,
-		evidence: "slides-skill.ts:1486-1508 blockScratchBuild：deck 带文字非装饰元素 ≤2 且 htmlGenerated=false 即拒绝；控制面 state 每次重建恒 false（control.ts:135），空白 deck 无解锁路径"
+		evidence: "slides-skill.ts:1498-1521 blockScratchBuild：deck 带文字非装饰元素 ≤2 且 htmlGenerated=false 即拒绝；skillStateCache（line 1448）跨调用持久化 htmlGenerated，generate_deck 后可解锁"
 	},
 	"slides:add_chart": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "web-bridge.ts:347,354,397,428,430,431,438,439,486 → notAvailable()"
+		evidence: "web-bridge.ts addChart → pptx-engine addChart"
 	},
 	"slides:add_smartart": {
-		status: "bridge-missing",
+		status: "guarded",
 		netEgress: false,
-		evidence: "web-bridge.ts:347,354,397,428,430,431,438,439,486 → notAvailable()"
+		evidence: "web-bridge.ts:1001-1022 addSmartArt → pptx-engine addSmartArt (pushHistory before mutation); slides-skill.ts:3086-3124 already wired; blockScratchBuild（slides-skill.ts:1498-1521）同 add_text_box/add_shape"
 	},
 	"slides:add_table": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "web-bridge.ts:347,354,397,428,430,431,438,439,486 → notAvailable()"
+		evidence: "web-bridge.ts addTable → pptx-engine addTable"
 	},
 	"slides:edit_table_cell": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "web-bridge.ts:347,354,397,428,430,431,438,439,486 → notAvailable()"
+		evidence: "web-bridge.ts editTableCell → pptx-engine editTableCellText"
 	},
 	"slides:edit_table_structure": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "web-bridge.ts:347,354,397,428,430,431,438,439,486 → notAvailable()"
+		evidence: "web-bridge.ts tableStructure / tableMerge → pptx-engine"
 	},
 	"slides:edit_table_style": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "web-bridge.ts:347,354,397,428,430,431,438,439,486 → notAvailable()"
+		evidence: "web-bridge.ts editTableStyle → pptx-engine editTableStyle"
 	},
 	"slides:edit_chart": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "web-bridge.ts:347,354,397,428,430,431,438,439,486 → notAvailable()"
+		evidence: "web-bridge.ts editChart / getChartData → pptx-engine"
 	},
 	"slides:set_slide_background": {
 		status: "available",
@@ -477,9 +477,9 @@ const CAPABILITY = {
 		evidence: "web-bridge.ts:226,308-336,356-421 均为真实实现"
 	},
 	"slides:ungroup_element": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "web-bridge.ts:347,354,397,428,430,431,438,439,486 → notAvailable()"
+		evidence: "web-bridge.ts ungroupElement → pptx-engine ungroupElement"
 	},
 	"slides:save": {
 		status: "available",
@@ -523,40 +523,40 @@ const CAPABILITY = {
 		evidence: "pdf/web-bridge.ts:208-219 → relay /api/search/image"
 	},
 	"pdf:generate_image": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
 		handover: "dsh:pending",
-		evidence: "pdf/web-bridge.ts:226 GenSpark 图片生成 stub"
+		evidence: "pdf/web-bridge.ts generateImage → relay POST /api/generate-image → gsk img (browser netEgress false)"
 	},
 	"pdf:list_page_images": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "pdf/web-bridge.ts:192-197 listPageImages 恒 []；web-pdf-save.ts:422-426 图片编辑被跳过"
+		evidence: "pdf/web-bridge.ts listPageImages → web-image-edit.ts listPageImages (pdfium wasm)"
 	},
 	"pdf:insert_image": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "pdf/web-bridge.ts:192-197 listPageImages 恒 []；web-pdf-save.ts:422-426 图片编辑被跳过"
+		evidence: "pdf/web-bridge.ts listPageImages + web-pdf-save.ts applyImageEdits → web-image-edit.ts applyImageEdits (pdfium wasm)"
 	},
 	"pdf:transform_image": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "pdf/web-bridge.ts:192-197 listPageImages 恒 []；web-pdf-save.ts:422-426 图片编辑被跳过"
+		evidence: "pdf/web-bridge.ts listPageImages + web-pdf-save.ts applyImageEdits → web-image-edit.ts applyImageEdits (pdfium wasm)"
 	},
 	"pdf:rotate_image": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "pdf/web-bridge.ts:192-197 listPageImages 恒 []；web-pdf-save.ts:422-426 图片编辑被跳过"
+		evidence: "pdf/web-bridge.ts listPageImages + web-pdf-save.ts applyImageEdits → web-image-edit.ts applyImageEdits (pdfium wasm)"
 	},
 	"pdf:replace_image": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "pdf/web-bridge.ts:192-197 listPageImages 恒 []；web-pdf-save.ts:422-426 图片编辑被跳过"
+		evidence: "pdf/web-bridge.ts listPageImages + web-pdf-save.ts applyImageEdits → web-image-edit.ts applyImageEdits (pdfium wasm)"
 	},
 	"pdf:delete_image": {
-		status: "bridge-missing",
+		status: "available",
 		netEgress: false,
-		evidence: "pdf/web-bridge.ts:192-197 listPageImages 恒 []；web-pdf-save.ts:422-426 图片编辑被跳过"
+		evidence: "pdf/web-bridge.ts listPageImages + web-pdf-save.ts applyImageEdits → web-image-edit.ts applyImageEdits (pdfium wasm)"
 	},
 	"pdf:list_form_fields": {
 		status: "available",
@@ -643,7 +643,7 @@ function buildGenOfficePromptText() {
 		`可做：\n${Object.entries(byApp).map(([app, skills]) => `${app}：${skills.join("、")}`).join("\n")}`,
 		`不可做（不要调用、不要向用户承诺）：\n${blocked.join("；")}`,
 		"需要联网资料时用 DSH 自己的 web_search。GenOffice 侧没有检索工具。",
-		"图片：不提供搜图与生图。本地已有图片时用 docx_insert_image，参数 imagePath 为本机绝对路径。",
+		"图片：不提供搜图与生图。本地已有图片时用 docx_insert_image 或 pdf_insert_image，参数 imagePath 为本机绝对路径。",
 		"「在浏览器中打开」会离开控制模式；网页版 AI 面板可直连第三方模型服务商，可能出网。"
 	].join("\n");
 }
@@ -1477,7 +1477,7 @@ const CONTROL_TOOL_TABLE = [
 		name: "pptx_generate_image",
 		skillName: "generate_image",
 		app: "slides",
-		description: "该工具操作 GenOffice 网页版中已打开的 pptx 演示文稿（控制模式）。所有编辑先改 iframe 内幻灯片，只有 pptx_save 或 tab「写入磁盘」才会写回原文件。页面索引 0 起，画布 1280×720。Genspark AI 图片生成/编辑（网页版不可用，返回错误）。",
+		description: "该工具操作 GenOffice 网页版中已打开的 pptx 演示文稿（控制模式）。所有编辑先改 iframe 内幻灯片，只有 pptx_save 或 tab「写入磁盘」才会写回原文件。页面索引 0 起，画布 1280×720。Genspark AI 图片生成/编辑。经本地中继调用，浏览器不直连公网。",
 		parameters: {
 			path: PATH_PARAM,
 			prompt: {
@@ -1491,7 +1491,7 @@ const CONTROL_TOOL_TABLE = [
 		name: "pptx_analyze_media",
 		skillName: "analyze_media",
 		app: "slides",
-		description: "该工具操作 GenOffice 网页版中已打开的 pptx 演示文稿（控制模式）。所有编辑先改 iframe 内幻灯片，只有 pptx_save 或 tab「写入磁盘」才会写回原文件。页面索引 0 起，画布 1280×720。媒体内容理解分析（网页版不可用，返回错误）。",
+		description: "该工具操作 GenOffice 网页版中已打开的 pptx 演示文稿（控制模式）。所有编辑先改 iframe 内幻灯片，只有 pptx_save 或 tab「写入磁盘」才会写回原文件。页面索引 0 起，画布 1280×720。媒体内容理解分析。mediaUrls 为图片/音视频链接；经本地中继调用 Genspark。",
 		parameters: {
 			path: PATH_PARAM,
 			mediaUrls: {
@@ -1830,17 +1830,37 @@ const CONTROL_TOOL_TABLE = [
 		name: "pptx_add_smartart",
 		skillName: "add_smartart",
 		app: "slides",
-		description: "该工具操作 GenOffice 网页版中已打开的 pptx 演示文稿（控制模式）。所有编辑先改 iframe 内幻灯片，只有 pptx_save 或 tab「写入磁盘」才会写回原文件。页面索引 0 起，画布 1280×720。添加 SmartArt（网页版不可用，返回错误）。",
+		description: "该工具操作 GenOffice 网页版中已打开的 pptx 演示文稿（控制模式）。所有编辑先改 iframe 内幻灯片，只有 pptx_save 或 tab「写入磁盘」才会写回原文件。页面索引 0 起，画布 1280×720。插入 SmartArt 风格示意图（list=纵向列表、process=流程箭头、cycle=循环、hierarchy=层级、pyramid=金字塔、matrix=2x2、venn=维恩）。items 为节点文本。省略 x/y/w/h 时居中。空白 deck 会被上游守卫拒绝。",
 		parameters: {
 			path: PATH_PARAM,
 			slideIndex: {
 				type: "integer",
 				required: true
 			},
-			kind: {
+			layout: {
 				type: "string",
-				required: true
-			}
+				required: true,
+				enum: [
+					"list",
+					"process",
+					"cycle",
+					"hierarchy",
+					"pyramid",
+					"matrix",
+					"venn"
+				],
+				description: "示意图布局"
+			},
+			items: {
+				type: "array",
+				required: true,
+				items: { type: "string" },
+				description: "节点文本（建议 2–8 项）"
+			},
+			x: { type: "number" },
+			y: { type: "number" },
+			w: { type: "number" },
+			h: { type: "number" }
 		}
 	},
 	{
@@ -2212,7 +2232,7 @@ const CONTROL_TOOL_TABLE = [
 		name: "pdf_generate_image",
 		skillName: "generate_image",
 		app: "pdf",
-		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。AI 图片生成（网页版不可用，返回错误）。",
+		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。AI 图片生成。经本地中继调用 Genspark，浏览器不直连公网。",
 		parameters: {
 			path: PATH_PARAM,
 			prompt: {
@@ -2226,12 +2246,12 @@ const CONTROL_TOOL_TABLE = [
 		name: "pdf_list_page_images",
 		skillName: "list_page_images",
 		app: "pdf",
-		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。列出页内图片（网页版不可用，返回空）。",
+		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。列出页内嵌入图片（位置/尺寸，1 起编号）。改图前先调用。",
 		parameters: {
 			path: PATH_PARAM,
 			page: {
 				type: "integer",
-				required: true
+				description: "页码（1 起）；省略则列出每一页"
 			}
 		}
 	},
@@ -2239,62 +2259,98 @@ const CONTROL_TOOL_TABLE = [
 		name: "pdf_insert_image",
 		skillName: "insert_image",
 		app: "pdf",
-		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。插入图片（网页版不可用，返回错误）。",
+		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。插入本地图片到指定页。imagePath 为本机绝对路径。省略 x/y 时居中；width 为显示宽度（点），高度按比例。",
 		parameters: {
 			path: PATH_PARAM,
 			page: {
 				type: "integer",
 				required: true
 			},
-			url: {
+			imagePath: {
 				type: "string",
-				required: true
+				required: true,
+				description: "本机图片绝对路径"
 			},
-			x: { type: "number" },
-			y: { type: "number" },
-			w: { type: "number" },
-			h: { type: "number" }
+			x: {
+				type: "number",
+				description: "左边缘（点，从页左缘）"
+			},
+			y: {
+				type: "number",
+				description: "上边缘（点，从页顶）"
+			},
+			width: {
+				type: "number",
+				description: "显示宽度（点）；高度按图片比例"
+			},
+			anchor_text: {
+				type: "string",
+				description: "页内原文片段，用于相对定位"
+			},
+			placement: {
+				type: "string",
+				enum: [
+					"below",
+					"above",
+					"right",
+					"left"
+				]
+			},
+			layer: {
+				type: "string",
+				enum: ["above_text", "below_text"]
+			}
 		}
 	},
 	{
 		name: "pdf_transform_image",
 		skillName: "transform_image",
 		app: "pdf",
-		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。移动/缩放图片（网页版不可用，返回错误）。",
+		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。移动/缩放已有页内图片。image_number 来自 list_page_images。",
 		parameters: {
 			path: PATH_PARAM,
 			page: {
 				type: "integer",
 				required: true
 			},
-			image_index: {
+			image_number: {
 				type: "integer",
-				required: true
+				required: true,
+				description: "list_page_images 的 1 起编号"
 			},
 			x: { type: "number" },
 			y: { type: "number" },
-			w: { type: "number" },
-			h: { type: "number" }
+			width: { type: "number" },
+			height: { type: "number" },
+			layer: {
+				type: "string",
+				enum: ["above_text", "below_text"]
+			}
 		}
 	},
 	{
 		name: "pdf_rotate_image",
 		skillName: "rotate_image",
 		app: "pdf",
-		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。旋转图片（网页版不可用，返回错误）。",
+		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。旋转已有页内图片。cw=顺时针 90°，ccw=逆时针 90°，180=半圈。",
 		parameters: {
 			path: PATH_PARAM,
 			page: {
 				type: "integer",
 				required: true
 			},
-			image_index: {
+			image_number: {
 				type: "integer",
-				required: true
+				required: true,
+				description: "list_page_images 的 1 起编号"
 			},
 			direction: {
 				type: "string",
-				enum: ["left", "right"],
+				enum: [
+					"cw",
+					"ccw",
+					"180"
+				],
 				required: true
 			}
 		}
@@ -2303,20 +2359,22 @@ const CONTROL_TOOL_TABLE = [
 		name: "pdf_replace_image",
 		skillName: "replace_image",
 		app: "pdf",
-		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。原地替换图片（网页版不可用，返回错误）。",
+		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。原地替换页内图片像素（位置/层级不变）。imagePath 为本机绝对路径。",
 		parameters: {
 			path: PATH_PARAM,
 			page: {
 				type: "integer",
 				required: true
 			},
-			image_index: {
+			image_number: {
 				type: "integer",
-				required: true
+				required: true,
+				description: "list_page_images 的 1 起编号"
 			},
-			url: {
+			imagePath: {
 				type: "string",
-				required: true
+				required: true,
+				description: "本机图片绝对路径"
 			}
 		}
 	},
@@ -2324,16 +2382,17 @@ const CONTROL_TOOL_TABLE = [
 		name: "pdf_delete_image",
 		skillName: "delete_image",
 		app: "pdf",
-		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。删除图片（网页版不可用，返回错误）。",
+		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。删除页内图片。image_number 来自 list_page_images。",
 		parameters: {
 			path: PATH_PARAM,
 			page: {
 				type: "integer",
 				required: true
 			},
-			image_index: {
+			image_number: {
 				type: "integer",
-				required: true
+				required: true,
+				description: "list_page_images 的 1 起编号"
 			}
 		}
 	},
@@ -2445,7 +2504,7 @@ function shouldRegister(entry, opts) {
 	if (opts.allTools) return true;
 	const cap = capabilityOf(entry.app, entry.skillName);
 	if (cap === void 0 || !isExposed(cap)) return false;
-	if (entry.name === "docx_insert_image" && !opts.assetsAvailable) return false;
+	if ((entry.name === "docx_insert_image" || entry.name === "pdf_insert_image" || entry.name === "pdf_replace_image") && !opts.assetsAvailable) return false;
 	return true;
 }
 function fail(error, path, kind) {
@@ -2541,7 +2600,6 @@ const READ_SKILLS = /* @__PURE__ */ new Set([
 	"get_outline"
 ]);
 function callKindFor(entry) {
-	if (isSaveEntry(entry)) return "execute";
 	if (READ_SKILLS.has(entry.skillName)) return "read";
 	return "edit";
 }
@@ -2605,19 +2663,23 @@ function createControlTools(opts = {}) {
 					text: value.output
 				}]
 			},
-			presentCall: (args) => ({
-				card: "generic",
-				title: entry.name,
-				kind: callKindFor(entry),
-				rawInput: String(args.path ?? "")
-			}),
+			presentCall: (args) => {
+				const path = String(args.path ?? "");
+				return {
+					card: "generic",
+					title: entry.name,
+					kind: callKindFor(entry),
+					rawInput: path,
+					...isSave && path.startsWith("/") ? { locations: [{ path }] } : {}
+				};
+			},
 			presentResult: (_args, result) => ({
 				card: "generic",
 				title: result.isError ? `${entry.name} 失败` : entry.name
 			}),
 			async execute(args, exec) {
 				const input = args;
-				if (entry.name === "docx_insert_image") return await executeInsertImage(entry, input, exec.signal, opts.assets);
+				if (entry.name === "docx_insert_image" || entry.name === "pdf_insert_image" || entry.name === "pdf_replace_image") return await executeInsertImage(entry, input, exec.signal, opts.assets);
 				if (isSave) {
 					const result = await saveViaRelay(entry, input, exec.signal);
 					return {
@@ -2689,6 +2751,9 @@ function createOpenTools() {
 		}),
 		async execute(args, exec) {
 			const filePath = String(args.path ?? "");
+			if (!filePath.startsWith("/")) fail("path 必须是目标文件的本机绝对路径", filePath, "local");
+			const slash = Math.max(filePath.lastIndexOf("/"), filePath.lastIndexOf("\\"));
+			if (!(slash < 0 ? filePath : filePath.slice(slash + 1)).toLowerCase().endsWith(`.${ext}`)) fail(`path 必须是 .${ext} 文件`, filePath, "local");
 			let resp;
 			try {
 				resp = await fetch(`${RELAY_BASE}/api/open`, {

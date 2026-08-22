@@ -158,9 +158,10 @@ const READ_SKILLS = new Set([
   'get_outline',
 ])
 
-function callKindFor(entry: ControlToolEntry): 'read' | 'edit' | 'execute' {
-  if (isSaveEntry(entry)) return 'execute'
+function callKindFor(entry: ControlToolEntry): 'read' | 'edit' {
   if (READ_SKILLS.has(entry.skillName)) return 'read'
+  // *_save and in-iframe mutations are both edits. Only save adds
+  // `locations`, which is what the turn-tail 「产物」 row actually keys on.
   return 'edit'
 }
 
@@ -216,12 +217,18 @@ export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<t
         },
         render: (_args, value) => [{ type: 'text', text: value.output }],
       },
-      presentCall: (args) => ({
-        card: 'generic',
-        title: entry.name,
-        kind: callKindFor(entry),
-        rawInput: String((args as Record<string, unknown>).path ?? ''),
-      }),
+      presentCall: (args) => {
+        const path = String((args as Record<string, unknown>).path ?? '')
+        return {
+          card: 'generic',
+          title: entry.name,
+          kind: callKindFor(entry),
+          rawInput: path,
+          // Only *_save joins the turn-tail produced-files row. In-iframe
+          // edits are not on disk yet; listing them would open stale bytes.
+          ...(isSave && path.startsWith('/') ? { locations: [{ path }] } : {}),
+        }
+      },
       presentResult: (_args, result) => ({
         card: 'generic',
         title: result.isError ? `${entry.name} 失败` : entry.name,
