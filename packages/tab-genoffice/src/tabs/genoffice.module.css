@@ -47,6 +47,11 @@
   cursor: default;
 }
 
+.btnDirty {
+  color: var(--dsw-alias-state-warning-primary, #b45309);
+  box-shadow: inset 0 0 0 1px var(--dsw-alias-state-warning-primary, #d97706);
+}
+
 /* The current directory: a subtle capsule the path truncates inside. */
 .pathText {
   flex: 1;

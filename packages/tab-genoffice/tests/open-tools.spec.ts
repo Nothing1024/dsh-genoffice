@@ -30,12 +30,13 @@ beforeEach(() => {
 })
 
 describe('createOpenTools', () => {
-  it('registers pptx_open / docx_open / xlsx_open / md_open', () => {
+  it('registers pptx_open / docx_open / xlsx_open / md_open / pdf_open', () => {
     expect(createOpenTools().map((t) => t.name)).toEqual([
       'pptx_open',
       'docx_open',
       'xlsx_open',
       'md_open',
+      'pdf_open',
     ])
   })
 
@@ -63,6 +64,7 @@ describe('createOpenTools', () => {
       'docx_open',
       'xlsx_open',
       'md_open',
+      'pdf_open',
     ])
   })
 
@@ -157,5 +159,42 @@ describe('createOpenTools', () => {
     await expect(tool!.execute({ path: '/tmp/book.xlsx' }, exec)).rejects.toThrow(
       'open failed: fetch failed',
     )
+  })
+
+  it('pdf_open rejects a path whose extension does not match', async () => {
+    const fetch = vi.fn()
+    vi.stubGlobal('fetch', fetch)
+    const tool = createOpenTools().find((t) => t.name === 'pdf_open')
+    await expect(tool!.execute({ path: '/tmp/a.docx' }, exec)).rejects.toThrow('.pdf')
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
+  it('fails immediately when subscribers is 0', async () => {
+    const fetch = mockOpenFetch({
+      open: () => ({ ok: true, path: '/tmp/demo.docx', subscribers: 0 }),
+    })
+    vi.stubGlobal('fetch', fetch)
+    const tool = createOpenTools().find((t) => t.name === 'docx_open')
+    await expect(tool!.execute({ path: '/tmp/demo.docx' }, exec)).rejects.toThrow(
+      /没有 DSH 页面在监听/,
+    )
+    expect(fetch.mock.calls.map((c) => String(c[0]))).toEqual([
+      'http://localhost:8787/api/open',
+    ])
+  })
+
+  it('still polls when subscribers is missing', async () => {
+    let n = 0
+    const fetch = mockOpenFetch({
+      open: () => ({ ok: true, path: '/tmp/demo.pptx' }),
+      ready: () => {
+        n += 1
+        return { ok: true, path: '/tmp/demo.pptx', registered: n >= 2 }
+      },
+    })
+    vi.stubGlobal('fetch', fetch)
+    const tool = createOpenTools().find((t) => t.name === 'pptx_open')
+    await tool!.execute({ path: '/tmp/demo.pptx' }, exec)
+    expect(n).toBeGreaterThanOrEqual(2)
   })
 })

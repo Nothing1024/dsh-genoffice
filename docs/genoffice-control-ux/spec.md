@@ -6,7 +6,7 @@
 > 其他文件（handoff.md、tasks.csv）只引用本文件，不复制内容。
 >
 > 填写三态规则：每个表格单元格只允许三种内容——
-> 1. 验证过的事实（注明来源命令）；2. 显式假设 `ASM-xxx`；3. `待勘察`。
+> 1. 验证过的事实（注明来源命令）；2. 显式假设 `ASM-xxx`；3. `未校准`。
 > 禁止编造看似合理的命令、symbol、文件名。
 
 ---
@@ -360,22 +360,22 @@ After:
 | `upstream/web/server.mjs` | `pushTo` / `executors` | `rg "const executors|function pushTo" web/server.mjs` | L69、L102 | saved 事件复用下行通道 |
 | `upstream/web/server.mjs` | export 端点分支 | `rg "'export'" web/server.mjs` | L800-834 | saveAs 分支在 path mismatch 校验旁扩展 |
 | `upstream/apps/docs/src/renderer/control.ts` | `captureMtime` / `openStream` | `rg "captureMtime" apps/docs/src/renderer/control.ts` | L215-228 | saved 监听加在 openStream 事件组；其余 4 app 同构 |
-| `upstream/apps/docs/src/renderer/doc-dirty.ts` | `DocDirtyState` | `rg "DocDirtyState" apps/docs/src/renderer` | L1-30 | docs dirty 源；接线点（App.tsx 何处持有）待 P0 校准 |
-| `upstream/apps/markdown/src/renderer/App.tsx` | dirty 状态持有处 | `rg -i "dirty" apps/markdown/src/renderer/App.tsx` | 待勘察 | ASM-003：P0 Task 2 校准 |
-| `upstream/apps/sheets/src/renderer/univer-sync.ts` | dirty/edit-journal 信号 | `rg -i "dirty" apps/sheets/src/renderer/univer-sync.ts` | 待勘察 | ASM-003 |
-| `upstream/apps/slides/src/renderer/action-context.ts` | dirty 信号 | `rg -i "dirty" apps/slides/src/renderer/action-context.ts` | 待勘察 | ASM-003 |
-| `upstream/apps/pdf/src/renderer/edit-state.ts` | dirty 信号 | `rg -i "dirty|unsaved" apps/pdf/src/renderer/edit-state.ts` | 待勘察 | ASM-003 |
+| `upstream/apps/docs/src/renderer/doc-dirty.ts` | `isDocDirty(DocDirtyState)` | `rg "isDocDirty|DocDirtyState" apps/docs/src/renderer` | L6-56 | docs dirty 源：`isDocDirty` 聚合 `dirtyRef` 与分域 dirty；App.tsx 传入 getDirty |
+| `upstream/apps/markdown/src/renderer/App.tsx` | `dirty` / `dirtyRef` / `markDirty` | `rg -n "dirtyRef|markDirty|uiOnly" apps/markdown/src/renderer/App.tsx` | L114-180 | `markDirty` 写 `dirty`/`dirtyRef`；`uiOnly` 事务排除（折叠等不落盘） |
+| `upstream/apps/sheets/src/renderer/App.tsx` + `edit-journal.ts` | `pendingEdits` + `journalSize(editJournal)` | `rg -n "pendingEdits|journalSize" apps/sheets/src/renderer` | App L407 | 同目标再编辑仍 `pendingEdits>0` |
+| `upstream/apps/slides/src/renderer/App.tsx` | App `dirty` state | `rg -n "setDirty|isDirty|sessionDirty" apps/slides/src/renderer` | App L284；web-slides-session L169 | 桌面 `isDirty` / web `sessionDirty(undoStack)` |
+| `upstream/apps/pdf/src/renderer/App.tsx` | App 计算 `dirty` | `rg -n "const dirty" apps/pdf/src/renderer/App.tsx` | L1375-1388 | markups/edits/rotations/deleted/order/metadata |
 | `plugin/.../src/tabs/control-mode.tsx` | `saveToDisk` / `remountControl` | `rg "remountControl" src/tabs/control-mode.tsx` | L61-67、L126-158 | 不重挂改造 + conflict 按钮 + dirty UI |
 | `plugin/.../src/tabs/control-mode.tsx` | `relayStrip` | `rg "relayStrip" src/tabs/control-mode.tsx` | L219-224 | 「启动 relay」按钮位 |
 | `plugin/.../src/tabs/genoffice.tsx` | relay 不可用条幅 | `rg "relay 不可用" src/tabs/genoffice.tsx` | L298-303 | 面板侧按钮位 |
 | `plugin/.../src/host/tools.ts` | `OPEN_TOOL_EXTS` / `OPEN_TOOL_BY_APP` / `createOpenTools` / `saveViaRelay` | `rg "OPEN_TOOL_EXTS|saveViaRelay" src/host/tools.ts` | L45-50、L184-212、L518-595 | pdf_open + 快速失败 + sync window 条件化 |
 | `plugin/.../src/host/sync.ts` | `applySyncRoute` | `rg "applySyncRoute" src/host/sync.ts` | L75-89 | relay-launch 路由的挂载范本 |
-| `plugin/.../src/host/tool-schema.ts` | `isSaveEntry` / 保存条目 | `rg "isSaveEntry|_save" src/host/tool-schema.ts` | 待勘察（save 条目具体行） | save_as 参数追加点，P0 校准 |
+| `plugin/.../src/host/tool-schema.ts` | `isSaveEntry` / 保存条目 | `rg "isSaveEntry|_save" src/host/tool-schema.ts` | 未校准（save 条目具体行） | save_as 参数追加点，P0 校准 |
 | `plugin/.../src/tabs/file-tab.ts` | `fileTabSeed`（tab id 构成） | `rg "fileTabSeed" src/tabs/file-tab.ts` | L19-27 | updateTab 需要 tabId=`${FILE_TAB_ID}:${path}` |
 | `node_modules/dsh-better-sidebar/src/client/service.ts` | `updateTab` | `rg "updateTab" node_modules/dsh-better-sidebar/src/client/service.ts` | L417 | 只读依赖，确认签名 |
 | `scripts/dev.mjs` | `smoke` | `rg "async function smoke" scripts/dev.mjs` | L85 | 新断言追加点 |
 
-> 待勘察 + ASM 占比：18 行中 5 行（28%）≤ 30%，P0 Task 2 全部覆盖。
+> 未校准 + ASM 占比：18 行中 5 行（28%）≤ 30%，P0 Task 2 全部覆盖。
 
 ### 3.4 API / 数据 / 权限 / 路由影响
 
@@ -406,7 +406,7 @@ P0 契约与校准 ──→ P1 保存不重挂 ──→ P2 冲突另存副本 
 ### Phase 0: 契约与校准
 
 > 你在哪里：改进方案已定但契约未记录，4 个 app 的 dirty 信号 symbol 未核实。
-> 做完之后：contracts/ 是新接口的单一事实源；3.3 定位清单无待勘察项。
+> 做完之后：contracts/ 是新接口的单一事实源；3.3 定位清单无未校准项。
 
 ### Task 1: 更新控制契约与 relay 契约
 
@@ -442,7 +442,7 @@ P0 契约与校准 ──→ P1 保存不重挂 ──→ P2 冲突另存副本 
 - **前置任务**：无
 - **风险等级**：P0
 
-**为什么做**：3.3 清单 5 处待勘察全部集中在 dirty 信号与 tool-schema save 条目；接错信号直接违反 BR-004。
+**为什么做**：3.3 清单 5 处未校准全部集中在 dirty 信号与 tool-schema save 条目；接错信号直接违反 BR-004。
 
 **涉及文件与定位**：
 
@@ -458,9 +458,9 @@ P0 契约与校准 ──→ P1 保存不重挂 ──→ P2 冲突另存副本 
 1. 逐 app 确认「有未保存修改」的权威布尔源（symbol + 所在组件/模块 + 订阅方式），优先复用桌面版 close guard 用的同一信号。
 2. 确认 control.ts 初始化点能否拿到该信号（App.tsx 传入 initControlMode opts 或全局单例），写明接线方案。
 3. 确认 tool-schema.ts 5 个 save 条目的 parameters 定义行。
-4. 把结论回写本 spec 3.3 清单（替换 5 个待勘察）与 Task 12-14 的定位段。
+4. 把结论回写本 spec 3.3 清单（替换 5 个未校准）与 Task 12-14 的定位段。
 
-**验证**：`rg -c "待勘察" docs/genoffice-control-ux/spec.md` → 期望 0
+**验证**：`rg -c "未校准" docs/genoffice-control-ux/spec.md` → 期望 0
 
 **Evidence**：`evidence/phase-0/dirty-survey.md`（每 app：symbol、rg 输出摘要、接线方案）
 
@@ -471,7 +471,7 @@ P0 契约与校准 ──→ P1 保存不重挂 ──→ P2 冲突另存副本 
 - **关联**：INV-001；本 Phase 全部任务
 - **前置任务**：1;2
 
-**验证**：`node scripts/dev.mjs smoke` → 全绿（契约文档改动不破坏现有断言）+ `rg -c "待勘察" docs/genoffice-control-ux/spec.md` → 0
+**验证**：`node scripts/dev.mjs smoke` → 全绿（契约文档改动不破坏现有断言）+ `rg -c "未校准" docs/genoffice-control-ux/spec.md` → 0
 
 **Evidence**：`evidence/phase-0/`
 
@@ -982,4 +982,4 @@ evidence/
 
 ## 质量记录
 
-- 2026-08-25 Stage 1：勘察 20 条事实（1.3），待勘察+ASM 占比 28%（≤30%），BR 7 条均有正反例，UF 5 条均有 2.3 流程脚本。
+- 2026-08-25 Stage 1：勘察 20 条事实（1.3），未校准+ASM 占比 28%（≤30%），BR 7 条均有正反例，UF 5 条均有 2.3 流程脚本。

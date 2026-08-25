@@ -16,7 +16,7 @@ const UP_STACK = resolve(import.meta.dirname, '../../../../../../genoffice/upstr
 const UP = existsSync(UP_SIBLING) ? UP_SIBLING : UP_STACK
 
 const ASSET_GATED = ['docx_insert_image', 'pdf_insert_image', 'pdf_replace_image'] as const
-const OPEN_TOOLS = ['pptx_open', 'docx_open', 'xlsx_open', 'md_open'] as const
+const OPEN_TOOLS = ['pptx_open', 'docx_open', 'xlsx_open', 'md_open', 'pdf_open'] as const
 const tableKeys = CONTROL_TOOL_TABLE.map((row) => `${row.app}:${row.skillName}`)
 const exposedNames = CONTROL_TOOL_TABLE
   .filter((row) => {
@@ -31,7 +31,7 @@ describe('capability filter', () => {
     expect(EXPOSED_COUNT).toBe(exposedNames.length)
   })
 
-  it('exposes the capability-available control tools plus 4 open tools when the asset channel is available', () => {
+  it('exposes the capability-available control tools plus 5 open tools when the asset channel is available', () => {
     const names = registeredToolNames({ assets: fakeAssets })
     expect(names).toHaveLength(exposedNames.length + OPEN_TOOLS.length)
     expect(names).toEqual(expect.arrayContaining([...exposedNames, ...OPEN_TOOLS]))
@@ -61,7 +61,7 @@ describe('capability filter', () => {
     expect(names).not.toContain('pdf_generate_image')
   })
 
-  it('skips insert/replace image tools without webServer and still registers the other exposed control tools plus 4 open tools', () => {
+  it('skips insert/replace image tools without webServer and still registers the other exposed control tools plus 5 open tools', () => {
     const names = registeredToolNames()
     expect(names).toHaveLength(exposedNames.length - ASSET_GATED.length + OPEN_TOOLS.length)
     expect(names).not.toContain('docx_insert_image')
@@ -75,7 +75,7 @@ describe('capability filter', () => {
     expect(names).toContain('pdf_insert_text')
   })
 
-  it('DSH_GENOFFICE_ALL_TOOLS registers every CONTROL_TOOL_TABLE row plus 4 open tools and labels egress tools', () => {
+  it('DSH_GENOFFICE_ALL_TOOLS registers every CONTROL_TOOL_TABLE row plus 5 open tools and labels egress tools', () => {
     const tools = createControlTools({ allTools: true, assets: fakeAssets })
     expect(tools).toHaveLength(CONTROL_TOOL_TABLE.length + OPEN_TOOLS.length)
     const search = tools.find((t) => t.name === 'docx_web_search')
@@ -85,6 +85,7 @@ describe('capability filter', () => {
       'docx_open',
       'xlsx_open',
       'md_open',
+      'pdf_open',
     ])
   })
 

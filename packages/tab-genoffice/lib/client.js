@@ -105,6 +105,29 @@ window.__ModuleLoader__.load({
 			});
 			return inFlight;
 		}
+		async function probeRelayLaunch() {
+			try {
+				const resp = await fetch(`${window.location.origin}/dsh-artifact/genoffice-relay`);
+				if (!resp.ok) return false;
+				return (await resp.json()).configured === true;
+			} catch {
+				return false;
+			}
+		}
+		async function launchRelay() {
+			try {
+				const data = await (await fetch(`${window.location.origin}/dsh-artifact/genoffice-relay`, { method: "POST" })).json();
+				return typeof data.error === "string" ? {
+					ok: data.ok === true,
+					error: data.error
+				} : { ok: data.ok === true };
+			} catch (e) {
+				return {
+					ok: false,
+					error: e instanceof Error ? e.message : String(e)
+				};
+			}
+		}
 		async function notifyHostSync(path) {
 			try {
 				await fetch(`${window.location.origin}/dsh-artifact/genoffice-sync`, {
@@ -169,7 +192,7 @@ window.__ModuleLoader__.load({
 		}
 		//#endregion
 		//#region \0dsh-css:/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/packages/tab-genoffice/src/tabs/genoffice.module.css.mjs
-		const css = ".p8QEMa_panel{height:100%;min-height:0;color:var(--dsw-alias-label-primary);flex-direction:column;font-size:13px;display:flex}.p8QEMa_toolbar{border-bottom:1px solid var(--dsw-alias-border-l1);flex:none;align-items:center;gap:2px;padding:6px 12px 8px;display:flex}.p8QEMa_btn{cursor:pointer;height:26px;color:var(--dsw-alias-label-secondary);font:inherit;transition:background-color .15s var(--ds-ease-in-out,ease), color .15s var(--ds-ease-in-out,ease);background:0 0;border:0;border-radius:8px;flex:none;align-items:center;gap:6px;padding:0 8px;font-size:12px;display:inline-flex}.p8QEMa_btn:hover:not(:disabled){background:var(--dsw-specific-sidebar-nav-item-hover);color:var(--dsw-alias-label-primary)}.p8QEMa_btn:disabled{color:var(--dsw-alias-label-dimmed);cursor:default}.p8QEMa_pathText{background:var(--dsw-specific-sidebar-nav-item-hover);min-width:0;color:var(--dsw-alias-label-tertiary);white-space:nowrap;text-overflow:ellipsis;border-radius:6px;flex:1;margin-left:2px;padding:3px 8px;font-size:11px;overflow:hidden}.p8QEMa_pathBar{background:var(--dsw-specific-sidebar-nav-item-hover);cursor:text;border-radius:6px;flex:1;align-items:center;gap:2px;min-width:0;min-height:26px;margin-left:2px;padding:0 4px;display:flex;overflow:hidden}.p8QEMa_crumb{color:var(--dsw-alias-label-secondary);font:inherit;cursor:pointer;white-space:nowrap;text-overflow:ellipsis;background:0 0;border:0;border-radius:6px;flex:none;max-width:10em;padding:2px 4px;font-size:11px;overflow:hidden}.p8QEMa_crumb:hover{background:var(--dsw-alias-border-l1);color:var(--dsw-alias-label-primary)}.p8QEMa_pathInput{min-width:0;color:var(--dsw-alias-label-primary);font:inherit;background:0 0;border:0;outline:none;flex:1;padding:3px 4px;font-size:11px}.p8QEMa_homeNote{color:var(--dsw-alias-label-tertiary);white-space:nowrap;flex:none;padding:0 8px;font-size:10.5px}.p8QEMa_fileName{white-space:nowrap;text-overflow:ellipsis;flex:1;min-width:0;font-size:12px;font-weight:600;overflow:hidden}.p8QEMa_hint{color:var(--dsw-alias-label-secondary);align-items:center;gap:8px;padding:10px 12px;font-size:12px;display:flex}.p8QEMa_list{flex:1;min-height:0;padding:6px;overflow-y:auto}.p8QEMa_row{cursor:default;border-radius:8px;align-items:center;gap:9px;height:30px;padding:0 8px;font-size:12.5px;display:flex}.p8QEMa_rowClickable{cursor:pointer;transition:background-color .15s var(--ds-ease-in-out,ease)}.p8QEMa_rowClickable:hover{background:var(--dsw-specific-sidebar-nav-item-hover)}.p8QEMa_rowDisabled{opacity:.55}.p8QEMa_rowIcon{width:16px;height:16px;color:var(--dsw-alias-label-tertiary);flex:none;justify-content:center;align-items:center;display:inline-flex}.p8QEMa_rowName{white-space:nowrap;text-overflow:ellipsis;flex:1;min-width:0;overflow:hidden}.p8QEMa_rowTag{color:var(--dsw-alias-label-tertiary);border:1px solid var(--dsw-alias-border-l2);border-radius:999px;flex:none;padding:1px 6px;font-size:10.5px}.p8QEMa_iframe{background:#fff;border:0;border-radius:8px;flex:1;min-height:0;margin:0 12px 12px}";
+		const css = ".p8QEMa_panel{height:100%;min-height:0;color:var(--dsw-alias-label-primary);flex-direction:column;font-size:13px;display:flex}.p8QEMa_toolbar{border-bottom:1px solid var(--dsw-alias-border-l1);flex:none;align-items:center;gap:2px;padding:6px 12px 8px;display:flex}.p8QEMa_btn{cursor:pointer;height:26px;color:var(--dsw-alias-label-secondary);font:inherit;transition:background-color .15s var(--ds-ease-in-out,ease), color .15s var(--ds-ease-in-out,ease);background:0 0;border:0;border-radius:8px;flex:none;align-items:center;gap:6px;padding:0 8px;font-size:12px;display:inline-flex}.p8QEMa_btn:hover:not(:disabled){background:var(--dsw-specific-sidebar-nav-item-hover);color:var(--dsw-alias-label-primary)}.p8QEMa_btn:disabled{color:var(--dsw-alias-label-dimmed);cursor:default}.p8QEMa_btnDirty{color:var(--dsw-alias-state-warning-primary,#b45309);box-shadow:inset 0 0 0 1px var(--dsw-alias-state-warning-primary,#d97706)}.p8QEMa_pathText{background:var(--dsw-specific-sidebar-nav-item-hover);min-width:0;color:var(--dsw-alias-label-tertiary);white-space:nowrap;text-overflow:ellipsis;border-radius:6px;flex:1;margin-left:2px;padding:3px 8px;font-size:11px;overflow:hidden}.p8QEMa_pathBar{background:var(--dsw-specific-sidebar-nav-item-hover);cursor:text;border-radius:6px;flex:1;align-items:center;gap:2px;min-width:0;min-height:26px;margin-left:2px;padding:0 4px;display:flex;overflow:hidden}.p8QEMa_crumb{color:var(--dsw-alias-label-secondary);font:inherit;cursor:pointer;white-space:nowrap;text-overflow:ellipsis;background:0 0;border:0;border-radius:6px;flex:none;max-width:10em;padding:2px 4px;font-size:11px;overflow:hidden}.p8QEMa_crumb:hover{background:var(--dsw-alias-border-l1);color:var(--dsw-alias-label-primary)}.p8QEMa_pathInput{min-width:0;color:var(--dsw-alias-label-primary);font:inherit;background:0 0;border:0;outline:none;flex:1;padding:3px 4px;font-size:11px}.p8QEMa_homeNote{color:var(--dsw-alias-label-tertiary);white-space:nowrap;flex:none;padding:0 8px;font-size:10.5px}.p8QEMa_fileName{white-space:nowrap;text-overflow:ellipsis;flex:1;min-width:0;font-size:12px;font-weight:600;overflow:hidden}.p8QEMa_hint{color:var(--dsw-alias-label-secondary);align-items:center;gap:8px;padding:10px 12px;font-size:12px;display:flex}.p8QEMa_list{flex:1;min-height:0;padding:6px;overflow-y:auto}.p8QEMa_row{cursor:default;border-radius:8px;align-items:center;gap:9px;height:30px;padding:0 8px;font-size:12.5px;display:flex}.p8QEMa_rowClickable{cursor:pointer;transition:background-color .15s var(--ds-ease-in-out,ease)}.p8QEMa_rowClickable:hover{background:var(--dsw-specific-sidebar-nav-item-hover)}.p8QEMa_rowDisabled{opacity:.55}.p8QEMa_rowIcon{width:16px;height:16px;color:var(--dsw-alias-label-tertiary);flex:none;justify-content:center;align-items:center;display:inline-flex}.p8QEMa_rowName{white-space:nowrap;text-overflow:ellipsis;flex:1;min-width:0;overflow:hidden}.p8QEMa_rowTag{color:var(--dsw-alias-label-tertiary);border:1px solid var(--dsw-alias-border-l2);border-radius:999px;flex:none;padding:1px 6px;font-size:10.5px}.p8QEMa_iframe{background:#fff;border:0;border-radius:8px;flex:1;min-height:0;margin:0 12px 12px}";
 		const tagId = "@deepseek-ai/dsh-tab-genoffice/genoffice.module.css";
 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
 			const tag = document.createElement("style");
@@ -179,24 +202,25 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var genoffice_module_css_default = {
-			"btn": "p8QEMa_btn",
-			"pathBar": "p8QEMa_pathBar",
-			"fileName": "p8QEMa_fileName",
-			"rowDisabled": "p8QEMa_rowDisabled",
-			"rowIcon": "p8QEMa_rowIcon",
-			"homeNote": "p8QEMa_homeNote",
-			"crumb": "p8QEMa_crumb",
 			"toolbar": "p8QEMa_toolbar",
-			"hint": "p8QEMa_hint",
-			"list": "p8QEMa_list",
-			"rowName": "p8QEMa_rowName",
-			"iframe": "p8QEMa_iframe",
-			"pathInput": "p8QEMa_pathInput",
-			"rowTag": "p8QEMa_rowTag",
-			"rowClickable": "p8QEMa_rowClickable",
-			"pathText": "p8QEMa_pathText",
+			"pathBar": "p8QEMa_pathBar",
+			"btnDirty": "p8QEMa_btnDirty",
 			"row": "p8QEMa_row",
-			"panel": "p8QEMa_panel"
+			"rowTag": "p8QEMa_rowTag",
+			"rowDisabled": "p8QEMa_rowDisabled",
+			"list": "p8QEMa_list",
+			"rowClickable": "p8QEMa_rowClickable",
+			"iframe": "p8QEMa_iframe",
+			"rowIcon": "p8QEMa_rowIcon",
+			"btn": "p8QEMa_btn",
+			"pathInput": "p8QEMa_pathInput",
+			"panel": "p8QEMa_panel",
+			"pathText": "p8QEMa_pathText",
+			"homeNote": "p8QEMa_homeNote",
+			"rowName": "p8QEMa_rowName",
+			"hint": "p8QEMa_hint",
+			"crumb": "p8QEMa_crumb",
+			"fileName": "p8QEMa_fileName"
 		};
 		//#endregion
 		//#region src/tabs/genoffice.tsx
@@ -342,6 +366,9 @@ window.__ModuleLoader__.load({
 			const [pathError, setPathError] = (0, react.useState)(null);
 			const [fellHome, setFellHome] = (0, react.useState)(false);
 			const [relayOk, setRelayOk] = (0, react.useState)(() => getRelayOk());
+			const [launchConfigured, setLaunchConfigured] = (0, react.useState)(false);
+			const [launching, setLaunching] = (0, react.useState)(false);
+			const [launchError, setLaunchError] = (0, react.useState)(null);
 			const loadSeq = (0, react.useRef)(0);
 			const loadList = async (nextPath, asHome = false) => {
 				const seq = ++loadSeq.current;
@@ -379,6 +406,18 @@ window.__ModuleLoader__.load({
 					if (was === false && ok === true) loadList(path || cwd, cwd === void 0 && (path === "" || path === void 0));
 				});
 			}, [path, cwd]);
+			(0, react.useEffect)(() => {
+				probeRelayLaunch().then(setLaunchConfigured);
+			}, []);
+			const startRelay = async () => {
+				if (launching) return;
+				setLaunching(true);
+				setLaunchError(null);
+				const result = await launchRelay();
+				setLaunching(false);
+				if (result.ok) probeRelay(true);
+				else setLaunchError(result.error ?? "timeout");
+			};
 			const mounted = (0, react.useRef)(false);
 			(0, react.useEffect)(() => {
 				if (mounted.current) return;
@@ -466,14 +505,30 @@ window.__ModuleLoader__.load({
 					relayOk === false && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 						className: genoffice_module_css_default.hint,
 						role: "status",
-						children: ["GenOffice relay 不可用 — 在仓库执行 `node web/server.mjs` 后点重新检查。", /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
-							type: "button",
-							className: genoffice_module_css_default.btn,
-							onClick: () => {
-								probeRelay(true);
-							},
-							children: "重新检查"
-						})]
+						children: [
+							"GenOffice relay 不可用 — 在仓库执行 `node web/server.mjs` 后点重新检查。",
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+								type: "button",
+								className: genoffice_module_css_default.btn,
+								onClick: () => {
+									probeRelay(true);
+								},
+								children: "重新检查"
+							}),
+							launchConfigured && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+								type: "button",
+								className: genoffice_module_css_default.btn,
+								disabled: launching,
+								onClick: () => {
+									startRelay();
+								},
+								children: launching ? "启动中…" : "启动 relay"
+							}), launchError !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", { children: [
+								"启动失败：",
+								launchError,
+								" — 手动执行 `node scripts/dev.mjs start-relay`"
+							] })] })
+						]
 					}),
 					loading && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 						className: genoffice_module_css_default.hint,
@@ -612,8 +667,23 @@ window.__ModuleLoader__.load({
 			height: 14
 		};
 		const BROWSER_OPEN_TITLE = "离开控制模式；网页版 AI 面板可直连第三方模型服务商，可能出网";
+		const RELAY_MANUAL = "`node scripts/dev.mjs start-relay`";
+		function copyPathOf(abs, at = /* @__PURE__ */ new Date(), withSeconds = false) {
+			const slash = Math.max(abs.lastIndexOf("/"), abs.lastIndexOf("\\"));
+			const dir = slash < 0 ? "" : abs.slice(0, slash + 1);
+			const base = slash < 0 ? abs : abs.slice(slash + 1);
+			const dot = base.lastIndexOf(".");
+			const stem = dot < 0 ? base : base.slice(0, dot);
+			const ext = dot < 0 ? "" : base.slice(dot + 1);
+			const y = String(at.getFullYear());
+			const mo = String(at.getMonth() + 1).padStart(2, "0");
+			const d = String(at.getDate()).padStart(2, "0");
+			const h = String(at.getHours()).padStart(2, "0");
+			const mi = String(at.getMinutes()).padStart(2, "0");
+			return `${dir}${stem} (副本 ${withSeconds ? `${y}${mo}${d}-${h}${mi}${String(at.getSeconds()).padStart(2, "0")}` : `${y}${mo}${d}-${h}${mi}`}).${ext}`;
+		}
 		function ControlModeViewer(props) {
-			const { path, title, ext, onBack, renderBuiltin } = props;
+			const { path, title, ext, onBack, renderBuiltin, tabId, updateTab } = props;
 			const degradeMode = props.degradeMode ?? "manual";
 			const [relayOk, setRelayOk] = (0, react.useState)(() => getRelayOk());
 			const [yielded, setYielded] = (0, react.useState)(false);
@@ -625,14 +695,19 @@ window.__ModuleLoader__.load({
 			const [popupHint, setPopupHint] = (0, react.useState)(false);
 			const [saveState, setSaveState] = (0, react.useState)("idle");
 			const [saveMessage, setSaveMessage] = (0, react.useState)(null);
+			const [dirty, setDirty] = (0, react.useState)(false);
+			const [launchConfigured, setLaunchConfigured] = (0, react.useState)(false);
+			const [launching, setLaunching] = (0, react.useState)(false);
+			const [launchError, setLaunchError] = (0, react.useState)(null);
 			const iframeRef = (0, react.useRef)(null);
 			const probeSeq = (0, react.useRef)(0);
-			const busy = saveState === "saving" || syncing;
+			const busy = saveState === "saving" || syncing || launching;
 			const unloadPreview = () => {
 				const prev = iframeRef.current;
 				if (prev !== null) prev.src = "about:blank";
 			};
 			const remountControl = async () => {
+				setDirty(false);
 				setSyncing(true);
 				setPreviewLoaded(false);
 				setPreviewError(false);
@@ -654,6 +729,10 @@ window.__ModuleLoader__.load({
 				});
 			}, []);
 			(0, react.useEffect)(() => {
+				probeRelayLaunch().then(setLaunchConfigured);
+			}, []);
+			(0, react.useEffect)(() => {
+				setDirty(false);
 				probe(false);
 				return () => {
 					probeSeq.current += 1;
@@ -693,6 +772,59 @@ window.__ModuleLoader__.load({
 					window.clearTimeout(timer);
 				};
 			}, [saveState]);
+			(0, react.useEffect)(() => {
+				const onMsg = (event) => {
+					(async () => {
+						const data = event.data;
+						if (event.origin !== "http://localhost:8787") return;
+						if (data === null || typeof data !== "object") return;
+						if (data.type !== "genoffice:dirty") return;
+						if (typeof data.dirty !== "boolean" || typeof data.docId !== "string") return;
+						const id = await docIdFor(path);
+						if (data.docId !== id) return;
+						setDirty(data.dirty);
+					})();
+				};
+				window.addEventListener("message", onMsg);
+				return () => {
+					window.removeEventListener("message", onMsg);
+				};
+			}, [path]);
+			(0, react.useEffect)(() => {
+				if (tabId === void 0 || updateTab === void 0) return;
+				const base = title.replace(/^● /, "");
+				const next = dirty ? `● ${base}` : base;
+				if (next === title) return;
+				updateTab(tabId, { title: next });
+			}, [
+				dirty,
+				tabId,
+				title,
+				updateTab
+			]);
+			const startRelay = async () => {
+				if (launching) return;
+				setLaunching(true);
+				setLaunchError(null);
+				const result = await launchRelay();
+				setLaunching(false);
+				if (result.ok) probe(true);
+				else setLaunchError(result.error ?? "timeout");
+			};
+			const launchControls = launchConfigured && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+				type: "button",
+				className: genoffice_module_css_default.btn,
+				disabled: launching,
+				onClick: () => {
+					startRelay();
+				},
+				children: launching ? "启动中…" : "启动 relay"
+			}), launchError !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", { children: [
+				"启动失败：",
+				launchError,
+				" — 手动执行 ",
+				RELAY_MANUAL
+			] })] });
 			const saveToDisk = async () => {
 				if (busy) return;
 				const app = PREVIEWABLE[ext];
@@ -708,8 +840,13 @@ window.__ModuleLoader__.load({
 					})).json();
 					if (data.ok) {
 						setSaveState("saved");
-						setSaveMessage(`已保存到 ${data.path ?? path}`);
-						await remountControl();
+						if (typeof data.mtimeMs === "number") {
+							setDirty(false);
+							setSaveMessage(`已保存到 ${data.path ?? path}（编辑状态已保留）`);
+						} else {
+							setSaveMessage(`已保存到 ${data.path ?? path}`);
+							await remountControl();
+						}
 					} else if (data.error === "conflict") {
 						setSaveState("conflict");
 						setSaveMessage("文件已被外部修改，未覆盖 — 请点「从磁盘重载」后再保存");
@@ -725,15 +862,55 @@ window.__ModuleLoader__.load({
 					setSaveMessage(`写入失败：${e instanceof Error ? e.message : String(e)}`);
 				}
 			};
+			const writeCopy = async (saveAs, retried = false) => {
+				const app = PREVIEWABLE[ext];
+				if (app === void 0) return;
+				const docId = await docIdFor(path);
+				setSaveState("saving");
+				setSaveMessage(null);
+				try {
+					const data = await (await fetch(`${RELAY_BASE}/api/control/${app}/${docId}/export`, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({
+							path,
+							saveAs
+						})
+					})).json();
+					if (data.ok) {
+						setSaveState("saved");
+						setSaveMessage(`已另存为 ${data.path ?? saveAs}`);
+						return;
+					}
+					if (data.error === "exists") {
+						setSaveState("conflict");
+						setSaveMessage("副本已存在，未覆盖");
+						if (!retried && window.confirm("副本已存在，换个名字再试？")) await writeCopy(copyPathOf(path, /* @__PURE__ */ new Date(), true), true);
+						return;
+					}
+					setSaveState("error");
+					setSaveMessage(`另存失败：${data.error ?? "未知错误"}`);
+				} catch (e) {
+					setSaveState("error");
+					setSaveMessage(`另存失败：${e instanceof Error ? e.message : String(e)}`);
+				}
+			};
+			const saveAsCopy = async () => {
+				if (busy) return;
+				await writeCopy(copyPathOf(path));
+			};
 			const reloadFromDisk = () => {
 				if (busy) return;
-				if (!window.confirm("从磁盘重新加载？未保存的编辑会丢失。")) return;
+				if (dirty) {
+					if (!window.confirm("有未保存的编辑，从磁盘重新加载会丢失。确定？")) return;
+				} else if (!window.confirm("从磁盘重新加载？未保存的编辑会丢失。")) return;
 				remountControl();
 			};
 			const openInBrowser = () => {
 				if (window.open(previewUrlFor(path, ext, false), "_blank", "noopener") === null) setPopupHint(true);
 			};
 			const goBack = () => {
+				if (dirty && !window.confirm("有未保存的编辑，确定返回？")) return;
 				unloadPreview();
 				onBack?.();
 			};
@@ -757,7 +934,7 @@ window.__ModuleLoader__.load({
 					}),
 					/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("button", {
 						type: "button",
-						className: genoffice_module_css_default.btn,
+						className: dirty ? `${genoffice_module_css_default.btn} ${genoffice_module_css_default.btnDirty}` : genoffice_module_css_default.btn,
 						disabled: busy,
 						title: "将当前编辑内容原子写回原文件",
 						onClick: () => {
@@ -796,14 +973,18 @@ window.__ModuleLoader__.load({
 			const relayStrip = relayOk === false && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 				className: genoffice_module_css_default.hint,
 				role: "status",
-				children: ["GenOffice relay 不可用 — 在仓库执行 `node web/server.mjs` 后点重新检查。", /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
-					type: "button",
-					className: genoffice_module_css_default.btn,
-					onClick: () => {
-						probe(true);
-					},
-					children: "重新检查"
-				})]
+				children: [
+					"GenOffice relay 不可用 — 在仓库执行 `node web/server.mjs` 后点重新检查。",
+					/* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+						type: "button",
+						className: genoffice_module_css_default.btn,
+						onClick: () => {
+							probe(true);
+						},
+						children: "重新检查"
+					}),
+					launchControls
+				]
 			});
 			if (blocked) return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 				className: genoffice_module_css_default.panel,
@@ -847,7 +1028,11 @@ window.__ModuleLoader__.load({
 						/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 							className: genoffice_module_css_default.hint,
 							role: "status",
-							children: ["GenOffice relay 不可用 — 已切换后备预览。在仓库执行 `node web/server.mjs` 后可恢复控制模式。", recheck]
+							children: [
+								"GenOffice relay 不可用 — 已切换后备预览。在仓库执行 `node web/server.mjs` 后可恢复控制模式。",
+								recheck,
+								launchControls
+							]
 						}),
 						renderBuiltin()
 					]
@@ -867,7 +1052,8 @@ window.__ModuleLoader__.load({
 								},
 								children: "用后备预览打开"
 							}),
-							recheck
+							recheck,
+							launchControls
 						]
 					})]
 				});
@@ -886,10 +1072,18 @@ window.__ModuleLoader__.load({
 						role: "status",
 						children: "正在同步…"
 					}),
-					saveMessage !== null && saveState !== "idle" && !syncing && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					saveMessage !== null && saveState !== "idle" && !syncing && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 						className: genoffice_module_css_default.hint,
 						style: { color: saveState === "saved" ? "var(--dsw-alias-state-success-primary)" : "var(--dsw-alias-state-error-primary)" },
-						children: saveState === "saving" ? "写入中…" : saveMessage
+						children: [saveState === "saving" ? "写入中…" : saveMessage, saveState === "conflict" && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+							type: "button",
+							className: genoffice_module_css_default.btn,
+							disabled: busy,
+							onClick: () => {
+								saveAsCopy();
+							},
+							children: "另存为副本"
+						})]
 					}),
 					previewError ? /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 						className: genoffice_module_css_default.hint,
@@ -959,19 +1153,28 @@ window.__ModuleLoader__.load({
 				path: props.path,
 				title: props.title,
 				ext,
-				renderBuiltin: () => renderDegradeFallback(props)
+				renderBuiltin: () => renderDegradeFallback(props),
+				...props.tabId !== void 0 ? { tabId: props.tabId } : {},
+				...props.updateTab !== void 0 ? { updateTab: props.updateTab } : {}
 			});
 		}
 		/** Per-file sidebar tab: same control-mode surface as the FileViewer, no Back. */
 		function GenOfficeFileTab(props) {
 			const path = props.tab.path ?? "";
+			const tabId = props.tab.id ?? `dsh-genoffice:file:${path}`;
+			const sidebar = props.ctx.betterSidebar;
+			const updateTab = (0, react.useCallback)((id, patch) => {
+				sidebar.updateTab(id, patch);
+			}, [sidebar]);
 			return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(DocxControlViewer, {
 				ctx: props.ctx,
 				store: props.store,
 				scope: props.scope,
 				path,
 				title: props.tab.title,
-				viewerId: `${OWN_VIEWER_PREFIX}${extOf(path)}`
+				viewerId: `${OWN_VIEWER_PREFIX}${extOf(path)}`,
+				tabId,
+				updateTab
 			});
 		}
 		//#endregion

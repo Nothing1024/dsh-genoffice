@@ -1,6 +1,6 @@
 # 控制契约（genoffice-dsh-office）
 
-> 本文件是 DSH 控制 GenOffice 文档编辑的**单一事实源**（INV-004）。版本：0.2.0 | 2026-08-12（扩展五 app）。
+> 本文件是 DSH 控制 GenOffice 文档编辑的**单一事实源**（INV-004）。版本：0.3.0 | 2026-08-25（控制 UX，见 `docs/genoffice-control-ux/spec.md`）。
 >
 > 四处镜像点（各侧独立声明，改动后必须同步本文件并跑 `node scripts/dev.mjs smoke` 验证）：
 > 1. app 控制适配器：`upstream/apps/{docs,markdown,sheets,slides,pdf}/src/renderer/control.ts`
@@ -40,6 +40,7 @@ data: {"docId":"<64hex>"}
 | `context` | `{"requestId": string}` | 请求文档上下文 |
 | `export` | `{"requestId": string}` | 请求导出当前文档字节 |
 | `error` | `{"message": string}` | 服务端错误通知 |
+| `saved` | `{"mtimeMs": number}` | 写回成功通知（新冲突基线） |
 
 ### 2.2 POST /api/control/notify — 上行通知
 
@@ -73,17 +74,26 @@ data: {"docId":"<64hex>"}
 
 ### 2.6 POST /api/control/<app>/<docId>/export — 导出并写回（UF-002 保存链路）
 
-入参：`{path: string(绝对路径), expectedMtimeMs?: number}`
+入参：`{path: string(绝对路径), expectedMtimeMs?: number, saveAs?: string(绝对路径)}`
 
 - 执行器未注册：`200 {ok:false, error:'executor not registered'}`。
 - 转发下行 `event: export`（带 requestId），等待 notify `kind='export'`（TTL 60s）。
 - 收到 `payload = {base64, name, path, mtimeMs?}` 后：校验 `payload.path` 与入参 `path` 一致（不一致 → `{ok:false, error:'path mismatch'}`）→ 转 `POST /api/file` 同一写回逻辑（§2.5，tmp+rename 原子写）。
-- 成功：`200 {ok:true, path}`；冲突：`200 {ok:false, error:'conflict'}`；其他失败：`{ok:false, error}`（原文件不变，INV-003）。
+- 成功：`200 {ok:true, path, mtimeMs}`（`mtimeMs` = 写后 `stat`）；冲突：`200 {ok:false, error:'conflict'}`；其他失败：`{ok:false, error}`（原文件不变，INV-003）。
 - 适配器回传的 `mtimeMs` 为空时以入参 `expectedMtimeMs` 为准；两者皆空则跳过 mtime 校验。
+- `saveAs` 已设：跳过 mtime 校验，对目标 `wx` 独占创建；已存在 → `{ok:false, error:'exists'}`（原文件与目标均不变）；相对路径 → `{ok:false, error:'invalid saveAs'}`；成功 `{ok:true, path, name, mtimeMs}`（`mtimeMs` = 写后 `stat`）。`saveAs` 成功**不**推送 `saved`。
 
 ### 2.7 POST /api/control/open — docId 计算辅助（BR-009）
 
 入参：`{path: string(绝对路径)}` → `200 {ok:true, docId, path, registered}`。`registered` 为该 docId 是否已有控制执行器（iframe 已挂上 `/api/control/stream`）。路径非绝对 → `400 {ok:false, error:'invalid path'}`。
+
+### 2.8 iframe→host postMessage — dirty 上报（UI-only，INV-005）
+
+形状：`{type:'genoffice:dirty', docId: string(64hex), dirty: boolean}`。
+
+- 发送时机：dirty 状态翻转时各发一次（clean→dirty / dirty→clean）。
+- 接收方校验：`event.origin` 必须等于 relay origin（插件侧 `RELAY_BASE`），且 `docId` 与当前打开文档一致；否则丢弃。
+- 仅布尔状态，不含任何编辑数据（INV-005）。
 
 ### 2.5 POST /api/file — 写回（BR-004/BR-005，INV-002/INV-003）
 
@@ -94,7 +104,7 @@ data: {"docId":"<64hex>"}
 - 目标必须为绝对路径（`path.isAbsolute` 等价检查）且父目录存在；`..` 解析越界由 loopback 边界兜底。
 - 原子写：写 `tmp`（**与目标同目录**，禁止跨设备 rename）+ `rename` 原子替换；任何失败不改变原文件字节（BR-004）。
 - `expectedMtimeMs` 可选：与当前 mtime 不匹配 → `200 {ok:false, error:'conflict'}`，原文件不变（UF-002 外部修改分支）。
-- 成功：`200 {ok:true, path}`。
+- 成功：`200 {ok:true, path, mtimeMs}`（`mtimeMs` = 写后 `stat`）。本端点**不**推送 `saved`。
 
 ## 3. docId 规则（BR-009）
 
@@ -202,7 +212,7 @@ DSH 工具名 = `<app前缀>_<skill工具名>`；`docx` ↔ app `docs`，`markdo
 | `pdf_save` | （写回工具，非 skill 工具） | pdf | 显式写回触发（BR-008） |
 
 - 写回触发（BR-008）：编辑工具只改 iframe 内文档状态；写回仅由显式动作触发——tab「写入磁盘」按钮或 `docx_save`/`markdown_save`/`xlsx_save`/`pptx_save`/`pdf_save` 工具，经 relay `POST /api/file` 原子写回原路径。
-- 保存工具入参：`{path: string}`（绝对路径）→ 返回写回结果；conflict → isError 提示"文件已被外部修改"。
+- 保存工具入参：`{path: string, save_as?: string}`（均为绝对路径；`save_as` 走 export `saveAs` 分支）→ 返回写回结果；conflict → isError 提示"文件已被外部修改"；exists → 另存目标已存在。
 - 扩展名 → app 映射：`xlsx→sheets`、`pptx→slides`、`pdf→pdf`（插件 tab `PREVIEWABLE` 与 host app 选择用）。
 - 工具名集合完整性：本表为控制面**全部工具**（skill + 各族 `*_save`）镜像，与 smoke 锁步：docx 11 + markdown 5 + xlsx 13 + pptx 39 + pdf 21（skill 分别为 10 / 4 / 12 / 38 / 20，含官方 merge 新增 `aggregate_range`/`find_cells`/`select_range`/`trace_precedents`/`trace_dependents`/`apply_ops`/`insert_text` / `land_pages`）。插件 `CONTROL_TOOL_TABLE` 与 `CAPABILITY` 必须逐名覆盖——缺 capability 的表项默认不注册。smoke 按本表逐名核对 skill / host / capability，漂移即 FAIL（BR-007 / INV-004）。不删官方工具。`pptx_land_pages` 是控制模式出片原语（宿主提交 PageSpec[]，iframe 只落地）。`pptx_generate_deck` / `pptx_regenerate_slide` 在非控制模式仍走网页本地 spec→pptx（`cloudGenStatus.enabled` 仍为 false）；控制模式 topic-only 必须 isError `control mode requires pages_spec; use land_pages`，不得进 iframe BYOK。空白稿落地后 `htmlGenerated` 解锁 `add_text_box` / `add_shape`。
 
@@ -216,6 +226,8 @@ DSH 工具名 = `<app前缀>_<skill工具名>`；`docx` ↔ app `docs`，`markdo
 | 控制通道超时 / SSE 断线 | `{ok:false, error:'timeout'}`；不重放 |
 | 写回目标不可写 | `{ok:false, error:<原因>}`；原文件不变 |
 | 写回外部修改冲突 | `{ok:false, error:'conflict'}`；原文件不变 |
+| 另存目标已存在 | `{ok:false, error:'exists'}`；原文件与目标均不变 |
+| 没有 DSH 页面在监听 /api/open/stream（`*_open` 且 `subscribers=0`） | `{ok:false, error:'no-gui-listening'}`；宿主也可直接失败「没有 DSH 页面在监听」 |
 | 非 loopback 写回 | `403 {ok:false, error:'loopback only'}` |
 | 控制模式 topic-only generate_deck / regenerate_slide / plan_deck | 适配器回传 isError，output 精确为 `control mode requires pages_spec; use land_pages` |
 | land_pages 空 pages | 适配器回传 isError，output 含 `land_pages requires a non-empty pages array` |

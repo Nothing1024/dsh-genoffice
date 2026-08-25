@@ -7,6 +7,12 @@ export interface ControlModeViewerProps {
     onBack?: () => void;
     renderBuiltin?: () => ReactNode;
     degradeMode?: DegradeMode;
+    tabId?: string;
+    updateTab?: (id: string, patch: {
+        title?: string;
+        path?: string;
+        meta?: unknown;
+    }) => void;
 }
 export declare function ControlModeViewer(props: ControlModeViewerProps): ReactNode;
 //# sourceMappingURL=control-mode.d.ts.map

@@ -8,6 +8,7 @@ import type {} from '@deepseek-ai/dsh-system-prompt'
 import { createAssetChannel } from './host/assets.ts'
 import { applyPrompt } from './host/prompt.ts'
 import { applySkill } from './host/skill.ts'
+import { applyRelayLaunchRoute } from './host/relay-launch.ts'
 import { applySyncRoute } from './host/sync.ts'
 import { createControlTools } from './host/tools.ts'
 
@@ -25,6 +26,7 @@ export function apply(ctx: Context): void {
   applyPrompt(ctx)
   applySkill(ctx)
   applySyncRoute(ctx)
+  applyRelayLaunchRoute(ctx)
   const assets = createAssetChannel(ctx)
   for (const tool of createControlTools({ assets })) {
     ctx.tools.register(tool)

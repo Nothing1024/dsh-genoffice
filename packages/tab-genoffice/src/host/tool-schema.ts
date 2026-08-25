@@ -35,6 +35,13 @@ const PATH_PARAM = {
   description: '目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）',
 }
 
+const SAVE_AS_PARAM = {
+  type: 'string' as const,
+  description: '冲突时另存到该绝对路径，不覆盖已存在文件',
+}
+
+const SAVE_PARAMS = { path: PATH_PARAM, save_as: SAVE_AS_PARAM }
+
 const DOCS_CONTROL_NOTE =
   '该工具操作 GenOffice 网页版中已打开的 docx 文档（控制模式）。所有块索引基于文档当前状态，修改后索引会变化，需重新读取上下文。'
 
@@ -262,7 +269,7 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     description:
       DOCS_CONTROL_NOTE +
       '将当前文档内容显式写回原文件（原子写回）。编辑工具只修改网页内状态，只有本工具（或 GenOffice tab 的「写入磁盘」按钮）会真正写盘。',
-    parameters: { path: PATH_PARAM },
+    parameters: SAVE_PARAMS,
   },
   // ── markdown (app: markdown) ─────────────────────────────────────
   {
@@ -322,7 +329,7 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     description:
       MARKDOWN_CONTROL_NOTE +
       '将当前文档内容显式写回原文件（原子写回）。编辑工具只修改网页内状态，只有本工具（或 GenOffice tab 的「写入磁盘」按钮）会真正写盘。',
-    parameters: { path: PATH_PARAM },
+    parameters: SAVE_PARAMS,
   },
   // ── xlsx (app: sheets) ──────────────────────────────────────────────
   {
@@ -503,7 +510,7 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     description:
       SHEETS_CONTROL_NOTE +
       '将当前工作簿内容显式写回原文件（原子写回，tmp+rename）。编辑工具只修改网页内状态，只有本工具（或 tab「写入磁盘」按钮）会真正写盘。',
-    parameters: { path: PATH_PARAM },
+    parameters: SAVE_PARAMS,
   },
   // ── pptx (app: slides) ──────────────────────────────────────────────
   {
@@ -1127,7 +1134,7 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     description:
       SLIDES_CONTROL_NOTE +
       '将当前演示文稿内容显式写回原文件（原子写回，tmp+rename）。编辑工具只修改网页内状态，只有本工具（或 tab「写入磁盘」按钮）会真正写盘。',
-    parameters: { path: PATH_PARAM },
+    parameters: SAVE_PARAMS,
   },
   // ── pdf (app: pdf) ──────────────────────────────────────────────────
   {
@@ -1404,7 +1411,7 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     description:
       PDF_CONTROL_NOTE +
       '将当前文档（含标注与文本改写）显式写回原文件（原子写回，tmp+rename）。编辑工具只修改网页内状态，只有本工具（或 tab「写入磁盘」按钮）会真正写盘。',
-    parameters: { path: PATH_PARAM },
+    parameters: SAVE_PARAMS,
   },
 ]
 

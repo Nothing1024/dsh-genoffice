@@ -21,6 +21,11 @@ export declare function previewUrlFor(path: string, ext: string, control: boolea
 export declare function checkRelay(signal?: AbortSignal): Promise<boolean>;
 /** Shared probe with throttle. `force` bypasses throttle (「重新检查」). */
 export declare function probeRelay(force?: boolean, signal?: AbortSignal): Promise<boolean>;
+export declare function probeRelayLaunch(): Promise<boolean>;
+export declare function launchRelay(): Promise<{
+    ok: boolean;
+    error?: string;
+}>;
 export declare function notifyHostSync(path: string): Promise<void>;
 export declare function subscribeOpenFile(fn: OpenFileListener): () => void;
 /** Dispatch a file path to all subscribeOpenFile listeners (used by the client-level SSE handler). */

@@ -116,6 +116,12 @@ async function smoke() {
     check('  name 为文件名', file.name === tmp.split('/').pop())
     const bad = await (await fetch(`${RELAY_BASE}/api/file?path=${encodeURIComponent('/nonexistent-xyz')}`)).json()
     check('  不可读路径 → ok:false', bad.ok === false)
+    const postedFile = await (await fetch(`${RELAY_BASE}/api/file`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path: tmp, base64: bytes.toString('base64') }),
+    })).json()
+    check('POST /api/file 成功含数值 mtimeMs', postedFile.ok === true && typeof postedFile.mtimeMs === 'number', JSON.stringify(postedFile))
   } finally {
     await rm(tmp, { force: true })
   }
@@ -211,6 +217,19 @@ async function smoke() {
   check('POST /api/control/open → 64hex docId', openRes.ok === true && /^[0-9a-f]{64}$/.test(openRes.docId ?? ''), openRes.error)
   check('  docId 与 sha256(绝对路径) 一致', openRes.docId === createHash('sha256').update('/tmp/smoke-doc.md').digest('hex'))
   check('  registered 为 boolean（执行器是否已挂上 SSE）', typeof openRes.registered === 'boolean')
+  const exportNoexec = await (await fetch(`${RELAY_BASE}/api/control/docs/${'a'.repeat(64)}/export`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ path: '/tmp/smoke-doc.md', saveAs: '/tmp/smoke-copy.md' }),
+  })).json()
+  check('export saveAs 未注册 → executor not registered',
+    exportNoexec.ok === false && exportNoexec.error === 'executor not registered', exportNoexec.error)
+  const relSaveAs = await (await fetch(`${RELAY_BASE}/api/control/docs/${'a'.repeat(64)}/export`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ path: '/tmp/smoke-doc.md', saveAs: 'relative.docx' }),
+  })).json()
+  check('相对 saveAs → invalid saveAs（或执行器未注册）',
+    relSaveAs.ok === false && (relSaveAs.error === 'invalid saveAs' || relSaveAs.error === 'executor not registered'),
+    relSaveAs.error)
 
   // 8b. /api/open 广播：file 事件带回 sessionId（与控制面 registered 分开）
   const selfPath = fileURLToPath(import.meta.url)
@@ -241,6 +260,7 @@ async function smoke() {
       body: JSON.stringify({ path: selfPath, sessionId: 'smoke-session' }),
     })).json()
     check('POST /api/open → ok', posted.ok === true && posted.path === selfPath, posted.error)
+    check('  subscribers 为数字（/api/open/stream 连接数）', typeof posted.subscribers === 'number', JSON.stringify(posted))
     const fileEv = await readUntil((s) => {
       const m = s.match(/event: file\ndata: (\{.*?\})/)
       return m ? JSON.parse(m[1]) : null
@@ -255,6 +275,7 @@ async function smoke() {
 
   // 9. 工具名集合镜像（INV-004：契约表 ↔ skill AGENT_TOOLS ↔ 插件 host 注册）
   const controlContract = await readFile(join(ROOT, 'contracts/control-api.md'), 'utf8')
+  check('契约 §2.1 事件表含 saved', /\| `saved` \|/.test(controlContract))
   const contractTools = [...controlContract.matchAll(/^\| `((?:docx|markdown|xlsx|pptx|pdf)[:_][a-z_]+)` \|/gm)].map((m) => m[1])
   const familyCount = (p) => contractTools.filter((t) => t.startsWith(`${p}_`)).length
   check('契约工具名集合表可解析（docx 11 + markdown 5 + xlsx 13 + pptx 39 + pdf 21）',

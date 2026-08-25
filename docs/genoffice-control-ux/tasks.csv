@@ -1,26 +1,26 @@
 序号,Phase,名称,详情锚点,前置任务,验证命令,状态,备注
-1,P0:契约与校准,更新控制契约与 relay 契约,spec.md#task-1,无,rg -n "saved|saveAs|save_as|exists" contracts/control-api.md → 非空,待开始,仓库:栈(genoffice/contracts)
-2,P0:契约与校准,校准 dirty 信号与 save 条目定位,spec.md#task-2,无,rg -c "待勘察" docs/genoffice-control-ux/spec.md → 0,待开始,仓库:跨(读上游+插件)；docs 侧可直接用 isDocDirty(doc-dirty.ts L32)
-3,P0:契约与校准,执行 Phase 0 回归验证,spec.md#task-3,1;2,node scripts/dev.mjs smoke → 全部 PASS,待开始,仓库:栈
-4,P1:保存不重挂,relay 写回后推送 saved 回带 mtimeMs,spec.md#task-4,3,node scripts/dev.mjs smoke → 全绿；curl POST /api/file 响应含数值 mtimeMs,待开始,仓库:上游(web/server.mjs)
-5,P1:保存不重挂,五适配器监听 saved 刷新基线,spec.md#task-5,4,upstream 五 app typecheck → 0 error,待开始,仓库:上游(apps/*/control.ts)
-6,P1:保存不重挂,插件保存链路渐进增强不重挂,spec.md#task-6,4,cd plugin && pnpm vitest run → 全绿,待开始,仓库:插件(control-mode.tsx/tools.ts)
-7,P1:保存不重挂,更新插件测试与 smoke 断言,spec.md#task-7,5;6,pnpm vitest run 全绿 + smoke 全绿,待开始,仓库:插件(tests)+栈(scripts/dev.mjs)
-8,P1:保存不重挂,重建 web-dist 验证连续保存,spec.md#task-8,7,连续两次保存均 ok 无 conflict（console 记录）,待开始,仓库:上游(web:build)
-9,P1:保存不重挂,执行 Phase 1 回归验证,spec.md#task-9,8,smoke + vitest + 五 app typecheck 全绿,待开始,仓库:跨
-10,P2:冲突另存副本,实现 relay export saveAs 分支,spec.md#task-10,9,curl 矩阵：invalid saveAs / exists / executor not registered 形状正确,待开始,仓库:上游(web/server.mjs)
-11,P2:冲突另存副本,冲突 UI 另存副本与 save_as 参数,spec.md#task-11,10,cd plugin && pnpm vitest run → 全绿（含 saveAs 新用例）,待开始,仓库:插件(control-mode/tool-schema/tools/errors)
-12,P2:冲突另存副本,执行 Phase 2 回归验证,spec.md#task-12,11,smoke + vitest 全绿 + curl 矩阵重放,待开始,仓库:跨
-13,P3:未保存指示,契约补 dirty 上报通道定义,spec.md#task-13,9,rg -n "genoffice:dirty" contracts/control-api.md → 有定义,待开始,仓库:栈(genoffice/contracts)
-14,P3:未保存指示,五适配器上报 dirty 翻转,spec.md#task-14,13;2,五 app typecheck 0 error + 重建后 console 收到消息,待开始,仓库:上游(apps/*/control.ts+App.tsx)
-15,P3:未保存指示,插件 dirty UI 与返回确认,spec.md#task-15,14,cd plugin && pnpm vitest run → 全绿（含 origin/docId 过滤用例）,待开始,仓库:插件(control-mode/file-tab/locales)
-16,P3:未保存指示,执行 Phase 3 回归验证,spec.md#task-16,15,smoke + vitest + typecheck 全绿 + 旧插件兼容抽查,待开始,仓库:跨
-17,P4:agent 侧补齐,补 pdf_open 工具,spec.md#task-17,9,cd plugin && pnpm vitest run → 全绿（open 工具 5 族）,待开始,仓库:插件(tools.ts)
-18,P4:agent 侧补齐,实现 open 无订阅快速失败,spec.md#task-18,17,pnpm vitest run → 全绿（subscribers=0/缺失两分支）,待开始,仓库:插件(tools.ts/errors.ts)
-19,P4:agent 侧补齐,实现 host 一键拉起 relay 路由,spec.md#task-19,9,pnpm vitest run → 全绿(configured 探测/假路径拒绝),待开始,仓库:插件(relay-launch.ts 新建)
-20,P4:agent 侧补齐,两处 UI 接入启动 relay 按钮,spec.md#task-20,19,pnpm vitest run → 全绿（条幅渲染分支）,待开始,仓库:插件(relay.ts/genoffice.tsx/control-mode.tsx)
-21,P4:agent 侧补齐,执行 Phase 4 回归验证,spec.md#task-21,18;20,smoke（89 工具名不变）+ vitest 全绿,待开始,仓库:跨
-22,P5:真实场景与收尾,对齐契约与 smoke 终版,spec.md#task-22,21,node scripts/dev.mjs smoke → 全部 PASS,待开始,仓库:栈(contracts+scripts/dev.mjs)
-23,P5:真实场景与收尾,重建全部 web-dist 并部署核对,spec.md#task-23,22,五 app 构建成功 + relay 托管 bundle 与磁盘一致 + 插件 lib 重建,待开始,仓库:上游(web:build)+插件(pnpm build)
-24,P5:真实场景与收尾,执行 spec 5.2 真实场景全套测试,spec.md#task-24,23,5.2 执行矩阵全部行通过并归档 evidence,待开始,仓库:跨
-25,P5:真实场景与收尾,执行 Phase 5 回归验证收尾,spec.md#task-25,24,smoke + vitest + typecheck 全绿 + validate_package.py 0 FAIL,待开始,仓库:跨
+1,P0:契约与校准,更新控制契约与 relay 契约,spec.md#task-1,无,rg -n "saved|saveAs|save_as|exists" contracts/control-api.md → 非空,完成,契约 0.3.0 saved/saveAs/dirty/subscribers
+2,P0:契约与校准,校准 dirty 信号与 save 条目定位,spec.md#task-2,无,rg -c "待勘察" docs/genoffice-control-ux/spec.md → 0,完成,待勘察=0；五 app dirty 源已校准
+3,P0:契约与校准,执行 Phase 0 回归验证,spec.md#task-3,1;2,node scripts/dev.mjs smoke → 全部 PASS,完成,smoke 全绿
+4,P1:保存不重挂,relay 写回后推送 saved 回带 mtimeMs,spec.md#task-4,3,node scripts/dev.mjs smoke → 全绿；curl POST /api/file 响应含数值 mtimeMs,完成,export/file 响应数值 mtimeMs；saved 仅非 saveAs
+5,P1:保存不重挂,五适配器监听 saved 刷新基线,spec.md#task-5,4,upstream 五 app typecheck → 0 error,完成,五适配器 saved 刷新基线
+6,P1:保存不重挂,插件保存链路渐进增强不重挂,spec.md#task-6,4,cd plugin && pnpm vitest run → 全绿,完成,mtimeMs 不重挂；缺省回退重挂
+7,P1:保存不重挂,更新插件测试与 smoke 断言,spec.md#task-7,5;6,pnpm vitest run 全绿 + smoke 全绿,完成,vitest 126 + smoke 新断言
+8,P1:保存不重挂,重建 web-dist 验证连续保存,spec.md#task-8,7,连续两次保存均 ok 无 conflict（console 记录）,完成,浏览器连续两次保存 ok 无 conflict
+9,P1:保存不重挂,执行 Phase 1 回归验证,spec.md#task-9,8,smoke + vitest + 五 app typecheck 全绿,完成,smoke+vitest+typecheck
+10,P2:冲突另存副本,实现 relay export saveAs 分支,spec.md#task-10,9,curl 矩阵：invalid saveAs / exists / executor not registered 形状正确,完成,API-saveas invalid/exists/unregistered/success
+11,P2:冲突另存副本,冲突 UI 另存副本与 save_as 参数,spec.md#task-11,10,cd plugin && pnpm vitest run → 全绿（含 saveAs 新用例）,完成,另存为副本 UI + save_as 参数
+12,P2:冲突另存副本,执行 Phase 2 回归验证,spec.md#task-12,11,smoke + vitest 全绿 + curl 矩阵重放,完成,浏览器 conflict + 原文件 EXTERNAL 保留
+13,P3:未保存指示,契约补 dirty 上报通道定义,spec.md#task-13,9,rg -n "genoffice:dirty" contracts/control-api.md → 有定义,完成,genoffice:dirty 契约
+14,P3:未保存指示,五适配器上报 dirty 翻转,spec.md#task-14,13;2,五 app typecheck 0 error + 重建后 console 收到消息,完成,onSaved 清编辑器 dirty；浏览器 postMessage 已见
+15,P3:未保存指示,插件 dirty UI 与返回确认,spec.md#task-15,14,cd plugin && pnpm vitest run → 全绿（含 origin/docId 过滤用例）,完成,● 标题/btnDirty/confirm；updateTab 不循环
+16,P3:未保存指示,执行 Phase 3 回归验证,spec.md#task-16,15,smoke + vitest + typecheck 全绿 + 旧插件兼容抽查,完成,伪造 origin 由单测覆盖
+17,P4:agent 侧补齐,补 pdf_open 工具,spec.md#task-17,9,cd plugin && pnpm vitest run → 全绿（open 工具 5 族）,完成,pdf_open 已注册
+18,P4:agent 侧补齐,实现 open 无订阅快速失败,spec.md#task-18,17,pnpm vitest run → 全绿（subscribers=0/缺失两分支）,完成,subscribers=0 秒级失败（单测）
+19,P4:agent 侧补齐,实现 host 一键拉起 relay 路由,spec.md#task-19,9,pnpm vitest run → 全绿(configured 探测/假路径拒绝),完成,GET configured=true 于 :3080
+20,P4:agent 侧补齐,两处 UI 接入启动 relay 按钮,spec.md#task-20,19,pnpm vitest run → 全绿（条幅渲染分支）,完成,面板与控制条均有启动按钮
+21,P4:agent 侧补齐,执行 Phase 4 回归验证,spec.md#task-21,18;20,smoke（89 工具名不变）+ vitest 全绿,完成,89 工具名 smoke 不变
+22,P5:真实场景与收尾,对齐契约与 smoke 终版,spec.md#task-22,21,node scripts/dev.mjs smoke → 全部 PASS,完成,smoke 终版全绿
+23,P5:真实场景与收尾,重建全部 web-dist 并部署核对,spec.md#task-23,22,五 app 构建成功 + relay 托管 bundle 与磁盘一致 + 插件 lib 重建,完成,五 app web-dist + 插件 lib 已重建
+24,P5:真实场景与收尾,执行 spec 5.2 真实场景全套测试,spec.md#task-24,23,5.2 执行矩阵全部行通过并归档 evidence,完成,见 evidence/UF-*；agent chat 与旧 relay 实机见各 notes
+25,P5:真实场景与收尾,执行 Phase 5 回归验证收尾,spec.md#task-25,24,smoke + vitest + typecheck 全绿 + validate_package.py 0 FAIL,完成,validate_package 0 FAIL

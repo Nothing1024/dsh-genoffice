@@ -42,7 +42,7 @@
 - 仅 loopback 来源（`ALLOW_ABS_PATHS` 语义 + 请求级 Host/远端地址校验），否则 `403 {ok:false, error:'loopback only'}`。
 - 原子写：同目录 `tmp` + `rename`；任何失败不改变原文件字节（INV-003）。
 - `expectedMtimeMs` 不匹配 → `200 {ok:false, error:'conflict'}`，原文件不变（外部修改冲突分支）。
-- 成功：`200 { "ok": true, "path": "/abs/path/a.docx" }`；字节上限 50MB。
+- 成功：`200 { "ok": true, "path": "/abs/path/a.docx", "mtimeMs": 1723000000000 }`（`mtimeMs` = 写后 `stat`）；字节上限 50MB。本端点不推送 `saved`。
 
 ### POST /api/inject  +  GET /api/inject/<token>  — 字节注入（`inject:` open 形态）
 POST 请求体 = 原始字节，头 `X-File-Name`（URI 编码）；返回 `{ok, token, name}`。token 一次性，TTL 30 分钟（5 分钟扫描）。
@@ -76,7 +76,7 @@ GET 消费后立即失效：`{ "ok": true, "base64": "<bytes>", "name": "a.docx"
 ### POST /api/open  — 向订阅者广播打开本机文件
 入参：`{ "path": "/abs/path/a.xlsx", "sessionId"?: string }`
 - 仅 loopback；路径必须绝对；`stat` 失败 → `200 {ok:false, error:'file not found'}`。
-- 成功：`200 {ok:true, path, subscribers}`，并向所有 `/api/open/stream` 连接写 `file` 事件。
+- 成功：`200 {ok:true, path, subscribers}`，并向所有 `/api/open/stream` 连接写 `file` 事件。`subscribers` 为当前 `/api/open/stream` 连接数；为 `0` 时插件 `*_open` 立即失败（见 `contracts/control-api.md` §5）。
 - **不**报告控制执行器是否已登记——那是 `POST /api/control/open` 的 `registered` 字段（见 `contracts/control-api.md` §2.7）。
 
 ### GET /api/gsk-status | POST /api/generate-image | POST /api/analyze-media

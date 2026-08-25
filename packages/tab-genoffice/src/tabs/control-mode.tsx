@@ -12,9 +12,11 @@ import {
   RELAY_BASE,
   docIdFor,
   getRelayOk,
+  launchRelay,
   notifyHostSync,
   previewUrlFor,
   probeRelay,
+  probeRelayLaunch,
   subscribeRelay,
 } from './relay.ts'
 import css from './genoffice.module.css'
@@ -24,6 +26,8 @@ const ROW_ICON_PROPS = { ...TAB_ICON_PROPS, width: 14, height: 14 }
 const BROWSER_OPEN_TITLE =
   '离开控制模式；网页版 AI 面板可直连第三方模型服务商，可能出网'
 
+const RELAY_MANUAL = '`node scripts/dev.mjs start-relay`'
+
 export interface ControlModeViewerProps {
   path: string
   title: string
@@ -31,12 +35,32 @@ export interface ControlModeViewerProps {
   onBack?: () => void
   renderBuiltin?: () => ReactNode
   degradeMode?: DegradeMode
+  tabId?: string
+  updateTab?: (id: string, patch: { title?: string; path?: string; meta?: unknown }) => void
 }
 
 type SaveState = 'idle' | 'saving' | 'saved' | 'conflict' | 'error'
 
+function copyPathOf(abs: string, at = new Date(), withSeconds = false): string {
+  const slash = Math.max(abs.lastIndexOf('/'), abs.lastIndexOf('\\'))
+  const dir = slash < 0 ? '' : abs.slice(0, slash + 1)
+  const base = slash < 0 ? abs : abs.slice(slash + 1)
+  const dot = base.lastIndexOf('.')
+  const stem = dot < 0 ? base : base.slice(0, dot)
+  const ext = dot < 0 ? '' : base.slice(dot + 1)
+  const y = String(at.getFullYear())
+  const mo = String(at.getMonth() + 1).padStart(2, '0')
+  const d = String(at.getDate()).padStart(2, '0')
+  const h = String(at.getHours()).padStart(2, '0')
+  const mi = String(at.getMinutes()).padStart(2, '0')
+  const stamp = withSeconds
+    ? `${y}${mo}${d}-${h}${mi}${String(at.getSeconds()).padStart(2, '0')}`
+    : `${y}${mo}${d}-${h}${mi}`
+  return `${dir}${stem} (副本 ${stamp}).${ext}`
+}
+
 export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
-  const { path, title, ext, onBack, renderBuiltin } = props
+  const { path, title, ext, onBack, renderBuiltin, tabId, updateTab } = props
   const degradeMode = props.degradeMode ?? DEGRADE_MODE
   const [relayOk, setRelayOk] = useState<boolean | null>(() => getRelayOk())
   const [yielded, setYielded] = useState(false)
@@ -48,10 +72,14 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
   const [popupHint, setPopupHint] = useState(false)
   const [saveState, setSaveState] = useState<SaveState>('idle')
   const [saveMessage, setSaveMessage] = useState<string | null>(null)
+  const [dirty, setDirty] = useState(false)
+  const [launchConfigured, setLaunchConfigured] = useState(false)
+  const [launching, setLaunching] = useState(false)
+  const [launchError, setLaunchError] = useState<string | null>(null)
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const probeSeq = useRef(0)
 
-  const busy = saveState === 'saving' || syncing
+  const busy = saveState === 'saving' || syncing || launching
 
   const unloadPreview = (): void => {
     const prev = iframeRef.current
@@ -59,6 +87,7 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
   }
 
   const remountControl = async (): Promise<void> => {
+    setDirty(false)
     setSyncing(true)
     setPreviewLoaded(false)
     setPreviewError(false)
@@ -82,6 +111,11 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
   }, [])
 
   useEffect(() => {
+    void probeRelayLaunch().then(setLaunchConfigured)
+  }, [])
+
+  useEffect(() => {
+    setDirty(false)
     probe(false)
     return () => {
       probeSeq.current += 1
@@ -123,6 +157,57 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
     return () => { window.clearTimeout(timer) }
   }, [saveState])
 
+  useEffect(() => {
+    const onMsg = (event: MessageEvent): void => {
+      void (async () => {
+        const data = event.data as { type?: unknown; docId?: unknown; dirty?: unknown } | null
+        if (event.origin !== RELAY_BASE) return
+        if (data === null || typeof data !== 'object') return
+        if (data.type !== 'genoffice:dirty') return
+        if (typeof data.dirty !== 'boolean' || typeof data.docId !== 'string') return
+        const id = await docIdFor(path)
+        if (data.docId !== id) return
+        setDirty(data.dirty)
+      })()
+    }
+    window.addEventListener('message', onMsg)
+    return () => { window.removeEventListener('message', onMsg) }
+  }, [path])
+
+  useEffect(() => {
+    if (tabId === undefined || updateTab === undefined) return
+    const base = title.replace(/^● /, '')
+    const next = dirty ? `● ${base}` : base
+    if (next === title) return
+    updateTab(tabId, { title: next })
+  }, [dirty, tabId, title, updateTab])
+
+  const startRelay = async (): Promise<void> => {
+    if (launching) return
+    setLaunching(true)
+    setLaunchError(null)
+    const result = await launchRelay()
+    setLaunching(false)
+    if (result.ok) probe(true)
+    else setLaunchError(result.error ?? 'timeout')
+  }
+
+  const launchControls = launchConfigured && (
+    <>
+      <button
+        type="button"
+        className={css.btn}
+        disabled={launching}
+        onClick={() => { void startRelay() }}
+      >
+        {launching ? '启动中…' : '启动 relay'}
+      </button>
+      {launchError !== null && (
+        <span>启动失败：{launchError} — 手动执行 {RELAY_MANUAL}</span>
+      )}
+    </>
+  )
+
   const saveToDisk = async (): Promise<void> => {
     if (busy) return
     const app = PREVIEWABLE[ext]
@@ -136,11 +221,16 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ path }),
       })
-      const data = (await resp.json()) as { ok?: boolean; error?: string; path?: string }
+      const data = (await resp.json()) as { ok?: boolean; error?: string; path?: string; mtimeMs?: unknown }
       if (data.ok) {
         setSaveState('saved')
-        setSaveMessage(`已保存到 ${data.path ?? path}`)
-        await remountControl()
+        if (typeof data.mtimeMs === 'number') {
+          setDirty(false)
+          setSaveMessage(`已保存到 ${data.path ?? path}（编辑状态已保留）`)
+        } else {
+          setSaveMessage(`已保存到 ${data.path ?? path}`)
+          await remountControl()
+        }
       } else if (data.error === 'conflict') {
         setSaveState('conflict')
         setSaveMessage('文件已被外部修改，未覆盖 — 请点「从磁盘重载」后再保存')
@@ -157,9 +247,52 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
     }
   }
 
+  const writeCopy = async (saveAs: string, retried = false): Promise<void> => {
+    const app = PREVIEWABLE[ext]
+    if (app === undefined) return
+    const docId = await docIdFor(path)
+    setSaveState('saving')
+    setSaveMessage(null)
+    try {
+      const resp = await fetch(`${RELAY_BASE}/api/control/${app}/${docId}/export`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path, saveAs }),
+      })
+      const data = (await resp.json()) as { ok?: boolean; error?: string; path?: string }
+      if (data.ok) {
+        setSaveState('saved')
+        setSaveMessage(`已另存为 ${data.path ?? saveAs}`)
+        return
+      }
+      if (data.error === 'exists') {
+        setSaveState('conflict')
+        setSaveMessage('副本已存在，未覆盖')
+        if (!retried && window.confirm('副本已存在，换个名字再试？')) {
+          await writeCopy(copyPathOf(path, new Date(), true), true)
+        }
+        return
+      }
+      setSaveState('error')
+      setSaveMessage(`另存失败：${data.error ?? '未知错误'}`)
+    } catch (e) {
+      setSaveState('error')
+      setSaveMessage(`另存失败：${e instanceof Error ? e.message : String(e)}`)
+    }
+  }
+
+  const saveAsCopy = async (): Promise<void> => {
+    if (busy) return
+    await writeCopy(copyPathOf(path))
+  }
+
   const reloadFromDisk = (): void => {
     if (busy) return
-    if (!window.confirm('从磁盘重新加载？未保存的编辑会丢失。')) return
+    if (dirty) {
+      if (!window.confirm('有未保存的编辑，从磁盘重新加载会丢失。确定？')) return
+    } else if (!window.confirm('从磁盘重新加载？未保存的编辑会丢失。')) {
+      return
+    }
     void remountControl()
   }
 
@@ -169,6 +302,7 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
   }
 
   const goBack = (): void => {
+    if (dirty && !window.confirm('有未保存的编辑，确定返回？')) return
     unloadPreview()
     onBack?.()
   }
@@ -184,7 +318,7 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
       <span className={css.fileName} title={path}>{title}</span>
       <button
         type="button"
-        className={css.btn}
+        className={dirty ? `${css.btn} ${css.btnDirty}` : css.btn}
         disabled={busy}
         title="将当前编辑内容原子写回原文件"
         onClick={() => { void saveToDisk() }}
@@ -220,6 +354,7 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
     <div className={css.hint} role="status">
       GenOffice relay 不可用 — 在仓库执行 `node web/server.mjs` 后点重新检查。
       <button type="button" className={css.btn} onClick={() => { probe(true) }}>重新检查</button>
+      {launchControls}
     </div>
   )
 
@@ -263,6 +398,7 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
           <div className={css.hint} role="status">
             GenOffice relay 不可用 — 已切换后备预览。在仓库执行 `node web/server.mjs` 后可恢复控制模式。
             {recheck}
+            {launchControls}
           </div>
           {renderBuiltin()}
         </div>
@@ -279,6 +415,7 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
             </button>
           )}
           {recheck}
+          {launchControls}
         </div>
       </div>
     )
@@ -296,6 +433,11 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
           style={{ color: saveState === 'saved' ? 'var(--dsw-alias-state-success-primary)' : 'var(--dsw-alias-state-error-primary)' }}
         >
           {saveState === 'saving' ? '写入中…' : saveMessage}
+          {saveState === 'conflict' && (
+            <button type="button" className={css.btn} disabled={busy} onClick={() => { void saveAsCopy() }}>
+              另存为副本
+            </button>
+          )}
         </div>
       )}
       {previewError

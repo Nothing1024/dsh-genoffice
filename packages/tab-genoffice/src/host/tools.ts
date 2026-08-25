@@ -47,6 +47,7 @@ const OPEN_TOOL_BY_APP: Partial<Record<ControlToolEntry['app'], string>> = {
   markdown: 'md_open',
   sheets: 'xlsx_open',
   slides: 'pptx_open',
+  pdf: 'pdf_open',
 }
 
 function describeEntry(entry: ControlToolEntry, cap: CapabilityEntry | undefined, allTools: boolean): string {
@@ -189,14 +190,22 @@ async function saveViaRelay(
   const path = String(input.path ?? '')
   if (!path.startsWith('/')) fail('path 必须是目标文件的本机绝对路径', path, 'local')
   if (isInSyncWindow(path)) fail('sync window', path, 'sync')
+  const saveAsRaw = input.save_as
+  if (saveAsRaw !== undefined && saveAsRaw !== '') {
+    if (typeof saveAsRaw !== 'string' || !saveAsRaw.startsWith('/')) {
+      fail('save_as 必须是本机绝对路径', path, 'local')
+    }
+  }
   const docId = await sha256Hex(path)
+  const body: { path: string; saveAs?: string } = { path }
+  if (typeof saveAsRaw === 'string' && saveAsRaw !== '') body.saveAs = saveAsRaw
   let resp: Response
   try {
     resp = await fetch(`${RELAY_BASE}/api/control/${entry.app}/${docId}/export`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       signal,
-      body: JSON.stringify({ path }),
+      body: JSON.stringify(body),
     })
   } catch (e) {
     fail(e instanceof Error ? e.message : String(e), path, 'fetch')
@@ -205,9 +214,12 @@ async function saveViaRelay(
     const text = await resp.text().catch(() => '')
     fail(`relay 返回 HTTP ${resp.status}${text ? `: ${text}` : ''}`, path, 'fetch')
   }
-  const data = (await resp.json()) as { ok?: boolean; error?: string; path?: string }
+  const data = (await resp.json()) as { ok?: boolean; error?: string; path?: string; mtimeMs?: unknown }
   if (!data.ok) fail(String(data.error ?? 'unknown error'), path, 'relay')
-  markSyncWindow(path)
+  if (body.saveAs !== undefined) {
+    return { ok: true, output: `已另存为 ${data.path ?? body.saveAs}`, summary: '已另存为' }
+  }
+  if (typeof data.mtimeMs !== 'number') markSyncWindow(path)
   return { ok: true, output: `已保存到 ${data.path ?? path}`, summary: '已保存' }
 }
 
@@ -515,7 +527,7 @@ export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<t
   return [...controlTools, ...createOpenTools()]
 }
 
-const OPEN_TOOL_EXTS = ['pptx', 'docx', 'xlsx', 'md'] as const
+const OPEN_TOOL_EXTS = ['pptx', 'docx', 'xlsx', 'md', 'pdf'] as const
 type OpenExt = (typeof OPEN_TOOL_EXTS)[number]
 
 function openToolDesc(ext: OpenExt): string {
@@ -585,6 +597,13 @@ export function createOpenTools(): ReturnType<typeof defineTool>[] {
         if (data['ok'] !== true) {
           const msg = typeof data['error'] === 'string' ? data['error'] : '未知错误'
           throw new Error(`open failed: ${msg}`)
+        }
+        if (data['subscribers'] === 0) {
+          fail(
+            '没有 DSH 页面在监听 /api/open/stream —— 请先在浏览器打开 DSH（默认 http://127.0.0.1:3080）再重试',
+            filePath,
+            'relay',
+          )
         }
         const ready = await waitUntilRegistered(filePath, exec.signal)
         if (!ready) fail('executor not registered', filePath, 'relay')

@@ -73,6 +73,17 @@ export function classifyControlError(input: ClassifyInput): MappedControlError {
     }
   }
 
+  if (err.includes('没有 DSH 页面在监听') || err.includes('no-gui-listening')) {
+    return {
+      class: 'executor-missing',
+      message: triple(
+        '没有 DSH 页面在监听打开请求。',
+        err,
+        '请先在浏览器打开 DSH（默认 http://127.0.0.1:3080）再重试。',
+      ),
+    }
+  }
+
   if (input.kind === 'relay' && err === 'executor not registered' || err.includes('executor not registered')) {
     return {
       class: 'executor-missing',
@@ -102,6 +113,17 @@ export function classifyControlError(input: ClassifyInput): MappedControlError {
         '写回冲突：磁盘上的文件与冲突基线不一致，未覆盖原文件。',
         err,
         '若刚点过「写入磁盘」，等同步完成后再保存。若确有其它程序改了文件，点「从磁盘重载」丢弃未保存编辑后再试。',
+      ),
+    }
+  }
+
+  if (err === 'exists' || /(?:^|\b)exists(?:\b|$)/.test(err)) {
+    return {
+      class: 'write-conflict',
+      message: triple(
+        '另存目标已存在，未覆盖。',
+        err,
+        '换个名字或删除既有副本',
       ),
     }
   }

@@ -105,6 +105,29 @@ export async function probeRelay(force = false, signal?: AbortSignal): Promise<b
   return inFlight
 }
 
+export async function probeRelayLaunch(): Promise<boolean> {
+  try {
+    const resp = await fetch(`${window.location.origin}/dsh-artifact/genoffice-relay`)
+    if (!resp.ok) return false
+    const data = (await resp.json()) as { configured?: boolean }
+    return data.configured === true
+  } catch {
+    return false
+  }
+}
+
+export async function launchRelay(): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const resp = await fetch(`${window.location.origin}/dsh-artifact/genoffice-relay`, { method: 'POST' })
+    const data = (await resp.json()) as { ok?: boolean; error?: string }
+    return typeof data.error === 'string'
+      ? { ok: data.ok === true, error: data.error }
+      : { ok: data.ok === true }
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) }
+  }
+}
+
 export async function notifyHostSync(path: string): Promise<void> {
   try {
     await fetch(`${window.location.origin}/dsh-artifact/genoffice-sync`, {

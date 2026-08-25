@@ -7,7 +7,7 @@ import { DocxControlViewer } from '../src/tabs/docx-control-viewer.tsx'
 import { CLAIMED_EXTS } from '../src/tabs/coexist.ts'
 import { resetActiveDocs } from '../src/tabs/doc-registry.ts'
 import { BROWSER_TAB_ID, FILE_TAB_ID, fileTabSeed } from '../src/tabs/file-tab.ts'
-import { previewUrlFor, resetRelayStore } from '../src/tabs/relay.ts'
+import { docIdFor, previewUrlFor, resetRelayStore } from '../src/tabs/relay.ts'
 import type { FileViewerDescriptor, FileViewerProps, TabDescriptor } from 'dsh-better-sidebar'
 
 afterEach(() => {
@@ -353,6 +353,115 @@ describe('control-mode toolbar parity', () => {
       expect(src).not.toBe(before)
     })
     expect(view.getByRole('button', { name: '写入磁盘' })).toHaveProperty('disabled', true)
+  })
+
+  it('save with numeric mtimeMs does not remount the iframe', async () => {
+    vi.stubGlobal('fetch', vi.fn(async (input: RequestInfo) => {
+      const url = String(input)
+      if (url.includes('/export')) {
+        return { ok: true, json: async () => ({ ok: true, path: '/tmp/a.docx', mtimeMs: 1_700_000_000_000 }) }
+      }
+      return { ok: true, json: async () => ({ ok: true }) }
+    }))
+    const view = render(<ControlModeViewer path="/tmp/a.docx" title="a.docx" ext="docx" />)
+    await waitFor(() => { expect(view.container.querySelector('iframe')).not.toBeNull() })
+    const before = view.container.querySelector('iframe')?.getAttribute('src') ?? ''
+    fireEvent.click(view.getByRole('button', { name: '写入磁盘' }))
+    await waitFor(() => {
+      expect(view.getByText(/编辑状态已保留/)).toBeTruthy()
+    })
+    expect(view.container.querySelector('iframe')?.getAttribute('src')).toBe(before)
+  })
+
+  it('ignores dirty messages from the wrong origin or docId', async () => {
+    stubRelay(true)
+    const view = render(<ControlModeViewer path="/tmp/a.docx" title="a.docx" ext="docx" />)
+    await waitFor(() => { expect(view.container.querySelector('iframe')).not.toBeNull() })
+    const id = await docIdFor('/tmp/a.docx')
+    window.dispatchEvent(new MessageEvent('message', {
+      origin: 'http://evil.example',
+      data: { type: 'genoffice:dirty', docId: id, dirty: true },
+    }))
+    expect(view.getByRole('button', { name: '写入磁盘' }).className).not.toMatch(/btnDirty/)
+    window.dispatchEvent(new MessageEvent('message', {
+      origin: 'http://localhost:8787',
+      data: { type: 'genoffice:dirty', docId: '0'.repeat(64), dirty: true },
+    }))
+    expect(view.getByRole('button', { name: '写入磁盘' }).className).not.toMatch(/btnDirty/)
+    window.dispatchEvent(new MessageEvent('message', {
+      origin: 'http://localhost:8787',
+      data: { type: 'genoffice:dirty', docId: id, dirty: true },
+    }))
+    await waitFor(() => {
+      expect(view.getByRole('button', { name: '写入磁盘' }).className).toMatch(/btnDirty/)
+    })
+  })
+
+  it('updateTab writes the bullet title once and does not loop', async () => {
+    stubRelay(true)
+    const updateTab = vi.fn()
+    const view = render(
+      <ControlModeViewer
+        path="/tmp/a.docx"
+        title="a.docx"
+        ext="docx"
+        tabId="file:/tmp/a.docx"
+        updateTab={updateTab}
+      />,
+    )
+    await waitFor(() => { expect(view.container.querySelector('iframe')).not.toBeNull() })
+    expect(updateTab).not.toHaveBeenCalled()
+    const id = await docIdFor('/tmp/a.docx')
+    window.dispatchEvent(new MessageEvent('message', {
+      origin: 'http://localhost:8787',
+      data: { type: 'genoffice:dirty', docId: id, dirty: true },
+    }))
+    await waitFor(() => {
+      expect(updateTab).toHaveBeenCalledTimes(1)
+      expect(updateTab.mock.calls[0]?.[1]).toEqual({ title: '● a.docx' })
+    })
+    view.rerender(
+      <ControlModeViewer
+        path="/tmp/a.docx"
+        title="● a.docx"
+        ext="docx"
+        tabId="file:/tmp/a.docx"
+        updateTab={updateTab}
+      />,
+    )
+    await waitFor(() => {
+      expect(view.getByRole('button', { name: '写入磁盘' }).className).toMatch(/btnDirty/)
+    })
+    expect(updateTab).toHaveBeenCalledTimes(1)
+  })
+
+  it('conflict offers 另存为副本 and posts saveAs without remounting', async () => {
+    const fetch = vi.fn(async (input: RequestInfo, init?: RequestInit) => {
+      const url = String(input)
+      if (url.includes('/export')) {
+        const body = JSON.parse(String(init?.body ?? '{}')) as { saveAs?: string }
+        if (typeof body.saveAs === 'string') {
+          return { ok: true, json: async () => ({ ok: true, path: body.saveAs, name: 'copy.docx', mtimeMs: 1 }) }
+        }
+        return { ok: true, json: async () => ({ ok: false, error: 'conflict' }) }
+      }
+      return { ok: true, json: async () => ({ ok: true }) }
+    })
+    vi.stubGlobal('fetch', fetch)
+    const view = render(<ControlModeViewer path="/tmp/a.docx" title="a.docx" ext="docx" />)
+    await waitFor(() => { expect(view.container.querySelector('iframe')).not.toBeNull() })
+    const before = view.container.querySelector('iframe')?.getAttribute('src') ?? ''
+    fireEvent.click(view.getByRole('button', { name: '写入磁盘' }))
+    const copyBtn = await view.findByRole('button', { name: '另存为副本' })
+    fireEvent.click(copyBtn)
+    await waitFor(() => {
+      expect(view.getByText(/已另存为/)).toBeTruthy()
+    })
+    expect(view.container.querySelector('iframe')?.getAttribute('src')).toBe(before)
+    const exportBodies = fetch.mock.calls
+      .filter((c) => String(c[0]).includes('/export'))
+      .map((c) => JSON.parse(String((c[1] as RequestInit | undefined)?.body ?? '{}')) as { saveAs?: string })
+    expect(exportBodies.some((b) => typeof b.saveAs === 'string' && b.saveAs.includes('副本'))).toBe(true)
   })
 })
 

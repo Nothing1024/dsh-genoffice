@@ -1,6 +1,8 @@
 import { readFile, stat } from "node:fs/promises";
-import { extname } from "node:path";
+import { extname, join } from "node:path";
 import { randomUUID } from "node:crypto";
+import { spawn } from "node:child_process";
+import { accessSync, constants } from "node:fs";
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import { BlockAssembler } from "@deepseek-ai/dsh-llm";
 import { createUserMessage } from "@deepseek-ai/dsh-llm/message";
@@ -765,6 +767,103 @@ function applySkill(ctx) {
 	ctx.inject(["skills"], (c) => mount(c.skills));
 }
 //#endregion
+//#region src/host/relay-launch.ts
+/**
+* Host route that can spawn the GenOffice relay from a configured checkout.
+* Modeled on sync.ts: loopback origin, exact path, optional webServer inject.
+*/
+const RELAY_LAUNCH_ROUTE = "/dsh-artifact/genoffice-relay";
+const HEALTH = "http://localhost:8787/api/health";
+const POLL_MS = 250;
+const TIMEOUT_MS = 1e4;
+const LOOPBACK_ORIGIN$1 = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/;
+let inFlight = null;
+function isRelayLaunchConfigured(env = process.env) {
+	const root = env.DSH_GENOFFICE_ROOT;
+	if (typeof root !== "string" || root === "") return false;
+	try {
+		accessSync(join(root, "scripts/dev.mjs"), constants.R_OK);
+		return true;
+	} catch {
+		return false;
+	}
+}
+async function pollHealth(deadline) {
+	while (Date.now() < deadline) {
+		try {
+			if ((await fetch(HEALTH, { signal: AbortSignal.timeout(500) })).ok) return true;
+		} catch {}
+		await new Promise((resolve) => setTimeout(resolve, POLL_MS));
+	}
+	return false;
+}
+async function spawnRelay() {
+	if (inFlight !== null) return inFlight;
+	const root = process.env.DSH_GENOFFICE_ROOT ?? "";
+	const script = join(root, "scripts/dev.mjs");
+	inFlight = (async () => {
+		try {
+			if (await pollHealth(Date.now() + POLL_MS)) return { ok: true };
+			spawn(process.execPath, [script, "start-relay"], {
+				detached: true,
+				stdio: "ignore"
+			}).unref();
+			return await pollHealth(Date.now() + TIMEOUT_MS) ? { ok: true } : {
+				ok: false,
+				error: "timeout"
+			};
+		} finally {
+			inFlight = null;
+		}
+	})();
+	return inFlight;
+}
+function writeJson(res, status, body) {
+	res.writeHead(status, { "Content-Type": "application/json" });
+	res.end(JSON.stringify(body));
+}
+async function handleRelayLaunchRequest(req, res) {
+	const origin = req.headers.origin;
+	if (origin !== void 0 && !LOOPBACK_ORIGIN$1.test(origin)) {
+		res.writeHead(403).end();
+		return;
+	}
+	const method = req.method ?? "GET";
+	if (method === "GET") {
+		writeJson(res, 200, { configured: isRelayLaunchConfigured() });
+		return;
+	}
+	if (method !== "POST") {
+		res.writeHead(405).end();
+		return;
+	}
+	if (!isRelayLaunchConfigured()) {
+		writeJson(res, 200, {
+			ok: false,
+			error: "not configured"
+		});
+		return;
+	}
+	writeJson(res, 200, await spawnRelay());
+}
+function applyRelayLaunchRoute(ctx) {
+	const mount = (http) => {
+		return http.register({
+			kind: "exact",
+			path: RELAY_LAUNCH_ROUTE,
+			handler: (req, res) => {
+				handleRelayLaunchRequest(req, res);
+			}
+		});
+	};
+	const existing = lookupWebServer(ctx);
+	if (existing !== void 0) {
+		ctx.effect(() => mount(existing));
+		return;
+	}
+	ctx.inject(["webServer"], (c) => mount(c.webServer));
+}
+//#endregion
 //#region src/host/sync.ts
 const SYNC_ROUTE = "/dsh-artifact/genoffice-sync";
 const SYNC_WINDOW_MS = 8e3;
@@ -851,6 +950,10 @@ function classifyControlError(input) {
 		class: "relay-down",
 		message: triple("GenOffice relay 不可达。控制工具需要本机 localhost:8787 上的中继。", err, "在 GenOffice 仓库执行 `node web/server.mjs`（或 `npm run web`），然后点侧栏「重新检查」。")
 	};
+	if (err.includes("没有 DSH 页面在监听") || err.includes("no-gui-listening")) return {
+		class: "executor-missing",
+		message: triple("没有 DSH 页面在监听打开请求。", err, "请先在浏览器打开 DSH（默认 http://127.0.0.1:3080）再重试。")
+	};
 	if (input.kind === "relay" && err === "executor not registered" || err.includes("executor not registered")) return {
 		class: "executor-missing",
 		message: triple(`文档尚未在控制模式打开${path ? `（${path}）` : ""}。`, err, "在侧栏 explorer / chat 产物行 / git 面板点击该文件，等控制模式 iframe 加载后再重试。")
@@ -862,6 +965,10 @@ function classifyControlError(input) {
 	if (err === "conflict" || /mtime 冲突|已被外部修改/i.test(err)) return {
 		class: "write-conflict",
 		message: triple("写回冲突：磁盘上的文件与冲突基线不一致，未覆盖原文件。", err, "若刚点过「写入磁盘」，等同步完成后再保存。若确有其它程序改了文件，点「从磁盘重载」丢弃未保存编辑后再试。")
+	};
+	if (err === "exists" || /(?:^|\b)exists(?:\b|$)/.test(err)) return {
+		class: "write-conflict",
+		message: triple("另存目标已存在，未覆盖。", err, "换个名字或删除既有副本")
 	};
 	if (/^planning failed:/i.test(err)) return {
 		class: "invalid-params",
@@ -1279,6 +1386,13 @@ const PATH_PARAM = {
 	required: true,
 	description: "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
 };
+const SAVE_PARAMS = {
+	path: PATH_PARAM,
+	save_as: {
+		type: "string",
+		description: "冲突时另存到该绝对路径，不覆盖已存在文件"
+	}
+};
 /**
 * Tool table — the plugin-side mirror of contracts/control-api.md §4.
 * Family counts match contracts/control-api.md §4 and smoke (skill + *_save):
@@ -1534,7 +1648,7 @@ const CONTROL_TOOL_TABLE = [
 		skillName: "save",
 		app: "docs",
 		description: "该工具操作 GenOffice 网页版中已打开的 docx 文档（控制模式）。所有块索引基于文档当前状态，修改后索引会变化，需重新读取上下文。将当前文档内容显式写回原文件（原子写回）。编辑工具只修改网页内状态，只有本工具（或 GenOffice tab 的「写入磁盘」按钮）会真正写盘。",
-		parameters: { path: PATH_PARAM }
+		parameters: SAVE_PARAMS
 	},
 	{
 		name: "markdown_get_document_context",
@@ -1614,7 +1728,7 @@ const CONTROL_TOOL_TABLE = [
 		skillName: "save",
 		app: "markdown",
 		description: "该工具操作 GenOffice 网页版中已打开的 markdown 文档（控制模式）。markdown 内容必须是纯 GFM。将当前文档内容显式写回原文件（原子写回）。编辑工具只修改网页内状态，只有本工具（或 GenOffice tab 的「写入磁盘」按钮）会真正写盘。",
-		parameters: { path: PATH_PARAM }
+		parameters: SAVE_PARAMS
 	},
 	{
 		name: "xlsx_get_workbook_context",
@@ -1836,7 +1950,7 @@ const CONTROL_TOOL_TABLE = [
 		skillName: "save",
 		app: "sheets",
 		description: "该工具操作 GenOffice 网页版中已打开的 xlsx 工作簿（控制模式）。所有编辑先改 iframe 内工作表，只有 xlsx_save 或 tab「写入磁盘」才会写回原文件。将当前工作簿内容显式写回原文件（原子写回，tmp+rename）。编辑工具只修改网页内状态，只有本工具（或 tab「写入磁盘」按钮）会真正写盘。",
-		parameters: { path: PATH_PARAM }
+		parameters: SAVE_PARAMS
 	},
 	{
 		name: "pptx_get_deck_context",
@@ -2804,7 +2918,7 @@ const CONTROL_TOOL_TABLE = [
 		skillName: "save",
 		app: "slides",
 		description: "该工具操作 GenOffice 网页版中已打开的 pptx 演示文稿（控制模式）。所有编辑先改 iframe 内幻灯片，只有 pptx_save 或 tab「写入磁盘」才会写回原文件。页面索引 0 起，画布 1280×720。将当前演示文稿内容显式写回原文件（原子写回，tmp+rename）。编辑工具只修改网页内状态，只有本工具（或 tab「写入磁盘」按钮）会真正写盘。",
-		parameters: { path: PATH_PARAM }
+		parameters: SAVE_PARAMS
 	},
 	{
 		name: "pdf_read_pages",
@@ -3292,7 +3406,7 @@ const CONTROL_TOOL_TABLE = [
 		skillName: "save",
 		app: "pdf",
 		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。将当前文档（含标注与文本改写）显式写回原文件（原子写回，tmp+rename）。编辑工具只修改网页内状态，只有本工具（或 tab「写入磁盘」按钮）会真正写盘。",
-		parameters: { path: PATH_PARAM }
+		parameters: SAVE_PARAMS
 	}
 ];
 /** Write-back trigger (BR-008). Only the five `*_save` rows; `save_style_template` is a skill, not disk write-back. */
@@ -3328,7 +3442,8 @@ const OPEN_TOOL_BY_APP = {
 	docs: "docx_open",
 	markdown: "md_open",
 	sheets: "xlsx_open",
-	slides: "pptx_open"
+	slides: "pptx_open",
+	pdf: "pdf_open"
 };
 function describeEntry(entry, cap, allTools) {
 	let d = entry.description;
@@ -3440,14 +3555,20 @@ async function saveViaRelay(entry, input, signal) {
 	const path = String(input.path ?? "");
 	if (!path.startsWith("/")) fail("path 必须是目标文件的本机绝对路径", path, "local");
 	if (isInSyncWindow(path)) fail("sync window", path, "sync");
+	const saveAsRaw = input.save_as;
+	if (saveAsRaw !== void 0 && saveAsRaw !== "") {
+		if (typeof saveAsRaw !== "string" || !saveAsRaw.startsWith("/")) fail("save_as 必须是本机绝对路径", path, "local");
+	}
 	const docId = await sha256Hex(path);
+	const body = { path };
+	if (typeof saveAsRaw === "string" && saveAsRaw !== "") body.saveAs = saveAsRaw;
 	let resp;
 	try {
 		resp = await fetch(`${RELAY_BASE}/api/control/${entry.app}/${docId}/export`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			signal,
-			body: JSON.stringify({ path })
+			body: JSON.stringify(body)
 		});
 	} catch (e) {
 		fail(e instanceof Error ? e.message : String(e), path, "fetch");
@@ -3458,7 +3579,12 @@ async function saveViaRelay(entry, input, signal) {
 	}
 	const data = await resp.json();
 	if (!data.ok) fail(String(data.error ?? "unknown error"), path, "relay");
-	markSyncWindow(path);
+	if (body.saveAs !== void 0) return {
+		ok: true,
+		output: `已另存为 ${data.path ?? body.saveAs}`,
+		summary: "已另存为"
+	};
+	if (typeof data.mtimeMs !== "number") markSyncWindow(path);
 	return {
 		ok: true,
 		output: `已保存到 ${data.path ?? path}`,
@@ -3729,7 +3855,8 @@ const OPEN_TOOL_EXTS = [
 	"pptx",
 	"docx",
 	"xlsx",
-	"md"
+	"md",
+	"pdf"
 ];
 function openToolDesc(ext) {
 	return `【必做第一步】用 GenOffice 控制模式打开本机 .${ext} 文件。做或改该类型文档时必须先调用本工具，等到返回「已打开控制模式」后才能调用其它 ${ext}_* 工具。禁止用 python、python-pptx、soffice、skill ppt-image-first、third-imagegen 代替本工具。path 为本机绝对路径，文件必须存在。`;
@@ -3807,6 +3934,7 @@ function createOpenTools() {
 				const msg = typeof data["error"] === "string" ? data["error"] : "未知错误";
 				throw new Error(`open failed: ${msg}`);
 			}
+			if (data["subscribers"] === 0) fail("没有 DSH 页面在监听 /api/open/stream —— 请先在浏览器打开 DSH（默认 http://127.0.0.1:3080）再重试", filePath, "relay");
 			if (!await waitUntilRegistered(filePath, exec.signal)) fail("executor not registered", filePath, "relay");
 			return {
 				ok: true,
@@ -3830,6 +3958,7 @@ function apply(ctx) {
 	applyPrompt(ctx);
 	applySkill(ctx);
 	applySyncRoute(ctx);
+	applyRelayLaunchRoute(ctx);
 	const assets = createAssetChannel(ctx);
 	for (const tool of createControlTools({ assets })) ctx.tools.register(tool);
 }

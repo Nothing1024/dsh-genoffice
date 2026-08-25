@@ -47,9 +47,9 @@ describe('GenOffice list start directory', () => {
     })
     vi.stubGlobal('fetch', fetch)
     panel('/proj')
-    await waitFor(() => { expect(fetch).toHaveBeenCalled() })
-    const url = String(fetch.mock.calls[0]?.[0])
-    expect(url).toContain('path=%2Fproj')
+    await waitFor(() => {
+      expect(fetch.mock.calls.some((c) => String(c[0]).includes('/api/dir') && String(c[0]).includes('path=%2Fproj'))).toBe(true)
+    })
   })
 
   it('fetches an empty path when cwd is missing', async () => {
@@ -68,10 +68,11 @@ describe('GenOffice list start directory', () => {
     })
     vi.stubGlobal('fetch', fetch)
     const { view } = panel('')
-    await waitFor(() => { expect(fetch).toHaveBeenCalled() })
-    expect(String(fetch.mock.calls[0]?.[0])).toMatch(/path=$|path=$/)
     await waitFor(() => {
-      expect(fetch.mock.calls.some((c) => String(c[0]).includes('path=') && !String(c[0]).includes('path=%2F'))).toBe(true)
+      expect(fetch.mock.calls.some((c) => String(c[0]).includes('/api/dir'))).toBe(true)
+    })
+    await waitFor(() => {
+      expect(fetch.mock.calls.some((c) => String(c[0]).includes('/api/dir') && String(c[0]).includes('path=') && !String(c[0]).includes('path=%2F'))).toBe(true)
     })
     await waitFor(() => { expect(view.getByText('已回落到主目录')).toBeTruthy() })
   })
@@ -111,13 +112,14 @@ describe('path bar', () => {
     vi.stubGlobal('fetch', fetch)
     const { view } = panel('/proj')
     await waitFor(() => { expect(view.getByRole('button', { name: 'proj' })).toBeTruthy() })
-    const before = fetch.mock.calls.length
+    const dirCalls = (): number => fetch.mock.calls.filter((c) => String(c[0]).includes('/api/dir')).length
+    const before = dirCalls()
     fireEvent.click(view.getByLabelText('当前路径'))
     const input = await view.findByLabelText('跳转到路径')
     fireEvent.change(input, { target: { value: 'relative/nope' } })
     fireEvent.keyDown(input, { key: 'Enter' })
     expect(view.getByText(/绝对路径/)).toBeTruthy()
-    expect(fetch.mock.calls.length).toBe(before)
+    expect(dirCalls()).toBe(before)
   })
 })
 

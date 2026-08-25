@@ -80,6 +80,21 @@ describe('seven error classes', () => {
     resetSyncWindows()
   })
 
+  it('exists maps to write-conflict', () => {
+    const m = classifyControlError({ error: 'exists' })
+    expect(m.class).toBe('write-conflict')
+    expect(m.message).toMatch(/另存目标已存在/)
+    expect(m.message).toMatch(/换个名字或删除既有副本/)
+  })
+
+  it('no GUI listening maps to executor-missing', () => {
+    const m = classifyControlError({
+      error: '没有 DSH 页面在监听 /api/open/stream —— 请先在浏览器打开 DSH（默认 http://127.0.0.1:3080）再重试',
+    })
+    expect(m.class).toBe('executor-missing')
+    expect(m.message).toMatch(/没有 DSH 页面在监听/)
+  })
+
   it('unrecognized keeps the upstream string', () => {
     const m = classifyControlError({ error: 'weird-xyz-42' })
     expect(m.class).toBe('unrecognized')

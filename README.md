@@ -36,3 +36,8 @@ sh env/boot.sh            # loopback :3080
 构建上游 web-dist：`cd ../upstream && npm run web`。
 
 调试网关内部状态用 `dsh-plugin-debug` skill：`~/.agents/skills/dsh-plugin-debug/scripts/dsh-rpc.sh 3080 pluginInventory/list`。
+
+## Relay 一键启动
+
+设置 `DSH_GENOFFICE_ROOT` 为本仓根目录（且 `<root>/scripts/dev.mjs` 可读）后，插件 host 路由 `GET/POST /dsh-artifact/genoffice-relay` 可用，侧栏在 relay 不可用时显示「启动 relay」。未设置该环境变量则只保留手动命令 `node scripts/dev.mjs start-relay`。
+

@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent, ReactNode } from 'react'
 import type { TabComponentProps } from 'dsh-better-sidebar'
 import { TAB_ICON_PROPS } from './icon.tsx'
-import { PREVIEWABLE, RELAY_BASE, getRelayOk, noteRelayOk, probeRelay, subscribeRelay } from './relay.ts'
+import { PREVIEWABLE, RELAY_BASE, getRelayOk, launchRelay, noteRelayOk, probeRelay, probeRelayLaunch, subscribeRelay } from './relay.ts'
 import { fileTabSeed } from './file-tab.ts'
 import css from './genoffice.module.css'
 
@@ -185,6 +185,9 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
   const [pathError, setPathError] = useState<string | null>(null)
   const [fellHome, setFellHome] = useState(false)
   const [relayOk, setRelayOk] = useState<boolean | null>(() => getRelayOk())
+  const [launchConfigured, setLaunchConfigured] = useState(false)
+  const [launching, setLaunching] = useState(false)
+  const [launchError, setLaunchError] = useState<string | null>(null)
   const loadSeq = useRef(0)
 
   const loadList = async (nextPath?: string, asHome = false): Promise<void> => {
@@ -228,6 +231,20 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path, cwd])
+
+  useEffect(() => {
+    void probeRelayLaunch().then(setLaunchConfigured)
+  }, [])
+
+  const startRelay = async (): Promise<void> => {
+    if (launching) return
+    setLaunching(true)
+    setLaunchError(null)
+    const result = await launchRelay()
+    setLaunching(false)
+    if (result.ok) void probeRelay(true)
+    else setLaunchError(result.error ?? 'timeout')
+  }
 
   const mounted = useRef(false)
   useEffect(() => {
@@ -299,6 +316,21 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
         <div className={css.hint} role="status">
           GenOffice relay 不可用 — 在仓库执行 `node web/server.mjs` 后点重新检查。
           <button type="button" className={css.btn} onClick={() => { void probeRelay(true) }}>重新检查</button>
+          {launchConfigured && (
+            <>
+              <button
+                type="button"
+                className={css.btn}
+                disabled={launching}
+                onClick={() => { void startRelay() }}
+              >
+                {launching ? '启动中…' : '启动 relay'}
+              </button>
+              {launchError !== null && (
+                <span>启动失败：{launchError} — 手动执行 `node scripts/dev.mjs start-relay`</span>
+              )}
+            </>
+          )}
         </div>
       )}
       {loading && <div className={css.hint}>加载中…</div>}
