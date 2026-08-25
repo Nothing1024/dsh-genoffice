@@ -302,7 +302,7 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
   }
 
   const goBack = (): void => {
-    if (dirty && !window.confirm('有未保存的编辑，确定返回？')) return
+    if (dirty && !window.confirm('有未保存的编辑，确定离开？')) return
     unloadPreview()
     onBack?.()
   }
@@ -467,17 +467,24 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
           />
         )}
       {!previewLoaded && !previewError && <div className={css.hint}>{syncing ? '正在同步…' : '预览加载中…'}</div>}
-      <PreviewTimeout loaded={previewLoaded} onTimeout={() => { setPreviewError(true); setSyncing(false) }} />
+      <PreviewTimeout
+        loaded={previewLoaded}
+        nonce={frameNonce}
+        onTimeout={() => { setPreviewError(true); setSyncing(false) }}
+      />
     </div>
   )
 }
 
-function PreviewTimeout({ loaded, onTimeout }: { loaded: boolean; onTimeout: () => void }): ReactNode {
+/** pdf/sheets first paint can exceed 10s (pdf.js worker + Univer). Host
+ *  *_open polls registration for 20s — a shorter iframe timeout unmounts
+ *  the executor first (UF-004). Re-arm on each remount nonce. */
+function PreviewTimeout({ loaded, nonce, onTimeout }: { loaded: boolean; nonce: string; onTimeout: () => void }): ReactNode {
   useEffect(() => {
     if (loaded) return
-    const timer = window.setTimeout(onTimeout, 10_000)
+    const timer = window.setTimeout(onTimeout, 30_000)
     return () => { window.clearTimeout(timer) }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- arm once per preview
-  }, [loaded])
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- remount via nonce; onTimeout is stable enough
+  }, [loaded, nonce])
   return null
 }

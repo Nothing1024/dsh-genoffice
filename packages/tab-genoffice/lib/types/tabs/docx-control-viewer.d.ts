@@ -9,7 +9,8 @@ export declare function DocxControlViewer(props: FileViewerProps & {
         path?: string;
         meta?: unknown;
     }) => void;
+    onBack?: () => void;
 }): ReactNode;
-/** Per-file sidebar tab: same control-mode surface as the FileViewer, no Back. */
+/** Per-file sidebar tab: control-mode plus Back (closes the tab; UF-003). */
 export declare function GenOfficeFileTab(props: TabComponentProps): ReactNode;
 //# sourceMappingURL=docx-control-viewer.d.ts.map

@@ -30,6 +30,7 @@ export function DocxControlViewer(
   props: FileViewerProps & {
     tabId?: string
     updateTab?: (id: string, patch: { title?: string; path?: string; meta?: unknown }) => void
+    onBack?: () => void
   },
 ): ReactNode {
   const ext = extOf(props.path)
@@ -41,11 +42,12 @@ export function DocxControlViewer(
       renderBuiltin={() => renderDegradeFallback(props)}
       {...(props.tabId !== undefined ? { tabId: props.tabId } : {})}
       {...(props.updateTab !== undefined ? { updateTab: props.updateTab } : {})}
+      {...(props.onBack !== undefined ? { onBack: props.onBack } : {})}
     />
   )
 }
 
-/** Per-file sidebar tab: same control-mode surface as the FileViewer, no Back. */
+/** Per-file sidebar tab: control-mode plus Back (closes the tab; UF-003). */
 export function GenOfficeFileTab(props: TabComponentProps): ReactNode {
   const path = props.tab.path ?? ''
   const tabId = props.tab.id ?? `${FILE_TAB_ID}:${path}`
@@ -56,6 +58,9 @@ export function GenOfficeFileTab(props: TabComponentProps): ReactNode {
     },
     [sidebar],
   )
+  const onBack = useCallback(() => {
+    sidebar.closeTab(tabId, props.scope)
+  }, [sidebar, tabId, props.scope])
   return (
     <DocxControlViewer
       ctx={props.ctx}
@@ -66,6 +71,7 @@ export function GenOfficeFileTab(props: TabComponentProps): ReactNode {
       viewerId={`${OWN_VIEWER_PREFIX}${extOf(path)}`}
       tabId={tabId}
       updateTab={updateTab}
+      onBack={onBack}
     />
   )
 }

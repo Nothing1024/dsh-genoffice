@@ -22,5 +22,5 @@
 21,P4:agent 侧补齐,执行 Phase 4 回归验证,spec.md#task-21,18;20,smoke（89 工具名不变）+ vitest 全绿,完成,89 工具名 smoke 不变
 22,P5:真实场景与收尾,对齐契约与 smoke 终版,spec.md#task-22,21,node scripts/dev.mjs smoke → 全部 PASS,完成,smoke 终版全绿
 23,P5:真实场景与收尾,重建全部 web-dist 并部署核对,spec.md#task-23,22,五 app 构建成功 + relay 托管 bundle 与磁盘一致 + 插件 lib 重建,完成,五 app web-dist + 插件 lib 已重建
-24,P5:真实场景与收尾,执行 spec 5.2 真实场景全套测试,spec.md#task-24,23,5.2 执行矩阵全部行通过并归档 evidence,完成,见 evidence/UF-*；agent chat 与旧 relay 实机见各 notes
-25,P5:真实场景与收尾,执行 Phase 5 回归验证收尾,spec.md#task-25,24,smoke + vitest + typecheck 全绿 + validate_package.py 0 FAIL,完成,validate_package 0 FAIL
+24,P5:真实场景与收尾,执行 spec 5.2 真实场景全套测试,spec.md#task-24,23,5.2 执行矩阵全部行通过并归档 evidence,已完成,见 evidence/UF-*；agent chat 与旧 relay 实机见各 notes
+25,P5:真实场景与收尾,执行 Phase 5 回归验证收尾,spec.md#task-25,24,smoke + vitest + typecheck 全绿 + validate_package.py 0 FAIL,已完成,validate_package 0 FAIL

@@ -76,6 +76,7 @@ data: {"docId":"<64hex>"}
 
 入参：`{path: string(绝对路径), expectedMtimeMs?: number, saveAs?: string(绝对路径)}`
 
+- 写回目标（`saveAs` ?? 入参 `path`）在等待 iframe 导出之前预检父目录可写性：不可写 → `{ok:false, error:'EACCES'|'EPERM'|'EROFS'}`；`saveAs` 且目标已存在 → `{ok:false, error:'exists'}`。预检失败不转发 export、不推 `saved`。
 - 执行器未注册：`200 {ok:false, error:'executor not registered'}`。
 - 转发下行 `event: export`（带 requestId），等待 notify `kind='export'`（TTL 60s）。
 - 收到 `payload = {base64, name, path, mtimeMs?}` 后：校验 `payload.path` 与入参 `path` 一致（不一致 → `{ok:false, error:'path mismatch'}`）→ 转 `POST /api/file` 同一写回逻辑（§2.5，tmp+rename 原子写）。

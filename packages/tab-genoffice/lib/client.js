@@ -202,25 +202,25 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var genoffice_module_css_default = {
-			"toolbar": "p8QEMa_toolbar",
+			"pathInput": "p8QEMa_pathInput",
 			"pathBar": "p8QEMa_pathBar",
+			"btn": "p8QEMa_btn",
 			"btnDirty": "p8QEMa_btnDirty",
 			"row": "p8QEMa_row",
-			"rowTag": "p8QEMa_rowTag",
-			"rowDisabled": "p8QEMa_rowDisabled",
-			"list": "p8QEMa_list",
-			"rowClickable": "p8QEMa_rowClickable",
-			"iframe": "p8QEMa_iframe",
-			"rowIcon": "p8QEMa_rowIcon",
-			"btn": "p8QEMa_btn",
-			"pathInput": "p8QEMa_pathInput",
-			"panel": "p8QEMa_panel",
-			"pathText": "p8QEMa_pathText",
 			"homeNote": "p8QEMa_homeNote",
-			"rowName": "p8QEMa_rowName",
+			"rowDisabled": "p8QEMa_rowDisabled",
+			"iframe": "p8QEMa_iframe",
+			"fileName": "p8QEMa_fileName",
+			"rowTag": "p8QEMa_rowTag",
+			"list": "p8QEMa_list",
 			"hint": "p8QEMa_hint",
+			"toolbar": "p8QEMa_toolbar",
+			"pathText": "p8QEMa_pathText",
+			"panel": "p8QEMa_panel",
+			"rowIcon": "p8QEMa_rowIcon",
 			"crumb": "p8QEMa_crumb",
-			"fileName": "p8QEMa_fileName"
+			"rowClickable": "p8QEMa_rowClickable",
+			"rowName": "p8QEMa_rowName"
 		};
 		//#endregion
 		//#region src/tabs/genoffice.tsx
@@ -910,7 +910,7 @@ window.__ModuleLoader__.load({
 				if (window.open(previewUrlFor(path, ext, false), "_blank", "noopener") === null) setPopupHint(true);
 			};
 			const goBack = () => {
-				if (dirty && !window.confirm("有未保存的编辑，确定返回？")) return;
+				if (dirty && !window.confirm("有未保存的编辑，确定离开？")) return;
 				unloadPreview();
 				onBack?.();
 			};
@@ -1113,6 +1113,7 @@ window.__ModuleLoader__.load({
 					}),
 					/* @__PURE__ */ (0, react_jsx_runtime.jsx)(PreviewTimeout, {
 						loaded: previewLoaded,
+						nonce: frameNonce,
 						onTimeout: () => {
 							setPreviewError(true);
 							setSyncing(false);
@@ -1121,14 +1122,17 @@ window.__ModuleLoader__.load({
 				]
 			});
 		}
-		function PreviewTimeout({ loaded, onTimeout }) {
+		/** pdf/sheets first paint can exceed 10s (pdf.js worker + Univer). Host
+		*  *_open polls registration for 20s — a shorter iframe timeout unmounts
+		*  the executor first (UF-004). Re-arm on each remount nonce. */
+		function PreviewTimeout({ loaded, nonce, onTimeout }) {
 			(0, react.useEffect)(() => {
 				if (loaded) return;
-				const timer = window.setTimeout(onTimeout, 1e4);
+				const timer = window.setTimeout(onTimeout, 3e4);
 				return () => {
 					window.clearTimeout(timer);
 				};
-			}, [loaded]);
+			}, [loaded, nonce]);
 			return null;
 		}
 		//#endregion
@@ -1155,10 +1159,11 @@ window.__ModuleLoader__.load({
 				ext,
 				renderBuiltin: () => renderDegradeFallback(props),
 				...props.tabId !== void 0 ? { tabId: props.tabId } : {},
-				...props.updateTab !== void 0 ? { updateTab: props.updateTab } : {}
+				...props.updateTab !== void 0 ? { updateTab: props.updateTab } : {},
+				...props.onBack !== void 0 ? { onBack: props.onBack } : {}
 			});
 		}
-		/** Per-file sidebar tab: same control-mode surface as the FileViewer, no Back. */
+		/** Per-file sidebar tab: control-mode plus Back (closes the tab; UF-003). */
 		function GenOfficeFileTab(props) {
 			const path = props.tab.path ?? "";
 			const tabId = props.tab.id ?? `dsh-genoffice:file:${path}`;
@@ -1166,6 +1171,13 @@ window.__ModuleLoader__.load({
 			const updateTab = (0, react.useCallback)((id, patch) => {
 				sidebar.updateTab(id, patch);
 			}, [sidebar]);
+			const onBack = (0, react.useCallback)(() => {
+				sidebar.closeTab(tabId, props.scope);
+			}, [
+				sidebar,
+				tabId,
+				props.scope
+			]);
 			return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(DocxControlViewer, {
 				ctx: props.ctx,
 				store: props.store,
@@ -1174,7 +1186,8 @@ window.__ModuleLoader__.load({
 				title: props.tab.title,
 				viewerId: `${OWN_VIEWER_PREFIX}${extOf(path)}`,
 				tabId,
-				updateTab
+				updateTab,
+				onBack
 			});
 		}
 		//#endregion

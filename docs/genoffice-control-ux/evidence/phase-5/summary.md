@@ -1,9 +1,8 @@
-# Phase 5 close 2026-08-25T09:23:06Z
+# Phase 5 close 2026-08-25
 
-- smoke: PASS（见 smoke.log）
-- vitest: 15 files / 126 tests
-- upstream typecheck: 5 apps 0 error（见 typecheck.log）
-- web:build: 5 apps rebuilt（见 build.log）
-- plugin build: tsc + tsdown OK
-- validate_package.py: 见重跑输出
-- 浏览器：UF-001 保存不重挂 + 二次保存；UF-002 conflict/另存；UF-003 dirty●/保存后清除；UF-005 一键拉起
+- smoke: PASS（全部契约断言）
+- vitest: 15 files / 129 tests
+- upstream typecheck: docs/markdown/sheets/slides/pdf 0 error
+- write-atomic: 4 tests pass
+- validate_package.py: 见 close.md
+- 5.2 整表重跑见 `real-run.md`：主路径全绿；旧 relay / GUI 未开 / 未配置 env 由单测覆盖

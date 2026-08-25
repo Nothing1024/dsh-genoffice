@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/react'
 import { apply as genofficeApply } from '@deepseek-ai/dsh-tab-genoffice/client'
 import { ControlModeViewer } from '../src/tabs/control-mode.tsx'
-import { DocxControlViewer } from '../src/tabs/docx-control-viewer.tsx'
+import { DocxControlViewer, GenOfficeFileTab } from '../src/tabs/docx-control-viewer.tsx'
 import { CLAIMED_EXTS } from '../src/tabs/coexist.ts'
 import { resetActiveDocs } from '../src/tabs/doc-registry.ts'
 import { BROWSER_TAB_ID, FILE_TAB_ID, fileTabSeed } from '../src/tabs/file-tab.ts'
@@ -78,6 +78,7 @@ function fakeBetterSidebar(sessionId?: string) {
     matchFileViewer: () => undefined,
     openTab: vi.fn(),
     closeTab: vi.fn(),
+    updateTab: vi.fn(),
     subscribe: () => () => {},
     getSnapshot: () => ({ sessionId }),
   }
@@ -326,6 +327,67 @@ describe('control-mode toolbar parity', () => {
     expect(within(viewer.container).queryByRole('button', { name: '返回' })).toBeNull()
   })
 
+  it('file tab Back closes the tab; FileViewer has no Back', async () => {
+    stubRelay(true)
+    const sidebar = fakeBetterSidebar()
+    const tabId = `${FILE_TAB_ID}:/tmp/a.docx`
+    const tab = render(
+      <GenOfficeFileTab
+        ctx={{ betterSidebar: sidebar } as never}
+        store={{} as never}
+        scope={{ sessionId: 's' }}
+        tab={{ id: tabId, type: FILE_TAB_ID, path: '/tmp/a.docx', title: 'a.docx' }}
+        visible
+      />,
+    )
+    const back = await tab.findByRole('button', { name: '返回' })
+    fireEvent.click(back)
+    expect(sidebar.closeTab).toHaveBeenCalledWith(tabId, { sessionId: 's' })
+
+    tab.unmount()
+    const viewer = render(
+      <DocxControlViewer
+        ctx={{ betterSidebar: sidebar } as never}
+        store={{} as never}
+        scope={{ sessionId: 's' }}
+        path="/tmp/b.docx"
+        title="b.docx"
+        viewerId="dsh-genoffice:viewer-docx"
+      />,
+    )
+    await within(viewer.container).findByRole('button', { name: '写入磁盘' })
+    expect(within(viewer.container).queryByRole('button', { name: '返回' })).toBeNull()
+  })
+
+  it('dirty Back confirm cancel keeps the file tab open', async () => {
+    stubRelay(true)
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false)
+    const sidebar = fakeBetterSidebar()
+    const tabId = `${FILE_TAB_ID}:/tmp/a.docx`
+    const tab = render(
+      <GenOfficeFileTab
+        ctx={{ betterSidebar: sidebar } as never}
+        store={{} as never}
+        scope={{ sessionId: 's' }}
+        tab={{ id: tabId, type: FILE_TAB_ID, path: '/tmp/a.docx', title: 'a.docx' }}
+        visible
+      />,
+    )
+    await tab.findByRole('button', { name: '返回' })
+    const id = await docIdFor('/tmp/a.docx')
+    window.dispatchEvent(new MessageEvent('message', {
+      origin: 'http://localhost:8787',
+      data: { type: 'genoffice:dirty', docId: id, dirty: true },
+    }))
+    await waitFor(() => {
+      expect(tab.getByRole('button', { name: '写入磁盘' }).className).toMatch(/btnDirty/)
+    })
+    fireEvent.click(tab.getByRole('button', { name: '返回' }))
+    expect(confirm).toHaveBeenCalled()
+    expect(String(confirm.mock.calls[0]?.[0] ?? '')).toMatch(/有未保存的编辑/)
+    expect(sidebar.closeTab).not.toHaveBeenCalled()
+  })
+
   it('browser-open tooltip warns about leaving control mode', async () => {
     stubRelay(true)
     const view = render(<ControlModeViewer path="/tmp/a.docx" title="a.docx" ext="docx" />)
@@ -369,6 +431,24 @@ describe('control-mode toolbar parity', () => {
     fireEvent.click(view.getByRole('button', { name: '写入磁盘' }))
     await waitFor(() => {
       expect(view.getByText(/编辑状态已保留/)).toBeTruthy()
+    })
+    expect(view.container.querySelector('iframe')?.getAttribute('src')).toBe(before)
+  })
+
+  it('write failure shows the relay disk error and does not remount', async () => {
+    vi.stubGlobal('fetch', vi.fn(async (input: RequestInfo) => {
+      const url = String(input)
+      if (url.includes('/export')) {
+        return { ok: true, json: async () => ({ ok: false, error: 'EACCES' }) }
+      }
+      return { ok: true, json: async () => ({ ok: true }) }
+    }))
+    const view = render(<ControlModeViewer path="/tmp/a.docx" title="a.docx" ext="docx" />)
+    await waitFor(() => { expect(view.container.querySelector('iframe')).not.toBeNull() })
+    const before = view.container.querySelector('iframe')?.getAttribute('src') ?? ''
+    fireEvent.click(view.getByRole('button', { name: '写入磁盘' }))
+    await waitFor(() => {
+      expect(view.getByText('写入失败：EACCES')).toBeTruthy()
     })
     expect(view.container.querySelector('iframe')?.getAttribute('src')).toBe(before)
   })
