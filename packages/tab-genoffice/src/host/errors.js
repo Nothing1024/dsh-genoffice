@@ -23,7 +23,7 @@ function classifyControlError(input) {
     if (input.kind === 'capability') {
         return {
             class: 'capability-unavailable',
-            message: triple('该能力在本机 GenOffice web 部署下不可用，本不该被调用。', err, '改用系统提示词里给出的替代（检索用 web_search；插图用本机 imagePath；表格/图表/云出片请改桌面版）。'),
+            message: triple('该能力在本机 GenOffice web 部署下不可用，本不该被调用。', err, '改用系统提示词里给出的替代（检索用 web_search；插图用本机 imagePath）。从零出片用 pptx_generate_deck 或 pptx_land_pages。'),
         };
     }
     if (input.kind === 'fetch'
@@ -51,10 +51,16 @@ function classifyControlError(input) {
             message: triple('写回冲突：磁盘上的文件与冲突基线不一致，未覆盖原文件。', err, '若刚点过「写入磁盘」，等同步完成后再保存。若确有其它程序改了文件，点「从磁盘重载」丢弃未保存编辑后再试。'),
         };
     }
+    if (/^planning failed:/i.test(err)) {
+        return {
+            class: 'invalid-params',
+            message: triple('宿主规划失败，未落地。', err, '改 topic/brief，或改调 pptx_land_pages 自写 PageSpec。不要把 key 写入 iframe。'),
+        };
+    }
     if (input.kind === 'executor' && GUARD_RE.test(err) || GUARD_RE.test(err)) {
         return {
             class: 'upstream-guard',
-            message: triple('上游策略拒绝了这次编辑（不是参数写错）。web 部署下空白 deck 无法靠手搭解锁。', err, '改为改写已有页面上的元素；从零出片请用桌面版 GenOffice。不要反复重试同一调用。'),
+            message: triple('上游策略拒绝了这次编辑（不是参数写错）。空白稿需先落地再改元素。', err, '空白稿用 pptx_generate_deck 或 pptx_land_pages 出片后再改；不要反复重试同一调用。'),
         };
     }
     if (input.kind === 'local') {
@@ -65,6 +71,6 @@ function classifyControlError(input) {
     }
     return {
         class: 'unrecognized',
-        message: triple('未识别的上游错误。', err, '根据原文判断是否需要重开文档或检查 relay；不要盲目重试。'),
+        message: triple('未识别的上游错误。', err, '规划失败看 planning failed:；落地失败看 land_pages 原文。不要盲目重试。'),
     };
 }

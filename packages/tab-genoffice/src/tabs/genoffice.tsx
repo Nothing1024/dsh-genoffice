@@ -1,16 +1,17 @@
 /**
- * GenOffice tab panel: relay-backed file browser + control-mode preview.
+ * GenOffice tab panel: relay-backed file browser.
  *
- * Initial list uses session cwd (empty string = missing → homedir fallback).
- * Path bar is a breadcrumb with type-to-jump (BR-008 / BR-009).
+ * Opening a previewable file calls `openTab` for a per-path document tab
+ * instead of replacing this list. Initial list uses session cwd
+ * (empty string = missing → homedir fallback). Path bar is a breadcrumb
+ * with type-to-jump (BR-008 / BR-009).
  */
 import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent, ReactNode } from 'react'
 import type { TabComponentProps } from 'dsh-better-sidebar'
 import { TAB_ICON_PROPS } from './icon.tsx'
-import { PREVIEWABLE, RELAY_BASE, docIdFor, extOf, getRelayOk, noteRelayOk, probeRelay, subscribeRelay, subscribeOpenFile } from './relay.ts'
-import { ControlModeViewer } from './control-mode.tsx'
-import { lookupActive } from './doc-registry.ts'
+import { PREVIEWABLE, RELAY_BASE, getRelayOk, noteRelayOk, probeRelay, subscribeRelay } from './relay.ts'
+import { fileTabSeed } from './file-tab.ts'
 import css from './genoffice.module.css'
 
 interface DirEntry {
@@ -30,10 +31,6 @@ interface DirResponse {
   entries?: DirEntry[]
   error?: string
 }
-
-type View =
-  | { kind: 'list' }
-  | { kind: 'preview'; path: string; name: string; ext: string }
 
 function joinPath(a: string, b: string): string {
   return a.endsWith('/') ? a + b : a + '/' + b
@@ -179,9 +176,7 @@ function PathBar(props: {
 }
 
 export function GenOfficePanel(props: TabComponentProps): ReactNode {
-  const initialPath = props.tab.path
   const cwd = sessionCwd(props.scope.cwd)
-  const [view, setView] = useState<View>({ kind: 'list' })
   const [path, setPath] = useState<string>('')
   const [parent, setParent] = useState<string | undefined>(undefined)
   const [entries, setEntries] = useState<DirEntry[] | null>(null)
@@ -190,7 +185,6 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
   const [pathError, setPathError] = useState<string | null>(null)
   const [fellHome, setFellHome] = useState(false)
   const [relayOk, setRelayOk] = useState<boolean | null>(() => getRelayOk())
-  const [occupiedHint, setOccupiedHint] = useState<string | null>(null)
   const loadSeq = useRef(0)
 
   const loadList = async (nextPath?: string, asHome = false): Promise<void> => {
@@ -228,38 +222,19 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
       const was = prevRelay.current
       prevRelay.current = ok
       setRelayOk(ok)
-      if (was === false && ok === true && view.kind === 'list') {
+      if (was === false && ok === true) {
         void loadList(path || cwd, cwd === undefined && (path === '' || path === undefined))
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [view.kind, path, cwd])
+  }, [path, cwd])
 
   const mounted = useRef(false)
   useEffect(() => {
     if (mounted.current) return
     mounted.current = true
-    if (initialPath !== undefined && initialPath !== '') {
-      openPreviewByPath(initialPath)
-      void loadList(cwd, cwd === undefined)
-      return
-    }
     void loadList(cwd, cwd === undefined)
     // eslint-disable-next-line react-hooks/exhaustive-deps -- initial load only
-  }, [])
-
-  const openPreviewByPath = (absPath: string): void => {
-    const ext = extOf(absPath)
-    const app = PREVIEWABLE[ext]
-    if (app === undefined) return
-    const name = absPath.slice(Math.max(absPath.lastIndexOf('/'), absPath.lastIndexOf('\\')) + 1)
-    setOccupiedHint(null)
-    setView({ kind: 'preview', path: absPath, name, ext })
-  }
-
-  useEffect(() => {
-    return subscribeOpenFile(openPreviewByPath)
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount
   }, [])
 
   const pickFile = (entry: DirEntry): void => {
@@ -270,25 +245,7 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
     const ext = entry.ext ?? ''
     if (PREVIEWABLE[ext] === undefined) return
     const abs = joinPath(path, entry.name)
-    void docIdFor(abs).then((id) => {
-      if (lookupActive(id) !== undefined) {
-        setOccupiedHint('该文档已在另一处打开')
-        return
-      }
-      openPreviewByPath(abs)
-    })
-  }
-
-  if (view.kind === 'preview') {
-    return (
-      <ControlModeViewer
-        key={view.path}
-        path={view.path}
-        title={view.name}
-        ext={view.ext}
-        onBack={() => { setView({ kind: 'list' }) }}
-      />
-    )
+    props.ctx.betterSidebar.openTab(fileTabSeed(abs), props.scope)
   }
 
   return (
@@ -345,9 +302,6 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
         </div>
       )}
       {loading && <div className={css.hint}>加载中…</div>}
-      {!loading && occupiedHint !== null && (
-        <div className={css.hint}>{occupiedHint}</div>
-      )}
       {!loading && pathError !== null && (
         <div className={css.hint}>{pathError}</div>
       )}
@@ -369,14 +323,14 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
               <div
                 key={entry.name}
                 className={`${css.row} ${clickable ? css.rowClickable : css.rowDisabled}`}
-                title={entry.dir ? '进入目录' : entry.symlink ? '符号链接（可能指向目录）' : previewable ? '点击预览' : '仅桌面版可用'}
+                title={entry.dir ? '进入目录' : entry.symlink ? '符号链接（可能指向目录）' : previewable ? '点击预览' : '网页版不可预览'}
                 onClick={() => { pickFile(entry) }}
               >
                 <span className={css.rowIcon}>
                   {entry.dir ? <FolderIcon /> : entry.symlink ? <LinkIcon /> : <FileIcon />}
                 </span>
                 <span className={css.rowName}>{entry.name}</span>
-                {!entry.dir && !previewable && !entry.symlink && <span className={css.rowTag}>仅桌面版可用</span>}
+                {!entry.dir && !previewable && !entry.symlink && <span className={css.rowTag}>网页版不可预览</span>}
               </div>
             )
           })}

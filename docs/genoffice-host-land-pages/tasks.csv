@@ -1,0 +1,13 @@
+序号,Phase,名称,详情锚点,前置任务,验证命令,状态,备注
+1,P0:契约冻结,冻结 land_pages 与 PageSpec 契约,spec.md#task-1,无,rg pptx_land_pages contracts/control-api.md,待开始,pptx 38→39
+2,P0:契约冻结,执行 Phase 0 回归验证,spec.md#task-2,1,核对契约加法与错误串,待开始,
+3,P1:iframe 落地原语,iframe 新增 land_pages 并不再调控制模式 LLM,spec.md#task-3,2,rg land_pages slides-skill.ts；control-deck-access 无 withLocalLlm,待开始,P0
+4,P1:iframe 落地原语,generate_deck 与 regenerate_slide 控制模式改走 pages_spec,spec.md#task-4,3,topic-only 返回 control mode requires pages_spec,待开始,
+5,P1:iframe 落地原语,单测覆盖落地与守卫解锁,spec.md#task-5,3;4,npx vitest run tests/web-land-pages.test.ts,待开始,
+6,P1:iframe 落地原语,执行 Phase 1 回归验证,spec.md#task-6,3;4;5,vitest 全绿；control-deck-access 无 NO_LOCAL_LLM,待开始,
+7,P2:DSH host 接线,DSH 注册 pptx_land_pages 并镜像契约,spec.md#task-7,6,capability.spec 含 pptx_land_pages,待开始,
+8,P2:DSH host 接线,DSH host 接管 pptx_generate_deck,spec.md#task-8,7,relay body name=land_pages 而非 generate_deck,待开始,禁止注入 iframe key
+9,P2:DSH host 接线,更新 skill 文案与错误下一步,spec.md#task-9,8,rg 桌面版 src 无匹配；catalog 含【不要主动触发】,待开始,
+10,P2:DSH host 接线,执行 Phase 2 回归验证,spec.md#task-10,7;8;9,pnpm run build && typecheck；node scripts/dev.mjs smoke,待开始,
+11,P3:端到端验收,执行 spec 5.2 真实场景全套测试,spec.md#task-11,10,5.2 矩阵全行通过,待开始,
+12,P3:端到端验收,执行 Phase 3 回归验证,spec.md#task-12,11,smoke + validate_package.py 0 FAIL,待开始,

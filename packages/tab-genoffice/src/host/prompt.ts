@@ -34,7 +34,7 @@ function reasonOf(entry: CapabilityEntry): string {
   if (entry.handover === 'dsh:pending') return '已划归 DSH 侧其它工具，本包不提供'
   if (entry.status === 'bridge-missing') return '网页桥接缺失'
   if (entry.status === 'state-locked') return '控制面状态门锁死'
-  if (entry.status === 'cloud-only') return '依赖云生成 / 桌面版'
+  if (entry.status === 'cloud-only') return '依赖云生成'
   if (entry.status === 'relay-fetch') return '会经 relay 出网'
   if (entry.status === 'guarded') return '空白 deck 会被上游守卫拒绝'
   if (entry.status === 'partial') return '部分可用'
@@ -64,7 +64,7 @@ export function buildGenOfficePromptText(): string {
     .join('\n')
 
   return [
-    '本机 GenOffice 是 web 部署，不是桌面版。工具只改已经在控制模式打开的文档；写盘只有 *_save 或界面「写入磁盘」。',
+    '本机 GenOffice 是 web 部署。工具只改已经在控制模式打开的文档；写盘只有 *_save 或界面「写入磁盘」。',
     `可做：\n${can}`,
     `不可做（不要调用、不要向用户承诺）：\n${blocked.join('；')}`,
     '需要联网资料时用 DSH 自己的 web_search。GenOffice 侧没有检索工具。',

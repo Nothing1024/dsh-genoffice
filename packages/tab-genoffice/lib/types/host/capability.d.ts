@@ -15,6 +15,6 @@ export interface CapabilityEntry {
 export declare const CAPABILITY: Record<CapabilityKey, CapabilityEntry>;
 export declare function isExposed(entry: CapabilityEntry): boolean;
 export declare function capabilityOf(app: CapabilityApp, skillName: string): CapabilityEntry | undefined;
-/** Exposed set size used by drift tests (51 after insert_image local-source). */
+/** Exposed set size. Tests must derive expected counts from CONTROL_TOOL_TABLE, not hardcode this. */
 export declare const EXPOSED_COUNT: number;
 //# sourceMappingURL=capability.d.ts.map

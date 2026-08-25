@@ -1,23 +1,40 @@
 /**
  * Host tools: GenOffice control plane via relay POST /api/control/<app>/<docId>/…
  *
- * Registration is filtered by CAPABILITY (BR-001 / BR-015). The table still
- * lists all 81 entries; DSH_GENOFFICE_ALL_TOOLS=1 re-opens the filter.
+ * Registration is filtered by CAPABILITY (BR-001 / BR-015). The table lists
+ * every control tool (docx 11 + markdown 5 + xlsx 13 + pptx 39 + pdf 21 = 89);
+ * a row without a CAPABILITY key is not registered. DSH_GENOFFICE_ALL_TOOLS=1
+ * re-opens the filter.
  * Write-back only through *_save and the tab button (BR-011).
+ * pptx_generate_deck / pptx_regenerate_slide plan on the session model then
+ * land_pages — they must not POST iframe generate_deck / regenerate_slide.
  */
 import { defineTool } from '@deepseek-ai/dsh-tools'
 import type { AssetChannel } from './assets.ts'
 import { capabilityOf, isExposed, type CapabilityEntry } from './capability.ts'
 import { classifyControlError, type ClassifyInput } from './errors.ts'
+import { planDeckPages, planOnePageSpec, type HostLlmOnce } from './page-plan.ts'
+import { sessionPlanLlm } from './session-llm.ts'
 import { isInSyncWindow, markSyncWindow } from './sync.ts'
 import { CONTROL_TOOL_TABLE, isSaveEntry, type ControlToolEntry } from './tool-schema.ts'
 
 const RELAY_BASE = 'http://localhost:8787'
 const CONTROL_TIMEOUT_MS = 70_000
+const GENERATE_DECK_TIMEOUT_MS = 300_000
+/** How long `*_open` waits for the control iframe to register on relay. */
+const OPEN_READY_MS = 20_000
+const OPEN_POLL_MS = 250
+const LAND_SETTLE_MS = 8_000
+const LAND_POLL_MS = 250
 
 export interface ControlToolsOptions {
   assets?: AssetChannel | null
   allTools?: boolean
+  /** Test seam: skip session LLM. Production uses the calling agent's model. */
+  planLlm?: HostLlmOnce
+  /** Test seam: shorten land settle polling. */
+  landSettleMs?: number
+  landPollMs?: number
 }
 
 async function sha256Hex(s: string): Promise<string> {
@@ -25,8 +42,19 @@ async function sha256Hex(s: string): Promise<string> {
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('')
 }
 
+const OPEN_TOOL_BY_APP: Partial<Record<ControlToolEntry['app'], string>> = {
+  docs: 'docx_open',
+  markdown: 'md_open',
+  sheets: 'xlsx_open',
+  slides: 'pptx_open',
+}
+
 function describeEntry(entry: ControlToolEntry, cap: CapabilityEntry | undefined, allTools: boolean): string {
   let d = entry.description
+  const openName = OPEN_TOOL_BY_APP[entry.app]
+  if (openName !== undefined) {
+    d = `须先 ${openName} 等到「已打开控制模式」再调用。${d}`
+  }
   if (cap === undefined) return d
   if (allTools && cap.netEgress) d = `【会向公网发起请求】${d}`
   if (allTools && cap.handover === 'dsh:web_search') d = `【已交还 DSH，请改用 web_search】${d}`
@@ -54,6 +82,54 @@ function shouldRegister(
     return false
   }
   return true
+}
+
+function sleep(ms: number, signal: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (signal.aborted) {
+      reject(signal.reason instanceof Error ? signal.reason : new Error('aborted'))
+      return
+    }
+    const timer = setTimeout(resolve, ms)
+    const onAbort = (): void => {
+      clearTimeout(timer)
+      reject(signal.reason instanceof Error ? signal.reason : new Error('aborted'))
+    }
+    signal.addEventListener('abort', onAbort, { once: true })
+  })
+}
+
+/**
+ * Poll relay until the control iframe has registered an executor for `path`.
+ * Old relays without `registered` are treated as ready (do not block open).
+ */
+async function waitUntilRegistered(path: string, signal: AbortSignal): Promise<boolean> {
+  const deadline = Date.now() + OPEN_READY_MS
+  while (Date.now() < deadline) {
+    if (signal.aborted) return false
+    try {
+      const resp = await fetch(`${RELAY_BASE}/api/control/open`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path }),
+        signal,
+      })
+      if (resp.ok) {
+        const data = (await resp.json()) as { registered?: unknown }
+        if (data.registered === true) return true
+        if (data.registered === undefined) return true
+      }
+    } catch (e) {
+      if (signal.aborted) return false
+      if (e instanceof Error && e.name === 'AbortError') return false
+    }
+    try {
+      await sleep(OPEN_POLL_MS, signal)
+    } catch {
+      return false
+    }
+  }
+  return false
 }
 
 function fail(error: string, path?: string, kind?: ClassifyInput['kind']): never {
@@ -193,10 +269,184 @@ async function executeInsertImage(
   }
 }
 
+function landPagesEntry(): ControlToolEntry {
+  const entry = CONTROL_TOOL_TABLE.find((row) => row.skillName === 'land_pages')
+  if (entry === undefined) throw new Error('planning failed: pptx_land_pages is not in CONTROL_TOOL_TABLE')
+  return entry
+}
+
+function planningFail(error: unknown, path: string): never {
+  const raw = error instanceof Error ? error.message : String(error)
+  fail(raw.startsWith('planning failed:') ? raw : `planning failed: ${raw}`, path, 'local')
+}
+
+function isTimeoutError(error: unknown): boolean {
+  const raw = error instanceof Error ? error.message : String(error)
+  return /timeout/i.test(raw)
+}
+
+async function callRelayRetry(
+  entry: ControlToolEntry,
+  input: Record<string, unknown>,
+  signal: AbortSignal,
+): Promise<{ ok: boolean; output: string; summary: string }> {
+  let last: unknown
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      return await callRelay(entry, input, signal)
+    } catch (e) {
+      last = e
+      if (!isTimeoutError(e) || attempt === 2) throw e
+      await sleep(400, signal)
+    }
+  }
+  throw last instanceof Error ? last : new Error(String(last))
+}
+
+function parseLandedCount(output: string): number | undefined {
+  const m = output.match(/Deck now has (\d+) page/i)
+  if (m === null) return undefined
+  return Number(m[1])
+}
+
+function parseDeckPageCount(output: string): number | undefined {
+  const m = output.match(/The presentation has (\d+) pages?/i)
+  if (m === null) return undefined
+  return Number(m[1])
+}
+
+function contextHasElements(output: string): boolean {
+  return /\|\s*(text|shape|image)\s*\|/i.test(output)
+}
+
+function firstTextNeedle(pages: unknown): string | undefined {
+  if (!Array.isArray(pages) || pages.length === 0) return undefined
+  const page = pages[0]
+  if (typeof page !== 'object' || page === null || !('elements' in page)) return undefined
+  const elements = (page as { elements?: unknown }).elements
+  if (!Array.isArray(elements)) return undefined
+  for (const el of elements) {
+    if (typeof el !== 'object' || el === null) continue
+    const rec = el as Record<string, unknown>
+    if (rec.type !== 'text') continue
+    const paragraphs = rec.paragraphs
+    if (!Array.isArray(paragraphs) || paragraphs.length === 0) continue
+    const para = paragraphs[0]
+    if (typeof para !== 'object' || para === null) continue
+    const runs = (para as { runs?: unknown }).runs
+    if (!Array.isArray(runs) || runs.length === 0) continue
+    const run = runs[0]
+    if (typeof run !== 'object' || run === null) continue
+    const text = (run as { text?: unknown }).text
+    if (typeof text === 'string' && text.trim().length > 0) return text.trim().slice(0, 24)
+  }
+  return undefined
+}
+
+function deckContextEntry(): ControlToolEntry | undefined {
+  return CONTROL_TOOL_TABLE.find((row) => row.skillName === 'get_deck_context')
+}
+
+async function waitLanded(
+  path: string,
+  expectedPages: number,
+  signal: AbortSignal,
+  needle: string | undefined,
+  settle: { settleMs: number; pollMs: number },
+): Promise<void> {
+  const entry = deckContextEntry()
+  if (entry === undefined) return
+  const deadline = Date.now() + settle.settleMs
+  for (;;) {
+    if (signal.aborted) return
+    let output = ''
+    try {
+      output = (await callRelay(entry, { path }, signal)).output
+    } catch {
+      output = ''
+    }
+    const n = parseDeckPageCount(output)
+    const pagesOk = n !== undefined && n === expectedPages
+    const filled = contextHasElements(output)
+    const needleOk = needle === undefined || output.includes(needle)
+    if (pagesOk && filled && needleOk) return
+    if (Date.now() >= deadline) return
+    try {
+      await sleep(settle.pollMs, signal)
+    } catch {
+      return
+    }
+  }
+}
+
+async function executeLandPages(
+  input: Record<string, unknown>,
+  signal: AbortSignal,
+  settle: { settleMs: number; pollMs: number },
+): Promise<{ ok: boolean; output: string; summary: string }> {
+  const result = await callRelayRetry(landPagesEntry(), input, signal)
+  const expected = parseLandedCount(result.output)
+  if (expected !== undefined) {
+    await waitLanded(String(input.path ?? ''), expected, signal, firstTextNeedle(input.pages), settle)
+  }
+  return result
+}
+
+async function executeGenerateDeck(
+  input: Record<string, unknown>,
+  signal: AbortSignal,
+  planLlm: HostLlmOnce,
+  settle: { settleMs: number; pollMs: number },
+): Promise<{ ok: boolean; output: string; summary: string }> {
+  const path = String(input.path ?? '')
+  let pages
+  try {
+    pages = await planDeckPages(input, planLlm, signal)
+  } catch (e) {
+    planningFail(e, path)
+  }
+  const landInput: Record<string, unknown> = {
+    path,
+    pages,
+    insert_mode: input.insert_mode === 'append' ? 'append' : 'replace',
+  }
+  if (typeof input.deck_name === 'string') landInput.deck_name = input.deck_name
+  return await executeLandPages(landInput, signal, settle)
+}
+
+async function executeRegenerateSlide(
+  input: Record<string, unknown>,
+  signal: AbortSignal,
+  planLlm: HostLlmOnce,
+  settle: { settleMs: number; pollMs: number },
+): Promise<{ ok: boolean; output: string; summary: string }> {
+  const path = String(input.path ?? '')
+  const atIndex = input.slideIndex
+  if (typeof atIndex !== 'number' || !Number.isInteger(atIndex) || atIndex < 0) {
+    fail('slideIndex 必须是 ≥0 的整数', path, 'local')
+  }
+  let page
+  try {
+    page = await planOnePageSpec(input, planLlm, signal)
+  } catch (e) {
+    planningFail(e, path)
+  }
+  return await executeLandPages({
+    path,
+    pages: [page],
+    insert_mode: 'replace_at',
+    at_index: atIndex,
+  }, signal, settle)
+}
+
 /** Build the control tool definitions from the contract mirror table. */
 export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<typeof defineTool>[] {
   const allTools = opts.allTools ?? process.env.DSH_GENOFFICE_ALL_TOOLS === '1'
   const assetsAvailable = opts.assets?.available === true
+  const settle = {
+    settleMs: opts.landSettleMs ?? LAND_SETTLE_MS,
+    pollMs: opts.landPollMs ?? LAND_POLL_MS,
+  }
   const controlTools = CONTROL_TOOL_TABLE.filter((entry) => shouldRegister(entry, { allTools, assetsAvailable })).map((entry) => {
     const isSave = isSaveEntry(entry)
     const cap = capabilityOf(entry.app, entry.skillName)
@@ -204,7 +454,7 @@ export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<t
       name: entry.name,
       description: describeEntry(entry, cap, allTools),
       parameters: entry.parameters,
-      timeoutMs: CONTROL_TIMEOUT_MS,
+      timeoutMs: entry.name === 'pptx_generate_deck' ? GENERATE_DECK_TIMEOUT_MS : CONTROL_TIMEOUT_MS,
       output: {
         schema: {
           type: 'object',
@@ -246,6 +496,17 @@ export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<t
           const result = await saveViaRelay(entry, input, exec.signal)
           return { ok: result.ok, output: result.output, summary: result.summary }
         }
+        if (entry.name === 'pptx_generate_deck') {
+          const planLlm = opts.planLlm ?? sessionPlanLlm(exec.agent)
+          return await executeGenerateDeck(input, exec.signal, planLlm, settle)
+        }
+        if (entry.name === 'pptx_regenerate_slide') {
+          const planLlm = opts.planLlm ?? sessionPlanLlm(exec.agent)
+          return await executeRegenerateSlide(input, exec.signal, planLlm, settle)
+        }
+        if (entry.skillName === 'land_pages') {
+          return await executeLandPages(input, exec.signal, settle)
+        }
         const result = await callRelay(entry, input, exec.signal)
         return { ok: result.ok, output: result.output, summary: result.summary }
       },
@@ -257,15 +518,16 @@ export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<t
 const OPEN_TOOL_EXTS = ['pptx', 'docx', 'xlsx', 'md'] as const
 type OpenExt = (typeof OPEN_TOOL_EXTS)[number]
 
-const OPEN_TOOL_DESC =
-  '用 GenOffice 侧栏打开指定本地文件（控制模式）。调用后侧栏会自动切换到该文件的编辑器；文件必须存在于本机。path 为本机绝对路径。'
+function openToolDesc(ext: OpenExt): string {
+  return `【必做第一步】用 GenOffice 控制模式打开本机 .${ext} 文件。做或改该类型文档时必须先调用本工具，等到返回「已打开控制模式」后才能调用其它 ${ext}_* 工具。禁止用 python、python-pptx、soffice、skill ppt-image-first、third-imagegen 代替本工具。path 为本机绝对路径，文件必须存在。`
+}
 
 /** Open tools: POST /api/open — bypasses the control plane (no docId needed). */
 export function createOpenTools(): ReturnType<typeof defineTool>[] {
   return OPEN_TOOL_EXTS.map((ext: OpenExt) =>
     defineTool({
       name: `${ext}_open` as const,
-      description: OPEN_TOOL_DESC,
+      description: openToolDesc(ext),
       parameters: {
         path: { type: 'string', description: '目标文件的本机绝对路径', required: true },
       },
@@ -302,10 +564,13 @@ export function createOpenTools(): ReturnType<typeof defineTool>[] {
         }
         let resp: Response
         try {
+          const sessionId = exec.agent?.id
+          const body: { path: string; sessionId?: string } = { path: filePath }
+          if (typeof sessionId === 'string' && sessionId !== '') body.sessionId = sessionId
           resp = await fetch(`${RELAY_BASE}/api/open`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ path: filePath }),
+            body: JSON.stringify(body),
             signal: exec.signal,
           })
         } catch (e) {
@@ -321,7 +586,9 @@ export function createOpenTools(): ReturnType<typeof defineTool>[] {
           const msg = typeof data['error'] === 'string' ? data['error'] : '未知错误'
           throw new Error(`open failed: ${msg}`)
         }
-        return { ok: true, output: `已发送打开指令：${filePath}`, summary: '打开文件' }
+        const ready = await waitUntilRegistered(filePath, exec.signal)
+        if (!ready) fail('executor not registered', filePath, 'relay')
+        return { ok: true, output: `已打开控制模式：${filePath}`, summary: '打开文件' }
       },
     }),
   )

@@ -11,22 +11,44 @@ const fakeAssets = {
   publish: async () => ({ url: 'http://127.0.0.1:9/dsh-artifact/genoffice-asset/t', token: 't', dispose: () => {} }),
 }
 
-const UP = resolve(import.meta.dirname, '../../../../../../genoffice/upstream')
+const UP_SIBLING = resolve(import.meta.dirname, '../../../../upstream')
+const UP_STACK = resolve(import.meta.dirname, '../../../../../../genoffice/upstream')
+const UP = existsSync(UP_SIBLING) ? UP_SIBLING : UP_STACK
+
+const ASSET_GATED = ['docx_insert_image', 'pdf_insert_image', 'pdf_replace_image'] as const
+const OPEN_TOOLS = ['pptx_open', 'docx_open', 'xlsx_open', 'md_open'] as const
+const tableKeys = CONTROL_TOOL_TABLE.map((row) => `${row.app}:${row.skillName}`)
+const exposedNames = CONTROL_TOOL_TABLE
+  .filter((row) => {
+    const cap = CAPABILITY[`${row.app}:${row.skillName}`]
+    return cap !== undefined && isExposed(cap)
+  })
+  .map((row) => row.name)
 
 describe('capability filter', () => {
-  it('exposes 70 control tools plus 4 open tools when the asset channel is available', () => {
-    expect(EXPOSED_COUNT).toBe(70)
-    expect(Object.keys(CAPABILITY)).toHaveLength(81)
+  it('covers every CONTROL_TOOL_TABLE row so a new official tool cannot hide behind the filter', () => {
+    expect(Object.keys(CAPABILITY).sort()).toEqual([...tableKeys].sort())
+    expect(EXPOSED_COUNT).toBe(exposedNames.length)
+  })
+
+  it('exposes the capability-available control tools plus 4 open tools when the asset channel is available', () => {
     const names = registeredToolNames({ assets: fakeAssets })
-    expect(names).toHaveLength(74)
+    expect(names).toHaveLength(exposedNames.length + OPEN_TOOLS.length)
+    expect(names).toEqual(expect.arrayContaining([...exposedNames, ...OPEN_TOOLS]))
+    expect(names).toContain('xlsx_aggregate_range')
+    expect(names).toContain('xlsx_find_cells')
+    expect(names).toContain('xlsx_select_range')
+    expect(names).toContain('xlsx_trace_precedents')
+    expect(names).toContain('xlsx_trace_dependents')
+    expect(names).toContain('pptx_apply_ops')
+    expect(names).toContain('pdf_insert_text')
     expect(names).toContain('docx_insert_image')
-    expect(names).toContain('docx_open')
-    expect(names).toContain('pptx_open')
-    expect(names).toContain('xlsx_open')
-    expect(names).toContain('md_open')
     expect(names).toContain('pptx_add_chart')
     expect(names).toContain('pptx_add_smartart')
     expect(names).toContain('pptx_analyze_media')
+    expect(names).toContain('pptx_generate_deck')
+    expect(names).toContain('pptx_land_pages')
+    expect(names).toContain('pptx_regenerate_slide')
     expect(names).toContain('pdf_list_page_images')
     expect(names).toContain('pdf_insert_image')
     expect(names).toContain('pdf_transform_image')
@@ -39,20 +61,23 @@ describe('capability filter', () => {
     expect(names).not.toContain('pdf_generate_image')
   })
 
-  it('skips insert/replace image tools without webServer and still registers the other 67 control tools plus 4 open tools', () => {
+  it('skips insert/replace image tools without webServer and still registers the other exposed control tools plus 4 open tools', () => {
     const names = registeredToolNames()
-    expect(names).toHaveLength(71)
+    expect(names).toHaveLength(exposedNames.length - ASSET_GATED.length + OPEN_TOOLS.length)
     expect(names).not.toContain('docx_insert_image')
     expect(names).not.toContain('pdf_insert_image')
     expect(names).not.toContain('pdf_replace_image')
     expect(names).toContain('docx_open')
     expect(names).toContain('pdf_list_page_images')
     expect(names).toContain('pdf_delete_image')
+    expect(names).toContain('pptx_apply_ops')
+    expect(names).toContain('xlsx_aggregate_range')
+    expect(names).toContain('pdf_insert_text')
   })
 
-  it('DSH_GENOFFICE_ALL_TOOLS registers 81 control tools plus 4 open tools and labels egress tools', () => {
+  it('DSH_GENOFFICE_ALL_TOOLS registers every CONTROL_TOOL_TABLE row plus 4 open tools and labels egress tools', () => {
     const tools = createControlTools({ allTools: true, assets: fakeAssets })
-    expect(tools).toHaveLength(85)
+    expect(tools).toHaveLength(CONTROL_TOOL_TABLE.length + OPEN_TOOLS.length)
     const search = tools.find((t) => t.name === 'docx_web_search')
     expect(search?.description).toMatch(/会向公网发起请求/)
     expect(tools.filter((t) => t.name.endsWith('_open')).map((t) => t.name)).toEqual([
@@ -105,6 +130,29 @@ describe('bridge-missing drift', () => {
     const save = readFileSync(pdfSave, 'utf8')
     expect(save).not.toContain('网页版暂不支持图片编辑')
     expect(save).toContain("import('./web-image-edit')")
+  })
+
+  it.skipIf(!present)('slides generate_deck is local spec→pptx, not a cloud stub', () => {
+    const src = readFileSync(bridge, 'utf8')
+    expect(src).toContain('localGeneratePage')
+    expect(src).toContain('webHtmlToPptx')
+    expect(src).toContain("cloudGenStatus: async () => ({ enabled: false })")
+    expect(src).not.toContain("网页版暂不支持本地单页生成")
+    expect(src).not.toContain("网页版暂不支持 HTML 转 PPTX")
+    const deck = CONTROL_TOOL_TABLE.find((r) => r.name === 'pptx_generate_deck')
+    const regen = CONTROL_TOOL_TABLE.find((r) => r.name === 'pptx_regenerate_slide')
+    const land = CONTROL_TOOL_TABLE.find((r) => r.name === 'pptx_land_pages')
+    expect(deck?.parameters.topic).toBeTruthy()
+    expect(deck?.parameters.pages).toBeTruthy()
+    expect(deck?.parameters.pages_spec).toBeTruthy()
+    expect(deck?.parameters.topic).not.toHaveProperty('required')
+    expect(regen?.parameters.brief).toBeTruthy()
+    expect(regen?.parameters.page_spec).toBeTruthy()
+    expect(regen?.parameters.html).toBeUndefined()
+    expect(land?.skillName).toBe('land_pages')
+    expect(CAPABILITY['slides:generate_deck']?.status).toBe('available')
+    expect(CAPABILITY['slides:regenerate_slide']?.status).toBe('available')
+    expect(CAPABILITY['slides:land_pages']?.status).toBe('available')
   })
 
   it.skipIf(!present)('slides bridge-missing skills are still stubs (can un-skip when upstream implements)', () => {

@@ -2,7 +2,14 @@ import { readFile, stat } from "node:fs/promises";
 import { extname } from "node:path";
 import { randomUUID } from "node:crypto";
 import { defineTool } from "@deepseek-ai/dsh-tools";
+import { BlockAssembler } from "@deepseek-ai/dsh-llm";
+import { createUserMessage } from "@deepseek-ai/dsh-llm/message";
 //#region src/host/lookup.ts
+function isLlmStreamService(v) {
+	if (typeof v !== "object" || v === null) return false;
+	if (!("stream" in v) || !("listProviders" in v)) return false;
+	return typeof v.stream === "function" && typeof v.listProviders === "function";
+}
 function lookupService(ctx, pred) {
 	const store = (ctx.root ?? ctx).reflect?.store;
 	if (store === void 0) return void 0;
@@ -16,6 +23,12 @@ function lookupWebServer(ctx) {
 }
 function lookupSystemPrompt(ctx) {
 	return lookupService(ctx, (v) => typeof v === "object" && v !== null && typeof v.section === "function");
+}
+function lookupSkills(ctx) {
+	return lookupService(ctx, (v) => typeof v === "object" && v !== null && typeof v.register === "function" && typeof v.registerProvider === "function" && typeof v.snapshot === "function");
+}
+function lookupLlm(ctx) {
+	return lookupService(ctx, isLlmStreamService);
 }
 //#endregion
 //#region src/host/assets.ts
@@ -288,6 +301,31 @@ const CAPABILITY = {
 		netEgress: false,
 		evidence: "sheets/tools.ts:365-601 走 Univer，不经桥接"
 	},
+	"sheets:aggregate_range": {
+		status: "available",
+		netEgress: false,
+		evidence: "sheets/tools.ts aggregate_range 走 Univer，不经桥接"
+	},
+	"sheets:find_cells": {
+		status: "available",
+		netEgress: false,
+		evidence: "sheets/tools.ts find_cells 走 Univer，不经桥接"
+	},
+	"sheets:select_range": {
+		status: "available",
+		netEgress: false,
+		evidence: "sheets/tools.ts select_range 走 Univer 视图，不经桥接"
+	},
+	"sheets:trace_precedents": {
+		status: "available",
+		netEgress: false,
+		evidence: "sheets/tools.ts trace_precedents 走 Univer，不经桥接"
+	},
+	"sheets:trace_dependents": {
+		status: "available",
+		netEgress: false,
+		evidence: "sheets/tools.ts trace_dependents 走 Univer，不经桥接"
+	},
 	"sheets:propose_operations": {
 		status: "partial",
 		netEgress: false,
@@ -392,19 +430,24 @@ const CAPABILITY = {
 		evidence: "web-bridge.ts:226,308-336,356-421 均为真实实现"
 	},
 	"slides:regenerate_slide": {
-		status: "cloud-only",
+		status: "available",
 		netEgress: false,
-		evidence: "web-bridge.ts:220-224 cloudGenStatus.enabled=false / htmlToPptx 报错"
+		evidence: "host 写一页 PageSpec 再 land_pages replace_at；不把 brief-only 转发 iframe LLM"
 	},
 	"slides:delete_slide": {
 		status: "available",
 		netEgress: false,
 		evidence: "web-bridge.ts:226,308-336,356-421 均为真实实现"
 	},
-	"slides:generate_deck": {
-		status: "cloud-only",
+	"slides:land_pages": {
+		status: "available",
 		netEgress: false,
-		evidence: "web-bridge.ts:220-224 cloudGenStatus.enabled=false / htmlToPptx 报错"
+		evidence: "CONTROL_TOOL_TABLE pptx_land_pages → iframe land_pages；iframe 只落地，host 剥 path"
+	},
+	"slides:generate_deck": {
+		status: "available",
+		netEgress: false,
+		evidence: "host 用当前会话模型写 PageSpec[] 再 land_pages；禁止 executeControl generate_deck"
 	},
 	"slides:save_style_template": {
 		status: "available",
@@ -481,6 +524,11 @@ const CAPABILITY = {
 		netEgress: false,
 		evidence: "web-bridge.ts ungroupElement → pptx-engine ungroupElement"
 	},
+	"slides:apply_ops": {
+		status: "available",
+		netEgress: false,
+		evidence: "web-bridge.ts applyTxn → runTxn（executor.ts）；空或 >50 ops 拒绝"
+	},
 	"slides:save": {
 		status: "available",
 		netEgress: false,
@@ -515,6 +563,11 @@ const CAPABILITY = {
 		status: "available",
 		netEgress: false,
 		evidence: "pdf/tools.ts:461-1325 + web-pdf-save.ts:414-463"
+	},
+	"pdf:insert_text": {
+		status: "available",
+		netEgress: false,
+		evidence: "pdf/tools.ts insertTextTool（与 edit_text/edit_block 同路径）"
 	},
 	"pdf:image_search": {
 		status: "relay-fetch",
@@ -616,7 +669,7 @@ function reasonOf(entry) {
 	if (entry.handover === "dsh:pending") return "已划归 DSH 侧其它工具，本包不提供";
 	if (entry.status === "bridge-missing") return "网页桥接缺失";
 	if (entry.status === "state-locked") return "控制面状态门锁死";
-	if (entry.status === "cloud-only") return "依赖云生成 / 桌面版";
+	if (entry.status === "cloud-only") return "依赖云生成";
 	if (entry.status === "relay-fetch") return "会经 relay 出网";
 	if (entry.status === "guarded") return "空白 deck 会被上游守卫拒绝";
 	if (entry.status === "partial") return "部分可用";
@@ -639,7 +692,7 @@ function buildGenOfficePromptText() {
 		(byApp[app] ?? (byApp[app] = [])).push(skill);
 	}
 	return [
-		"本机 GenOffice 是 web 部署，不是桌面版。工具只改已经在控制模式打开的文档；写盘只有 *_save 或界面「写入磁盘」。",
+		"本机 GenOffice 是 web 部署。工具只改已经在控制模式打开的文档；写盘只有 *_save 或界面「写入磁盘」。",
 		`可做：\n${Object.entries(byApp).map(([app, skills]) => `${app}：${skills.join("、")}`).join("\n")}`,
 		`不可做（不要调用、不要向用户承诺）：\n${blocked.join("；")}`,
 		"需要联网资料时用 DSH 自己的 web_search。GenOffice 侧没有检索工具。",
@@ -662,6 +715,54 @@ function applyPrompt(ctx) {
 		return;
 	}
 	ctx.inject(["systemPrompt"], (c) => mount(c.systemPrompt));
+}
+//#endregion
+//#region src/host/skill.ts
+const GENOFFICE_SKILL_NAME = "dsh-genoffice";
+/** Catalog text. Do not list “做 PPT / 汇报 PPT” — those would auto-route. Capped at 500. */
+const GENOFFICE_SKILL_DESCRIPTION = [
+	"【不要主动触发】仅当用户明确写出本 skill 名称或发送 /dsh-genoffice 时再加载。",
+	"用户只说做 PPT、汇报、答辩、路演时不要调用本 skill。",
+	"加载后：先 pptx_open / docx_open / xlsx_open / md_open，等到「已打开控制模式」，再用内置工具改稿。"
+].join("");
+const GENOFFICE_SKILL_CONTENT = [
+	"# GenOffice 控制模式",
+	"",
+	"本 skill 不自动适用于「做 PPT」类请求。只有用户点名 `dsh-genoffice` 或发送 `/dsh-genoffice` 后才按下面做。",
+	"",
+	"本会话有内置 `pptx_*` / `docx_*` / `xlsx_*` / `md_*` 工具。按本 skill 工作时只走这些工具。",
+	"",
+	"## 不要走这些路径",
+	"",
+	"- 不要调用 skill `ppt-image-first` 或 `third-imagegen`。若已经加载，停止执行它们的步骤。",
+	"- 不要用 bash、python、python-pptx、soffice、LibreOffice 或生图 API 生成或改写 pptx/docx/xlsx。",
+	"- 不要先拼 HTML 预览再导出 PPT。",
+	"",
+	"## 步骤",
+	"",
+	"1. 先调用对应 `pptx_open` / `docx_open` / `xlsx_open` / `md_open`，path 为本机绝对路径。",
+	"2. 等到工具返回「已打开控制模式：<path>」，再调用其它同前缀工具。",
+	"3. 读改先 `*_get_*_context`（PPT 用 `pptx_get_deck_context`）。",
+	"4. 空白 pptx 出片：用 `pptx_generate_deck`（当前会话模型写 PageSpec 再落地）或自写 PageSpec 后 `pptx_land_pages`。不要把 API key 写入 iframe。",
+	"5. 只用内置工具改 iframe 内文档。写盘只用 `*_save` 或界面「写入磁盘」。",
+	"",
+	"## 失败",
+	"",
+	"若报 `executor not registered` 或「尚未在控制模式打开」，只再调用一次对应 `*_open` 并等待成功。不要改走脚本。"
+].join("\n");
+function applySkill(ctx) {
+	const mount = (skills) => skills.register({
+		name: GENOFFICE_SKILL_NAME,
+		description: GENOFFICE_SKILL_DESCRIPTION,
+		content: GENOFFICE_SKILL_CONTENT,
+		source: "runtime"
+	});
+	const existing = lookupSkills(ctx);
+	if (existing !== void 0) {
+		ctx.effect(() => mount(existing));
+		return;
+	}
+	ctx.inject(["skills"], (c) => mount(c.skills));
 }
 //#endregion
 //#region src/host/sync.ts
@@ -744,7 +845,7 @@ function classifyControlError(input) {
 	};
 	if (input.kind === "capability") return {
 		class: "capability-unavailable",
-		message: triple("该能力在本机 GenOffice web 部署下不可用，本不该被调用。", err, "改用系统提示词里给出的替代（检索用 web_search；插图用本机 imagePath；表格/图表/云出片请改桌面版）。")
+		message: triple("该能力在本机 GenOffice web 部署下不可用，本不该被调用。", err, "改用系统提示词里给出的替代（检索用 web_search；插图用本机 imagePath）。从零出片用 pptx_generate_deck 或 pptx_land_pages。")
 	};
 	if (input.kind === "fetch" || /econnrefused|fetch failed|failed to fetch|networkerror|relay 返回 http/i.test(err)) return {
 		class: "relay-down",
@@ -762,9 +863,13 @@ function classifyControlError(input) {
 		class: "write-conflict",
 		message: triple("写回冲突：磁盘上的文件与冲突基线不一致，未覆盖原文件。", err, "若刚点过「写入磁盘」，等同步完成后再保存。若确有其它程序改了文件，点「从磁盘重载」丢弃未保存编辑后再试。")
 	};
+	if (/^planning failed:/i.test(err)) return {
+		class: "invalid-params",
+		message: triple("宿主规划失败，未落地。", err, "改 topic/brief，或改调 pptx_land_pages 自写 PageSpec。不要把 key 写入 iframe。")
+	};
 	if (input.kind === "executor" && GUARD_RE.test(err) || GUARD_RE.test(err)) return {
 		class: "upstream-guard",
-		message: triple("上游策略拒绝了这次编辑（不是参数写错）。web 部署下空白 deck 无法靠手搭解锁。", err, "改为改写已有页面上的元素；从零出片请用桌面版 GenOffice。不要反复重试同一调用。")
+		message: triple("上游策略拒绝了这次编辑（不是参数写错）。空白稿需先落地再改元素。", err, "空白稿用 pptx_generate_deck 或 pptx_land_pages 出片后再改；不要反复重试同一调用。")
 	};
 	if (input.kind === "local") return {
 		class: "invalid-params",
@@ -772,7 +877,398 @@ function classifyControlError(input) {
 	};
 	return {
 		class: "unrecognized",
-		message: triple("未识别的上游错误。", err, "根据原文判断是否需要重开文档或检查 relay；不要盲目重试。")
+		message: triple("未识别的上游错误。", err, "规划失败看 planning failed:；落地失败看 land_pages 原文。不要盲目重试。")
+	};
+}
+//#endregion
+//#region src/host/page-plan.ts
+/**
+* Host-side deck planning. Prompt text is copied from
+* upstream/apps/slides/src/renderer/ai/local-page-gen.ts
+* (`pageSpecSystemPrompt`, `pageSpecUserMessage`, `PLAN_DECK_SYSTEM_PROMPT`,
+* `STYLE_SKILL_SYSTEM_PROMPT`, `styleSkillUserMessage`, `planDeckUserMessage`).
+* Do not import the slides renderer (ASM-005).
+*/
+const SPEC_CANVAS_W = 1280;
+const DEFAULT_STYLE = "Main background: #16395C\nMain text color: #FFFFFF\nPrimary accent: #3DDC97\nSecondary accent: #F4D35E\nOverall style: dark professional typography-first slide.";
+function pageSpecSystemPrompt(canvasW, canvasH) {
+	return `You are a professional slide visual designer. Output exactly ONE JSON object describing one slide; no explanations/markdown/code fences.
+
+## Canvas
+${canvasW}x${canvasH} px, origin top-left. All x/y/w/h are integers in px. Nothing may cross the canvas edges; negative coordinates forbidden. Elements paint in array order: background/decor shapes first, then images, text last (text must never end up underneath a shape).\n
+## Format
+{"background":"#RRGGBB","elements":[...]}
+Element types:
+- Shape: {"type":"shape","shape":"roundRect","x":80,"y":120,"w":360,"h":200,"fill":"#RRGGBB or #RRGGBBAA (AA=alpha, 00 transparent)","stroke":{"color":"#RRGGBB","widthPt":1},"paragraphs":[...optional label text, vertically centered...]}
+  Allowed shape values: rect, roundRect, ellipse, triangle, rightArrow, leftArrow, upArrow, downArrow, chevron, diamond, parallelogram, trapezoid, hexagon, pentagon, pie, donut, star5, heart, cloud, line, lineArrow. line/lineArrow draw the diagonal of their box from top-left to bottom-right and need a stroke (a horizontal rule = a box with h:1).
+- Text: {"type":"text","x":80,"y":60,"w":800,"h":90,"valign":"top","paragraphs":[{"align":"left","lineSpacingPct":110,"spaceAfterPt":6,"bullet":false,"runs":[{"text":"...","sizePt":18,"bold":true,"italic":false,"color":"#RRGGBB","font":"Font Name"}]}]}
+  A paragraph may mix runs of different weight/color/size (e.g. a big number run + a small unit run in one line).
+- Image: {"type":"image","url":"https://...","x":660,"y":80,"w":540,"h":560} — center-cropped to fill its box (object-fit: cover).
+
+## Hard layout rules
+- Text boxes have ZERO inner padding: the box top-left is exactly where the first glyph starts. Size every box from its content: one line is about sizePt*1.8 px tall at lineSpacingPct 110; a CJK character is about sizePt*1.35 px wide, a Latin character about sizePt*0.7 px. Text wraps at the box width — count the wrapped lines and make the box tall enough, plus one spare line.
+- Text must never overflow its box or overlap other text. Keep >=8px between text and card edges, >=20px between a big title and its subtitle, >=5px between stacked text blocks in the same column — self-check every pair before output.
+- Font sizes in pt: big titles 32-48, subtitles 18-24, body 12-15, hero KPI numbers up to 80.
+- Spread content across the whole page; do not cram it into the top half leaving large blank areas; make text and images as large as the layout allows.
+
+## Visuals and assets
+- Photos may only use URLs from the "available images" list, at most as many image elements as URLs. With no available images, fill with typography/color blocks/shapes — never fake photos.
+- Icon-like decoration uses the allowed shapes only (at most 4-5 per page, strongly content-related). **Never use emoji**.
+- Data visuals: compose bars/rings/timelines from rect/donut/line shapes with sizes proportional to the real values from the brief.
+- Solid colors only (alpha allowed) — no gradients. **No placeholders of any kind**: all copy comes from the brief’s real content.
+
+## Anti-AI design rules (violation = unacceptable)
+- No thin vertical accent bar on the left of cards, no colored bar on top of cards, no small bar left of titles — express hierarchy with background color/font weight/size contrast.
+- One primary + one secondary accent color for the whole page; even when comparing multiple entities, do not give each a different color (no rainbow cards).
+- No decorative corner blocks/short lines; decorative elements must be consistent in position and style across the deck.
+- Do not turn every page into a "shape + bold subtitle + description" list; the cover must not be a flat one-line title + subtitle layout — it needs a visual anchor (large color block/geometric composition/huge number/hero image).`;
+}
+function pageSpecUserMessage(args) {
+	const imgBlock = args.images.length ? `\nAvailable image URLs (put them into image elements; do not invent placeholder blocks):\n${args.images.map((u, i) => `${i + 1}. ${u}`).join("\n")}` : "";
+	const ctxBlock = args.context ? `\n\nReference material (all real names/figures/facts come from here; do not invent):\n${args.context.slice(0, 4e3)}` : "";
+	return `This is the deck's unified style (this page must follow it strictly to stay consistent across pages):\n${args.style}\n\n` + (args.topic ? `Deck topic: ${args.topic}\n` : "") + `Deck-wide narrative Core Hook: ${args.coreHook}\n\nNow design page ${args.pageIndex}/${args.totalPages}.\nTitle: ${args.title}\nLayout: ${args.layout}\nContent brief (use real data/facts): ${args.brief}${imgBlock}${ctxBlock}\n\nReturn only this page's spec JSON.`;
+}
+const PLAN_DECK_SYSTEM_PROMPT = "You are a professional deck planner. Given the confirmed design style, plan the content page by page. Output only one JSON object, no explanations/markdown/code fences.\nFormat: {\"core_hook\":\"...\",\"pages\":[{\"title\":\"\",\"type\":\"cover|content|data|closing\",\"brief\":\"\",\"layout\":\"\",\"image_queries\":[]}]}\n\n## core_hook\nThe deck's narrative anchor: one sentence, with tension, containing a number or counter-intuitive contrast, at most 20 characters.\n\n## layout (choose from the Style Skill's per-page-type variant library; content pages within one deck must not repeat the same variant)\ncover: cover_typography_hero (huge pure typography) | cover_dark_minimal (dark background, centered large title) | cover_split_color (side-by-side color blocks) | cover_full_image_overlay (full-bleed photo + dark overlay) | cover_magazine (magazine-style large title + partial imagery) | cover_split_image (text left, image right)\ncontent: left_text_right_image | three_column_cards | hero_big_number | two_column_comparison | timeline_horizontal | full_image_text_overlay\ndata: kpi_cards_row | chart_with_insight | two_by_two_grid\nclosing: closing_cta | closing_thank_you\nSelection criteria: 3 parallel points → three_column_cards; a key number → hero_big_number; comparison/categories → two_column_comparison/two_by_two_grid; sequence → timeline_horizontal; image+text → left_text_right_image/full_image_text_overlay; metrics → kpi_cards_row.\n\n## brief\nDescribe in detail what goes in each region of the layout; prefer real data/facts from the reference material, no \"XX%\" placeholders; cover gives main/sub titles and mood; data gives metric names + concrete values + changes.\n\n## image_queries\nArray: one entry per photo slot on the page. If the reference material contains ready image URLs (starting with http), use them directly; otherwise put English image-search keywords (describing a concrete scene, e.g. \"summer palace kunming lake\", not generic words like \"park\") — the system auto-searches and fills real URLs back. Travel/product/people/brand pages get images by default; give [] only when the page truly needs no photos (fill with typography/icons; never count on CSS-drawn fake images).";
+function planDeckUserMessage(a) {
+	const styleBlock = a.styleSkill ? `\n[Confirmed design style Style Skill; choose layout accordingly while planning]:\n${a.styleSkill}` : "";
+	return `Topic: ${a.topic}${a.context ? `\nReference material/requirements: ${a.context}` : ""}${styleBlock}\nPlan ${a.count} pages in total.\nOutput the JSON.`;
+}
+function extractJsonText(raw) {
+	const text = String(raw ?? "");
+	const candidates = [];
+	for (let start = 0; start < text.length; start++) {
+		if (text[start] !== "{") continue;
+		let depth = 0;
+		let inString = false;
+		let escape = false;
+		for (let i = start; i < text.length; i++) {
+			const ch = text[i];
+			if (inString) {
+				if (escape) escape = false;
+				else if (ch === "\\") escape = true;
+				else if (ch === "\"") inString = false;
+				continue;
+			}
+			if (ch === "\"") {
+				inString = true;
+				continue;
+			}
+			if (ch === "{") depth += 1;
+			else if (ch === "}") {
+				depth -= 1;
+				if (depth === 0) {
+					candidates.push(text.slice(start, i + 1));
+					break;
+				}
+			}
+		}
+	}
+	for (const candidate of candidates) try {
+		JSON.parse(candidate);
+		return candidate;
+	} catch {
+		continue;
+	}
+	return candidates[0];
+}
+function asRecord(v) {
+	return v !== null && typeof v === "object" && !Array.isArray(v) ? v : void 0;
+}
+function isPageSpecLike(v) {
+	const rec = asRecord(v);
+	if (rec === void 0) return false;
+	const elements = rec.elements;
+	if (!Array.isArray(elements) || elements.length === 0) return false;
+	return elements.every((el) => {
+		const item = asRecord(el);
+		if (item === void 0) return false;
+		if (typeof item.type !== "string" || item.type.length === 0) return false;
+		return [
+			"x",
+			"y",
+			"w",
+			"h"
+		].every((k) => typeof item[k] === "number" && Number.isFinite(item[k]));
+	});
+}
+function parsePageSpecLike(raw) {
+	const json = extractJsonText(raw);
+	if (json === void 0) return {
+		ok: false,
+		error: "no JSON object found in the output"
+	};
+	let parsed;
+	try {
+		parsed = JSON.parse(json);
+	} catch (e) {
+		return {
+			ok: false,
+			error: e instanceof Error ? e.message : String(e)
+		};
+	}
+	if (!isPageSpecLike(parsed)) return {
+		ok: false,
+		error: "spec missing elements with type/x/y/w/h"
+	};
+	return {
+		ok: true,
+		spec: parsed
+	};
+}
+function parseOutline(raw) {
+	const json = extractJsonText(raw);
+	if (json === void 0) return {
+		ok: false,
+		error: "no JSON object found in the output"
+	};
+	let parsed;
+	try {
+		parsed = JSON.parse(json);
+	} catch (e) {
+		return {
+			ok: false,
+			error: "outline JSON parse failed: " + (e instanceof Error ? e.message : String(e))
+		};
+	}
+	const rec = asRecord(parsed);
+	if (rec === void 0) return {
+		ok: false,
+		error: "outline JSON parse failed: not an object"
+	};
+	const pagesRaw = rec.pages;
+	if (!Array.isArray(pagesRaw) || pagesRaw.length === 0) return {
+		ok: false,
+		error: "outline JSON parse failed: pages must be a non-empty array"
+	};
+	const pages = [];
+	for (const item of pagesRaw) {
+		const p = asRecord(item);
+		if (p === void 0) return {
+			ok: false,
+			error: "outline JSON parse failed: page is not an object"
+		};
+		const title = typeof p.title === "string" ? p.title : "";
+		const brief = typeof p.brief === "string" ? p.brief : "";
+		const layout = typeof p.layout === "string" ? p.layout : "";
+		if (title.length === 0 || brief.length === 0 || layout.length === 0) return {
+			ok: false,
+			error: "outline JSON parse failed: each page needs title/brief/layout"
+		};
+		const image_queries = Array.isArray(p.image_queries) ? p.image_queries.filter((u) => typeof u === "string" && /^https?:\/\//i.test(u)) : [];
+		pages.push({
+			title,
+			brief,
+			layout,
+			...typeof p.type === "string" ? { type: p.type } : {},
+			...image_queries.length > 0 ? { image_queries } : {}
+		});
+	}
+	return {
+		ok: true,
+		outline: {
+			core_hook: typeof rec.core_hook === "string" && rec.core_hook.length > 0 ? rec.core_hook : pages[0]?.title ?? "",
+			pages
+		}
+	};
+}
+function coercePagesSpec(value) {
+	if (!Array.isArray(value) || value.length === 0) return void 0;
+	if (!value.every(isPageSpecLike)) return void 0;
+	return value;
+}
+function httpImagesFrom(value) {
+	if (!Array.isArray(value)) return [];
+	return value.filter((u) => typeof u === "string" && /^https?:\/\//i.test(u));
+}
+async function llmJson(run, system, user, signal, parse, maxTokens) {
+	let lastErr = "empty model output";
+	for (let attempt = 0; attempt < 2; attempt++) {
+		if (signal.aborted) throw new Error("planning failed: aborted");
+		const prompt = attempt === 0 ? user : `${user}\n\nYour previous output was rejected: ${lastErr}. Output the corrected JSON object only.`;
+		let text;
+		try {
+			text = await run(system, prompt, signal, maxTokens);
+		} catch (e) {
+			lastErr = e instanceof Error ? e.message : String(e);
+			continue;
+		}
+		if (typeof text !== "string" || text.trim().length === 0) {
+			lastErr = "empty model output";
+			continue;
+		}
+		const parsed = parse(text);
+		if (parsed.ok) return parsed.value;
+		lastErr = parsed.error;
+	}
+	throw new Error(`planning failed: ${lastErr}`);
+}
+async function planDeckPages(input, run, signal) {
+	const given = coercePagesSpec(input.pages_spec);
+	if (given !== void 0) return given;
+	if (input.pages_spec !== void 0) throw new Error("planning failed: pages_spec must be a non-empty array of PageSpec objects");
+	const topic = typeof input.topic === "string" ? input.topic.trim() : "";
+	const approx = typeof input.approx_pages === "number" && Number.isFinite(input.approx_pages) ? Math.max(1, Math.min(12, Math.round(input.approx_pages))) : 3;
+	const style = typeof input.style === "string" && input.style.length > 0 ? input.style : DEFAULT_STYLE;
+	const context = typeof input.context === "string" && input.context.length > 0 ? input.context : void 0;
+	let outline;
+	const pagesInput = input.pages;
+	if (Array.isArray(pagesInput) && pagesInput.length > 0) {
+		const parsed = parseOutline(JSON.stringify({
+			core_hook: typeof input.core_hook === "string" ? input.core_hook : topic,
+			pages: pagesInput
+		}));
+		if (!parsed.ok) throw new Error(`planning failed: ${parsed.error}`);
+		outline = parsed.outline;
+	}
+	if (outline === void 0) {
+		if (topic.length === 0) throw new Error("planning failed: topic is required when pages_spec is omitted");
+		const outlineArgs = {
+			topic,
+			count: approx,
+			styleSkill: style
+		};
+		if (context !== void 0) outlineArgs.context = context;
+		outline = await llmJson(run, PLAN_DECK_SYSTEM_PROMPT, planDeckUserMessage(outlineArgs), signal, (text) => {
+			const parsed = parseOutline(text);
+			return parsed.ok ? {
+				ok: true,
+				value: parsed.outline
+			} : parsed;
+		}, 2048);
+	}
+	const sharedImages = httpImagesFrom(input.image_urls);
+	const specs = [];
+	for (const [i, page] of outline.pages.entries()) {
+		const pageImages = [...sharedImages, ...(page.image_queries ?? []).filter((u) => /^https?:\/\//i.test(u))];
+		const specArgs = {
+			style,
+			coreHook: outline.core_hook,
+			pageIndex: i + 1,
+			totalPages: outline.pages.length,
+			title: page.title,
+			layout: page.layout,
+			brief: page.brief,
+			images: pageImages
+		};
+		if (topic.length > 0) specArgs.topic = topic;
+		if (context !== void 0) specArgs.context = context;
+		const spec = await llmJson(run, pageSpecSystemPrompt(SPEC_CANVAS_W, 720), pageSpecUserMessage(specArgs), signal, (text) => {
+			const parsed = parsePageSpecLike(text);
+			return parsed.ok ? {
+				ok: true,
+				value: parsed.spec
+			} : parsed;
+		}, 4096);
+		specs.push(spec);
+	}
+	if (specs.length === 0) throw new Error("planning failed: no pages produced");
+	return specs;
+}
+async function planOnePageSpec(input, run, signal) {
+	const given = input.page_spec;
+	if (given !== void 0) {
+		if (!isPageSpecLike(given)) throw new Error("planning failed: page_spec must be a PageSpec object");
+		return given;
+	}
+	const brief = typeof input.brief === "string" ? input.brief.trim() : "";
+	if (brief.length === 0) throw new Error("planning failed: brief is required when page_spec is omitted");
+	const title = typeof input.title === "string" && input.title.length > 0 ? input.title : "Slide";
+	const layout = typeof input.layout === "string" && input.layout.length > 0 ? input.layout : "cover_dark_minimal";
+	const style = typeof input.style === "string" && input.style.length > 0 ? input.style : DEFAULT_STYLE;
+	return await llmJson(run, pageSpecSystemPrompt(SPEC_CANVAS_W, 720), pageSpecUserMessage({
+		style,
+		coreHook: title,
+		pageIndex: 1,
+		totalPages: 1,
+		title,
+		layout,
+		brief,
+		images: httpImagesFrom(input.image_urls)
+	}), signal, (text) => {
+		const parsed = parsePageSpecLike(text);
+		return parsed.ok ? {
+			ok: true,
+			value: parsed.spec
+		} : parsed;
+	}, 4096);
+}
+//#endregion
+//#region src/host/session-llm.ts
+function asSessionAgent(value) {
+	if (typeof value !== "object" || value === null) return void 0;
+	if (!("id" in value) || !("options" in value) || !("ctx" in value) || !("session" in value)) return void 0;
+	if (typeof value.id !== "string" || value.id.length === 0) return void 0;
+	if (typeof value.options !== "object" || value.options === null) return void 0;
+	if (typeof value.ctx !== "object" || value.ctx === null) return void 0;
+	if (typeof value.session !== "object" || value.session === null) return void 0;
+	if (!("requestHeader" in value.session) || typeof value.session.requestHeader !== "function") return void 0;
+	return value;
+}
+function routeOf(agent) {
+	const header = agent.session.requestHeader()?.config;
+	const provider = header?.provider ?? agent.options.provider;
+	const model = header?.model ?? agent.options.model;
+	if (provider === void 0 || provider.length === 0 || model === void 0 || model.length === 0) return void 0;
+	const route = {
+		provider,
+		model
+	};
+	if (header?.temperature !== void 0) route.temperature = header.temperature;
+	if (header?.maxTokens !== void 0) route.maxTokens = header.maxTokens;
+	return route;
+}
+function assembledText(assembler, rawDeltas) {
+	try {
+		const fromBlocks = assembler.blocks().filter((b) => b.type === "text").map((b) => b.text).join("");
+		if (fromBlocks.trim().length > 0) return fromBlocks;
+	} catch {}
+	return rawDeltas;
+}
+function isTextDelta(chunk) {
+	return chunk.type === "text-delta";
+}
+function sessionPlanLlm(agentValue) {
+	const agent = asSessionAgent(agentValue);
+	if (agent === void 0) return async () => {
+		throw new Error("planning failed: no session model");
+	};
+	const llm = lookupLlm(agent.ctx);
+	const route = routeOf(agent);
+	if (llm === void 0 || route === void 0) return async () => {
+		throw new Error("planning failed: session LLM is unavailable");
+	};
+	return async (system, user, signal, maxTokens) => {
+		const assembler = new BlockAssembler();
+		const options = {
+			provider: route.provider,
+			model: route.model,
+			system,
+			messages: [createUserMessage({
+				content: [{
+					type: "text",
+					text: user
+				}],
+				source: {
+					kind: "plugin",
+					plugin: "dsh-tab-genoffice",
+					form: "notice",
+					summary: "host page plan"
+				}
+			})],
+			signal
+		};
+		if (maxTokens !== void 0) options.maxTokens = maxTokens;
+		if (route.temperature !== void 0) options.temperature = route.temperature;
+		let rawDeltas = "";
+		for await (const chunk of llm.stream(options)) {
+			assembler.push(chunk);
+			if (isTextDelta(chunk)) rawDeltas += chunk.text;
+		}
+		const finish = assembler.finish;
+		if (finish.kind === "error" || finish.kind === "aborted") throw new Error(finish.failure.message);
+		const text = assembledText(assembler, rawDeltas);
+		if (text.trim().length === 0) throw new Error(`empty model output (${finish.kind})`);
+		return text;
 	};
 }
 //#endregion
@@ -785,7 +1281,9 @@ const PATH_PARAM = {
 };
 /**
 * Tool table — the plugin-side mirror of contracts/control-api.md §4.
-* 11 docx tools (10 skill + docx_save) and 5 markdown tools (4 skill + markdown_save).
+* Family counts match contracts/control-api.md §4 and smoke (skill + *_save):
+* docx 11 (10+save), markdown 5 (4+save), xlsx 13 (12+save),
+* pptx 39 (38+save), pdf 21 (20+save).
 * Naming uses `_` instead of `:` (provider tool-name pattern ^[a-zA-Z0-9_-]+$;
 * see the contract's §4 separator note, ASM-006 revision).
 */
@@ -1193,6 +1691,120 @@ const CONTROL_TOOL_TABLE = [
 				required: true,
 				description: "单元格地址列表，如 [\"A1\",\"B2\"]，最多 100 个",
 				items: { type: "string" }
+			}
+		}
+	},
+	{
+		name: "xlsx_aggregate_range",
+		skillName: "aggregate_range",
+		app: "sheets",
+		description: "该工具操作 GenOffice 网页版中已打开的 xlsx 工作簿（控制模式）。所有编辑先改 iframe 内工作表，只有 xlsx_save 或 tab「写入磁盘」才会写回原文件。对区域做统计（非空数、去重数、数值 sum/avg/min/max、高频值），不逐格读。大表问「多少个不同供应商」必须用它，禁止循环 read_range 或写昂贵 COUNTIF。一列一次。",
+		parameters: {
+			path: PATH_PARAM,
+			range: {
+				type: "string",
+				required: true,
+				description: "区域如 \"D2:D88588\"（通常一列，不含表头）"
+			},
+			sheetId: {
+				type: "string",
+				description: "目标工作表 id；省略读当前表"
+			},
+			topValues: {
+				type: "number",
+				description: "返回多少个最高频值（0-50，默认 10）"
+			}
+		}
+	},
+	{
+		name: "xlsx_find_cells",
+		skillName: "find_cells",
+		app: "sheets",
+		description: "该工具操作 GenOffice 网页版中已打开的 xlsx 工作簿（控制模式）。所有编辑先改 iframe 内工作表，只有 xlsx_save 或 tab「写入磁盘」才会写回原文件。在整本或一张表里搜索值/公式匹配的单元格，返回 Sheet!Address。明文是大小写不敏感子串；regex=true 当 JS 正则；errors_only=true 找公式错误格（此时可省略 query）。定位数据或审计错误优先用它，不要分页 read_range。",
+		parameters: {
+			path: PATH_PARAM,
+			query: {
+				type: "string",
+				description: "文本或正则；仅 errors_only=true 时可省略"
+			},
+			regex: {
+				type: "boolean",
+				description: "将 query 当作 JS 正则（默认 false）"
+			},
+			look_in: {
+				type: "string",
+				enum: [
+					"values",
+					"formulas",
+					"both"
+				],
+				description: "匹配范围（默认 both）"
+			},
+			sheetId: {
+				type: "string",
+				description: "限制到一张表；省略搜全部表"
+			},
+			errors_only: {
+				type: "boolean",
+				description: "只找公式错误值（默认 false）"
+			},
+			max_results: {
+				type: "integer",
+				description: "最多返回条数"
+			}
+		}
+	},
+	{
+		name: "xlsx_select_range",
+		skillName: "select_range",
+		app: "sheets",
+		description: "该工具操作 GenOffice 网页版中已打开的 xlsx 工作簿（控制模式）。所有编辑先改 iframe 内工作表，只有 xlsx_save 或 tab「写入磁盘」才会写回原文件。选中区域并滚到可见（激活该表）。纯视图导航，不改数据。",
+		parameters: {
+			path: PATH_PARAM,
+			range: {
+				type: "string",
+				required: true,
+				description: "区域如 \"A1:D20\"；单格也可"
+			},
+			sheetId: {
+				type: "string",
+				description: "目标工作表 id；省略当前表"
+			}
+		}
+	},
+	{
+		name: "xlsx_trace_precedents",
+		skillName: "trace_precedents",
+		app: "sheets",
+		description: "该工具操作 GenOffice 网页版中已打开的 xlsx 工作簿（控制模式）。所有编辑先改 iframe 内工作表，只有 xlsx_save 或 tab「写入磁盘」才会写回原文件。列出公式单元格读取的引用（precedents）及当前值，并标出错误值。深度 1；对可疑引用再调一次可往上走。定义名称不展开。",
+		parameters: {
+			path: PATH_PARAM,
+			address: {
+				type: "string",
+				required: true,
+				description: "要审计的公式格，如 \"C10\""
+			},
+			sheetId: {
+				type: "string",
+				description: "单元格所在表；省略当前表"
+			}
+		}
+	},
+	{
+		name: "xlsx_trace_dependents",
+		skillName: "trace_dependents",
+		app: "sheets",
+		description: "该工具操作 GenOffice 网页版中已打开的 xlsx 工作簿（控制模式）。所有编辑先改 iframe 内工作表，只有 xlsx_save 或 tab「写入磁盘」才会写回原文件。找出工作簿里所有读取该单元格的公式（dependents）。改/删单元格前用它看谁会断。经定义名称间接引用的检测不到。",
+		parameters: {
+			path: PATH_PARAM,
+			address: {
+				type: "string",
+				required: true,
+				description: "目标单元格，如 \"B2\""
+			},
+			sheetId: {
+				type: "string",
+				description: "单元格所在表；省略当前表"
 			}
 		}
 	},
@@ -1646,16 +2258,45 @@ const CONTROL_TOOL_TABLE = [
 		name: "pptx_regenerate_slide",
 		skillName: "regenerate_slide",
 		app: "slides",
-		description: "该工具操作 GenOffice 网页版中已打开的 pptx 演示文稿（控制模式）。所有编辑先改 iframe 内幻灯片，只有 pptx_save 或 tab「写入磁盘」才会写回原文件。页面索引 0 起，画布 1280×720。用单页 HTML 重做一页（依赖 LLM 管线，控制模式下通常不可用）。",
+		description: "该工具操作 GenOffice 网页版中已打开的 pptx 演示文稿（控制模式）。所有编辑先改 iframe 内幻灯片，只有 pptx_save 或 tab「写入磁盘」才会写回原文件。页面索引 0 起，画布 1280×720。按 brief 由当前会话模型写一页 PageSpec，再 land_pages replace_at（其他页不动）。也可直接传 page_spec 跳过规划。不要把 brief 交给 iframe 打 LLM。先 read_slide；需要图时把真实 http(s) URL 放进 image_urls。",
 		parameters: {
 			path: PATH_PARAM,
 			slideIndex: {
 				type: "integer",
-				required: true
+				required: true,
+				description: "要重做的页（0 起）"
 			},
-			html: {
+			brief: {
 				type: "string",
-				required: true
+				description: "新页内容与布局说明：各区域放什么、用什么 layout（如 three_column_cards）。无 page_spec 时必填。"
+			},
+			title: {
+				type: "string",
+				description: "页标题"
+			},
+			layout: {
+				type: "string",
+				description: "布局意图名（可选）"
+			},
+			image_urls: {
+				type: "array",
+				items: { type: "string" },
+				description: "本页真实 http(s) 图片 URL；没有则 []"
+			},
+			page_spec: {
+				type: "object",
+				additionalProperties: true,
+				description: "已写好的单页 PageSpec（background + elements）；有则跳过规划直接 land"
+			},
+			dataSource: {
+				type: "string",
+				enum: [
+					"user",
+					"document",
+					"search",
+					"sample"
+				],
+				description: "brief 含具体数字时必填：数字来源"
 			}
 		}
 	},
@@ -1673,18 +2314,116 @@ const CONTROL_TOOL_TABLE = [
 		}
 	},
 	{
+		name: "pptx_land_pages",
+		skillName: "land_pages",
+		app: "slides",
+		description: "该工具操作 GenOffice 网页版中已打开的 pptx 演示文稿（控制模式）。所有编辑先改 iframe 内幻灯片，只有 pptx_save 或 tab「写入磁盘」才会写回原文件。页面索引 0 起，画布 1280×720。把宿主写好的 PageSpec[] 落入当前稿（iframe 只落地，不打 LLM）。pages 每页须有 elements[]，元素含 type/x/y/w/h；画布 1280×720。insert_mode 缺省 replace；replace_at/insert_at 需 pages.length===1 且整数 at_index。落地不写盘。",
+		parameters: {
+			path: PATH_PARAM,
+			pages: {
+				type: "array",
+				required: true,
+				description: "PageSpec 数组：background + elements（shape/text/image）",
+				items: {
+					type: "object",
+					additionalProperties: true
+				}
+			},
+			insert_mode: {
+				type: "string",
+				enum: [
+					"replace",
+					"append",
+					"replace_at",
+					"insert_at"
+				],
+				description: "replace（默认）/ append / replace_at / insert_at"
+			},
+			at_index: {
+				type: "integer",
+				description: "replace_at / insert_at 的页索引（0 起）"
+			},
+			deck_name: {
+				type: "string",
+				description: "可选稿名"
+			}
+		}
+	},
+	{
 		name: "pptx_generate_deck",
 		skillName: "generate_deck",
 		app: "slides",
-		description: "该工具操作 GenOffice 网页版中已打开的 pptx 演示文稿（控制模式）。所有编辑先改 iframe 内幻灯片，只有 pptx_save 或 tab「写入磁盘」才会写回原文件。页面索引 0 起，画布 1280×720。生成整套演示（依赖 LLM 管线，控制模式下通常不可用）。",
+		description: "该工具操作 GenOffice 网页版中已打开的 pptx 演示文稿（控制模式）。所有编辑先改 iframe 内幻灯片，只有 pptx_save 或 tab「写入磁盘」才会写回原文件。页面索引 0 起，画布 1280×720。用当前 DSH 会话模型写 PageSpec[]，再 land_pages 落地（不转发 iframe generate_deck，不配 iframe key）。推荐 topic + approx_pages；也可直接传 pages_spec。空白稿出片后解锁 add_text_box / add_shape。落地不写盘。",
 		parameters: {
 			path: PATH_PARAM,
 			topic: {
 				type: "string",
-				required: true
+				description: "演示主题/需求（与 approx_pages 搭配时由宿主规划，不必手写 pages）"
 			},
-			style: { type: "string" },
-			approx_pages: { type: "integer" }
+			approx_pages: {
+				type: "integer",
+				description: "期望页数（与 topic 联用）"
+			},
+			context: {
+				type: "string",
+				description: "可选：真实材料/数据/问卷答案"
+			},
+			core_hook: {
+				type: "string",
+				description: "可选：已定叙事锚点（与 pages 联用时推荐）"
+			},
+			style: {
+				type: "string",
+				description: "统一设计系统（与 pages 联用时需要；与 topic 联用时作风格提示）"
+			},
+			pages: {
+				type: "array",
+				description: "可选：已知道每页时直接传入；每项 title/brief/layout 必填",
+				items: {
+					type: "object",
+					additionalProperties: true,
+					properties: {
+						title: { type: "string" },
+						type: {
+							type: "string",
+							description: "cover|content|data|closing"
+						},
+						brief: { type: "string" },
+						layout: { type: "string" },
+						image_queries: {
+							type: "array",
+							items: { type: "string" }
+						}
+					}
+				}
+			},
+			pages_spec: {
+				type: "array",
+				description: "已写好的 PageSpec[]；有则跳过规划直接 land_pages",
+				items: {
+					type: "object",
+					additionalProperties: true
+				}
+			},
+			insert_mode: {
+				type: "string",
+				enum: ["replace", "append"],
+				description: "replace（默认，整套替换）或 append（追加到末尾）"
+			},
+			style_template: {
+				type: "string",
+				description: "已保存样式模板名（跳过风格生成）"
+			},
+			dataSource: {
+				type: "string",
+				enum: [
+					"user",
+					"document",
+					"search",
+					"sample"
+				],
+				description: "topic/context/briefs 含具体数字时必填：数字来源"
+			}
 		}
 	},
 	{
@@ -2034,6 +2773,33 @@ const CONTROL_TOOL_TABLE = [
 		}
 	},
 	{
+		name: "pptx_apply_ops",
+		skillName: "apply_ops",
+		app: "slides",
+		description: "该工具操作 GenOffice 网页版中已打开的 pptx 演示文稿（控制模式）。所有编辑先改 iframe 内幻灯片，只有 pptx_save 或 tab「写入磁盘」才会写回原文件。页面索引 0 起，画布 1280×720。以一笔事务应用一组官方原子编辑 op（默认 atomic：失败全回滚）。dry_run=true 只校验不改稿。多页/大量元素批处理用这个；单页排版优先 execute_slide_script，单个编辑优先专用工具。网页版走 applyTxn → runTxn（空或超过 50 个 op 拒绝；per_op 失败跳过）。",
+		parameters: {
+			path: PATH_PARAM,
+			ops: {
+				type: "array",
+				required: true,
+				description: "op 列表，按顺序作为一笔事务（最多 50）",
+				items: {
+					type: "object",
+					additionalProperties: true
+				}
+			},
+			dry_run: {
+				type: "boolean",
+				description: "只校验计划，不改稿"
+			},
+			isolation: {
+				type: "string",
+				enum: ["atomic", "per_op"],
+				description: "atomic 默认全成或全败；per_op 失败跳过"
+			}
+		}
+	},
+	{
 		name: "pptx_save",
 		skillName: "save",
 		app: "slides",
@@ -2197,6 +2963,64 @@ const CONTROL_TOOL_TABLE = [
 			color: {
 				type: "string",
 				description: "#RRGGBB"
+			},
+			font: {
+				type: "string",
+				enum: [
+					"arial",
+					"times",
+					"courier"
+				]
+			},
+			bold: { type: "boolean" },
+			italic: { type: "boolean" }
+		}
+	},
+	{
+		name: "pdf_insert_text",
+		skillName: "insert_text",
+		app: "pdf",
+		description: "该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。在页面上新增文本（叠在页面上，保存时生效）。空白页/空白区域用它；改已有文字用 edit_text / edit_block。x/y 是显示坐标系下文本块左上角（pt，从页顶/页左算）；省略则水平居中靠上。",
+		parameters: {
+			path: PATH_PARAM,
+			page: {
+				type: "integer",
+				required: true,
+				description: "页码（1 起）"
+			},
+			text: {
+				type: "string",
+				required: true,
+				description: "要插入的文本；\"\\n\" 换行"
+			},
+			x: {
+				type: "number",
+				description: "文本块左边缘，距页左（pt）"
+			},
+			y: {
+				type: "number",
+				description: "文本块上边缘，距页顶（pt）"
+			},
+			font_size: {
+				type: "number",
+				description: "字号 pt，默认 14"
+			},
+			color: {
+				type: "string",
+				description: "颜色 #RRGGBB，默认黑"
+			},
+			max_width: {
+				type: "number",
+				description: "换行宽度（pt）；省略保持给定换行"
+			},
+			align: {
+				type: "string",
+				enum: [
+					"left",
+					"center",
+					"right"
+				],
+				description: "行对齐，默认 left"
 			},
 			font: {
 				type: "string",
@@ -2471,7 +3295,7 @@ const CONTROL_TOOL_TABLE = [
 		parameters: { path: PATH_PARAM }
 	}
 ];
-/** Whether a table entry is the write-back trigger (BR-008). */
+/** Write-back trigger (BR-008). Only the five `*_save` rows; `save_style_template` is a skill, not disk write-back. */
 function isSaveEntry(entry) {
 	return entry.skillName === "save";
 }
@@ -2480,18 +3304,36 @@ function isSaveEntry(entry) {
 /**
 * Host tools: GenOffice control plane via relay POST /api/control/<app>/<docId>/…
 *
-* Registration is filtered by CAPABILITY (BR-001 / BR-015). The table still
-* lists all 81 entries; DSH_GENOFFICE_ALL_TOOLS=1 re-opens the filter.
+* Registration is filtered by CAPABILITY (BR-001 / BR-015). The table lists
+* every control tool (docx 11 + markdown 5 + xlsx 13 + pptx 39 + pdf 21 = 89);
+* a row without a CAPABILITY key is not registered. DSH_GENOFFICE_ALL_TOOLS=1
+* re-opens the filter.
 * Write-back only through *_save and the tab button (BR-011).
+* pptx_generate_deck / pptx_regenerate_slide plan on the session model then
+* land_pages — they must not POST iframe generate_deck / regenerate_slide.
 */
 const RELAY_BASE = "http://localhost:8787";
 const CONTROL_TIMEOUT_MS = 7e4;
+const GENERATE_DECK_TIMEOUT_MS = 3e5;
+/** How long `*_open` waits for the control iframe to register on relay. */
+const OPEN_READY_MS = 2e4;
+const OPEN_POLL_MS = 250;
+const LAND_SETTLE_MS = 8e3;
+const LAND_POLL_MS = 250;
 async function sha256Hex(s) {
 	const digest = await globalThis.crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
 	return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
+const OPEN_TOOL_BY_APP = {
+	docs: "docx_open",
+	markdown: "md_open",
+	sheets: "xlsx_open",
+	slides: "pptx_open"
+};
 function describeEntry(entry, cap, allTools) {
 	let d = entry.description;
+	const openName = OPEN_TOOL_BY_APP[entry.app];
+	if (openName !== void 0) d = `须先 ${openName} 等到「已打开控制模式」再调用。${d}`;
 	if (cap === void 0) return d;
 	if (allTools && cap.netEgress) d = `【会向公网发起请求】${d}`;
 	if (allTools && cap.handover === "dsh:web_search") d = `【已交还 DSH，请改用 web_search】${d}`;
@@ -2506,6 +3348,52 @@ function shouldRegister(entry, opts) {
 	if (cap === void 0 || !isExposed(cap)) return false;
 	if ((entry.name === "docx_insert_image" || entry.name === "pdf_insert_image" || entry.name === "pdf_replace_image") && !opts.assetsAvailable) return false;
 	return true;
+}
+function sleep(ms, signal) {
+	return new Promise((resolve, reject) => {
+		if (signal.aborted) {
+			reject(signal.reason instanceof Error ? signal.reason : /* @__PURE__ */ new Error("aborted"));
+			return;
+		}
+		const timer = setTimeout(resolve, ms);
+		const onAbort = () => {
+			clearTimeout(timer);
+			reject(signal.reason instanceof Error ? signal.reason : /* @__PURE__ */ new Error("aborted"));
+		};
+		signal.addEventListener("abort", onAbort, { once: true });
+	});
+}
+/**
+* Poll relay until the control iframe has registered an executor for `path`.
+* Old relays without `registered` are treated as ready (do not block open).
+*/
+async function waitUntilRegistered(path, signal) {
+	const deadline = Date.now() + OPEN_READY_MS;
+	while (Date.now() < deadline) {
+		if (signal.aborted) return false;
+		try {
+			const resp = await fetch(`${RELAY_BASE}/api/control/open`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ path }),
+				signal
+			});
+			if (resp.ok) {
+				const data = await resp.json();
+				if (data.registered === true) return true;
+				if (data.registered === void 0) return true;
+			}
+		} catch (e) {
+			if (signal.aborted) return false;
+			if (e instanceof Error && e.name === "AbortError") return false;
+		}
+		try {
+			await sleep(OPEN_POLL_MS, signal);
+		} catch {
+			return false;
+		}
+	}
+	return false;
 }
 function fail(error, path, kind) {
 	const input = { error };
@@ -2624,10 +3512,140 @@ async function executeInsertImage(entry, input, signal, assets) {
 		published.dispose();
 	}
 }
+function landPagesEntry() {
+	const entry = CONTROL_TOOL_TABLE.find((row) => row.skillName === "land_pages");
+	if (entry === void 0) throw new Error("planning failed: pptx_land_pages is not in CONTROL_TOOL_TABLE");
+	return entry;
+}
+function planningFail(error, path) {
+	const raw = error instanceof Error ? error.message : String(error);
+	fail(raw.startsWith("planning failed:") ? raw : `planning failed: ${raw}`, path, "local");
+}
+function isTimeoutError(error) {
+	const raw = error instanceof Error ? error.message : String(error);
+	return /timeout/i.test(raw);
+}
+async function callRelayRetry(entry, input, signal) {
+	let last;
+	for (let attempt = 0; attempt < 3; attempt++) try {
+		return await callRelay(entry, input, signal);
+	} catch (e) {
+		last = e;
+		if (!isTimeoutError(e) || attempt === 2) throw e;
+		await sleep(400, signal);
+	}
+	throw last instanceof Error ? last : new Error(String(last));
+}
+function parseLandedCount(output) {
+	const m = output.match(/Deck now has (\d+) page/i);
+	if (m === null) return void 0;
+	return Number(m[1]);
+}
+function parseDeckPageCount(output) {
+	const m = output.match(/The presentation has (\d+) pages?/i);
+	if (m === null) return void 0;
+	return Number(m[1]);
+}
+function contextHasElements(output) {
+	return /\|\s*(text|shape|image)\s*\|/i.test(output);
+}
+function firstTextNeedle(pages) {
+	if (!Array.isArray(pages) || pages.length === 0) return void 0;
+	const page = pages[0];
+	if (typeof page !== "object" || page === null || !("elements" in page)) return void 0;
+	const elements = page.elements;
+	if (!Array.isArray(elements)) return void 0;
+	for (const el of elements) {
+		if (typeof el !== "object" || el === null) continue;
+		const rec = el;
+		if (rec.type !== "text") continue;
+		const paragraphs = rec.paragraphs;
+		if (!Array.isArray(paragraphs) || paragraphs.length === 0) continue;
+		const para = paragraphs[0];
+		if (typeof para !== "object" || para === null) continue;
+		const runs = para.runs;
+		if (!Array.isArray(runs) || runs.length === 0) continue;
+		const run = runs[0];
+		if (typeof run !== "object" || run === null) continue;
+		const text = run.text;
+		if (typeof text === "string" && text.trim().length > 0) return text.trim().slice(0, 24);
+	}
+}
+function deckContextEntry() {
+	return CONTROL_TOOL_TABLE.find((row) => row.skillName === "get_deck_context");
+}
+async function waitLanded(path, expectedPages, signal, needle, settle) {
+	const entry = deckContextEntry();
+	if (entry === void 0) return;
+	const deadline = Date.now() + settle.settleMs;
+	for (;;) {
+		if (signal.aborted) return;
+		let output = "";
+		try {
+			output = (await callRelay(entry, { path }, signal)).output;
+		} catch {
+			output = "";
+		}
+		const n = parseDeckPageCount(output);
+		const pagesOk = n !== void 0 && n === expectedPages;
+		const filled = contextHasElements(output);
+		const needleOk = needle === void 0 || output.includes(needle);
+		if (pagesOk && filled && needleOk) return;
+		if (Date.now() >= deadline) return;
+		try {
+			await sleep(settle.pollMs, signal);
+		} catch {
+			return;
+		}
+	}
+}
+async function executeLandPages(input, signal, settle) {
+	const result = await callRelayRetry(landPagesEntry(), input, signal);
+	const expected = parseLandedCount(result.output);
+	if (expected !== void 0) await waitLanded(String(input.path ?? ""), expected, signal, firstTextNeedle(input.pages), settle);
+	return result;
+}
+async function executeGenerateDeck(input, signal, planLlm, settle) {
+	const path = String(input.path ?? "");
+	let pages;
+	try {
+		pages = await planDeckPages(input, planLlm, signal);
+	} catch (e) {
+		planningFail(e, path);
+	}
+	const landInput = {
+		path,
+		pages,
+		insert_mode: input.insert_mode === "append" ? "append" : "replace"
+	};
+	if (typeof input.deck_name === "string") landInput.deck_name = input.deck_name;
+	return await executeLandPages(landInput, signal, settle);
+}
+async function executeRegenerateSlide(input, signal, planLlm, settle) {
+	const path = String(input.path ?? "");
+	const atIndex = input.slideIndex;
+	if (typeof atIndex !== "number" || !Number.isInteger(atIndex) || atIndex < 0) fail("slideIndex 必须是 ≥0 的整数", path, "local");
+	let page;
+	try {
+		page = await planOnePageSpec(input, planLlm, signal);
+	} catch (e) {
+		planningFail(e, path);
+	}
+	return await executeLandPages({
+		path,
+		pages: [page],
+		insert_mode: "replace_at",
+		at_index: atIndex
+	}, signal, settle);
+}
 /** Build the control tool definitions from the contract mirror table. */
 function createControlTools(opts = {}) {
 	const allTools = opts.allTools ?? process.env.DSH_GENOFFICE_ALL_TOOLS === "1";
 	const assetsAvailable = opts.assets?.available === true;
+	const settle = {
+		settleMs: opts.landSettleMs ?? LAND_SETTLE_MS,
+		pollMs: opts.landPollMs ?? LAND_POLL_MS
+	};
 	return [...CONTROL_TOOL_TABLE.filter((entry) => shouldRegister(entry, {
 		allTools,
 		assetsAvailable
@@ -2638,7 +3656,7 @@ function createControlTools(opts = {}) {
 			name: entry.name,
 			description: describeEntry(entry, cap, allTools),
 			parameters: entry.parameters,
-			timeoutMs: CONTROL_TIMEOUT_MS,
+			timeoutMs: entry.name === "pptx_generate_deck" ? GENERATE_DECK_TIMEOUT_MS : CONTROL_TIMEOUT_MS,
 			output: {
 				schema: {
 					type: "object",
@@ -2688,6 +3706,15 @@ function createControlTools(opts = {}) {
 						summary: result.summary
 					};
 				}
+				if (entry.name === "pptx_generate_deck") {
+					const planLlm = opts.planLlm ?? sessionPlanLlm(exec.agent);
+					return await executeGenerateDeck(input, exec.signal, planLlm, settle);
+				}
+				if (entry.name === "pptx_regenerate_slide") {
+					const planLlm = opts.planLlm ?? sessionPlanLlm(exec.agent);
+					return await executeRegenerateSlide(input, exec.signal, planLlm, settle);
+				}
+				if (entry.skillName === "land_pages") return await executeLandPages(input, exec.signal, settle);
 				const result = await callRelay(entry, input, exec.signal);
 				return {
 					ok: result.ok,
@@ -2704,12 +3731,14 @@ const OPEN_TOOL_EXTS = [
 	"xlsx",
 	"md"
 ];
-const OPEN_TOOL_DESC = "用 GenOffice 侧栏打开指定本地文件（控制模式）。调用后侧栏会自动切换到该文件的编辑器；文件必须存在于本机。path 为本机绝对路径。";
+function openToolDesc(ext) {
+	return `【必做第一步】用 GenOffice 控制模式打开本机 .${ext} 文件。做或改该类型文档时必须先调用本工具，等到返回「已打开控制模式」后才能调用其它 ${ext}_* 工具。禁止用 python、python-pptx、soffice、skill ppt-image-first、third-imagegen 代替本工具。path 为本机绝对路径，文件必须存在。`;
+}
 /** Open tools: POST /api/open — bypasses the control plane (no docId needed). */
 function createOpenTools() {
 	return OPEN_TOOL_EXTS.map((ext) => defineTool({
 		name: `${ext}_open`,
-		description: OPEN_TOOL_DESC,
+		description: openToolDesc(ext),
 		parameters: { path: {
 			type: "string",
 			description: "目标文件的本机绝对路径",
@@ -2756,10 +3785,13 @@ function createOpenTools() {
 			if (!(slash < 0 ? filePath : filePath.slice(slash + 1)).toLowerCase().endsWith(`.${ext}`)) fail(`path 必须是 .${ext} 文件`, filePath, "local");
 			let resp;
 			try {
+				const sessionId = exec.agent?.id;
+				const body = { path: filePath };
+				if (typeof sessionId === "string" && sessionId !== "") body.sessionId = sessionId;
 				resp = await fetch(`${RELAY_BASE}/api/open`, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ path: filePath }),
+					body: JSON.stringify(body),
 					signal: exec.signal
 				});
 			} catch (e) {
@@ -2775,9 +3807,10 @@ function createOpenTools() {
 				const msg = typeof data["error"] === "string" ? data["error"] : "未知错误";
 				throw new Error(`open failed: ${msg}`);
 			}
+			if (!await waitUntilRegistered(filePath, exec.signal)) fail("executor not registered", filePath, "relay");
 			return {
 				ok: true,
-				output: `已发送打开指令：${filePath}`,
+				output: `已打开控制模式：${filePath}`,
 				summary: "打开文件"
 			};
 		}
@@ -2787,7 +3820,7 @@ function createOpenTools() {
 //#region src/index.ts
 /** Plugin name (host half). */
 const name = "dsh-tab-genoffice";
-/** Required services: the host tool registry. webServer / systemPrompt are nested. */
+/** Required services: the host tool registry. webServer / systemPrompt / skills are nested. */
 const inject = ["tools"];
 /**
 * Plugin host body.
@@ -2795,6 +3828,7 @@ const inject = ["tools"];
 */
 function apply(ctx) {
 	applyPrompt(ctx);
+	applySkill(ctx);
 	applySyncRoute(ctx);
 	const assets = createAssetChannel(ctx);
 	for (const tool of createControlTools({ assets })) ctx.tools.register(tool);

@@ -43,6 +43,11 @@ export const CAPABILITY: Record<CapabilityKey, CapabilityEntry> = {
   'sheets:read_formats': { status: 'available', netEgress: false, evidence: 'sheets/tools.ts:365-601 走 Univer，不经桥接' },
   'sheets:read_sheet_features': { status: 'available', netEgress: false, evidence: 'sheets/tools.ts:365-601 走 Univer，不经桥接' },
   'sheets:read_cells': { status: 'available', netEgress: false, evidence: 'sheets/tools.ts:365-601 走 Univer，不经桥接' },
+  'sheets:aggregate_range': { status: 'available', netEgress: false, evidence: 'sheets/tools.ts aggregate_range 走 Univer，不经桥接' },
+  'sheets:find_cells': { status: 'available', netEgress: false, evidence: 'sheets/tools.ts find_cells 走 Univer，不经桥接' },
+  'sheets:select_range': { status: 'available', netEgress: false, evidence: 'sheets/tools.ts select_range 走 Univer 视图，不经桥接' },
+  'sheets:trace_precedents': { status: 'available', netEgress: false, evidence: 'sheets/tools.ts trace_precedents 走 Univer，不经桥接' },
+  'sheets:trace_dependents': { status: 'available', netEgress: false, evidence: 'sheets/tools.ts trace_dependents 走 Univer，不经桥接' },
   'sheets:propose_operations': { status: 'partial', netEgress: false, evidence: 'sheets/tools.ts:533-601 可用；add_image 走 readLocalImage（web-bridge.ts:263 stub）' },
   'sheets:save': { status: 'available', netEgress: false, evidence: 'relay POST /api/control/<app>/<docId>/export（server.mjs:558-601 原子写回）' },
   'slides:get_deck_context': { status: 'available', netEgress: false, evidence: 'web-bridge.ts:226,308-336,356-421 均为真实实现' },
@@ -63,9 +68,10 @@ export const CAPABILITY: Record<CapabilityKey, CapabilityEntry> = {
   'slides:replace_image': { status: 'available', netEgress: true, evidence: 'web-bridge.ts replacePictureUrl / replacePictureBytes → pptx-engine replacePictureBytes' },
   'slides:ask_clarification': { status: 'available', netEgress: false, evidence: 'App.tsx control mode getDeckAccess adds askClarification via React state; ClarifyCard overlay rendered in App root' },
   'slides:plan_deck': { status: 'available', netEgress: false, evidence: 'web-bridge.ts:226,308-336,356-421 均为真实实现' },
-  'slides:regenerate_slide': { status: 'cloud-only', netEgress: false, evidence: 'web-bridge.ts:220-224 cloudGenStatus.enabled=false / htmlToPptx 报错' },
+  'slides:regenerate_slide': { status: 'available', netEgress: false, evidence: 'host 写一页 PageSpec 再 land_pages replace_at；不把 brief-only 转发 iframe LLM' },
   'slides:delete_slide': { status: 'available', netEgress: false, evidence: 'web-bridge.ts:226,308-336,356-421 均为真实实现' },
-  'slides:generate_deck': { status: 'cloud-only', netEgress: false, evidence: 'web-bridge.ts:220-224 cloudGenStatus.enabled=false / htmlToPptx 报错' },
+  'slides:land_pages': { status: 'available', netEgress: false, evidence: 'CONTROL_TOOL_TABLE pptx_land_pages → iframe land_pages；iframe 只落地，host 剥 path' },
+  'slides:generate_deck': { status: 'available', netEgress: false, evidence: 'host 用当前会话模型写 PageSpec[] 再 land_pages；禁止 executeControl generate_deck' },
   'slides:save_style_template': { status: 'available', netEgress: false, evidence: 'slides-skill.ts:1444-1459 skillStateCache persists lastStyleSkill across tool calls per docPath' },
   'slides:list_style_templates': { status: 'available', netEgress: false, evidence: 'web-bridge.ts listStyleTemplates → localStorage genoffice-style-templates' },
   'slides:add_slide': { status: 'available', netEgress: false, evidence: 'web-bridge.ts:226,308-336,356-421 均为真实实现' },
@@ -81,6 +87,7 @@ export const CAPABILITY: Record<CapabilityKey, CapabilityEntry> = {
   'slides:set_slide_background': { status: 'available', netEgress: false, evidence: 'web-bridge.ts:226,308-336,356-421 均为真实实现' },
   'slides:delete_element': { status: 'available', netEgress: false, evidence: 'web-bridge.ts:226,308-336,356-421 均为真实实现' },
   'slides:ungroup_element': { status: 'available', netEgress: false, evidence: 'web-bridge.ts ungroupElement → pptx-engine ungroupElement' },
+  'slides:apply_ops': { status: 'available', netEgress: false, evidence: 'web-bridge.ts applyTxn → runTxn（executor.ts）；空或 >50 ops 拒绝' },
   'slides:save': { status: 'available', netEgress: false, evidence: 'relay POST /api/control/<app>/<docId>/export（server.mjs:558-601 原子写回）' },
   'pdf:read_pages': { status: 'available', netEgress: false, evidence: 'pdf/tools.ts:461-1325 + web-pdf-save.ts:414-463' },
   'pdf:search_text': { status: 'available', netEgress: false, evidence: 'pdf/tools.ts:461-1325 + web-pdf-save.ts:414-463' },
@@ -88,6 +95,7 @@ export const CAPABILITY: Record<CapabilityKey, CapabilityEntry> = {
   'pdf:markup_text': { status: 'available', netEgress: false, evidence: 'pdf/tools.ts:461-1325 + web-pdf-save.ts:414-463' },
   'pdf:edit_text': { status: 'available', netEgress: false, evidence: 'pdf/tools.ts:461-1325 + web-pdf-save.ts:414-463' },
   'pdf:edit_block': { status: 'available', netEgress: false, evidence: 'pdf/tools.ts:461-1325 + web-pdf-save.ts:414-463' },
+  'pdf:insert_text': { status: 'available', netEgress: false, evidence: 'pdf/tools.ts insertTextTool（与 edit_text/edit_block 同路径）' },
   'pdf:image_search': { status: 'relay-fetch', netEgress: true, handover: 'dsh:pending', evidence: 'pdf/web-bridge.ts:208-219 → relay /api/search/image' },
   'pdf:generate_image': { status: 'available', netEgress: false, handover: 'dsh:pending', evidence: 'pdf/web-bridge.ts generateImage → relay POST /api/generate-image → gsk img (browser netEgress false)' },
   'pdf:list_page_images': { status: 'available', netEgress: false, evidence: 'pdf/web-bridge.ts listPageImages → web-image-edit.ts listPageImages (pdfium wasm)' },
@@ -114,6 +122,6 @@ export function capabilityOf(app: CapabilityApp, skillName: string): CapabilityE
   return CAPABILITY[`${app}:${skillName}`]
 }
 
-/** Exposed set size used by drift tests (updated after slides/pdf image + media bridge). */
+/** Exposed set size. Tests must derive expected counts from CONTROL_TOOL_TABLE, not hardcode this. */
 export const EXPOSED_COUNT = Object.values(CAPABILITY).filter(isExposed).length
 

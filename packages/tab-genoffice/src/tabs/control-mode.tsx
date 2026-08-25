@@ -261,7 +261,7 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
         <div className={css.panel}>
           {toolbar}
           <div className={css.hint} role="status">
-            GenOffice relay 不可用 — 已切换内置预览。在仓库执行 `node web/server.mjs` 后可恢复控制模式。
+            GenOffice relay 不可用 — 已切换后备预览。在仓库执行 `node web/server.mjs` 后可恢复控制模式。
             {recheck}
           </div>
           {renderBuiltin()}
@@ -275,7 +275,7 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
           GenOffice relay 不可用 — 控制模式需要 localhost:8787 上的中继。启动命令：`node web/server.mjs`
           {renderBuiltin !== undefined && degradeMode === 'manual' && (
             <button type="button" className={css.btn} onClick={() => { setYielded(true) }}>
-              用内置预览打开
+              用后备预览打开
             </button>
           )}
           {recheck}

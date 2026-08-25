@@ -6,12 +6,14 @@
 /** Simplified Chinese dictionary (the key-set source of truth). */
 export declare const zh: {
     'tab.genoffice': string;
+    'tab.file': string;
 };
 /** The genoffice tab namespace key union. */
 export type GenOfficeTabKey = keyof typeof zh;
 /** English dictionary, checked complete against the zh key set. */
 export declare const en: {
     'tab.genoffice': string;
+    'tab.file': string;
 };
 /** Dictionary namespace owned by the genoffice tab artifact. */
 export declare const NS: "tabs.genoffice";

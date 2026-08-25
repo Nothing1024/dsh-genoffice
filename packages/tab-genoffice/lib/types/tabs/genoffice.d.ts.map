@@ -1,1 +1,1 @@
-{"version":3,"file":"genoffice.d.ts","sourceRoot":"","sources":["../../../src/tabs/genoffice.tsx"],"names":[],"mappings":"AAOA,OAAO,KAAK,EAAiB,SAAS,EAAE,MAAM,OAAO,CAAA;AACrD,OAAO,KAAK,EAAE,iBAAiB,EAAE,MAAM,oBAAoB,CAAA;AA4K3D,wBAAgB,cAAc,CAAC,KAAK,EAAE,iBAAiB,GAAG,SAAS,CAmNlE"}
+{"version":3,"file":"genoffice.d.ts","sourceRoot":"","sources":["../../../src/tabs/genoffice.tsx"],"names":[],"mappings":"AASA,OAAO,KAAK,EAAiB,SAAS,EAAE,MAAM,OAAO,CAAA;AACrD,OAAO,KAAK,EAAE,iBAAiB,EAAE,MAAM,oBAAoB,CAAA;AAuK3D,wBAAgB,cAAc,CAAC,KAAK,EAAE,iBAAiB,GAAG,SAAS,CAmKlE"}

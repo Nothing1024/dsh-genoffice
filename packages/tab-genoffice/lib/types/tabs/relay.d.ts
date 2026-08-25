@@ -25,7 +25,12 @@ export declare function notifyHostSync(path: string): Promise<void>;
 export declare function subscribeOpenFile(fn: OpenFileListener): () => void;
 /** Dispatch a file path to all subscribeOpenFile listeners (used by the client-level SSE handler). */
 export declare function emitOpenFile(filePath: string): void;
-/** Called by GenOfficePanel on mount; drives the EventSource for LLM-triggered open events. */
+/**
+ * Deliver an open path to the mounted panel. If no listener is up yet
+ * (tab still opening), wait `delayMs` once; cancel the timer on dispose.
+ */
+export declare function scheduleOpenFile(filePath: string, delayMs?: number): () => void;
+/** Test helper: EventSource → emitOpenFile. Production uses apply()'s single stream. */
 export declare function startOpenFileStream(): () => void;
 export {};
 //# sourceMappingURL=relay.d.ts.map

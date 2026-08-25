@@ -16,10 +16,11 @@ import type {
 } from 'dsh-better-sidebar'
 import { GenOfficePanel } from '../tabs/genoffice.tsx'
 import { GenOfficeIcon } from '../tabs/icon.tsx'
-import { DocxControlViewer } from '../tabs/docx-control-viewer.tsx'
+import { DocxControlViewer, GenOfficeFileTab } from '../tabs/docx-control-viewer.tsx'
 import { CLAIMED_EXTS } from '../tabs/coexist.ts'
+import { BROWSER_TAB_ID, FILE_TAB_ID, fileOpenOnThisPage } from '../tabs/file-tab.ts'
 import { en, NS, zh } from '../tabs/locales.ts'
-import { RELAY_BASE, scheduleOpenFile } from '../tabs/relay.ts'
+import { RELAY_BASE } from '../tabs/relay.ts'
 
 /** Locale is required; betterSidebar is awaited inside apply so its absence
  *  skips registration instead of leaving this fiber PENDING (BR-003). */
@@ -45,7 +46,7 @@ export function apply(ctx: ClientContext): void {
         // 0.13 required fields stay id/title/component. Do not set urlTarget
         // (we do not claim http(s)) or FileViewer toolbar fields (internal).
         const tab: TabDescriptor = {
-          id: 'dsh-genoffice:tab',
+          id: BROWSER_TAB_ID,
           title: () => t('tab.genoffice'),
           icon: (size: number) => createElement(GenOfficeIcon, { size }),
           order: 20,
@@ -57,6 +58,20 @@ export function apply(ctx: ClientContext): void {
         return betterSidebar.registerTab(tab)
       },
       'dsh-tab-genoffice: registerTab',
+    )
+    sidebarCtx.effect(
+      () => {
+        const tab: TabDescriptor = {
+          id: FILE_TAB_ID,
+          title: () => t('tab.file'),
+          icon: (size: number) => createElement(GenOfficeIcon, { size }),
+          hidden: true,
+          dedupeKey: (opened) => opened.path,
+          component: (props: TabComponentProps) => createElement(GenOfficeFileTab, props),
+        }
+        return betterSidebar.registerTab(tab)
+      },
+      'dsh-tab-genoffice: registerFileTab',
     )
     for (const ext of CLAIMED_EXTS) {
       sidebarCtx.effect(
@@ -76,23 +91,21 @@ export function apply(ctx: ClientContext): void {
       )
     }
 
-    // Global SSE: start before GenOfficePanel mounts so *_open events are
-    // never lost even when the sidebar tab hasn't been opened yet (BR-M03).
+    // Global SSE: *_open lands on a per-path file tab even if the browser
+    // tab has not been opened yet (BR-M03). Only the page whose active
+    // session matches sessionId mounts the iframe (see fileOpenOnThisPage).
     sidebarCtx.effect(() => {
       const es = new EventSource(`${RELAY_BASE}/api/open/stream`)
-      let cancelOpen: (() => void) | undefined
       es.addEventListener('file', (ev: MessageEvent) => {
         try {
-          const data = JSON.parse(ev.data) as { path?: unknown }
-          const filePath = typeof data.path === 'string' ? data.path : ''
-          if (filePath === '') return
-          betterSidebar.openTab({ type: 'dsh-genoffice:tab', path: filePath })
-          cancelOpen?.()
-          cancelOpen = scheduleOpenFile(filePath)
+          const data = JSON.parse(ev.data) as { path?: unknown; sessionId?: unknown }
+          const activeSessionId = betterSidebar.getSnapshot?.().sessionId
+          const next = fileOpenOnThisPage(data, activeSessionId)
+          if (next === undefined) return
+          betterSidebar.openTab(next.seed)
         } catch { /* malformed event — ignore */ }
       })
       return () => {
-        cancelOpen?.()
         es.close()
       }
     }, 'dsh-tab-genoffice: open-file-stream')

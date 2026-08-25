@@ -2,7 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/react'
 import { GenOfficePanel } from '../src/tabs/genoffice.tsx'
-import { emitOpenFile, resetRelayStore } from '../src/tabs/relay.ts'
+import { fileTabSeed } from '../src/tabs/file-tab.ts'
+import { resetRelayStore } from '../src/tabs/relay.ts'
 import type { TabComponentProps } from 'dsh-better-sidebar'
 
 afterEach(() => {
@@ -23,15 +24,15 @@ beforeEach(() => {
   vi.stubGlobal('EventSource', FakeEventSource)
 })
 
-function panel(cwd?: string) {
+function panel(cwd?: string, openTab: ReturnType<typeof vi.fn> = vi.fn()) {
   const props = {
-    ctx: {} as never,
+    ctx: { betterSidebar: { openTab } } as never,
     store: {} as never,
     scope: { sessionId: 's', cwd },
     tab: { id: 't', type: 'genoffice', title: 'GenOffice' },
     visible: true,
   } as TabComponentProps
-  return render(<GenOfficePanel {...props} />)
+  return { view: render(<GenOfficePanel {...props} />), openTab }
 }
 
 describe('GenOffice list start directory', () => {
@@ -66,7 +67,7 @@ describe('GenOffice list start directory', () => {
       }
     })
     vi.stubGlobal('fetch', fetch)
-    const view = panel('')
+    const { view } = panel('')
     await waitFor(() => { expect(fetch).toHaveBeenCalled() })
     expect(String(fetch.mock.calls[0]?.[0])).toMatch(/path=$|path=$/)
     await waitFor(() => {
@@ -91,7 +92,7 @@ describe('path bar', () => {
       }
     })
     vi.stubGlobal('fetch', fetch)
-    const view = panel('/a/b/c')
+    const { view } = panel('/a/b/c')
     await waitFor(() => { expect(view.getByRole('button', { name: 'b' })).toBeTruthy() })
     fireEvent.click(view.getByRole('button', { name: 'b' }))
     await waitFor(() => {
@@ -108,7 +109,7 @@ describe('path bar', () => {
       }
     })
     vi.stubGlobal('fetch', fetch)
-    const view = panel('/proj')
+    const { view } = panel('/proj')
     await waitFor(() => { expect(view.getByRole('button', { name: 'proj' })).toBeTruthy() })
     const before = fetch.mock.calls.length
     fireEvent.click(view.getByLabelText('当前路径'))
@@ -120,24 +121,35 @@ describe('path bar', () => {
   })
 })
 
-describe('open-file hook', () => {
-  it('subscribeOpenFile from the panel opens a previewable path', async () => {
+describe('opening a file from the list', () => {
+  it('opens a per-path document tab and keeps the directory list', async () => {
     const fetch = vi.fn(async (input: RequestInfo) => {
       const url = String(input)
       if (url.includes('/api/dir')) {
         const path = new URL(url).searchParams.get('path') ?? ''
         return {
           ok: true,
-          json: async () => ({ ok: true, path: path || '/tmp', parent: '/', entries: [] }),
+          json: async () => ({
+            ok: true,
+            path: path || '/tmp',
+            parent: '/',
+            entries: [
+              { name: 'a.docx', dir: false, hidden: false, symlink: false, size: 1, mtimeMs: 0, ext: 'docx' },
+              { name: 'notes.txt', dir: false, hidden: false, symlink: false, size: 1, mtimeMs: 0, ext: 'txt' },
+            ],
+          }),
         }
       }
       return { ok: true, json: async () => ({ ok: true }) }
     })
     vi.stubGlobal('fetch', fetch)
-    const view = panel('/tmp')
-    await waitFor(() => { expect(view.getByRole('button', { name: '主目录' })).toBeTruthy() })
-    emitOpenFile('/tmp/a.docx')
+    const { view, openTab } = panel('/tmp')
     await waitFor(() => { expect(view.getByText('a.docx')).toBeTruthy() })
-    expect(view.getByRole('button', { name: '返回' })).toBeTruthy()
+    fireEvent.click(view.getByText('a.docx'))
+    expect(openTab).toHaveBeenCalledWith(fileTabSeed('/tmp/a.docx'), { sessionId: 's', cwd: '/tmp' })
+    expect(view.getByRole('button', { name: '主目录' })).toBeTruthy()
+    expect(view.queryByRole('button', { name: '返回' })).toBeNull()
+    fireEvent.click(view.getByText('notes.txt'))
+    expect(openTab).toHaveBeenCalledTimes(1)
   })
 })

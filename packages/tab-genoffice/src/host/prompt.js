@@ -27,7 +27,7 @@ function reasonOf(entry) {
     if (entry.status === 'state-locked')
         return '控制面状态门锁死';
     if (entry.status === 'cloud-only')
-        return '依赖云生成 / 桌面版';
+        return '依赖云生成';
     if (entry.status === 'relay-fetch')
         return '会经 relay 出网';
     if (entry.status === 'guarded')
@@ -65,7 +65,7 @@ function buildGenOfficePromptText() {
     })
         .join('\n');
     return [
-        '本机 GenOffice 是 web 部署，不是桌面版。工具只改已经在控制模式打开的文档；写盘只有 *_save 或界面「写入磁盘」。',
+        '本机 GenOffice 是 web 部署。工具只改已经在控制模式打开的文档；写盘只有 *_save 或界面「写入磁盘」。',
         "\u53EF\u505A\uFF1A\n".concat(can),
         "\u4E0D\u53EF\u505A\uFF08\u4E0D\u8981\u8C03\u7528\u3001\u4E0D\u8981\u5411\u7528\u6237\u627F\u8BFA\uFF09\uFF1A\n".concat(blocked.join('；')),
         '需要联网资料时用 DSH 自己的 web_search。GenOffice 侧没有检索工具。',

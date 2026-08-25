@@ -64,6 +64,21 @@ GET 消费后立即失效：`{ "ok": true, "base64": "<bytes>", "name": "a.docx"
 - `/api/search/image` `{query, maxResults}` → `{images:[{title,imageUrl,sourceUrl,source,width,height}], method:"bing"}`
 - `/api/fetch-image` `{url}` → `{base64, mime}`（20MB 上限）
 
+### GET /api/open/stream  — 本机打开订阅（SSE）
+仅 loopback。立即发送 `event: hello` / `data: {}`，每 25s `ping`。下行 `file` 事件：
+
+```json
+{ "path": "/abs/path/a.xlsx", "sessionId": "optional-dsh-session" }
+```
+
+`sessionId` 仅在 `POST /api/open` 传入时出现，用来把打开请求钉在发起页的 DSH session（避免落到另一页的前台 session）。
+
+### POST /api/open  — 向订阅者广播打开本机文件
+入参：`{ "path": "/abs/path/a.xlsx", "sessionId"?: string }`
+- 仅 loopback；路径必须绝对；`stat` 失败 → `200 {ok:false, error:'file not found'}`。
+- 成功：`200 {ok:true, path, subscribers}`，并向所有 `/api/open/stream` 连接写 `file` 事件。
+- **不**报告控制执行器是否已登记——那是 `POST /api/control/open` 的 `registered` 字段（见 `contracts/control-api.md` §2.7）。
+
 ### GET /api/gsk-status | POST /api/generate-image | POST /api/analyze-media
 Genspark 能力由 **relay 代跑**（gsk CLI 或 `tool_cli` HTTP），浏览器不直连 genspark.ai。
 - `/api/gsk-status` → `{available: boolean}`（`GSK_API_KEY` 或 `~/.genspark-tool-cli/config.json`）
@@ -89,8 +104,10 @@ Genspark 能力由 **relay 代跑**（gsk CLI 或 `tool_cli` HTTP），浏览器
 |---|---|---|
 | `docx` | `/docs/?open=path:<enc>` | AI Docs |
 | `md`（含 `markdown`） | `/markdown/?open=path:<enc>` | AI Markdown |
+| `xlsx` | `/sheets/?open=path:<enc>` | AI Sheets |
+| `pptx` | `/slides/?open=path:<enc>` | AI Slides |
+| `pdf` | `/pdf/?open=path:<enc>` | AI PDF |
 | `mdx` | — | tab 不预览；内测渲染器补丁已删 |
-| 其余（xlsx/pptx/pdf/…） | — | 仅桌面版可用，列表置灰 |
 
 路径需 `encodeURIComponent` 后放入 `path:` 之后整体再编码进 URL。
 

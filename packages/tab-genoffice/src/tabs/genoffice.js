@@ -330,12 +330,12 @@ function GenOfficePanel(props) {
                 var _a;
                 var previewable = !entry.dir && !entry.symlink && relay_ts_1.PREVIEWABLE[(_a = entry.ext) !== null && _a !== void 0 ? _a : ''] !== undefined;
                 var clickable = entry.dir || entry.symlink || previewable;
-                return (<div key={entry.name} className={"".concat(genoffice_module_css_1.default.row, " ").concat(clickable ? genoffice_module_css_1.default.rowClickable : genoffice_module_css_1.default.rowDisabled)} title={entry.dir ? '进入目录' : entry.symlink ? '符号链接（可能指向目录）' : previewable ? '点击预览' : '仅桌面版可用'} onClick={function () { pickFile(entry); }}>
+                return (<div key={entry.name} className={"".concat(genoffice_module_css_1.default.row, " ").concat(clickable ? genoffice_module_css_1.default.rowClickable : genoffice_module_css_1.default.rowDisabled)} title={entry.dir ? '进入目录' : entry.symlink ? '符号链接（可能指向目录）' : previewable ? '点击预览' : '网页版不可预览'} onClick={function () { pickFile(entry); }}>
                 <span className={genoffice_module_css_1.default.rowIcon}>
                   {entry.dir ? <FolderIcon /> : entry.symlink ? <LinkIcon /> : <FileIcon />}
                 </span>
                 <span className={genoffice_module_css_1.default.rowName}>{entry.name}</span>
-                {!entry.dir && !previewable && !entry.symlink && <span className={genoffice_module_css_1.default.rowTag}>仅桌面版可用</span>}
+                {!entry.dir && !previewable && !entry.symlink && <span className={genoffice_module_css_1.default.rowTag}>网页版不可预览</span>}
               </div>);
             })}
         </div>)}

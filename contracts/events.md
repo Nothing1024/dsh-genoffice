@@ -14,8 +14,9 @@
 
 ## 消费者
 
-- 位置：`../plugin/dsh-genoffice/plugin/packages/tab-genoffice/src/client/index.ts`
-- 覆盖前本机还做过 SSE `/api/open/stream`（stash `wip/local-open-sse`），当前 checkout 未必含这段。
+- 插件：`packages/tab-genoffice/src/tabs/relay.ts` 的 `startOpenFileStream`（以及 client `apply` 里的单路 SSE）订阅 `GET /api/open/stream`。
+- `file` 事件 `data = {path, sessionId?}`。`sessionId` 由 `POST /api/open` 原样带回；省略时订阅者只按 `path` 打开。
+- 契约见 `relay-api.md`（`/api/open` / `/api/open/stream`）。
 
 ## 扩展名
 

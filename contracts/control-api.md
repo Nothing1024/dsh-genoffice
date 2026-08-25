@@ -83,7 +83,7 @@ data: {"docId":"<64hex>"}
 
 ### 2.7 POST /api/control/open — docId 计算辅助（BR-009）
 
-入参：`{path: string(绝对路径)}` → `200 {ok:true, docId, path}`；路径非绝对 → `400 {ok:false, error:'invalid path'}`。
+入参：`{path: string(绝对路径)}` → `200 {ok:true, docId, path, registered}`。`registered` 为该 docId 是否已有控制执行器（iframe 已挂上 `/api/control/stream`）。路径非绝对 → `400 {ok:false, error:'invalid path'}`。
 
 ### 2.5 POST /api/file — 写回（BR-004/BR-005，INV-002/INV-003）
 
@@ -158,9 +158,10 @@ DSH 工具名 = `<app前缀>_<skill工具名>`；`docx` ↔ app `docs`，`markdo
 | `pptx_replace_image` | replace_image | slides | 替换图片 |
 | `pptx_ask_clarification` | ask_clarification | slides | 需求澄清 |
 | `pptx_plan_deck` | plan_deck | slides | 演示大纲规划 |
-| `pptx_regenerate_slide` | regenerate_slide | slides | 重生成页 |
+| `pptx_regenerate_slide` | regenerate_slide | slides | 按 brief 重做一页（本地 spec→pptx，不走云）；控制模式需 page_spec 或改用 land_pages |
 | `pptx_delete_slide` | delete_slide | slides | 删除页 |
-| `pptx_generate_deck` | generate_deck | slides | 生成整套演示 |
+| `pptx_generate_deck` | generate_deck | slides | 本地生成整套演示（非控制模式 LLM 规划；控制模式需 pages_spec 或改用 land_pages，iframe 不 BYOK） |
+| `pptx_land_pages` | land_pages | slides | 宿主提交 PageSpec[] 落地（parsePageSpec → localGeneratePage → htmlToPptx，无 iframe LLM） |
 | `pptx_save_style_template` | save_style_template | slides | 保存样式模板 |
 | `pptx_list_style_templates` | list_style_templates | slides | 列出样式模板 |
 | `pptx_add_slide` | add_slide | slides | 添加页 |
@@ -203,7 +204,7 @@ DSH 工具名 = `<app前缀>_<skill工具名>`；`docx` ↔ app `docs`，`markdo
 - 写回触发（BR-008）：编辑工具只改 iframe 内文档状态；写回仅由显式动作触发——tab「写入磁盘」按钮或 `docx_save`/`markdown_save`/`xlsx_save`/`pptx_save`/`pdf_save` 工具，经 relay `POST /api/file` 原子写回原路径。
 - 保存工具入参：`{path: string}`（绝对路径）→ 返回写回结果；conflict → isError 提示"文件已被外部修改"。
 - 扩展名 → app 映射：`xlsx→sheets`、`pptx→slides`、`pdf→pdf`（插件 tab `PREVIEWABLE` 与 host app 选择用）。
-- 工具名集合完整性：本表为**全部 skill 工具**的镜像（xlsx 12、pptx 37、pdf 20，含官方 merge 新增 `aggregate_range`/`find_cells`/`select_range`/`trace_precedents`/`trace_dependents`/`apply_ops`/`insert_text`）；smoke 断言按本表逐名核对 skill 与插件 host，漂移即 FAIL（BR-007 / INV-004）。不删官方工具。
+- 工具名集合完整性：本表为控制面**全部工具**（skill + 各族 `*_save`）镜像，与 smoke 锁步：docx 11 + markdown 5 + xlsx 13 + pptx 39 + pdf 21（skill 分别为 10 / 4 / 12 / 38 / 20，含官方 merge 新增 `aggregate_range`/`find_cells`/`select_range`/`trace_precedents`/`trace_dependents`/`apply_ops`/`insert_text` / `land_pages`）。插件 `CONTROL_TOOL_TABLE` 与 `CAPABILITY` 必须逐名覆盖——缺 capability 的表项默认不注册。smoke 按本表逐名核对 skill / host / capability，漂移即 FAIL（BR-007 / INV-004）。不删官方工具。`pptx_land_pages` 是控制模式出片原语（宿主提交 PageSpec[]，iframe 只落地）。`pptx_generate_deck` / `pptx_regenerate_slide` 在非控制模式仍走网页本地 spec→pptx（`cloudGenStatus.enabled` 仍为 false）；控制模式 topic-only 必须 isError `control mode requires pages_spec; use land_pages`，不得进 iframe BYOK。空白稿落地后 `htmlGenerated` 解锁 `add_text_box` / `add_shape`。
 
 ## 5. 错误语义汇总（UF-001 失败分支）
 
@@ -216,6 +217,8 @@ DSH 工具名 = `<app前缀>_<skill工具名>`；`docx` ↔ app `docs`，`markdo
 | 写回目标不可写 | `{ok:false, error:<原因>}`；原文件不变 |
 | 写回外部修改冲突 | `{ok:false, error:'conflict'}`；原文件不变 |
 | 非 loopback 写回 | `403 {ok:false, error:'loopback only'}` |
+| 控制模式 topic-only generate_deck / regenerate_slide / plan_deck | 适配器回传 isError，output 精确为 `control mode requires pages_spec; use land_pages` |
+| land_pages 空 pages | 适配器回传 isError，output 含 `land_pages requires a non-empty pages array` |
 
 ## 6. 安全边界（INV-002）
 

@@ -6,7 +6,8 @@ import { ControlModeViewer } from '../src/tabs/control-mode.tsx'
 import { DocxControlViewer } from '../src/tabs/docx-control-viewer.tsx'
 import { CLAIMED_EXTS } from '../src/tabs/coexist.ts'
 import { resetActiveDocs } from '../src/tabs/doc-registry.ts'
-import { previewUrlFor, resetRelayStore, subscribeOpenFile } from '../src/tabs/relay.ts'
+import { BROWSER_TAB_ID, FILE_TAB_ID, fileTabSeed } from '../src/tabs/file-tab.ts'
+import { previewUrlFor, resetRelayStore } from '../src/tabs/relay.ts'
 import type { FileViewerDescriptor, FileViewerProps, TabDescriptor } from 'dsh-better-sidebar'
 
 afterEach(() => {
@@ -49,7 +50,7 @@ beforeEach(() => {
   vi.stubGlobal('EventSource', FakeEventSource)
 })
 
-function fakeBetterSidebar() {
+function fakeBetterSidebar(sessionId?: string) {
   const registered: TabDescriptor[] = []
   const viewers: FileViewerDescriptor[] = []
   return {
@@ -73,11 +74,12 @@ function fakeBetterSidebar() {
     getFileViewers: () => viewers,
     getTab: (id: string) => registered.find((t) => t.id === id),
     isTabEnabled: () => true,
-    isViewerEnabled: () => true,
+    isViewerEnabled: (_id: string) => true,
     matchFileViewer: () => undefined,
     openTab: vi.fn(),
     closeTab: vi.fn(),
     subscribe: () => () => {},
+    getSnapshot: () => ({ sessionId }),
   }
 }
 
@@ -104,8 +106,8 @@ function fakeLocale(active: 'zh' | 'en' = 'zh') {
  * `betterSidebar`. Registration/dispose semantics mirror cordis
  * (`ctx.effect` runs the callback and collects the disposer).
  */
-async function bench(withSidebar = true) {
-  const sidebar = fakeBetterSidebar()
+async function bench(withSidebar = true, sessionId?: string) {
+  const sidebar = fakeBetterSidebar(sessionId)
   const disposers: Array<() => void> = []
   const locale = fakeLocale()
   const ctx = {
@@ -136,7 +138,12 @@ function stubRelay(ok: boolean): void {
 describe('genoffice better-sidebar registration', () => {
   it('registers a prefixed tab and one viewer per claimed ext', async () => {
     const b = await bench(true)
-    expect(b.sidebar.registered.map((t) => t.id)).toEqual(['dsh-genoffice:tab'])
+    expect(b.sidebar.registered.map((t) => t.id)).toEqual([BROWSER_TAB_ID, FILE_TAB_ID])
+    const browser = b.sidebar.registered[0]
+    const fileTab = b.sidebar.registered[1]
+    expect(browser?.single).toBe(true)
+    expect(fileTab?.hidden).toBe(true)
+    expect(fileTab?.dedupeKey?.({ path: '/tmp/a.docx' } as never)).toBe('/tmp/a.docx')
     expect(b.sidebar.viewers.map((v) => v.id)).toEqual(
       CLAIMED_EXTS.map((ext) => `dsh-genoffice:viewer-${ext}`),
     )
@@ -151,7 +158,7 @@ describe('genoffice better-sidebar registration', () => {
 
   it('disposer from effect unregisters the tab (HMR / BR-006)', async () => {
     const b = await bench(true)
-    expect(b.sidebar.registered).toHaveLength(1)
+    expect(b.sidebar.registered).toHaveLength(2)
     await b.plugin.dispose()
     expect(b.sidebar.registered).toHaveLength(0)
     expect(b.sidebar.viewers).toHaveLength(0)
@@ -199,10 +206,88 @@ describe('coexist degrade modes', () => {
       viewerId: 'dsh-genoffice:viewer-docx',
     }
     const view = render(<DocxControlViewer {...props} />)
-    const button = await view.findByRole('button', { name: '用内置预览打开' })
+    const button = await view.findByRole('button', { name: '用后备预览打开' })
     expect(view.getByText(/relay 不可用/)).toBeTruthy()
     fireEvent.click(button)
     expect(view.getByText('builtin-docx')).toBeTruthy()
+  })
+
+  it('0.13: without an office builtin, degrades to binary-download instead of a dead hint', async () => {
+    stubRelay(false)
+    const download = {
+      id: 'binary-download',
+      exts: ['doc', 'xls', 'ppt'],
+      fetchStrategy: 'binary-download' as const,
+      component: () => <div>download-fallback</div>,
+    }
+    const own = {
+      id: 'dsh-genoffice:viewer-docx',
+      exts: ['docx'],
+      fetchStrategy: 'none' as const,
+      component: () => <div>own-viewer</div>,
+    }
+    const sidebar = fakeBetterSidebar()
+    sidebar.viewers.push(own, download)
+    const props: FileViewerProps = {
+      ctx: { betterSidebar: sidebar } as unknown as FileViewerProps['ctx'],
+      store: {} as FileViewerProps['store'],
+      scope: { sessionId: 's' },
+      path: '/tmp/a.docx',
+      title: 'a.docx',
+      viewerId: 'dsh-genoffice:viewer-docx',
+    }
+    const view = render(<DocxControlViewer {...props} />)
+    fireEvent.click(await view.findByRole('button', { name: '用后备预览打开' }))
+    expect(view.getByText('download-fallback')).toBeTruthy()
+    expect(view.queryByText('own-viewer')).toBeNull()
+    expect(view.queryByText('没有可用的后备预览')).toBeNull()
+  })
+
+  it('skips a disabled office-plugin viewer and uses binary-download', async () => {
+    stubRelay(false)
+    const office = {
+      id: 'docx',
+      exts: ['docx'],
+      fetchStrategy: 'mediaUrl' as const,
+      component: () => <div>office-plugin</div>,
+    }
+    const download = {
+      id: 'binary-download',
+      exts: ['doc', 'xls', 'ppt'],
+      fetchStrategy: 'binary-download' as const,
+      component: () => <div>download-fallback</div>,
+    }
+    const sidebar = fakeBetterSidebar()
+    sidebar.viewers.push(office, download)
+    sidebar.isViewerEnabled = (id: string) => id !== 'docx'
+    const props: FileViewerProps = {
+      ctx: { betterSidebar: sidebar } as unknown as FileViewerProps['ctx'],
+      store: {} as FileViewerProps['store'],
+      scope: { sessionId: 's' },
+      path: '/tmp/a.docx',
+      title: 'a.docx',
+      viewerId: 'dsh-genoffice:viewer-docx',
+    }
+    const view = render(<DocxControlViewer {...props} />)
+    fireEvent.click(await view.findByRole('button', { name: '用后备预览打开' }))
+    expect(view.getByText('download-fallback')).toBeTruthy()
+    expect(view.queryByText('office-plugin')).toBeNull()
+  })
+
+  it('shows a dead-end hint when no other viewer is registered', async () => {
+    stubRelay(false)
+    const sidebar = fakeBetterSidebar()
+    const props: FileViewerProps = {
+      ctx: { betterSidebar: sidebar } as unknown as FileViewerProps['ctx'],
+      store: {} as FileViewerProps['store'],
+      scope: { sessionId: 's' },
+      path: '/tmp/a.docx',
+      title: 'a.docx',
+      viewerId: 'dsh-genoffice:viewer-docx',
+    }
+    const view = render(<DocxControlViewer {...props} />)
+    fireEvent.click(await view.findByRole('button', { name: '用后备预览打开' }))
+    expect(view.getByText('没有可用的后备预览')).toBeTruthy()
   })
 
   it('auto mode renders the builtin without a yield click', async () => {
@@ -217,7 +302,7 @@ describe('coexist degrade modes', () => {
       />,
     )
     expect(await view.findByText('builtin-docx')).toBeTruthy()
-    expect(view.queryByRole('button', { name: '用内置预览打开' })).toBeNull()
+    expect(view.queryByRole('button', { name: '用后备预览打开' })).toBeNull()
     expect(view.getByRole('button', { name: '重新检查' })).toBeTruthy()
   })
 })
@@ -307,30 +392,47 @@ describe('open-file SSE client', () => {
     expect(FakeEventSource.instances[0]?.closed).toBe(true)
   })
 
-  it('file event opens the tab and emits immediately when the panel is already listening', async () => {
-    const seen: string[] = []
-    const stop = subscribeOpenFile((p) => { seen.push(p) })
+  it('file event opens a per-path document tab', async () => {
     const b = await bench(true)
     FakeEventSource.instances[0]?.emit('file', JSON.stringify({ path: '/tmp/demo.docx' }))
-    expect(b.sidebar.openTab).toHaveBeenCalledWith({ type: 'dsh-genoffice:tab', path: '/tmp/demo.docx' })
-    expect(seen).toEqual(['/tmp/demo.docx'])
-    stop()
+    expect(b.sidebar.openTab).toHaveBeenCalledWith(fileTabSeed('/tmp/demo.docx'))
     await b.runtime.dispose()
   })
 
-  it('file event waits for the panel when no listener is mounted yet', async () => {
-    vi.useFakeTimers()
-    const seen: string[] = []
-    const b = await bench(true)
-    FakeEventSource.instances[0]?.emit('file', JSON.stringify({ path: '/tmp/demo.docx' }))
-    expect(b.sidebar.openTab).toHaveBeenCalledWith({ type: 'dsh-genoffice:tab', path: '/tmp/demo.docx' })
-    expect(seen).toEqual([])
-    const stop = subscribeOpenFile((p) => { seen.push(p) })
-    await vi.advanceTimersByTimeAsync(300)
-    expect(seen).toEqual(['/tmp/demo.docx'])
-    stop()
+  it('file event with sessionId opens on the matching page without targetedOpen scope', async () => {
+    const b = await bench(true, 'session-a')
+    FakeEventSource.instances[0]?.emit(
+      'file',
+      JSON.stringify({ path: '/tmp/demo.docx', sessionId: 'session-a' }),
+    )
+    expect(b.sidebar.openTab).toHaveBeenCalledWith(fileTabSeed('/tmp/demo.docx'))
+    expect(b.sidebar.openTab).not.toHaveBeenCalledWith(
+      fileTabSeed('/tmp/demo.docx'),
+      { sessionId: 'session-a' },
+    )
     await b.runtime.dispose()
-    vi.useRealTimers()
+  })
+
+  it('a second page viewing another session does not open or collapse the origin session', async () => {
+    const page1 = await bench(true, 'session-a')
+    const page2 = await bench(true, 'session-b')
+    const payload = JSON.stringify({ path: '/tmp/demo.docx', sessionId: 'session-a' })
+    FakeEventSource.instances[0]?.emit('file', payload)
+    FakeEventSource.instances[1]?.emit('file', payload)
+    expect(page1.sidebar.openTab).toHaveBeenCalledWith(fileTabSeed('/tmp/demo.docx'))
+    expect(page2.sidebar.openTab).not.toHaveBeenCalled()
+    await page1.runtime.dispose()
+    await page2.runtime.dispose()
+  })
+
+  it('a second file event opens a distinct tab seed so files sit side by side', async () => {
+    const b = await bench(true)
+    FakeEventSource.instances[0]?.emit('file', JSON.stringify({ path: '/tmp/a.docx' }))
+    FakeEventSource.instances[0]?.emit('file', JSON.stringify({ path: '/tmp/b.xlsx' }))
+    expect(b.sidebar.openTab).toHaveBeenNthCalledWith(1, fileTabSeed('/tmp/a.docx'))
+    expect(b.sidebar.openTab).toHaveBeenNthCalledWith(2, fileTabSeed('/tmp/b.xlsx'))
+    expect(fileTabSeed('/tmp/a.docx').id).not.toBe(fileTabSeed('/tmp/b.xlsx').id)
+    await b.runtime.dispose()
   })
 
   it('ignores malformed SSE payloads', async () => {

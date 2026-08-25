@@ -1,0 +1,18 @@
+{"type": "CALL", "name": "pptx_land_pages", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\", \"insert_mode\": \"replace_at\", \"at_index\": 0, \"pages\": [{\"background\": \"#0F2740\", \"elements\": [{\"type\": \"text\", \"x\": 80, \"y\": 80, \"w\": 1120, \"h\": 80, \"valign\": \"top\", \"paragraphs\": [{\"align\": \"left\", \"runs\": [{\"text\": \"替换后的第一页\", \"sizePt\": 32, \"bold\": true, \"color\": \"#FFFFFF\"}]}]}]}]}"}
+{"type": "RES", "isError": false, "text": "Landed 1 host-authored page(s) (insert_mode:replace_at). Deck now has 3 page(s)."}
+{"type": "CALL", "name": "pptx_get_deck_context", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\"}"}
+{"type": "RES", "isError": false, "text": "The presentation has 1 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage 1 (slideIndex=0):\n(Use read_slide to see element positions/sizes/colors)"}
+{"type": "CALL", "name": "pptx_read_slide", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\", \"slideIndex\": 0}"}
+{"type": "RES", "isError": false, "text": "Canvas 1280×720px\ne_b22da36d | text | pos(80,80) size 1120×90 font 36pt | text#FFFFFF\n季度复盘\n---\ne_b1f70e7e | text | pos(80,200) size 1120×420 font 18pt | text#FFFFFF\n深蓝背景 #16395C，白字大标题“季度复盘”，副标题“2025 Q3 · 业务全景与关键指标”；副标题下方以绿色\n#3DDC97 强调核心悬念“营收 +18%，利润 -5%”，营造专业、冷静、有张力的开场氛围。"}
+{"type": "CALL", "name": "pptx_read_slide", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\", \"slideIndex\": 1}"}
+{"type": "RES", "isError": false, "text": "Canvas 1280×720px\ne_57f27076 | text | pos(80,80) size 1120×90 font 36pt | text#FFFFFF\n季度复盘三页演示 2\n---\ne_aec9e8f6 | text | pos(80,200) size 1120×420 font 18pt | text#FFFFFF\n季度复盘三页演示 要点 1。"}
+{"type": "CALL", "name": "pptx_read_slide", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\", \"slideIndex\": 2}"}
+{"type": "RES", "isError": false, "text": "Canvas 1280×720px\ne_8e2e1cb7 | text | pos(80,80) size 1120×90 font 36pt | text#FFFFFF\n季度复盘三页演示 3\n---\ne_5e78f608 | text | pos(80,200) size 1120×420 font 18pt | text#FFFFFF\n季度复盘三页演示 收束与下一步。"}
+{"type": "CALL", "name": "pptx_read_slide", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\", \"slideIndex\": 3}"}
+{"type": "RES", "isError": true, "text": "Error: 未识别的上游错误。\n上游原文：slideIndex out of range (0-0)\n下一步：规划失败看 planning failed:；落地失败看 land_pages 原文。不要盲目重试。"}
+{"type": "CALL", "name": "pptx_get_deck_context", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\"}"}
+{"type": "RES", "isError": false, "text": "The presentation has 1 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage 1 (slideIndex=0):\n(Use read_slide to see element positions/sizes/colors)"}
+{"type": "CALL", "name": "pptx_read_slide", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\", \"slideIndex\": 0}"}
+{"type": "RES", "isError": false, "text": "Canvas 1280×720px\n(no elements on this page)"}
+{"type": "CALL", "name": "bash", "arguments": "{\"command\": \"sleep 2\", \"description\": \"Wait 2 seconds for iframe state to settle\"}"}
+{"type": "RES", "isError": false, "text": "(no output)"}

@@ -18,4 +18,10 @@ describe('genoffice system prompt', () => {
     expect(text).toMatch(/docx:web_search/)
     expect(text).not.toMatch(/请调用 docx_web_search/)
   })
+
+  it('does not bake skill workflow into the system prompt', () => {
+    expect(text).not.toMatch(/ppt-image-first/)
+    expect(text).not.toMatch(/python-pptx/)
+    expect(text).not.toMatch(/不要改走脚本/)
+  })
 })

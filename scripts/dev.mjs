@@ -163,7 +163,9 @@ async function smoke() {
         lastErr = e.message
       }
     }
-    check('tab PREVIEWABLE 可解析', tabExts.length > 0, tabExts.length > 0 ? `tab=[${tabExts}]` : lastErr || 'tab=[]')
+    const needExts = ['docx', 'md', 'xlsx', 'pptx', 'pdf']
+    check('tab PREVIEWABLE 可解析', needExts.every((e) => tabExts.includes(e)),
+      tabExts.length > 0 ? `tab=[${tabExts}]` : lastErr || 'tab=[]')
   } catch (e) {
     check('tab-genoffice 面板源码可读', false, e.message)
   }
@@ -208,14 +210,56 @@ async function smoke() {
   })).json()
   check('POST /api/control/open → 64hex docId', openRes.ok === true && /^[0-9a-f]{64}$/.test(openRes.docId ?? ''), openRes.error)
   check('  docId 与 sha256(绝对路径) 一致', openRes.docId === createHash('sha256').update('/tmp/smoke-doc.md').digest('hex'))
+  check('  registered 为 boolean（执行器是否已挂上 SSE）', typeof openRes.registered === 'boolean')
+
+  // 8b. /api/open 广播：file 事件带回 sessionId（与控制面 registered 分开）
+  const selfPath = fileURLToPath(import.meta.url)
+  const openAc = new AbortController()
+  const openTimer = setTimeout(() => openAc.abort(), 4000)
+  try {
+    const stream = await fetch(`${RELAY_BASE}/api/open/stream`, { signal: openAc.signal })
+    check('GET /api/open/stream → SSE', stream.ok === true && (stream.headers.get('content-type') ?? '').includes('text/event-stream'))
+    const reader = stream.body?.getReader()
+    const dec = new TextDecoder()
+    let buf = ''
+    const readUntil = async (pred) => {
+      if (!reader) return null
+      const deadline = Date.now() + 2500
+      while (Date.now() < deadline) {
+        const { value, done } = await reader.read()
+        if (done) break
+        buf += dec.decode(value, { stream: true })
+        const got = pred(buf)
+        if (got) return got
+      }
+      return pred(buf)
+    }
+    const hello = await readUntil((s) => /event: hello/.test(s) ? true : null)
+    check('  open/stream hello', hello === true)
+    const posted = await (await fetch(`${RELAY_BASE}/api/open`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path: selfPath, sessionId: 'smoke-session' }),
+    })).json()
+    check('POST /api/open → ok', posted.ok === true && posted.path === selfPath, posted.error)
+    const fileEv = await readUntil((s) => {
+      const m = s.match(/event: file\ndata: (\{.*?\})/)
+      return m ? JSON.parse(m[1]) : null
+    })
+    check('  open/stream file 带 sessionId', fileEv?.path === selfPath && fileEv?.sessionId === 'smoke-session', JSON.stringify(fileEv))
+  } catch (e) {
+    check('GET /api/open/stream → SSE', false, e.message)
+  } finally {
+    clearTimeout(openTimer)
+    openAc.abort()
+  }
 
   // 9. 工具名集合镜像（INV-004：契约表 ↔ skill AGENT_TOOLS ↔ 插件 host 注册）
   const controlContract = await readFile(join(ROOT, 'contracts/control-api.md'), 'utf8')
   const contractTools = [...controlContract.matchAll(/^\| `((?:docx|markdown|xlsx|pptx|pdf)[:_][a-z_]+)` \|/gm)].map((m) => m[1])
   const familyCount = (p) => contractTools.filter((t) => t.startsWith(`${p}_`)).length
-  check('契约工具名集合表可解析（docx 11 + markdown 5 + xlsx 13 + pptx 38 + pdf 21）',
+  check('契约工具名集合表可解析（docx 11 + markdown 5 + xlsx 13 + pptx 39 + pdf 21）',
     familyCount('docx') === 11 && familyCount('markdown') === 5 && familyCount('xlsx') === 13 &&
-    familyCount('pptx') === 38 && familyCount('pdf') === 21,
+    familyCount('pptx') === 39 && familyCount('pdf') === 21,
     `docx=${familyCount('docx')} markdown=${familyCount('markdown')} xlsx=${familyCount('xlsx')} pptx=${familyCount('pptx')} pdf=${familyCount('pdf')}`)
   const skillMirrors = {
     docs: join(UPSTREAM, 'apps/docs/src/renderer/ai/tools.ts'),
@@ -237,26 +281,30 @@ async function smoke() {
       missing.length === 0 && contractAppTools.length === skillNames.length,
       missing.length > 0 ? `契约有而 skill 无: ${missing.join(',')}` : `契约 ${contractAppTools.length} vs skill ${skillNames.length}`)
   }
-  // 插件 host 注册镜像：host 已声明的族必须与契约完全一致；未接线的族（xlsx/pptx/pdf 在
-  // Task 10/14/18 接线）整族缺失时仅提示（防止中间阶段 smoke 误红），一旦声明即严格核对。
+  // 插件 host + capability 必须与契约整表锁步（五族已接线，不再允许整族缺席）。
   const hostTools = join(pluginRoot, 'packages/tab-genoffice/src/host/tool-schema.ts')
+  const capFile = join(pluginRoot, 'packages/tab-genoffice/src/host/capability.ts')
   try {
     const hostSrc = await readFile(hostTools, 'utf8')
     const hostNames = [...hostSrc.matchAll(/name:\s*'((?:docx|markdown|xlsx|pptx|pdf)[:_][a-z_]+)'/g)].map((m) => m[1])
     const hostFamilies = [...new Set(hostNames.map((t) => t.split(/[:_]/)[0]))]
-    const declaredFamilies = ['docx', 'markdown', 'xlsx', 'pptx', 'pdf'].filter((f) => hostFamilies.includes(f))
-    const undeclaredFamilies = ['docx', 'markdown', 'xlsx', 'pptx', 'pdf'].filter((f) => !hostFamilies.includes(f))
-    const missingHost = contractTools.filter((t) => {
-      const fam = t.split(/[:_]/)[0]
-      return declaredFamilies.includes(fam) && !hostNames.includes(t)
-    })
+    const requiredFamilies = ['docx', 'markdown', 'xlsx', 'pptx', 'pdf']
+    const missingHost = contractTools.filter((t) => !hostNames.includes(t))
     check('工具名集合镜像（契约 ↔ 插件 host 注册）', missingHost.length === 0,
       `契约有而 host 无: ${missingHost.join(',')}`)
-    if (undeclaredFamilies.length > 0) {
-      console.log(`  提示: host 尚未接线工具族 ${undeclaredFamilies.join('/')}（Task 10/14/18），接线后自动严格核对`)
-    }
-  } catch {
-    console.log('  提示: tab-genoffice host 工具未接线（P4 任务），契约↔host 镜像断言待生效')
+    check('五族 host 均已声明', requiredFamilies.every((f) => hostFamilies.includes(f)),
+      `hostFamilies=${hostFamilies.join(',')}`)
+    const capSrc = await readFile(capFile, 'utf8')
+    const prefixToApp = { docx: 'docs', markdown: 'markdown', xlsx: 'sheets', pptx: 'slides', pdf: 'pdf' }
+    const missingCap = contractTools.filter((t) => {
+      const i = t.indexOf('_')
+      const app = prefixToApp[t.slice(0, i)]
+      return !capSrc.includes(`'${app}:${t.slice(i + 1)}'`)
+    })
+    check('工具名集合镜像（契约 ↔ 插件 capability）', missingCap.length === 0,
+      `契约有而 capability 无: ${missingCap.join(',')}`)
+  } catch (e) {
+    check('插件 host/capability 可读', false, e.message)
   }
 
   console.log(failures === 0 ? '[smoke] 全部通过 ✔' : `[smoke] ${failures} 项失败 ✘`)
@@ -265,7 +313,7 @@ async function smoke() {
 
 async function openFile(fileArg) {
   if (!fileArg) {
-    console.error('用法: node scripts/dev.mjs open <文件路径> [--no-browser]  (支持 .docx / .md)')
+    console.error('用法: node scripts/dev.mjs open <文件路径> [--no-browser]  (支持 .docx / .md / .xlsx / .pptx / .pdf)')
     process.exit(1)
   }
   await startRelay()

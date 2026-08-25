@@ -28,11 +28,13 @@ export interface ControlToolEntry {
 }
 /**
  * Tool table — the plugin-side mirror of contracts/control-api.md §4.
- * 11 docx tools (10 skill + docx_save) and 5 markdown tools (4 skill + markdown_save).
+ * Family counts match contracts/control-api.md §4 and smoke (skill + *_save):
+ * docx 11 (10+save), markdown 5 (4+save), xlsx 13 (12+save),
+ * pptx 39 (38+save), pdf 21 (20+save).
  * Naming uses `_` instead of `:` (provider tool-name pattern ^[a-zA-Z0-9_-]+$;
  * see the contract's §4 separator note, ASM-006 revision).
  */
 export declare const CONTROL_TOOL_TABLE: ControlToolEntry[];
-/** Whether a table entry is the write-back trigger (BR-008). */
+/** Write-back trigger (BR-008). Only the five `*_save` rows; `save_style_template` is a skill, not disk write-back. */
 export declare function isSaveEntry(entry: ControlToolEntry): boolean;
 //# sourceMappingURL=tool-schema.d.ts.map

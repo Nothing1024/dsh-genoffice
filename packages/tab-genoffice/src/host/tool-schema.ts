@@ -52,7 +52,9 @@ const PDF_CONTROL_NOTE =
 
 /**
  * Tool table — the plugin-side mirror of contracts/control-api.md §4.
- * 11 docx tools (10 skill + docx_save) and 5 markdown tools (4 skill + markdown_save).
+ * Family counts match contracts/control-api.md §4 and smoke (skill + *_save):
+ * docx 11 (10+save), markdown 5 (4+save), xlsx 13 (12+save),
+ * pptx 39 (38+save), pdf 21 (20+save).
  * Naming uses `_` instead of `:` (provider tool-name pattern ^[a-zA-Z0-9_-]+$;
  * see the contract's §4 separator note, ASM-006 revision).
  */
@@ -779,15 +781,36 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     },
   },
   {
-    // UNREGISTERED (cloud-only) — 上游放开后需先修键（html→brief/title/layout）再暴露
     name: 'pptx_regenerate_slide',
     skillName: 'regenerate_slide',
     app: 'slides',
-    description: SLIDES_CONTROL_NOTE + '用单页 HTML 重做一页（依赖 LLM 管线，控制模式下通常不可用）。',
+    description:
+      SLIDES_CONTROL_NOTE +
+      '按 brief 由当前会话模型写一页 PageSpec，再 land_pages replace_at（其他页不动）。也可直接传 page_spec 跳过规划。不要把 brief 交给 iframe 打 LLM。先 read_slide；需要图时把真实 http(s) URL 放进 image_urls。',
     parameters: {
       path: PATH_PARAM,
-      slideIndex: { type: 'integer', required: true },
-      html: { type: 'string', required: true },
+      slideIndex: { type: 'integer', required: true, description: '要重做的页（0 起）' },
+      brief: {
+        type: 'string',
+        description: '新页内容与布局说明：各区域放什么、用什么 layout（如 three_column_cards）。无 page_spec 时必填。',
+      },
+      title: { type: 'string', description: '页标题' },
+      layout: { type: 'string', description: '布局意图名（可选）' },
+      image_urls: {
+        type: 'array',
+        items: { type: 'string' },
+        description: '本页真实 http(s) 图片 URL；没有则 []',
+      },
+      page_spec: {
+        type: 'object',
+        additionalProperties: true,
+        description: '已写好的单页 PageSpec（background + elements）；有则跳过规划直接 land',
+      },
+      dataSource: {
+        type: 'string',
+        enum: ['user', 'document', 'search', 'sample'],
+        description: 'brief 含具体数字时必填：数字来源',
+      },
     },
   },
   {
@@ -801,16 +824,74 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     },
   },
   {
-    // UNREGISTERED (cloud-only) — 上游放开后需先修键（topic→core_hook）再暴露
+    name: 'pptx_land_pages',
+    skillName: 'land_pages',
+    app: 'slides',
+    description:
+      SLIDES_CONTROL_NOTE +
+      '把宿主写好的 PageSpec[] 落入当前稿（iframe 只落地，不打 LLM）。pages 每页须有 elements[]，元素含 type/x/y/w/h；画布 1280×720。insert_mode 缺省 replace；replace_at/insert_at 需 pages.length===1 且整数 at_index。落地不写盘。',
+    parameters: {
+      path: PATH_PARAM,
+      pages: {
+        type: 'array',
+        required: true,
+        description: 'PageSpec 数组：background + elements（shape/text/image）',
+        items: { type: 'object', additionalProperties: true },
+      },
+      insert_mode: {
+        type: 'string',
+        enum: ['replace', 'append', 'replace_at', 'insert_at'],
+        description: 'replace（默认）/ append / replace_at / insert_at',
+      },
+      at_index: { type: 'integer', description: 'replace_at / insert_at 的页索引（0 起）' },
+      deck_name: { type: 'string', description: '可选稿名' },
+    },
+  },
+  {
     name: 'pptx_generate_deck',
     skillName: 'generate_deck',
     app: 'slides',
-    description: SLIDES_CONTROL_NOTE + '生成整套演示（依赖 LLM 管线，控制模式下通常不可用）。',
+    description:
+      SLIDES_CONTROL_NOTE +
+      '用当前 DSH 会话模型写 PageSpec[]，再 land_pages 落地（不转发 iframe generate_deck，不配 iframe key）。推荐 topic + approx_pages；也可直接传 pages_spec。空白稿出片后解锁 add_text_box / add_shape。落地不写盘。',
     parameters: {
       path: PATH_PARAM,
-      topic: { type: 'string', required: true },
-      style: { type: 'string' },
-      approx_pages: { type: 'integer' },
+      topic: { type: 'string', description: '演示主题/需求（与 approx_pages 搭配时由宿主规划，不必手写 pages）' },
+      approx_pages: { type: 'integer', description: '期望页数（与 topic 联用）' },
+      context: { type: 'string', description: '可选：真实材料/数据/问卷答案' },
+      core_hook: { type: 'string', description: '可选：已定叙事锚点（与 pages 联用时推荐）' },
+      style: { type: 'string', description: '统一设计系统（与 pages 联用时需要；与 topic 联用时作风格提示）' },
+      pages: {
+        type: 'array',
+        description: '可选：已知道每页时直接传入；每项 title/brief/layout 必填',
+        items: {
+          type: 'object',
+          additionalProperties: true,
+          properties: {
+            title: { type: 'string' },
+            type: { type: 'string', description: 'cover|content|data|closing' },
+            brief: { type: 'string' },
+            layout: { type: 'string' },
+            image_queries: { type: 'array', items: { type: 'string' } },
+          },
+        },
+      },
+      pages_spec: {
+        type: 'array',
+        description: '已写好的 PageSpec[]；有则跳过规划直接 land_pages',
+        items: { type: 'object', additionalProperties: true },
+      },
+      insert_mode: {
+        type: 'string',
+        enum: ['replace', 'append'],
+        description: 'replace（默认，整套替换）或 append（追加到末尾）',
+      },
+      style_template: { type: 'string', description: '已保存样式模板名（跳过风格生成）' },
+      dataSource: {
+        type: 'string',
+        enum: ['user', 'document', 'search', 'sample'],
+        description: 'topic/context/briefs 含具体数字时必填：数字来源',
+      },
     },
   },
   {
@@ -1026,7 +1107,7 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     description:
       SLIDES_CONTROL_NOTE +
       '以一笔事务应用一组官方原子编辑 op（默认 atomic：失败全回滚）。dry_run=true 只校验不改稿。多页/大量元素批处理用这个；单页排版优先 execute_slide_script，单个编辑优先专用工具。' +
-      '网页版 applyTxn 若未实现会返回未执行（与 ungroup 同类）。',
+      '网页版走 applyTxn → runTxn（空或超过 50 个 op 拒绝；per_op 失败跳过）。',
     parameters: {
       path: PATH_PARAM,
       ops: {
@@ -1327,7 +1408,7 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
   },
 ]
 
-/** Whether a table entry is the write-back trigger (BR-008). */
+/** Write-back trigger (BR-008). Only the five `*_save` rows; `save_style_template` is a skill, not disk write-back. */
 export function isSaveEntry(entry: ControlToolEntry): boolean {
   return entry.skillName === 'save'
 }
