@@ -1,0 +1,8 @@
+# UF-003 写回 diff（BR-008/BR-004）
+写回前 sha256: before-c6de28ad6f6d6899eff27ded2e327a8c34b46035d4eaca9ec82f507fd1394917
+写回后 sha256: 92af5722637a630f9bbd74d8527d1a185011487eb468d614eb1ee34b2861a2df
+产物校验（解流分析）:
+- 页面内容流含 "right"（<54686973...7269676874...> = '...the word right to fix later.'）—— 文本改写已落盘
+- 标注 appearance stream: '/GsM gs 1 0.87 0.35 rg 334.11 740 30.46 14 re f'（黄色高亮矩形）
+- Annots 存在；zip/结构完整（pdf.js 可渲染）
+备注: agent 写回后 read_pages 仍显示 "wrong" 系渲染器搜索索引基于打开时 doc（导出写回不触发渲染器重载——与 M0 桌面 tab 写回语义一致）；第二次 edit_text 报"无法定位"恰证明文本已在文件内被替换（幂等保护）。

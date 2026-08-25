@@ -1,0 +1,6 @@
+Playwright pageerror + console.error while verifying UF-001/UF-002
+(control=1, compatibility-basic.xlsx, viewports 700/900/500, plus live resize 900→500):
+
+[]
+
+No pageerror, no console.error.

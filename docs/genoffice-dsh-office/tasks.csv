@@ -1,0 +1,25 @@
+序号,Phase,名称,详情锚点,前置任务,验证命令,状态,备注
+1,P0:基线与勘察,记录基线并勘察三 app Web 化缺口,spec.md#task-1-记录基线并勘察三-app-web-化缺口,无,ls evidence/phase-0/ → commands.log/slidesapi-inventory.md 等,已完成,
+2,P0:基线与勘察,三 app Web 化策略决议,spec.md#task-2-三-app-web-化策略决议,1,ls evidence/phase-0/web-strategy.md 且三 app 各一条路线,已完成,ASM-001/004 定稿
+3,P0:基线与勘察,执行 Phase 0 回归验证,spec.md#task-3-执行-phase-0-回归验证,1;2,node scripts/dev.mjs smoke → 全部通过,已完成,
+4,P1:契约与控制面扩展,扩展 contracts/control-api.md 控制契约,spec.md#task-4-扩展-contractscontrol-apimd-控制契约,3,validate_package.py → 0 FAIL；镜像点评审,已完成,五 app 注册表 + 工具名集合
+5,P1:契约与控制面扩展,relay 控制面 app 白名单扩展与 smoke 断言,spec.md#task-5-relay-控制面-app-白名单扩展与-smoke-断言,4,node scripts/dev.mjs smoke → 全绿（含新断言）,已完成,
+6,P1:契约与控制面扩展,执行 Phase 1 回归验证,spec.md#task-6-执行-phase-1-回归验证,4;5,smoke 全绿；五 app 未注册/未知 app 两态 curl,已完成,
+7,P2:sheets 接入,sheets Web 化基础（web-bridge+构建接入）,spec.md#task-7-sheets-web-化基础web-bridge-构建接入,6,npm run web:build -w @genoffice/sheets → 成功,已完成,
+8,P2:sheets 接入,xlsx 读写后端接入（保存管线）,spec.md#task-8-xlsx-读写后端接入保存管线,7,导出字节与编辑器一致；原文件未变,已完成,
+9,P2:sheets 接入,sheets 控制适配器,spec.md#task-9-sheets-控制适配器,7;8,web:build 通过；control=1 页面 console 无 error,已完成,
+10,P2:sheets 接入,xlsx_* 工具定义与 host 执行 + tab 接线,spec.md#task-10-xlsx-工具定义与-host-执行-tab-接线,9,plugin build/typecheck 通过；会话实测 xlsx_get_workbook_context,已完成,
+11,P2:sheets 接入,执行 Phase 2 回归验证,spec.md#task-11-执行-phase-2-回归验证,7;8;9;10,smoke 全绿；/sheets/?control=1 走查无 console error,已完成,
+12,P3:slides 接入,slides Web 化基础（slidesApi 浏览器实现面）,spec.md#task-12-slides-web-化基础slidesapi-浏览器实现面,11,web:build 通过；/slides/?open=path: 加载无 error,已完成,未覆盖方法显式不可用
+13,P3:slides 接入,slides 控制适配器,spec.md#task-13-slides-控制适配器,12,web:build 通过；control=1 页面 console 无 error,已完成,
+14,P3:slides 接入,pptx_* 工具定义与 host 执行 + tab 接线,spec.md#task-14-pptx-工具定义与-host-执行-tab-接线,13,plugin build/typecheck 通过；会话实测 pptx_get_deck_context,已完成,
+15,P3:slides 接入,执行 Phase 3 回归验证,spec.md#task-15-执行-phase-3-回归验证,12;13;14,smoke 全绿；/slides/?control=1 走查无 console error,已完成,
+16,P4:pdf 接入,pdf Web 化基础（web-bridge+打开/保存管线）,spec.md#task-16-pdf-web-化基础web-bridge打开保存管线,15,web:build 通过；/pdf/?open=path: 渲染+标注可操作,已完成,
+17,P4:pdf 接入,pdf 控制适配器,spec.md#task-17-pdf-控制适配器,16,web:build 通过；control=1 页面 console 无 error,已完成,
+18,P4:pdf 接入,pdf_* 工具定义与 host 执行 + tab 接线,spec.md#task-18-pdf-工具定义与-host-执行-tab-接线,17,plugin build/typecheck 通过；会话实测 pdf_read_pages,已完成,
+19,P4:pdf 接入,执行 Phase 4 回归验证,spec.md#task-19-执行-phase-4-回归验证,16;17;18,smoke 全绿；/pdf/?control=1 走查无 console error,已完成,
+20,P5:去 AI 与插件收尾,三 app 控制模式隐藏 AI 助手,spec.md#task-20-三-app-控制模式隐藏-ai-助手,19,三 app control/非 control 截图对比（EVD-002/006）,已完成,
+21,P5:去 AI 与插件收尾,插件构建、类型检查与 vendor 同步,spec.md#task-21-插件构建类型检查与-vendor-同步,20,npm run build && npm run typecheck → 全绿；3099 可访问,已完成,
+22,P5:去 AI 与插件收尾,执行 Phase 5 回归验证,spec.md#task-22-执行-phase-5-回归验证,20;21,smoke 全绿；双态截图存档,已完成,
+23,P6:端到端验收,执行 spec 5.2 真实场景全套测试,spec.md#task-23-执行-spec-52-真实场景全套测试,22,执行矩阵全行通过；validate_package.py → 0 FAIL,已完成,
+24,P6:端到端验收,执行 Phase 6 回归验证,spec.md#task-24-执行-phase-6-回归验证,23,smoke 全绿 + 5.4 检查清单 + 校验 0 FAIL,已完成,

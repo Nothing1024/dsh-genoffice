@@ -8,3 +8,11 @@ coverage/
 
 # logs
 *.log
+
+# local DSH_HOME (loopback profile). Never commit secrets.
+env/.env
+env/.credentials.yaml
+env/.anonymous-user-id
+
+# Finder
+.DS_Store

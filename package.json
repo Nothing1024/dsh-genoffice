@@ -11,7 +11,9 @@
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "env:setup": "sh env/setup.sh",
-    "env:boot": "sh env/boot.sh"
+    "env:boot": "sh env/boot.sh",
+    "relay": "node scripts/dev.mjs start-relay",
+    "smoke": "node scripts/dev.mjs smoke"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

@@ -1,0 +1,25 @@
+序号,Phase,名称,详情锚点,前置任务,验证命令,状态,备注
+1,P0:基线与契约,记录基线并归档证据,spec.md#task-1-记录基线并归档证据,无,ls evidence/phase-0/ → commands.log/baseline.md/baseline-docs.png,已完成,commands.log/baseline.md/baseline-docs.png 已归档
+2,P0:基线与契约,定义 contracts/control-api.md 控制契约,spec.md#task-2-定义-contractscontrol-apimd-控制契约,1,人工评审 4 个镜像点声明存在,已完成,contracts/control-api.md 落盘；4 镜像点声明；评审记录 control-api-draft.md
+3,P0:基线与契约,执行 Phase 0 回归验证,spec.md#task-3-执行-phase-0-回归验证,1;2,node scripts/dev.mjs smoke → 全部通过,已完成,smoke 全绿；phase-0-summary.md 落盘
+4,P1:relay 控制面,实现执行器注册表与 SSE 下行通道,spec.md#task-4-实现执行器注册表与-sse-下行通道,3,curl -N /api/control/stream → hello+ping;非法 docId → 400,已完成,curl/smoke 验证通过；evidence/API-control + phase-1/smoke.log 落盘
+5,P1:relay 控制面,实现上行通知 POST /api/control/notify,spec.md#task-5-实现上行通知-post-apicontrolnotify,4,curl POST notify → ok;未注册 → ok:false,已完成,curl/smoke 验证通过；evidence/API-control + phase-1/smoke.log 落盘
+6,P1:relay 控制面,实现 context/tool 端点,spec.md#task-6-实现-contexttool-端点,4;5,curl 合法/非法/未注册三发 → 三态正确,已完成,curl/smoke 验证通过；evidence/API-control + phase-1/smoke.log 落盘
+7,P1:relay 控制面,实现 POST /api/file 写回端点,spec.md#task-7-实现-post-apifile-写回端点,5,curl 写回 → ok;伪造 Host → 403;坏路径 → ok:false,已完成,curl/smoke 验证通过；evidence/API-control + phase-1/smoke.log 落盘
+8,P1:relay 控制面,实现 docId 计算与路径安全校验,spec.md#task-8-实现-docid-计算与路径安全校验,4,node -e 同路径同 docId;异路径异 docId,已完成,curl/smoke 验证通过；evidence/API-control + phase-1/smoke.log 落盘
+9,P1:relay 控制面,执行 Phase 1 回归验证,spec.md#task-9-执行-phase-1-回归验证,6;7;8,node scripts/dev.mjs smoke → 全绿,已完成,curl/smoke 验证通过；evidence/API-control + phase-1/smoke.log 落盘
+10,P2:app 控制适配器,实现 docs 控制适配器,spec.md#task-10-实现-docs-控制适配器,9,npm run web 构建通过;control=1 页面 console 无 error,已完成,浏览器实景 + export 落盘验证通过；phase-2 evidence 落盘
+11,P2:app 控制适配器,实现 markdown 控制适配器,spec.md#task-11-实现-markdown-控制适配器,9,npm run web 构建通过;control=1 页面 console 无 error,已完成,浏览器实景 + export 落盘验证通过；phase-2 evidence 落盘
+12,P2:app 控制适配器,适配器接线（挂载点+URL 参数协作）,spec.md#task-12-适配器接线挂载点url-参数协作,10;11,URL 无残留参数;EventSource 建立;非 control 无 EventSource,已完成,浏览器实景 + export 落盘验证通过；phase-2 evidence 落盘
+13,P2:app 控制适配器,导出字节链路（写回数据源）,spec.md#task-13-导出字节链路写回数据源,10;11,触发 export → notify 字节与编辑器一致;原文件未变,已完成,浏览器实景 + export 落盘验证通过；phase-2 evidence 落盘
+14,P2:app 控制适配器,执行 Phase 2 回归验证,spec.md#task-14-执行-phase-2-回归验证,12;13,smoke 全绿;控制模式走查无 console error,已完成,浏览器实景 + export 落盘验证通过；phase-2 evidence 落盘
+15,P3:去 AI 助手,docs 控制模式隐藏 AI 助手,spec.md#task-15-docs-控制模式隐藏-ai-助手,14,control=1 截图无 AI 元素;非 control 截图有,已完成,control/非 control 双态截图对比存档（EVD-002/EVD-006）
+16,P3:去 AI 助手,markdown 控制模式隐藏 AI 助手,spec.md#task-16-markdown-控制模式隐藏-ai-助手,14,control=1 截图无 AI 元素;非 control 截图有,已完成,control/非 control 双态截图对比存档（EVD-002/EVD-006）
+17,P3:去 AI 助手,执行 Phase 3 回归验证,spec.md#task-17-执行-phase-3-回归验证,15;16,smoke 全绿;双态截图存档,已完成,control/非 control 双态截图对比存档（EVD-002/EVD-006）
+18,P4:DSH 插件工具与接线,实现 skill→defineTool 工具定义生成器,spec.md#task-18-实现-skilldefineTool-工具定义生成器,17,npm run build 通过;生成定义与契约表逐字段一致,已完成,DSH 会话实测全链路通过；smoke 工具名集合镜像三向一致；构建/类型检查全绿
+19,P4:DSH 插件工具与接线,实现 host 工具执行（context/tool/save）,spec.md#task-19-实现-host-工具执行contexttoolsave,18,DSH 会话实测 read_blocks 返回真实内容;未打开报错,已完成,DSH 会话实测全链路通过；smoke 工具名集合镜像三向一致；构建/类型检查全绿
+20,P4:DSH 插件工具与接线,client 接线（control URL+保存按钮+事件复用）,spec.md#task-20-client-接线control-url保存按钮事件复用,19,点击 md → iframe 带 control=1;保存按钮三态可用,已完成,DSH 会话实测全链路通过；smoke 工具名集合镜像三向一致；构建/类型检查全绿
+21,P4:DSH 插件工具与接线,插件构建、类型检查与 vendor 同步,spec.md#task-21-插件构建类型检查与-vendor-同步,20,npm run build && npm run typecheck → 全绿;3099 可访问,已完成,DSH 会话实测全链路通过；smoke 工具名集合镜像三向一致；构建/类型检查全绿
+22,P4:DSH 插件工具与接线,执行 Phase 4 回归验证,spec.md#task-22-执行-phase-4-回归验证,19;20;21,smoke 全绿;端到端走查无 console error,已完成,DSH 会话实测全链路通过；smoke 工具名集合镜像三向一致；构建/类型检查全绿
+23,P5:端到端验收,执行 spec 5.2 真实场景全套测试,spec.md#task-23-执行-spec-52-真实场景全套测试,22,执行矩阵全行通过;validate_package.py → 0 FAIL,已完成,执行矩阵全行通过；证据按 5.2 落盘（UF-001/002/003/004 + API-control）
+24,P5:端到端验收,执行 Phase 5 回归验证,spec.md#task-24-执行-phase-5-回归验证,23,smoke 全绿 + 5.4 检查清单 + 校验 0 FAIL,已完成,smoke 全绿 + 5.4 检查清单 + validate_package.py 0 FAIL

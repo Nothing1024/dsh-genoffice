@@ -1,0 +1,9 @@
+event: hello
+data: {"docId":"cae42f78509990424170d18b6f7b856066861286f12893744586b7506a09f232"}
+
+event: ping
+data: {"t":1786527854949}
+
+event: ping
+data: {"t":1786527879950}
+

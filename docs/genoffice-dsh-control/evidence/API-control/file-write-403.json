@@ -1,0 +1,6 @@
+{
+  "request": {"method": "POST", "url": "http://127.0.0.1:8787/api/file", "headers": {"Host": "evil.example.com"}, "body": {"path": "/tmp/genoffice-writeback-test.bin", "base64": "<bytes>"}},
+  "response": {"ok": false, "error": "loopback only"},
+  "httpStatus": 403,
+  "note": "BR-005/INV-002：伪造非 loopback Host 头 → 403 拒绝，原文件不变"
+}

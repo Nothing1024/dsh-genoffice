@@ -1,0 +1,10 @@
+# UF-001 fail-web (gateway :3080 down)
+date: 2026-08-19T01:22:18Z
+cmd: DSH_HOME=env node packages/session-tool-cli/lib/bin.js session create --profile st --title sm-fail-web --tag kind:vibee --format json
+
+dsh-session: ENOENT: no such file or directory, open '/Users/nothing/workspace/dsh/plugin/session-tool/env/session-tool-env/apps/cli/package.json'
+
+exit=0
+
+## marks.jsonl after fail
+ABSENT (no new jsonl row)

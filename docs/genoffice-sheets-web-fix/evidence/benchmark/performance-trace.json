@@ -1,0 +1,1091 @@
+[
+  {
+    "label": "small-compat",
+    "path": "/Users/nothing/workspace/dsh/genoffice/upstream/apps/sheets/fixtures/generated/compatibility-basic.xlsx",
+    "runs": [
+      {
+        "label": "small-compat",
+        "canvasMs": 388,
+        "fps": {
+          "frames": 231,
+          "ms": 2008,
+          "fps": 115
+        },
+        "nav": {
+          "type": "navigate",
+          "startTime": 0,
+          "fetchStart": 0,
+          "responseEnd": 2,
+          "domInteractive": 6,
+          "domContentLoaded": 263,
+          "loadEventEnd": 263,
+          "transferSize": 1012,
+          "duration": 263
+        },
+        "bundle": {
+          "name": "index-DpoDUAoR.js",
+          "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+          "duration": 58.4,
+          "transferSize": 10000440,
+          "encodedBodySize": 10000140,
+          "decodedBodySize": 10000140,
+          "initiatorType": "script"
+        },
+        "jsResources": [
+          {
+            "name": "index-DpoDUAoR.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+            "duration": 58.4,
+            "transferSize": 10000440,
+            "encodedBodySize": 10000140,
+            "decodedBodySize": 10000140,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-BRtMYtNc.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-BRtMYtNc.js",
+            "duration": 1.9,
+            "transferSize": 294311,
+            "encodedBodySize": 294011,
+            "decodedBodySize": 294011,
+            "initiatorType": "script"
+          },
+          {
+            "name": "en-gb-B7Al27b_-BFFr9zKP.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/en-gb-B7Al27b_-BFFr9zKP.js",
+            "duration": 1.1,
+            "transferSize": 105679,
+            "encodedBodySize": 105379,
+            "decodedBodySize": 105379,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DEieJF9n.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DEieJF9n.js",
+            "duration": 2.7,
+            "transferSize": 11316,
+            "encodedBodySize": 11016,
+            "decodedBodySize": 11016,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DXbDGSge.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DXbDGSge.js",
+            "duration": 1.8,
+            "transferSize": 3813,
+            "encodedBodySize": 3513,
+            "decodedBodySize": 3513,
+            "initiatorType": "script"
+          }
+        ],
+        "longTaskCount": 2,
+        "longTaskSum": 372,
+        "longestLongTask": {
+          "name": "self",
+          "duration": 223,
+          "startTime": 404.7,
+          "attribution": [
+            {
+              "containerType": "window",
+              "containerName": "",
+              "containerSrc": ""
+            }
+          ]
+        },
+        "topLongTasks": [
+          {
+            "name": "self",
+            "duration": 223,
+            "startTime": 404.7,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          },
+          {
+            "name": "self",
+            "duration": 149,
+            "startTime": 113.6,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          }
+        ],
+        "longTaskError": null
+      },
+      {
+        "label": "small-compat",
+        "canvasMs": 430,
+        "fps": {
+          "frames": 232,
+          "ms": 2011,
+          "fps": 115.4
+        },
+        "nav": {
+          "type": "navigate",
+          "startTime": 0,
+          "fetchStart": 2,
+          "responseEnd": 4,
+          "domInteractive": 8,
+          "domContentLoaded": 289,
+          "loadEventEnd": 290,
+          "transferSize": 1012,
+          "duration": 290
+        },
+        "bundle": {
+          "name": "index-DpoDUAoR.js",
+          "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+          "duration": 60.9,
+          "transferSize": 10000440,
+          "encodedBodySize": 10000140,
+          "decodedBodySize": 10000140,
+          "initiatorType": "script"
+        },
+        "jsResources": [
+          {
+            "name": "index-DpoDUAoR.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+            "duration": 60.9,
+            "transferSize": 10000440,
+            "encodedBodySize": 10000140,
+            "decodedBodySize": 10000140,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-BRtMYtNc.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-BRtMYtNc.js",
+            "duration": 2.6,
+            "transferSize": 294311,
+            "encodedBodySize": 294011,
+            "decodedBodySize": 294011,
+            "initiatorType": "script"
+          },
+          {
+            "name": "en-gb-B7Al27b_-BFFr9zKP.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/en-gb-B7Al27b_-BFFr9zKP.js",
+            "duration": 1.1,
+            "transferSize": 105679,
+            "encodedBodySize": 105379,
+            "decodedBodySize": 105379,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DEieJF9n.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DEieJF9n.js",
+            "duration": 2.5,
+            "transferSize": 11316,
+            "encodedBodySize": 11016,
+            "decodedBodySize": 11016,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DXbDGSge.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DXbDGSge.js",
+            "duration": 2.5,
+            "transferSize": 3813,
+            "encodedBodySize": 3513,
+            "decodedBodySize": 3513,
+            "initiatorType": "script"
+          }
+        ],
+        "longTaskCount": 2,
+        "longTaskSum": 369,
+        "longestLongTask": {
+          "name": "self",
+          "duration": 204,
+          "startTime": 449.7,
+          "attribution": [
+            {
+              "containerType": "window",
+              "containerName": "",
+              "containerSrc": ""
+            }
+          ]
+        },
+        "topLongTasks": [
+          {
+            "name": "self",
+            "duration": 204,
+            "startTime": 449.7,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          },
+          {
+            "name": "self",
+            "duration": 165,
+            "startTime": 124.6,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          }
+        ],
+        "longTaskError": null
+      },
+      {
+        "label": "small-compat",
+        "canvasMs": 372,
+        "fps": {
+          "frames": 232,
+          "ms": 2002,
+          "fps": 115.9
+        },
+        "nav": {
+          "type": "navigate",
+          "startTime": 0,
+          "fetchStart": 3,
+          "responseEnd": 4,
+          "domInteractive": 7,
+          "domContentLoaded": 254,
+          "loadEventEnd": 254,
+          "transferSize": 1012,
+          "duration": 254
+        },
+        "bundle": {
+          "name": "index-DpoDUAoR.js",
+          "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+          "duration": 55.3,
+          "transferSize": 10000440,
+          "encodedBodySize": 10000140,
+          "decodedBodySize": 10000140,
+          "initiatorType": "script"
+        },
+        "jsResources": [
+          {
+            "name": "index-DpoDUAoR.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+            "duration": 55.3,
+            "transferSize": 10000440,
+            "encodedBodySize": 10000140,
+            "decodedBodySize": 10000140,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-BRtMYtNc.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-BRtMYtNc.js",
+            "duration": 2,
+            "transferSize": 294311,
+            "encodedBodySize": 294011,
+            "decodedBodySize": 294011,
+            "initiatorType": "script"
+          },
+          {
+            "name": "en-gb-B7Al27b_-BFFr9zKP.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/en-gb-B7Al27b_-BFFr9zKP.js",
+            "duration": 1.1,
+            "transferSize": 105679,
+            "encodedBodySize": 105379,
+            "decodedBodySize": 105379,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DEieJF9n.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DEieJF9n.js",
+            "duration": 2.1,
+            "transferSize": 11316,
+            "encodedBodySize": 11016,
+            "decodedBodySize": 11016,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DXbDGSge.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DXbDGSge.js",
+            "duration": 1.7,
+            "transferSize": 3813,
+            "encodedBodySize": 3513,
+            "decodedBodySize": 3513,
+            "initiatorType": "script"
+          }
+        ],
+        "longTaskCount": 3,
+        "longTaskSum": 402,
+        "longestLongTask": {
+          "name": "self",
+          "duration": 196,
+          "startTime": 390.9,
+          "attribution": [
+            {
+              "containerType": "window",
+              "containerName": "",
+              "containerSrc": ""
+            }
+          ]
+        },
+        "topLongTasks": [
+          {
+            "name": "self",
+            "duration": 196,
+            "startTime": 390.9,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          },
+          {
+            "name": "self",
+            "duration": 145,
+            "startTime": 108.4,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          },
+          {
+            "name": "self",
+            "duration": 61,
+            "startTime": 265.4,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          }
+        ],
+        "longTaskError": null
+      }
+    ],
+    "median": {
+      "canvasMs": 388,
+      "longestLongTaskMs": 204,
+      "bundleDurationMs": 58.4,
+      "scrollFps": 115.4
+    }
+  },
+  {
+    "label": "large-10k",
+    "path": "/Users/nothing/workspace/dsh/genoffice/docs/genoffice-sheets-web-fix/evidence/benchmark/fixtures/large-10k-rows.xlsx",
+    "runs": [
+      {
+        "label": "large-10k",
+        "canvasMs": 389,
+        "fps": {
+          "frames": 231,
+          "ms": 2013,
+          "fps": 114.8
+        },
+        "nav": {
+          "type": "navigate",
+          "startTime": 0,
+          "fetchStart": 0,
+          "responseEnd": 2,
+          "domInteractive": 5,
+          "domContentLoaded": 265,
+          "loadEventEnd": 266,
+          "transferSize": 1012,
+          "duration": 266
+        },
+        "bundle": {
+          "name": "index-DpoDUAoR.js",
+          "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+          "duration": 57.4,
+          "transferSize": 10000440,
+          "encodedBodySize": 10000140,
+          "decodedBodySize": 10000140,
+          "initiatorType": "script"
+        },
+        "jsResources": [
+          {
+            "name": "index-DpoDUAoR.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+            "duration": 57.4,
+            "transferSize": 10000440,
+            "encodedBodySize": 10000140,
+            "decodedBodySize": 10000140,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-BRtMYtNc.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-BRtMYtNc.js",
+            "duration": 3,
+            "transferSize": 294311,
+            "encodedBodySize": 294011,
+            "decodedBodySize": 294011,
+            "initiatorType": "script"
+          },
+          {
+            "name": "en-gb-B7Al27b_-BFFr9zKP.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/en-gb-B7Al27b_-BFFr9zKP.js",
+            "duration": 1.1,
+            "transferSize": 105679,
+            "encodedBodySize": 105379,
+            "decodedBodySize": 105379,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DEieJF9n.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DEieJF9n.js",
+            "duration": 2.7,
+            "transferSize": 11316,
+            "encodedBodySize": 11016,
+            "decodedBodySize": 11016,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DXbDGSge.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DXbDGSge.js",
+            "duration": 2.4,
+            "transferSize": 3813,
+            "encodedBodySize": 3513,
+            "decodedBodySize": 3513,
+            "initiatorType": "script"
+          }
+        ],
+        "longTaskCount": 2,
+        "longTaskSum": 374,
+        "longestLongTask": {
+          "name": "self",
+          "duration": 221,
+          "startTime": 435.9,
+          "attribution": [
+            {
+              "containerType": "window",
+              "containerName": "",
+              "containerSrc": ""
+            }
+          ]
+        },
+        "topLongTasks": [
+          {
+            "name": "self",
+            "duration": 221,
+            "startTime": 435.9,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          },
+          {
+            "name": "self",
+            "duration": 153,
+            "startTime": 111.7,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          }
+        ],
+        "longTaskError": null
+      },
+      {
+        "label": "large-10k",
+        "canvasMs": 369,
+        "fps": {
+          "frames": 230,
+          "ms": 2009,
+          "fps": 114.5
+        },
+        "nav": {
+          "type": "navigate",
+          "startTime": 0,
+          "fetchStart": 1,
+          "responseEnd": 3,
+          "domInteractive": 7,
+          "domContentLoaded": 250,
+          "loadEventEnd": 251,
+          "transferSize": 1012,
+          "duration": 251
+        },
+        "bundle": {
+          "name": "index-DpoDUAoR.js",
+          "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+          "duration": 56.2,
+          "transferSize": 10000440,
+          "encodedBodySize": 10000140,
+          "decodedBodySize": 10000140,
+          "initiatorType": "script"
+        },
+        "jsResources": [
+          {
+            "name": "index-DpoDUAoR.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+            "duration": 56.2,
+            "transferSize": 10000440,
+            "encodedBodySize": 10000140,
+            "decodedBodySize": 10000140,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-BRtMYtNc.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-BRtMYtNc.js",
+            "duration": 2.7,
+            "transferSize": 294311,
+            "encodedBodySize": 294011,
+            "decodedBodySize": 294011,
+            "initiatorType": "script"
+          },
+          {
+            "name": "en-gb-B7Al27b_-BFFr9zKP.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/en-gb-B7Al27b_-BFFr9zKP.js",
+            "duration": 1.3,
+            "transferSize": 105679,
+            "encodedBodySize": 105379,
+            "decodedBodySize": 105379,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DEieJF9n.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DEieJF9n.js",
+            "duration": 2.9,
+            "transferSize": 11316,
+            "encodedBodySize": 11016,
+            "decodedBodySize": 11016,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DXbDGSge.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DXbDGSge.js",
+            "duration": 2.6,
+            "transferSize": 3813,
+            "encodedBodySize": 3513,
+            "decodedBodySize": 3513,
+            "initiatorType": "script"
+          }
+        ],
+        "longTaskCount": 2,
+        "longTaskSum": 365,
+        "longestLongTask": {
+          "name": "self",
+          "duration": 222,
+          "startTime": 413.7,
+          "attribution": [
+            {
+              "containerType": "window",
+              "containerName": "",
+              "containerSrc": ""
+            }
+          ]
+        },
+        "topLongTasks": [
+          {
+            "name": "self",
+            "duration": 222,
+            "startTime": 413.7,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          },
+          {
+            "name": "self",
+            "duration": 143,
+            "startTime": 107.5,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          }
+        ],
+        "longTaskError": null
+      },
+      {
+        "label": "large-10k",
+        "canvasMs": 377,
+        "fps": {
+          "frames": 233,
+          "ms": 2009,
+          "fps": 116
+        },
+        "nav": {
+          "type": "navigate",
+          "startTime": 0,
+          "fetchStart": 0,
+          "responseEnd": 2,
+          "domInteractive": 4,
+          "domContentLoaded": 256,
+          "loadEventEnd": 257,
+          "transferSize": 1012,
+          "duration": 257
+        },
+        "bundle": {
+          "name": "index-DpoDUAoR.js",
+          "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+          "duration": 56.1,
+          "transferSize": 10000440,
+          "encodedBodySize": 10000140,
+          "decodedBodySize": 10000140,
+          "initiatorType": "script"
+        },
+        "jsResources": [
+          {
+            "name": "index-DpoDUAoR.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+            "duration": 56.1,
+            "transferSize": 10000440,
+            "encodedBodySize": 10000140,
+            "decodedBodySize": 10000140,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-BRtMYtNc.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-BRtMYtNc.js",
+            "duration": 3.6,
+            "transferSize": 294311,
+            "encodedBodySize": 294011,
+            "decodedBodySize": 294011,
+            "initiatorType": "script"
+          },
+          {
+            "name": "en-gb-B7Al27b_-BFFr9zKP.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/en-gb-B7Al27b_-BFFr9zKP.js",
+            "duration": 1.1,
+            "transferSize": 105679,
+            "encodedBodySize": 105379,
+            "decodedBodySize": 105379,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DEieJF9n.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DEieJF9n.js",
+            "duration": 3.1,
+            "transferSize": 11316,
+            "encodedBodySize": 11016,
+            "decodedBodySize": 11016,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DXbDGSge.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DXbDGSge.js",
+            "duration": 2.9,
+            "transferSize": 3813,
+            "encodedBodySize": 3513,
+            "decodedBodySize": 3513,
+            "initiatorType": "script"
+          }
+        ],
+        "longTaskCount": 2,
+        "longTaskSum": 371,
+        "longestLongTask": {
+          "name": "self",
+          "duration": 221,
+          "startTime": 426.8,
+          "attribution": [
+            {
+              "containerType": "window",
+              "containerName": "",
+              "containerSrc": ""
+            }
+          ]
+        },
+        "topLongTasks": [
+          {
+            "name": "self",
+            "duration": 221,
+            "startTime": 426.8,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          },
+          {
+            "name": "self",
+            "duration": 150,
+            "startTime": 106.2,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          }
+        ],
+        "longTaskError": null
+      }
+    ],
+    "median": {
+      "canvasMs": 377,
+      "longestLongTaskMs": 221,
+      "bundleDurationMs": 56.2,
+      "scrollFps": 114.8
+    }
+  },
+  {
+    "label": "large-50k",
+    "path": "/Users/nothing/workspace/dsh/genoffice/docs/genoffice-sheets-web-fix/evidence/benchmark/fixtures/large-50k-rows.xlsx",
+    "runs": [
+      {
+        "label": "large-50k",
+        "canvasMs": 376,
+        "fps": {
+          "frames": 231,
+          "ms": 2006,
+          "fps": 115.2
+        },
+        "nav": {
+          "type": "navigate",
+          "startTime": 0,
+          "fetchStart": 3,
+          "responseEnd": 5,
+          "domInteractive": 9,
+          "domContentLoaded": 255,
+          "loadEventEnd": 256,
+          "transferSize": 1012,
+          "duration": 256
+        },
+        "bundle": {
+          "name": "index-DpoDUAoR.js",
+          "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+          "duration": 58.1,
+          "transferSize": 10000440,
+          "encodedBodySize": 10000140,
+          "decodedBodySize": 10000140,
+          "initiatorType": "script"
+        },
+        "jsResources": [
+          {
+            "name": "index-DpoDUAoR.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+            "duration": 58.1,
+            "transferSize": 10000440,
+            "encodedBodySize": 10000140,
+            "decodedBodySize": 10000140,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-BRtMYtNc.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-BRtMYtNc.js",
+            "duration": 1.7,
+            "transferSize": 294311,
+            "encodedBodySize": 294011,
+            "decodedBodySize": 294011,
+            "initiatorType": "script"
+          },
+          {
+            "name": "en-gb-B7Al27b_-BFFr9zKP.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/en-gb-B7Al27b_-BFFr9zKP.js",
+            "duration": 1.1,
+            "transferSize": 105679,
+            "encodedBodySize": 105379,
+            "decodedBodySize": 105379,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DEieJF9n.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DEieJF9n.js",
+            "duration": 6.4,
+            "transferSize": 11316,
+            "encodedBodySize": 11016,
+            "decodedBodySize": 11016,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DXbDGSge.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DXbDGSge.js",
+            "duration": 6.2,
+            "transferSize": 3813,
+            "encodedBodySize": 3513,
+            "decodedBodySize": 3513,
+            "initiatorType": "script"
+          }
+        ],
+        "longTaskCount": 2,
+        "longTaskSum": 206,
+        "longestLongTask": {
+          "name": "self",
+          "duration": 144,
+          "startTime": 111.5,
+          "attribution": [
+            {
+              "containerType": "window",
+              "containerName": "",
+              "containerSrc": ""
+            }
+          ]
+        },
+        "topLongTasks": [
+          {
+            "name": "self",
+            "duration": 144,
+            "startTime": 111.5,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          },
+          {
+            "name": "self",
+            "duration": 62,
+            "startTime": 267.6,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          }
+        ],
+        "longTaskError": null
+      },
+      {
+        "label": "large-50k",
+        "canvasMs": 380,
+        "fps": {
+          "frames": 232,
+          "ms": 2012,
+          "fps": 115.3
+        },
+        "nav": {
+          "type": "navigate",
+          "startTime": 0,
+          "fetchStart": 0,
+          "responseEnd": 2,
+          "domInteractive": 6,
+          "domContentLoaded": 260,
+          "loadEventEnd": 260,
+          "transferSize": 1012,
+          "duration": 260
+        },
+        "bundle": {
+          "name": "index-DpoDUAoR.js",
+          "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+          "duration": 59.4,
+          "transferSize": 10000440,
+          "encodedBodySize": 10000140,
+          "decodedBodySize": 10000140,
+          "initiatorType": "script"
+        },
+        "jsResources": [
+          {
+            "name": "index-DpoDUAoR.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+            "duration": 59.4,
+            "transferSize": 10000440,
+            "encodedBodySize": 10000140,
+            "decodedBodySize": 10000140,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-BRtMYtNc.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-BRtMYtNc.js",
+            "duration": 1.7,
+            "transferSize": 294311,
+            "encodedBodySize": 294011,
+            "decodedBodySize": 294011,
+            "initiatorType": "script"
+          },
+          {
+            "name": "en-gb-B7Al27b_-BFFr9zKP.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/en-gb-B7Al27b_-BFFr9zKP.js",
+            "duration": 0.9,
+            "transferSize": 105679,
+            "encodedBodySize": 105379,
+            "decodedBodySize": 105379,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DEieJF9n.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DEieJF9n.js",
+            "duration": 6.4,
+            "transferSize": 11316,
+            "encodedBodySize": 11016,
+            "decodedBodySize": 11016,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DXbDGSge.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DXbDGSge.js",
+            "duration": 6,
+            "transferSize": 3813,
+            "encodedBodySize": 3513,
+            "decodedBodySize": 3513,
+            "initiatorType": "script"
+          }
+        ],
+        "longTaskCount": 2,
+        "longTaskSum": 210,
+        "longestLongTask": {
+          "name": "self",
+          "duration": 147,
+          "startTime": 112.8,
+          "attribution": [
+            {
+              "containerType": "window",
+              "containerName": "",
+              "containerSrc": ""
+            }
+          ]
+        },
+        "topLongTasks": [
+          {
+            "name": "self",
+            "duration": 147,
+            "startTime": 112.8,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          },
+          {
+            "name": "self",
+            "duration": 63,
+            "startTime": 271.6,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          }
+        ],
+        "longTaskError": null
+      },
+      {
+        "label": "large-50k",
+        "canvasMs": 380,
+        "fps": {
+          "frames": 233,
+          "ms": 2008,
+          "fps": 116
+        },
+        "nav": {
+          "type": "navigate",
+          "startTime": 0,
+          "fetchStart": 3,
+          "responseEnd": 5,
+          "domInteractive": 9,
+          "domContentLoaded": 258,
+          "loadEventEnd": 258,
+          "transferSize": 1012,
+          "duration": 258
+        },
+        "bundle": {
+          "name": "index-DpoDUAoR.js",
+          "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+          "duration": 58.2,
+          "transferSize": 10000440,
+          "encodedBodySize": 10000140,
+          "decodedBodySize": 10000140,
+          "initiatorType": "script"
+        },
+        "jsResources": [
+          {
+            "name": "index-DpoDUAoR.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/index-DpoDUAoR.js",
+            "duration": 58.2,
+            "transferSize": 10000440,
+            "encodedBodySize": 10000140,
+            "decodedBodySize": 10000140,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-BRtMYtNc.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-BRtMYtNc.js",
+            "duration": 1.7,
+            "transferSize": 294311,
+            "encodedBodySize": 294011,
+            "decodedBodySize": 294011,
+            "initiatorType": "script"
+          },
+          {
+            "name": "en-gb-B7Al27b_-BFFr9zKP.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/en-gb-B7Al27b_-BFFr9zKP.js",
+            "duration": 1.1,
+            "transferSize": 105679,
+            "encodedBodySize": 105379,
+            "decodedBodySize": 105379,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DEieJF9n.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DEieJF9n.js",
+            "duration": 6.5,
+            "transferSize": 11316,
+            "encodedBodySize": 11016,
+            "decodedBodySize": 11016,
+            "initiatorType": "script"
+          },
+          {
+            "name": "zh-CN-DXbDGSge.js",
+            "url": "http://127.0.0.1:8787/sheets/assets/zh-CN-DXbDGSge.js",
+            "duration": 6.2,
+            "transferSize": 3813,
+            "encodedBodySize": 3513,
+            "decodedBodySize": 3513,
+            "initiatorType": "script"
+          }
+        ],
+        "longTaskCount": 1,
+        "longTaskSum": 143,
+        "longestLongTask": {
+          "name": "self",
+          "duration": 143,
+          "startTime": 114.1,
+          "attribution": [
+            {
+              "containerType": "window",
+              "containerName": "",
+              "containerSrc": ""
+            }
+          ]
+        },
+        "topLongTasks": [
+          {
+            "name": "self",
+            "duration": 143,
+            "startTime": 114.1,
+            "attribution": [
+              {
+                "containerType": "window",
+                "containerName": "",
+                "containerSrc": ""
+              }
+            ]
+          }
+        ],
+        "longTaskError": null
+      }
+    ],
+    "median": {
+      "canvasMs": 380,
+      "longestLongTaskMs": 144,
+      "bundleDurationMs": 58.2,
+      "scrollFps": 115.3
+    }
+  }
+]

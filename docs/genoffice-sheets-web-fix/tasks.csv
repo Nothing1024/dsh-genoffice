@@ -1,0 +1,14 @@
+序号,Phase,名称,详情锚点,前置任务,验证命令,状态,备注
+1,P0:基线与复现,启动本地web版并复现布局截断问题,spec.md#task-1-启动本地-web-版并复现布局截断问题,无,截图能看到 control=1 下死区约360px → 复现成功,已完成,800px 视口 grid 360+540 唯一子节点进第一列 右侧死区≈350px
+2,P0:基线与复现,确认修复实现方式并记录设计决策,spec.md#task-2-确认修复实现方式并记录设计决策,1,设计决策文档写清方案选择与UF-003影响推理,已完成,选定方案B单列校正 否决A（A会把唯一子节点压进34px轨道）
+3,P0:基线与复现,执行Phase 0回归验证,spec.md#task-3-执行-phase-0-回归验证,1;2,evidence/phase-0/ 复现截图+设计决策文档齐全,已完成,repro-control-mode.png repro-non-control.png design-decision.md summary.md 齐全
+4,P1:布局修复,实现isCopilotOpen控制模式感知修复,spec.md#task-4-实现-iscopilotopenclass-的控制模式感知修复,3,npm run typecheck -w @genoffice/sheets → 通过,已完成,方案B已落地 typecheck+web:build 通过 未改 isCopilotOpen 初值
+5,P1:布局修复,真实场景验证控制模式下表格铺满宽度,spec.md#task-5-真实场景验证控制模式下表格铺满宽度uf-001uf-002,4,两个宽度点表格铺满容器且console无error,已完成,700/900 leftover=0；500/1100 无360死区；console 空
+6,P1:布局修复,真实场景验证非控制模式无回归,spec.md#task-6-真实场景验证非控制模式无回归uf-003,4,三态截图与修复前一致,已完成,默认360+540 / 收起34+866 / 再展开还原；无 control-mode class
+7,P1:布局修复,执行Phase 1回归验证,spec.md#task-7-执行-phase-1-回归验证,4;5;6,typecheck通过+UF-001/002/003 evidence齐全,已完成,typecheck+build 绿；三组 UF evidence 齐全
+8,P2:性能基线与优化,准备大体量xlsx性能测试夹具,spec.md#task-8-准备大体量-xlsx-性能测试夹具,7,生成的大文件可在web版正常打开,已完成,10k×5 189KB 可打开；另产 50k 夹具 981KB
+9,P2:性能基线与优化,采集性能基线,spec.md#task-9-采集性能基线冷启动打开耗时主线程阻塞,8,baseline.md含冷启动/打开/LongTask三项数字,已完成,首包9.54MB/57ms 打开377-388ms 最长LT~200ms window归属
+10,P2:性能基线与优化,基于基线选定并实现一项可行优化或记录暂不做,spec.md#task-10-基于基线选定并实现一项可行的优化或明确记录暂不做,9,before-after.md或decision.md产出+compat通过(若改动),已完成,暂不做：最大瓶颈是9.54MB主包eval而非matchAll 见decision.md
+11,P2:性能基线与优化,执行Phase 2回归验证,spec.md#task-11-执行-phase-2-回归验证,8;9;10,benchmark证据齐全+typecheck/compat通过(若涉及),已完成,baseline+decision+fixture+trace 齐全；无解析改动故不跑compat
+12,P3:端到端验收,执行spec 5.2真实场景全套测试,spec.md#task-12-执行-spec-52-真实场景全套测试,7;11,执行矩阵全行通过,已完成,矩阵 6/6 布局行 + UF-004 基线/决策/夹具 全通过
+13,P3:端到端验收,执行Phase 3回归验证,spec.md#task-13-执行-phase-3-回归验证,12,typecheck全绿+5.4清单通过+validate_package.py 0 FAIL,已完成,typecheck EXIT0；5.4 全勾；validate_package 0 FAIL 0 WARN 13 PASS

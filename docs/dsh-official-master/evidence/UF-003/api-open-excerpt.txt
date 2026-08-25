@@ -1,0 +1,41 @@
+# /api/open + /api/open/stream confirmed in upstream/web/server.mjs
+
+rg /api/open:
+813:  if (req.method === 'GET' && pathname === '/api/open/stream') {
+834:  if (req.method === 'POST' && pathname === '/api/open') {
+
+----- excerpt -----
+  if (req.method === 'GET' && pathname === '/api/open/stream') {
+    if (openStreams.size >= MAX_OPEN_STREAMS) return json(res, 503, { ok: false, error: 'too many open-stream subscribers' })
+    const corsOrigin = req.headers.origin ?? ''
+    const sseHeaders = {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+    }
+    if (corsOrigin && /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(corsOrigin)) {
+      sseHeaders['Access-Control-Allow-Origin'] = corsOrigin
+    }
+    res.writeHead(200, sseHeaders)
+    res.write(`event: hello\ndata: {}\n\n`)
+    openStreams.add(res)
+    const ping = setInterval(() => {
+      try { res.write(`event: ping\ndata: {}\n\n`) } catch { clearInterval(ping); openStreams.delete(res) }
+    }, PING_MS)
+    req.on('close', () => { clearInterval(ping); openStreams.delete(res) })
+    return
+  }
+
+  if (req.method === 'POST' && pathname === '/api/open') {
+    if (!ALLOW_ABS_PATHS || !isLoopbackRequest(req)) return json(res, 403, { ok: false, error: 'loopback only' })
+    const target = typeof body.path === 'string' ? body.path : ''
+    if (!isAbsolute(target)) return json(res, 400, { ok: false, error: 'path must be absolute' })
+    try { await stat(target) } catch { return json(res, 200, { ok: false, error: 'file not found' }) }
+    const dead = []
+    for (const s of openStreams) {
+      try { s.write(`event: file\ndata: ${JSON.stringify({ path: target })}\n\n`) }
+      catch { dead.push(s) }
+    }
+    for (const s of dead) openStreams.delete(s)
+    return json(res, 200, { ok: true, path: target, subscribers: openStreams.size })
+  }

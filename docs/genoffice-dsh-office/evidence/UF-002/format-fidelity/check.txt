@@ -1,0 +1,6 @@
+# UF-002 格式保真（BR-009）
+写回产物: ~/Downloads/genoffice-e2e/demo.pptx（agent pptx_save）
+- zip 完整性: OK
+- 编辑点: ppt/slides/slide2.xml 文本 = ['已由 DSH 修改', '']（第 2 页标题改写）
+- 未编辑页: slide1.xml 与写回前 fixture 字节一致（byte-equal）
+- 结论: 元素级补丁保存（pptx-engine element-patch），版式/未编辑页不破坏

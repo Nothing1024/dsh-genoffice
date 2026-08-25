@@ -1,0 +1,7 @@
+# UF-003 格式保真（BR-009）
+写回产物: ~/Downloads/genoffice-e2e/demo.pdf（agent pdf_save）
+- macOS QuickLook（qlmanage）渲染成功（真实 PDF 渲染器可打开）
+- 文本 run 对比（内容流 UTF-16BE hex 解码）: 第 1 页 wrong → right；其余 run 不变
+- 未标注页面（第 2 页 'Page Two'）内容不变
+- 标注 appearance stream 独立于内容流（/GsM gs 1 0.87 0.35 rg ... re f）
+- 结论: 标注合并 + 文本改写后未标注内容保持

@@ -1,0 +1,10 @@
+# UF-001 create with gateway :3080 UP
+date: 2026-08-19T01:27:27Z
+gateway: 200
+cmd: DSH_HOME=env node packages/session-tool-cli/lib/bin.js session create --profile st --title sm-wf --tag kind:vibee --tag plan --format json
+
+dsh-session: ENOENT: no such file or directory, open '/Users/nothing/workspace/dsh/plugin/session-tool/env/session-tool-env/apps/cli/package.json'
+exit=1
+
+## marks.jsonl
+ABSENT

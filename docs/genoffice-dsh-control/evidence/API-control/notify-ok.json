@@ -1,0 +1,9 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8787/api/control/notify",
+    "body": {"docId": "<64hex: sha256(/tmp/test-doc.md)>", "kind": "tool-result", "requestId": "r1", "payload": {"output": "hello", "isError": false, "summary": "t"}}
+  },
+  "response": {"ok": true},
+  "note": "docId 已注册（SSE 连接打开中）→ ok:true"
+}

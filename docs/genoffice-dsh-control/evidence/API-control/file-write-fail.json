@@ -1,0 +1,5 @@
+{
+  "request": {"method": "POST", "url": "http://127.0.0.1:8787/api/file", "body": {"path": "/tmp/no-such-dir-xyz/file.bin", "base64": "<bytes>"}},
+  "response": {"ok": false, "error": "parent directory does not exist: /tmp/no-such-dir-xyz"},
+  "note": "BR-004：目标不可写 → ok:false，原文件字节不变"
+}

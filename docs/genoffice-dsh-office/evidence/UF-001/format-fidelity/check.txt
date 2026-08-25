@@ -1,0 +1,6 @@
+# UF-001 格式保真（BR-009）
+写回产物: ~/Downloads/genoffice-e2e/demo.xlsx（agent xlsx_save）
+- zip 完整性: OK（python zipfile.testzip）
+- 编辑点: B11=<f>SUM(B1:B10)</f>；B1 s=2 + <xf numFmtId="2" applyNumberFormat="1"/>（内置 0.00）
+- 未编辑条目字节一致: [Content_Types].xml / customXml/item1.xml / xl/charts/chart1.xml 与生成 fixture cmp 相同（无变化）
+- 结论: 重打包仅改 touched entries，可被桌面版/Office 打开（结构完整 + 标准 OOXML）

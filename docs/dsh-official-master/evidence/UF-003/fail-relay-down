@@ -1,0 +1,5 @@
+# UF-003 fail-relay-down (port 18787 not listening)
+date: 2026-08-19T01:21:37Z
+curl: (7) Failed to connect to 127.0.0.1 port 18787 after 0 ms: Couldn't connect to server
+
+exit=0
