@@ -5,7 +5,7 @@
  *   node scripts/dev.mjs status         relay / DSH 实例健康检查（默认命令）
  *   node scripts/dev.mjs start-relay    确保 :8787 relay 在跑（不在则拉起，日志 /tmp/genoffice-web.log）
  *   node scripts/dev.mjs smoke          对运行中的 relay 跑契约形状断言 + 跨侧镜像一致性
- *   node scripts/dev.mjs open <path> [--no-browser]   转发给 upstream/web/open.mjs
+ *   node scripts/dev.mjs open <path> [--no-browser]   转发给 engine/web/open.mjs
  *
  * 契约断言与 contracts/ 目录保持一致（relay-api.md / events.md）；接口改动先改
  * contracts/ 再改两侧源码，最后跑 smoke 验证。
@@ -20,7 +20,7 @@ import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
-const UPSTREAM = join(ROOT, '../upstream')
+const UPSTREAM = join(ROOT, '../engine')
 const RELAY_BASE = 'http://127.0.0.1:8787'
 const DSH_URL = 'http://127.0.0.1:3080'
 const LOG_FILE = '/tmp/genoffice-web.log'
@@ -54,7 +54,7 @@ async function startRelay() {
       return
     }
   }
-  console.error('[dev] relay 启动超时 — 手动跑: cd upstream && node web/server.mjs')
+  console.error('[dev] relay 启动超时 — 手动跑: cd ../engine && node web/server.mjs')
   process.exit(1)
 }
 

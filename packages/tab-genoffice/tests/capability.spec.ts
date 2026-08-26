@@ -11,9 +11,7 @@ const fakeAssets = {
   publish: async () => ({ url: 'http://127.0.0.1:9/dsh-artifact/genoffice-asset/t', token: 't', dispose: () => {} }),
 }
 
-const UP_SIBLING = resolve(import.meta.dirname, '../../../../upstream')
-const UP_STACK = resolve(import.meta.dirname, '../../../../../../genoffice/upstream')
-const UP = existsSync(UP_SIBLING) ? UP_SIBLING : UP_STACK
+const UP = resolve(import.meta.dirname, '../../../../engine')
 
 const ASSET_GATED = ['docx_insert_image', 'pdf_insert_image', 'pdf_replace_image'] as const
 const OPEN_TOOLS = ['pptx_open', 'docx_open', 'xlsx_open', 'md_open', 'pdf_open'] as const

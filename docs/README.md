@@ -9,7 +9,7 @@
 | relay 健康 | `node scripts/dev.mjs status`（或 `curl http://localhost:8787/api/health`） |
 | 契约冒烟 | `node scripts/dev.mjs smoke` |
 | 预览本地文件 | `node scripts/dev.mjs open <path> [--no-browser]` |
-| web-dist 构建 | `cd ../upstream && npm run web` |
+| web-dist 构建 | `cd ../engine && npm run web` |
 | 插件构建 | `pnpm install && pnpm run build`（本仓根） |
 | DSH | `npx --yes @deepseek-ai/dsh web` → http://127.0.0.1:3080 |
 

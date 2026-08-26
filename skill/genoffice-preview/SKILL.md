@@ -9,8 +9,8 @@ description: Use when the user asks to preview, open, view, or quickly edit a lo
 
 ## 前置
 
-- GenOffice 产品仓在 `/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin`（魔改上游在并列的 `../upstream`）
-- 需要 Node ≥ 22（零依赖，无需构建即可跑 relay；首次使用前若 `upstream/apps/*/web-dist` 不存在，需先 `npm run web` 构建一次）
+- GenOffice 产品仓在 `/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin`（魔改引擎在并列的 `../engine`）
+- 需要 Node ≥ 22（零依赖，无需构建即可跑 relay；首次使用前若 `engine/apps/*/web-dist` 不存在，需先 `npm run web` 构建一次）
 - 浏览器建议 Chrome / Edge（File System Access API 完整支持）
 
 ## 步骤
@@ -22,7 +22,7 @@ node /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/scripts/dev.mjs st
 ```
 
 （等价于手工 `curl -s http://localhost:8787/api/health`，不在则
-`cd /Users/nothing/workspace/dsh/plugin/dsh-genoffice/upstream && node web/server.mjs`。）
+`cd /Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine && node web/server.mjs`。）
 
 ### 2. 打开文件（任选一种）
 
@@ -53,6 +53,6 @@ loopback 时可用；若 relay 以 `HOST=0.0.0.0` 暴露到网络，需设 `GENO
 - 仅支持 `.docx`（AI Docs）和 `.md`（AI Markdown）；xlsx/pptx/pdf 会提示"仅桌面版可用"。
 - 文件超过 50MB 会被拒绝。
 - 若返回 404/空白页，先确认 relay 已启动（`curl http://localhost:8787/api/health`）且
-  `apps/*/web-dist` 已构建（`cd upstream && npm run web`）。
+  `apps/*/web-dist` 已构建（`cd ../engine && npm run web`）。
 - 接口契约与排查手册见 `/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/README.md` 与
   `contracts/`。

@@ -1,6 +1,6 @@
 # dsh-genoffice — 产品仓
 
-DSH 侧栏插件 + 跨侧契约 + 启动/冒烟脚本。魔改 GenOffice 本体在并列目录 `../upstream`（独立 git，origin = genspark-ai/genoffice），不要把上游 commit 进本仓。
+DSH 侧栏插件 + 跨侧契约 + 启动/冒烟脚本。魔改 GenOffice 引擎在并列目录 `../engine`（独立 git，origin = `Nothing1024/dsh-genoffice-engine`；官方在 remote `upstream` = `genspark-ai/genoffice`），不要把引擎 commit 进本仓。
 
 钉正式 npm：`@deepseek-ai/dsh-*@0.1.0-rc.7`，`dsh-better-sidebar@0.13.0`（optional peer `^0.13.0`）。不要 `latest`，不要 `vendor/dsh` / worktree `file:`。
 
@@ -31,7 +31,7 @@ sh env/setup.sh
 sh env/boot.sh            # loopback :3080
 ```
 
-构建上游 web-dist：`cd ../upstream && npm run web`。
+构建引擎 web-dist：`cd ../engine && npm run web`。
 
 调试网关内部状态用 `dsh-plugin-debug` skill：`~/.agents/skills/dsh-plugin-debug/scripts/dsh-rpc.sh 3080 pluginInventory/list`。
 
