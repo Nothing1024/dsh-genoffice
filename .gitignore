@@ -9,10 +9,16 @@ coverage/
 # logs
 *.log
 
-# local DSH_HOME (loopback profile). Never commit secrets.
+# local DSH_HOME (loopback profile). Recipe files are tracked; runtime is not.
 env/.env
 env/.credentials.yaml
 env/.anonymous-user-id
+env/sessions/
+env/storages/
+env/settings.yaml
+env/attachments/
+env/profiles/*/node_modules/
+env/profiles/*/pnpm-lock.yaml
 
 # Finder
 .DS_Store

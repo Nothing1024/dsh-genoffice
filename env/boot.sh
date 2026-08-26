@@ -8,4 +8,5 @@ if [ ! -d "$ROOT/profiles/go/node_modules/@deepseek-ai/dsh-base" ]; then
   exit 1
 fi
 export DSH_HOME="$ROOT"
+export DSH_GENOFFICE_ROOT="$(CDPATH='' cd -- "$ROOT/.." && pwd)"
 exec npx --yes @deepseek-ai/dsh@0.1.0-rc.7 --profile go --port 3080 "$@"

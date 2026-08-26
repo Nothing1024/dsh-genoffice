@@ -9,7 +9,7 @@ description: Use when the user asks to preview, open, view, or quickly edit a lo
 
 ## 前置
 
-- GenOffice 产品仓在 `/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin`（兼容入口 `/Users/nothing/workspace/dsh/genoffice`；魔改上游在并列的 `../upstream`）
+- GenOffice 产品仓在 `/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin`（魔改上游在并列的 `../upstream`）
 - 需要 Node ≥ 22（零依赖，无需构建即可跑 relay；首次使用前若 `upstream/apps/*/web-dist` 不存在，需先 `npm run web` 构建一次）
 - 浏览器建议 Chrome / Edge（File System Access API 完整支持）
 
@@ -18,7 +18,7 @@ description: Use when the user asks to preview, open, view, or quickly edit a lo
 ### 1. 确认/启动 relay
 
 ```bash
-node /Users/nothing/workspace/dsh/genoffice/scripts/dev.mjs start-relay
+node /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/scripts/dev.mjs start-relay
 ```
 
 （等价于手工 `curl -s http://localhost:8787/api/health`，不在则
@@ -29,7 +29,7 @@ node /Users/nothing/workspace/dsh/genoffice/scripts/dev.mjs start-relay
 **方式 A — CLI 注入（最稳，不依赖路径读取开关）：**
 
 ```bash
-node /Users/nothing/workspace/dsh/genoffice/scripts/dev.mjs open <文件的绝对或相对路径>
+node /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/scripts/dev.mjs open <文件的绝对或相对路径>
 ```
 
 会自动用系统默认浏览器打开对应编辑器标签页（`.docx` → `/docs/`，`.md` → `/markdown/`）。
@@ -54,5 +54,5 @@ loopback 时可用；若 relay 以 `HOST=0.0.0.0` 暴露到网络，需设 `GENO
 - 文件超过 50MB 会被拒绝。
 - 若返回 404/空白页，先确认 relay 已启动（`curl http://localhost:8787/api/health`）且
   `apps/*/web-dist` 已构建（`cd upstream && npm run web`）。
-- 接口契约与排查手册见栈根 `/Users/nothing/workspace/dsh/genoffice/README.md` 与
+- 接口契约与排查手册见 `/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/README.md` 与
   `contracts/`。

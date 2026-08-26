@@ -4,9 +4,7 @@ DSH 侧栏插件 + 跨侧契约 + 启动/冒烟脚本。魔改 GenOffice 本体�
 
 钉正式 npm：`@deepseek-ai/dsh-*@0.1.0-rc.7`，`dsh-better-sidebar@0.13.0`（optional peer `^0.13.0`）。不要 `latest`，不要 `vendor/dsh` / worktree `file:`。
 
-仓内 `env/` 是 loopback `DSH_HOME`（profile `go`，:3080），不要提交凭据。
-
-`~/workspace/dsh/genoffice` 指向本目录，旧命令继续可用。
+仓内 `env/` 是 loopback `DSH_HOME`（profile `go`，:3080），不要提交凭据。`boot.sh` 会把 `DSH_GENOFFICE_ROOT` 指到本仓根。
 
 ## 目录
 
@@ -17,7 +15,7 @@ DSH 侧栏插件 + 跨侧契约 + 启动/冒烟脚本。魔改 GenOffice 本体�
 ├── scripts/dev.mjs           # status / start-relay / smoke / open
 ├── docs/                     # 活文档 + 历史任务包
 ├── skill/genoffice-preview/
-└── env/                      # 本机 DSH_HOME，不进 git
+└── env/                      # 配方进 git；凭据 / sessions / storages 不进
 ```
 
 ## 日常
@@ -39,5 +37,5 @@ sh env/boot.sh            # loopback :3080
 
 ## Relay 一键启动
 
-设置 `DSH_GENOFFICE_ROOT` 为本仓根目录（且 `<root>/scripts/dev.mjs` 可读）后，插件 host 路由 `GET/POST /dsh-artifact/genoffice-relay` 可用，侧栏在 relay 不可用时显示「启动 relay」。未设置该环境变量则只保留手动命令 `node scripts/dev.mjs start-relay`。
+`env/boot.sh` 会设置 `DSH_GENOFFICE_ROOT` 为本仓根（且 `<root>/scripts/dev.mjs` 可读）。之后插件 host 路由 `GET/POST /dsh-artifact/genoffice-relay` 可用，侧栏在 relay 不可用时显示「启动 relay」。未设置该环境变量则只保留手动命令 `node scripts/dev.mjs start-relay`。不要再走已删除的 `~/workspace/dsh/genoffice`。
 
