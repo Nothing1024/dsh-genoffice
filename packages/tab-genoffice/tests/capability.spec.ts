@@ -198,6 +198,7 @@ describe('dsh web_search exists', () => {
 describe('host apply without webServer', () => {
   it('does not throw', () => {
     const ctx = {
+      effect: vi.fn((fn: () => unknown) => { fn() }),
       inject: vi.fn(() => {}),
       tools: { register: vi.fn() },
     }

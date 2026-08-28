@@ -3,6 +3,7 @@
  * Catalog shows name + description; the body loads only after `skill dsh-genoffice`.
  */
 import type { Context } from '@deepseek-ai/cordis'
+import { acquireFromCordis, type CordisLike } from '../standard/cordis-acquire.ts'
 import { lookupSkills, type SkillsService } from './lookup.ts'
 
 export const GENOFFICE_SKILL_NAME = 'dsh-genoffice'
@@ -40,18 +41,16 @@ export const GENOFFICE_SKILL_CONTENT = [
   '若报 `executor not registered` 或「尚未在控制模式打开」，只再调用一次对应 `*_open` 并等待成功。不要改走脚本。',
 ].join('\n')
 
+/** cordis 形态的旧入口（标准路径在 src/standard/host.ts 经 SkillRegistry 句柄）。 */
 export function applySkill(ctx: Context): void {
-  const mount = (skills: SkillsService): (() => void) =>
-    skills.register({
-      name: GENOFFICE_SKILL_NAME,
-      description: GENOFFICE_SKILL_DESCRIPTION,
-      content: GENOFFICE_SKILL_CONTENT,
-      source: 'runtime',
-    })
-  const existing = lookupSkills(ctx)
-  if (existing !== undefined) {
-    ctx.effect(() => mount(existing))
-    return
-  }
-  ctx.inject(['skills'], (c) => mount((c as Context & { skills: SkillsService }).skills))
+  acquireFromCordis<SkillsService>(
+    ctx as unknown as CordisLike,
+    () => lookupSkills(ctx),
+    'skills',
+  )((skills) => skills.register({
+    name: GENOFFICE_SKILL_NAME,
+    description: GENOFFICE_SKILL_DESCRIPTION,
+    content: GENOFFICE_SKILL_CONTENT,
+    source: 'runtime',
+  }))
 }

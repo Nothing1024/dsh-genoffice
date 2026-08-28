@@ -27,7 +27,7 @@ describe('saveViaRelay', () => {
       ok: true,
       json: async () => ({ ok: true, path: '/tmp/a.docx', mtimeMs: 123 }),
     })))
-    const result = await saveTool().execute({ path: '/tmp/a.docx' }, exec)
+    const result = await saveTool().execute({ path: '/tmp/a.docx' }, exec) as { output: string }
     expect(result.output).toMatch(/已保存到/)
     expect(isInSyncWindow('/tmp/a.docx')).toBe(false)
   })
@@ -48,7 +48,7 @@ describe('saveViaRelay', () => {
       return { ok: true, json: async () => ({ ok: true, path: '/tmp/b.docx', mtimeMs: 1 }) }
     })
     vi.stubGlobal('fetch', fetch)
-    const result = await saveTool().execute({ path: '/tmp/a.docx', save_as: '/tmp/b.docx' }, exec)
+    const result = await saveTool().execute({ path: '/tmp/a.docx', save_as: '/tmp/b.docx' }, exec) as { output: string }
     expect(result.output).toBe('已另存为 /tmp/b.docx')
     expect(isInSyncWindow('/tmp/a.docx')).toBe(false)
   })

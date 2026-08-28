@@ -5,13 +5,19 @@
   "version": "0.2.0",
   "manifestVersion": "0.15",
   "facets": {
-    "host": { "entry": "lib/index.js", "apiVersion": "v1alpha1" }
+    "host": { "entry": "lib/standard/host.js", "apiVersion": "v1alpha1" }
   },
   "requires": {
     "contracts": [
       { "apiVersion": "x-nothing1024.dsh.tools/v1alpha1", "kind": "ToolRegistry" },
+      { "apiVersion": "x-nothing1024.dsh.system-prompt/v1alpha1", "kind": "SystemPrompt", "optional": true },
+      { "apiVersion": "x-nothing1024.dsh.skills/v1alpha1", "kind": "SkillRegistry", "optional": true },
+      { "apiVersion": "x-nothing1024.dsh.web-server/v1alpha1", "kind": "WebServer", "optional": true },
       { "apiVersion": "x-nothing1024.better-sidebar/v1alpha1", "kind": "SidebarTab", "optional": true }
     ]
   },
-  "permissions": []
+  "permissions": [
+    "x-nothing1024.net.loopback-fetch",
+    "x-nothing1024.process.spawn"
+  ]
 }

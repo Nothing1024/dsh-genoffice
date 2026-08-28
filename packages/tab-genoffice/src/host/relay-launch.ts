@@ -1,14 +1,12 @@
 /**
  * Host route that can spawn the GenOffice relay from a configured checkout.
- * Modeled on sync.ts: loopback origin, exact path, optional webServer inject.
+ * Modeled on sync.ts: loopback origin, exact path. Route mounting lives in
+ * the standard host facet (src/standard/host.ts).
  */
 import { spawn } from 'node:child_process'
 import { accessSync, constants } from 'node:fs'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { join } from 'node:path'
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-host-webserver'
-import { lookupWebServer } from './lookup.ts'
 
 export const RELAY_LAUNCH_ROUTE = '/dsh-artifact/genoffice-relay'
 const HEALTH = 'http://localhost:8787/api/health'
@@ -93,22 +91,6 @@ export async function handleRelayLaunchRequest(req: IncomingMessage, res: Server
     return
   }
   writeJson(res, 200, await spawnRelay())
-}
-
-export function applyRelayLaunchRoute(ctx: Context): void {
-  const mount = (http: Context['webServer']): (() => void) => {
-    return http.register({
-      kind: 'exact',
-      path: RELAY_LAUNCH_ROUTE,
-      handler: (req, res) => { void handleRelayLaunchRequest(req, res) },
-    })
-  }
-  const existing = lookupWebServer(ctx)
-  if (existing !== undefined) {
-    ctx.effect(() => mount(existing))
-    return
-  }
-  ctx.inject(['webServer'], (c) => mount(c.webServer))
 }
 
 /** Test helper. */

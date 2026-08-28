@@ -68,6 +68,10 @@ describe('asset channel', () => {
   it('createAssetChannel without webServer does not throw', () => {
     const ctx = { inject: vi.fn(() => {}) }
     expect(() => createAssetChannel(ctx as never)).not.toThrow()
-    expect(() => applyHost({ inject: vi.fn(() => {}), tools: { register: vi.fn() } } as never)).not.toThrow()
+    expect(() => applyHost({
+      effect: vi.fn((fn: () => unknown) => { fn() }),
+      inject: vi.fn(() => {}),
+      tools: { register: vi.fn() },
+    } as never)).not.toThrow()
   })
 })

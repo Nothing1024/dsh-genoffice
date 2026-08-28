@@ -4,11 +4,9 @@
  *
  * The browser posts `{ path }` to this same-origin route before remounting.
  * Host `*_save` also marks the window after a successful export.
+ * Route mounting lives in the standard host facet (src/standard/host.ts).
  */
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-host-webserver'
-import { lookupWebServer } from './lookup.ts'
 
 export const SYNC_ROUTE = '/dsh-artifact/genoffice-sync'
 export const SYNC_WINDOW_MS = 8_000
@@ -70,20 +68,4 @@ export async function handleSyncRequest(req: IncomingMessage, res: ServerRespons
   }
   markSyncWindow(path)
   res.writeHead(204).end()
-}
-
-export function applySyncRoute(ctx: Context): void {
-  const mount = (http: Context['webServer']): (() => void) => {
-    return http.register({
-      kind: 'exact',
-      path: SYNC_ROUTE,
-      handler: (req, res) => { void handleSyncRequest(req, res) },
-    })
-  }
-  const existing = lookupWebServer(ctx)
-  if (existing !== undefined) {
-    ctx.effect(() => mount(existing))
-    return
-  }
-  ctx.inject(['webServer'], (c) => mount(c.webServer))
 }

@@ -67,10 +67,13 @@ function sourceAssetPath(source: string, importer: string): string {
   return resolvePath(emitted.slice(0, boundary), 'src', emitted.slice(boundary + marker.length))
 }
 
-/** Host-half Node library: ESM entry from src, peers never bundled. */
+/** Host-half Node library: ESM entries from src, peers never bundled.
+ *  `standard/host` is the dsh-community-standard facet entry declared by
+ *  dsh-plugin.json (facets.host.entry) — cordis-free, default-exports the
+ *  facet definition. */
 const libConfig: UserConfig = {
   name: PLUGIN_ID,
-  entry: { index: 'src/index.ts' },
+  entry: { index: 'src/index.ts', 'standard/host': 'src/standard/host.ts' },
   outDir: 'lib',
   format: ['esm'],
   platform: 'neutral',

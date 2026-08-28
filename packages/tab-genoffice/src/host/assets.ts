@@ -10,6 +10,8 @@ import { extname } from 'node:path'
 import { randomUUID } from 'node:crypto'
 import type { Context } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-host-webserver'
+import { acquireFromCordis, type CordisLike } from '../standard/cordis-acquire.ts'
+import type { ServiceAcquire, WebServerLike } from '../standard/coordinates.ts'
 import { lookupWebServer } from './lookup.ts'
 
 export const ASSET_PREFIX = '/dsh-artifact/genoffice-asset'
@@ -157,36 +159,33 @@ export async function serveAsset(
 }
 
 /**
- * Prefer `reflect.get` when the service is already provided (external plugins
- * often cannot `inject()` undeclared services). Fall back to nested inject so
- * Electron compositions without webServer still load.
+ * Build the channel over a ServiceAcquire (the standard-facet seam): mounts
+ * the one-shot asset route when the web server materialises; `dispose`
+ * cancels the pending acquire or unmounts the live route.
  */
-export function createAssetChannel(ctx: Context): AssetChannel {
+export function createAssetChannelFrom(
+  acquire: ServiceAcquire<WebServerLike> | undefined,
+): AssetChannel & { dispose(): void } {
   const store = createAssetStore()
   const bind = { host: '127.0.0.1', port: 0, ready: false }
 
-  const mount = (http: Context['webServer']): (() => void) => {
-    bind.host = http.host === '0.0.0.0' ? '127.0.0.1' : http.host
-    bind.port = http.port
-    bind.ready = true
-    const disposeRoute = http.register({
-      kind: 'prefix',
-      path: ASSET_PREFIX,
-      handler: (req, res) => { void serveAsset(store, req, res) },
+  const cancel = acquire === undefined
+    ? (): void => {}
+    : acquire((http) => {
+      bind.host = http.host === '0.0.0.0' ? '127.0.0.1' : http.host
+      bind.port = http.port
+      bind.ready = true
+      const disposeRoute = http.register({
+        kind: 'prefix',
+        path: ASSET_PREFIX,
+        handler: (req, res) => { void serveAsset(store, req, res) },
+      })
+      return () => {
+        bind.ready = false
+        disposeRoute()
+        store.clear()
+      }
     })
-    return () => {
-      bind.ready = false
-      disposeRoute()
-      store.clear()
-    }
-  }
-
-  const existing = lookupWebServer(ctx)
-  if (existing !== undefined) {
-    ctx.effect(() => mount(existing))
-  } else {
-    ctx.inject(['webServer'], (c) => mount(c.webServer))
-  }
 
   return {
     get available() {
@@ -198,5 +197,22 @@ export function createAssetChannel(ctx: Context): AssetChannel {
       }
       return store.publish(absPath, { host: bind.host, port: bind.port })
     },
+    dispose() {
+      cancel()
+    },
   }
+}
+
+/**
+ * cordis 形态的旧入口：lookup 已到位的 webServer，否则嵌套 inject
+ * （Electron 组合缺 webServer 时照常装载）。
+ */
+export function createAssetChannel(ctx: Context): AssetChannel {
+  return createAssetChannelFrom(
+    acquireFromCordis<WebServerLike>(
+      ctx as unknown as CordisLike,
+      () => lookupWebServer(ctx) as WebServerLike | undefined,
+      'webServer',
+    ),
+  )
 }

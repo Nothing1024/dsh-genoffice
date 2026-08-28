@@ -6,6 +6,185 @@ window.__ModuleLoader__.load({
 		Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 		let react = require("react");
 		let react_jsx_runtime = require("react/jsx-runtime");
+		//#region src/standard/cordis-acquire.ts
+		/**
+		* 构造一个 ServiceAcquire：
+		* - 服务已到位（lookup 命中）→ 立即经 ctx.effect 挂载（disposer 归 fiber）；
+		* - 未到位 → ctx.inject 等服务出现，出现后在子 ctx 的 effect 里挂载；
+		* - 部署里永远不出现 → mount 一次都不跑（声明过的降级路径）。
+		* acquire 返回的取消函数可提前卸载；与 fiber 卸载互为幂等。
+		*/
+		function acquireFromCordis(ctx, lookup, serviceName, label = `dsh-tab-genoffice: acquire ${serviceName}`) {
+			return (mount) => {
+				let cancelled = false;
+				let unmount;
+				const runMount = (service) => {
+					if (cancelled) return () => {};
+					const off = mount(service);
+					unmount = () => {
+						unmount = void 0;
+						off();
+					};
+					return () => {
+						unmount?.();
+					};
+				};
+				const existing = lookup();
+				if (existing !== void 0) ctx.effect(() => runMount(existing), label);
+				else ctx.inject([serviceName], (child) => {
+					const service = child[serviceName];
+					const effect = child.effect;
+					if (typeof effect === "function") effect.call(child, () => runMount(service), label);
+					else runMount(service);
+				});
+				return () => {
+					cancelled = true;
+					unmount?.();
+				};
+			};
+		}
+		//#endregion
+		//#region src/standard/coordinates.ts
+		/** 客户端词典/翻译（client 半身 required）。 */
+		const LOCALE = {
+			apiVersion: "x-nothing1024.dsh.locale/v1alpha1",
+			kind: "Locale"
+		};
+		/** better-sidebar 页签与 FileViewer 槽位（client 半身 optional peer）。 */
+		const SIDEBAR_TAB = {
+			apiVersion: "x-nothing1024.better-sidebar/v1alpha1",
+			kind: "SidebarTab"
+		};
+		/** client facet 的声明镜像（RFC 0002 定案后进 manifest）。 */
+		const CLIENT_REQUIRED = [LOCALE];
+		const CLIENT_OPTIONAL = [SIDEBAR_TAB];
+		//#endregion
+		//#region src/standard/sdk.ts
+		/** facet-api §7：所有标准 API 抛出的错误必须是 StandardError。 */
+		var StandardError = class extends Error {
+			code;
+			contract;
+			constructor(code, message, contract) {
+				super(message);
+				this.name = "StandardError";
+				this.code = code;
+				if (contract !== void 0) this.contract = contract;
+			}
+		};
+		/** 坐标的规范化 key（与 standards/validate.mjs 的协商实现同构）。 */
+		function coordKey(c) {
+			return `${c.apiVersion} # ${c.kind}`;
+		}
+		/**
+		* facet 定义的品牌符号。用 Symbol.for 注册到全局符号表：装载检查器
+		* （standards/validate.mjs）和跨构建产物的消费方无需共享模块实例即可识别。
+		*/
+		const FACET_DEFINITION_BRAND = Symbol.for("dsh-community-standard.facet-definition");
+		/** facet-api §2：`export default defineFacet(setup)` 的构造器。 */
+		function defineFacet(setup) {
+			return {
+				[FACET_DEFINITION_BRAND]: true,
+				setup
+			};
+		}
+		/** 装载检查：默认导出是否是（任一构建实例的）facet 定义。 */
+		function isFacetDefinition(value) {
+			return typeof value === "object" && value !== null && value[FACET_DEFINITION_BRAND] === true && typeof value.setup === "function";
+		}
+		/**
+		* 构造一个执行 facet-api 纪律的 activation：
+		* 未声明即用 → E_CONTRACT_NOT_DECLARED；optional 缺席 get → E_CONTRACT_UNAVAILABLE；
+		* 重复发布 → E_DUPLICATE_PUBLISH；dispose 后再用 → E_WRONG_STATE。
+		*/
+		function createActivation(options) {
+			const declared = new Set(options.declared.map(coordKey));
+			const contracts = options.contracts ?? /* @__PURE__ */ new Map();
+			const publishTargets = options.publishTargets ?? /* @__PURE__ */ new Map();
+			const cleanups = [];
+			const published = /* @__PURE__ */ new Map();
+			let state = "active";
+			const assertActive = (api) => {
+				if (state !== "active") throw new StandardError("E_WRONG_STATE", `${api}：activation 已 disposed`);
+			};
+			const assertDeclared = (coordinate, api) => {
+				const key = coordKey(coordinate);
+				if (!declared.has(key)) throw new StandardError("E_CONTRACT_NOT_DECLARED", `${api}：坐标 ${key} 未在 manifest requires.contracts 声明`, coordinate);
+				return key;
+			};
+			return {
+				activation: {
+					extensions: { publish(coordinate, id, implementation) {
+						assertActive("extensions.publish");
+						const key = assertDeclared(coordinate, "extensions.publish");
+						const target = publishTargets.get(key);
+						if (target === void 0) throw new StandardError("E_CONTRACT_UNAVAILABLE", `extensions.publish：坐标 ${key} 不可用`, coordinate);
+						const publishKey = `${key} :: ${id}`;
+						if (published.has(publishKey)) throw new StandardError("E_DUPLICATE_PUBLISH", `重复发布：${publishKey}`, coordinate);
+						const off = target(id, implementation);
+						const release = () => {
+							if (!published.delete(publishKey)) return;
+							if (typeof off === "function") off();
+						};
+						published.set(publishKey, release);
+						return { dispose: release };
+					} },
+					scope: { add(dispose) {
+						assertActive("scope.add");
+						cleanups.push(dispose);
+						options.onScopeAdd?.(dispose);
+					} },
+					contracts: {
+						get(coordinate) {
+							assertActive("contracts.get");
+							const key = assertDeclared(coordinate, "contracts.get");
+							if (!contracts.has(key)) throw new StandardError("E_CONTRACT_UNAVAILABLE", `contracts.get：optional 坐标 ${key} 在本宿主缺席（用 has() 走降级路径）`, coordinate);
+							return contracts.get(key);
+						},
+						has(coordinate) {
+							assertActive("contracts.has");
+							return declared.has(coordKey(coordinate)) && contracts.has(coordKey(coordinate));
+						}
+					}
+				},
+				async dispose() {
+					if (state === "disposed") return;
+					state = "disposed";
+					for (const release of [...published.values()].reverse()) release();
+					for (const cleanup of cleanups.splice(0).reverse()) try {
+						await cleanup();
+					} catch {}
+				}
+			};
+		}
+		/**
+		* 驱动一个 facet 定义。setup 同步完成时本函数同步返回（宿主对同步插件
+		* 不引入额外微任务——capability.spec 依赖注册在 apply 返回前完成）。
+		*/
+		function runFacet(definition, activation) {
+			if (!isFacetDefinition(definition)) throw new StandardError("E_WRONG_STATE", "runFacet：默认导出不是 defineFacet 创建的 facet 定义");
+			return definition.setup(activation);
+		}
+		//#endregion
+		//#region src/standard/cordis-client-adapter.ts
+		function createClientActivation(ctx) {
+			const cordis = ctx;
+			const locale = {
+				bind: (ns) => ctx.locale.bind(ns),
+				register: (ns, dicts) => ctx.locale.register(ns, dicts)
+			};
+			/** betterSidebar 无进程内 lookup（client 运行时按 inject 供给），恒走延迟绑定。 */
+			const sidebar = { acquire: acquireFromCordis(cordis, () => void 0, "betterSidebar") };
+			return createActivation({
+				declared: [...CLIENT_REQUIRED, ...CLIENT_OPTIONAL],
+				contracts: /* @__PURE__ */ new Map([[coordKey(LOCALE), locale], [coordKey(SIDEBAR_TAB), sidebar]]),
+				onScopeAdd: (dispose) => {
+					cordis.effect(() => () => {
+						dispose();
+					}, "dsh-tab-genoffice: standard scope");
+				}
+			});
+		}
+		//#endregion
 		//#region src/tabs/icon.tsx
 		/** Shared SVG presentation props for sidebar tab icons (16px grid). */
 		const TAB_ICON_PROPS = {
@@ -223,25 +402,25 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var genoffice_module_css_default = {
-			"crumb": "p8QEMa_crumb",
-			"rowClickable": "p8QEMa_rowClickable",
-			"pathBar": "p8QEMa_pathBar",
 			"hint": "p8QEMa_hint",
-			"list": "p8QEMa_list",
-			"btnDirty": "p8QEMa_btnDirty",
-			"rowName": "p8QEMa_rowName",
-			"toolbar": "p8QEMa_toolbar",
-			"fileName": "p8QEMa_fileName",
-			"pathInput": "p8QEMa_pathInput",
-			"rowDisabled": "p8QEMa_rowDisabled",
-			"btn": "p8QEMa_btn",
-			"rowTag": "p8QEMa_rowTag",
-			"panel": "p8QEMa_panel",
-			"homeNote": "p8QEMa_homeNote",
+			"pathText": "p8QEMa_pathText",
+			"pathBar": "p8QEMa_pathBar",
 			"row": "p8QEMa_row",
-			"iframe": "p8QEMa_iframe",
+			"rowName": "p8QEMa_rowName",
+			"rowTag": "p8QEMa_rowTag",
+			"pathInput": "p8QEMa_pathInput",
+			"rowClickable": "p8QEMa_rowClickable",
+			"crumb": "p8QEMa_crumb",
+			"homeNote": "p8QEMa_homeNote",
+			"btnDirty": "p8QEMa_btnDirty",
+			"rowDisabled": "p8QEMa_rowDisabled",
+			"fileName": "p8QEMa_fileName",
+			"list": "p8QEMa_list",
+			"toolbar": "p8QEMa_toolbar",
+			"btn": "p8QEMa_btn",
+			"panel": "p8QEMa_panel",
 			"rowIcon": "p8QEMa_rowIcon",
-			"pathText": "p8QEMa_pathText"
+			"iframe": "p8QEMa_iframe"
 		};
 		//#endregion
 		//#region src/tabs/genoffice.tsx
@@ -1283,15 +1462,84 @@ window.__ModuleLoader__.load({
 		/** Dictionary namespace owned by the genoffice tab artifact. */
 		const NS = "tabs.genoffice";
 		//#endregion
-		//#region src/client/index.ts
+		//#region src/standard/client.ts
 		/**
-		* Client half of the GenOffice tab artifact: registers the file-browser tab
-		* and control-mode FileViewers (docx / xlsx / pptx) on `ctx.betterSidebar`. When the
-		* upstream service is absent the plugin still loads and skips registration
-		* (BR-003) — betterSidebar is requested via `ctx.inject` so a missing
-		* service never fail-louds the whole DSH tree.
+		* GenOffice 的 client facet 主体（dsh-community-standard 形态）。
+		*
+		* v0.15 中 `client` 是保留 facet 名（归 RFC 0002），manifest 不声明本模块；
+		* 生产路径由官方 client bundle 入口（src/client/index.ts）经
+		* cordis-client-adapter 执行同一份主体。RFC 0002 定案后，把本模块的构建
+		* 产物填进 facets.client.entry 即完成切换——主体零改动。
+		*
+		* 依赖（CLIENT_REQUIRED / CLIENT_OPTIONAL 镜像）：
+		* - Locale（required）：词典注册 + 翻译绑定；
+		* - SidebarTab（optional peer）：缺席时跳过全部 UI 注册不崩（BR-003）。
 		*/
-		/** Locale is required; betterSidebar is awaited inside apply so its absence
+		/** 全部 UI 注册（tabs + FileViewers + 全局 SSE）。返回合并卸载函数。 */
+		function mountSidebar(betterSidebar, t) {
+			const offs = [];
+			const browserTab = {
+				id: BROWSER_TAB_ID,
+				title: () => t("tab.genoffice"),
+				icon: (size) => (0, react.createElement)(GenOfficeIcon, { size }),
+				order: 20,
+				single: true,
+				component: (props) => (0, react.createElement)(GenOfficePanel, props)
+			};
+			offs.push(betterSidebar.registerTab(browserTab));
+			const fileTab = {
+				id: FILE_TAB_ID,
+				title: () => t("tab.file"),
+				icon: (size) => (0, react.createElement)(GenOfficeIcon, { size }),
+				hidden: true,
+				dedupeKey: (opened) => opened.path,
+				component: (props) => (0, react.createElement)(GenOfficeFileTab, props)
+			};
+			offs.push(betterSidebar.registerTab(fileTab));
+			for (const ext of CLAIMED_EXTS) {
+				const viewer = {
+					id: `dsh-genoffice:viewer-${ext}`,
+					title: () => `GenOffice · .${ext}`,
+					icon: (size) => (0, react.createElement)(GenOfficeIcon, { size }),
+					exts: [ext],
+					priority: 10,
+					fetchStrategy: "none",
+					component: DocxControlViewer
+				};
+				offs.push(betterSidebar.registerFileViewer(viewer));
+			}
+			const es = new EventSource(`${RELAY_BASE}/api/open/stream`);
+			es.addEventListener("file", (ev) => {
+				try {
+					const data = JSON.parse(ev.data);
+					const activeSessionId = betterSidebar.getSnapshot?.().sessionId;
+					const next = fileOpenOnThisPage(data, activeSessionId);
+					if (next === void 0) return;
+					betterSidebar.openTab(next.seed);
+				} catch {}
+			});
+			offs.push(() => {
+				es.close();
+			});
+			return () => {
+				for (const off of offs.splice(0).reverse()) off();
+			};
+		}
+		var client_default = defineFacet((activation) => {
+			const { contracts, scope } = activation;
+			const locale = contracts.get(LOCALE);
+			const t = locale.bind(NS);
+			scope.add(locale.register(NS, {
+				zh,
+				en
+			}));
+			if (!contracts.has(SIDEBAR_TAB)) return;
+			const sidebar = contracts.get(SIDEBAR_TAB);
+			scope.add(sidebar.acquire((betterSidebar) => mountSidebar(betterSidebar, t)));
+		});
+		//#endregion
+		//#region src/client/index.ts
+		/** Locale is required; betterSidebar is acquired lazily so its absence
 		*  skips registration instead of leaving this fiber PENDING (BR-003). */
 		const inject = ["locale"];
 		/**
@@ -1299,64 +1547,7 @@ window.__ModuleLoader__.load({
 		* @param ctx - client root context.
 		*/
 		function apply(ctx) {
-			const t = ctx.locale.bind(NS);
-			ctx.effect(() => ctx.locale.register(NS, {
-				zh,
-				en
-			}), "dsh-tab-genoffice: dictionaries");
-			ctx.inject(["betterSidebar"], (raw) => {
-				const sidebarCtx = raw;
-				const { betterSidebar } = sidebarCtx;
-				sidebarCtx.effect(() => {
-					const tab = {
-						id: BROWSER_TAB_ID,
-						title: () => t("tab.genoffice"),
-						icon: (size) => (0, react.createElement)(GenOfficeIcon, { size }),
-						order: 20,
-						single: true,
-						component: (props) => (0, react.createElement)(GenOfficePanel, props)
-					};
-					return betterSidebar.registerTab(tab);
-				}, "dsh-tab-genoffice: registerTab");
-				sidebarCtx.effect(() => {
-					const tab = {
-						id: FILE_TAB_ID,
-						title: () => t("tab.file"),
-						icon: (size) => (0, react.createElement)(GenOfficeIcon, { size }),
-						hidden: true,
-						dedupeKey: (opened) => opened.path,
-						component: (props) => (0, react.createElement)(GenOfficeFileTab, props)
-					};
-					return betterSidebar.registerTab(tab);
-				}, "dsh-tab-genoffice: registerFileTab");
-				for (const ext of CLAIMED_EXTS) sidebarCtx.effect(() => {
-					const viewer = {
-						id: `dsh-genoffice:viewer-${ext}`,
-						title: () => `GenOffice · .${ext}`,
-						icon: (size) => (0, react.createElement)(GenOfficeIcon, { size }),
-						exts: [ext],
-						priority: 10,
-						fetchStrategy: "none",
-						component: DocxControlViewer
-					};
-					return betterSidebar.registerFileViewer(viewer);
-				}, `dsh-tab-genoffice: registerFileViewer:${ext}`);
-				sidebarCtx.effect(() => {
-					const es = new EventSource(`${RELAY_BASE}/api/open/stream`);
-					es.addEventListener("file", (ev) => {
-						try {
-							const data = JSON.parse(ev.data);
-							const activeSessionId = betterSidebar.getSnapshot?.().sessionId;
-							const next = fileOpenOnThisPage(data, activeSessionId);
-							if (next === void 0) return;
-							betterSidebar.openTab(next.seed);
-						} catch {}
-					});
-					return () => {
-						es.close();
-					};
-				}, "dsh-tab-genoffice: open-file-stream");
-			});
+			runFacet(client_default, createClientActivation(ctx).activation);
 		}
 		//#endregion
 		exports.apply = apply;

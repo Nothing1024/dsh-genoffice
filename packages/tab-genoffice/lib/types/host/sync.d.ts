@@ -4,9 +4,9 @@
  *
  * The browser posts `{ path }` to this same-origin route before remounting.
  * Host `*_save` also marks the window after a successful export.
+ * Route mounting lives in the standard host facet (src/standard/host.ts).
  */
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import type { Context } from '@deepseek-ai/cordis';
 export declare const SYNC_ROUTE = "/dsh-artifact/genoffice-sync";
 export declare const SYNC_WINDOW_MS = 8000;
 export declare function markSyncWindow(path: string, now?: number): void;
@@ -15,5 +15,4 @@ export declare function clearSyncWindow(path: string): void;
 /** Test helper. */
 export declare function resetSyncWindows(): void;
 export declare function handleSyncRequest(req: IncomingMessage, res: ServerResponse): Promise<void>;
-export declare function applySyncRoute(ctx: Context): void;
 //# sourceMappingURL=sync.d.ts.map

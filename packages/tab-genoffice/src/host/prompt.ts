@@ -1,10 +1,8 @@
 /**
  * Deployment-boundary system prompt, generated from CAPABILITY (BR-002 / BR-015 / BR-017).
- * Nested inject so a composition without systemPrompt still loads.
+ * Mounting lives in the standard host facet (src/standard/host.ts) via the
+ * SystemPrompt handle; this module owns the section identity and the text.
  */
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-system-prompt'
-import { lookupSystemPrompt } from './lookup.ts'
 import {
   CAPABILITY,
   isExposed,
@@ -73,15 +71,5 @@ export function buildGenOfficePromptText(): string {
   ].join('\n')
 }
 
-export function applyPrompt(ctx: Context): void {
-  const text = buildGenOfficePromptText()
-  const mount = (sp: Context['systemPrompt']): (() => void) => {
-    return sp.section({ name: 'tool:genoffice', order: 150, text })
-  }
-  const existing = lookupSystemPrompt(ctx)
-  if (existing !== undefined) {
-    ctx.effect(() => mount(existing))
-    return
-  }
-  ctx.inject(['systemPrompt'], (c) => mount(c.systemPrompt))
-}
+/** 提示词段的身份（名称与拼接顺序）；文本用 buildGenOfficePromptText()。 */
+export const PROMPT_SECTION = { name: 'tool:genoffice', order: 150 } as const

@@ -19,10 +19,13 @@
   },
   "files": [
     "lib/index.js",
+    "lib/standard/**/*.js",
+    "lib/*.js",
     "lib/client.js",
     "lib/client.js.map",
     "lib/types/**/*.d.ts",
     "dsh.plugin.json",
+    "dsh-plugin.json",
     "cordis.patch.yml"
   ],
   "scripts": {

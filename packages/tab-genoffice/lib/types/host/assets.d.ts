@@ -1,5 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import type { Context } from '@deepseek-ai/cordis';
+import type { ServiceAcquire, WebServerLike } from '../standard/coordinates.ts';
 export declare const ASSET_PREFIX = "/dsh-artifact/genoffice-asset";
 export declare const TOKEN_TTL_MS = 60000;
 export declare const MAX_ASSET_BYTES: number;
@@ -31,9 +32,16 @@ export declare function createAssetStore(opts?: {
 }): AssetStore;
 export declare function serveAsset(store: AssetStore, req: IncomingMessage, res: ServerResponse): Promise<void>;
 /**
- * Prefer `reflect.get` when the service is already provided (external plugins
- * often cannot `inject()` undeclared services). Fall back to nested inject so
- * Electron compositions without webServer still load.
+ * Build the channel over a ServiceAcquire (the standard-facet seam): mounts
+ * the one-shot asset route when the web server materialises; `dispose`
+ * cancels the pending acquire or unmounts the live route.
+ */
+export declare function createAssetChannelFrom(acquire: ServiceAcquire<WebServerLike> | undefined): AssetChannel & {
+    dispose(): void;
+};
+/**
+ * cordis 形态的旧入口：lookup 已到位的 webServer，否则嵌套 inject
+ * （Electron 组合缺 webServer 时照常装载）。
  */
 export declare function createAssetChannel(ctx: Context): AssetChannel;
 export {};
