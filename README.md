@@ -1,6 +1,8 @@
-# dsh-genoffice — 产品仓
+# dsh-genoffice — 产品仓（插件半边）
 
-DSH 侧栏插件 + 跨侧契约 + 启动/冒烟脚本。魔改 GenOffice 引擎在并列目录 `../engine`（独立 git，origin = `Nothing1024/dsh-genoffice-engine`；官方在 remote `upstream` = `genspark-ai/genoffice`），不要把引擎 commit 进本仓。
+两仓一产品。本仓是**插件半边**：结合上游魔改引擎（`../engine`）与 `dsh-better-sidebar`，做成 DSH 侧栏插件——含跨侧契约与启动/冒烟脚本。
+
+**上游半边**在并列目录 `../engine`（独立 git，origin = `Nothing1024/dsh-genoffice-engine`；官方在 remote `upstream` = `genspark-ai/genoffice`）：魔改 GenOffice 引擎，目标是更好的云端调用与 agent 化——web 端脱离 Electron 跑通、relay（`web/server.mjs`，:8787）、控制面 API 与五族编辑器的 agent 工具执行器。不要把引擎 commit 进本仓。
 
 钉正式 npm：`@deepseek-ai/dsh-*@0.1.0-rc.7`，`dsh-better-sidebar@0.13.0`（optional peer `^0.13.0`）。不要 `latest`，不要 `vendor/dsh` / worktree `file:`。
 
