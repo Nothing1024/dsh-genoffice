@@ -13,8 +13,11 @@
 
 ### GET /api/health
 ```json
-{ "ok": true, "name": "genoffice-web-relay", "port": 8787 }
+{ "ok": true, "name": "genoffice-web-relay", "port": 8787, "ready": true, "roots": ["shell", "docs"], "executors": 0 }
 ```
+- `ready` / `roots` 为**每次请求现算**的静态根状态（各 app `web-dist/index.html` 仍可读）。`ok:true` 只代表 API 进程活着（liveness）；`ready:false` 说明引擎目录被移动/改名或 web-dist 未构建——此时预览路由全 404，应重启 relay（`node scripts/dev.mjs start-relay` 会自动替换无执行器的失效实例）。
+- `executors` = 当前控制面 SSE 执行器数（contracts/control-api.md §2.1 的注册表大小）。
+- 旧 relay 无这三个字段；消费方按「缺字段视为 ready」向后兼容。
 
 ### GET /api/dir?path=  — 目录列表（DSH 插件文件浏览）
 `path` 缺省 = 用户主目录。符号链接**只标记不跟随**（`symlink: true` 且不视为目录）；不可读路径返回 `ok:false` 而非 500。

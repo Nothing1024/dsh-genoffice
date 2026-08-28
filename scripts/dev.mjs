@@ -13,7 +13,7 @@
 import { writeFile, readFile, rm } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import { openSync } from 'node:fs'
-import { spawn } from 'node:child_process'
+import { spawn, spawnSync } from 'node:child_process'
 import { randomBytes } from 'node:crypto'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
@@ -25,19 +25,47 @@ const RELAY_BASE = 'http://127.0.0.1:8787'
 const DSH_URL = 'http://127.0.0.1:3080'
 const LOG_FILE = '/tmp/genoffice-web.log'
 
-async function relayUp() {
+async function relayHealth() {
   try {
     const resp = await fetch(`${RELAY_BASE}/api/health`, { signal: AbortSignal.timeout(2000) })
-    return resp.ok
+    if (!resp.ok) return null
+    return await resp.json()
   } catch {
-    return false
+    return null
   }
 }
 
+async function relayUp() {
+  const h = await relayHealth()
+  return h?.ok === true
+}
+
+/** 杀掉监听 :8787 的失效 relay（health 已确认 name=genoffice-web-relay 才会走到这里）。
+ *  只匹配 LISTEN：不加 -sTCP:LISTEN 会把本进程的 keep-alive 客户端连接也列进来。 */
+function killRelayOnPort() {
+  const out = spawnSync('lsof', ['-ti', 'tcp:8787', '-sTCP:LISTEN'], { encoding: 'utf8' })
+  const pids = (out.stdout ?? '').split('\n').map((s) => s.trim()).filter(Boolean)
+  for (const pid of pids) {
+    try { process.kill(Number(pid)) } catch { /* already gone */ }
+  }
+  return pids
+}
+
 async function startRelay() {
-  if (await relayUp()) {
+  const h = await relayHealth()
+  if (h?.ok === true && h.ready !== false) {
     console.log('[dev] relay 已在运行:', RELAY_BASE)
     return
+  }
+  if (h?.ok === true && h.ready === false) {
+    // 失效实例：API 活着但静态根丢失（引擎目录被移动/改名后遗留的旧进程）
+    if ((h.executors ?? 0) > 0) {
+      console.error('[dev] relay 静态资源不可达，但仍有控制执行器在线 — 先关闭编辑页再重试')
+      process.exit(1)
+    }
+    const pids = killRelayOnPort()
+    console.log(`[dev] 替换失效 relay（静态根不可达，pid ${pids.join(',') || '?'}）`)
+    for (let i = 0; i < 20 && (await relayUp()); i++) await new Promise((r) => setTimeout(r, 250))
   }
   console.log('[dev] 启动 relay:', join(UPSTREAM, 'web/server.mjs'))
   const logFd = openSync(LOG_FILE, 'a')
@@ -59,8 +87,10 @@ async function startRelay() {
 }
 
 async function status() {
-  const relay = await relayUp()
-  console.log(`relay  :8787  ${relay ? 'UP' : 'DOWN'}`)
+  const h = await relayHealth()
+  const relay = h?.ok === true
+  const readyNote = relay && h.ready === false ? '（静态根不可达 — start-relay 会替换）' : ''
+  console.log(`relay  :8787  ${relay ? 'UP' : 'DOWN'}${readyNote}`)
   try {
     const resp = await fetch(DSH_URL, { signal: AbortSignal.timeout(3000) })
     console.log(`dsh    :3080  ${resp.status === 200 ? 'UP' : `HTTP ${resp.status}`}`)
@@ -89,10 +119,14 @@ async function smoke() {
   }
   console.log('[smoke] 契约断言（relay-api.md）:')
 
-  // 1. health
+  // 1. health（liveness + readiness，contracts/relay-api.md §GET /api/health）
   const health = await (await fetch(`${RELAY_BASE}/api/health`)).json()
   check('GET /api/health', health.ok === true && health.name === 'genoffice-web-relay',
     JSON.stringify(health))
+  check('  health.ready 为 true 且 roots/executors 形状正确',
+    health.ready === true && Array.isArray(health.roots) && health.roots.length > 0 &&
+    typeof health.executors === 'number',
+    JSON.stringify({ ready: health.ready, roots: health.roots, executors: health.executors }))
 
   // 2. /api/dir 形状（插件面板的消费形状）
   const dir = await (await fetch(`${RELAY_BASE}/api/dir?path=${encodeURIComponent('/tmp')}`)).json()

@@ -12,6 +12,7 @@ import {
   RELAY_BASE,
   docIdFor,
   getRelayOk,
+  getRelayReady,
   launchRelay,
   notifyHostSync,
   previewUrlFor,
@@ -63,6 +64,7 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
   const { path, title, ext, onBack, renderBuiltin, tabId, updateTab } = props
   const degradeMode = props.degradeMode ?? DEGRADE_MODE
   const [relayOk, setRelayOk] = useState<boolean | null>(() => getRelayOk())
+  const [relayReady, setRelayReady] = useState<boolean | null>(() => getRelayReady())
   const [yielded, setYielded] = useState(false)
   const [blocked, setBlocked] = useState(false)
   const [previewLoaded, setPreviewLoaded] = useState(false)
@@ -103,11 +105,15 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
     void probeRelay(force, ac.signal).then((ok) => {
       if (seq !== probeSeq.current) return
       setRelayOk(ok)
+      setRelayReady(getRelayReady())
     })
   }
 
   useEffect(() => {
-    return subscribeRelay(() => { setRelayOk(getRelayOk()) })
+    return subscribeRelay(() => {
+      setRelayOk(getRelayOk())
+      setRelayReady(getRelayReady())
+    })
   }, [])
 
   useEffect(() => {
@@ -415,6 +421,20 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
             </button>
           )}
           {recheck}
+          {launchControls}
+        </div>
+      </div>
+    )
+  }
+
+  if (relayReady === false) {
+    return (
+      <div className={css.panel}>
+        {toolbar}
+        <div className={css.hint} role="status">
+          relay 在运行，但引擎静态资源不可达（引擎目录被移动或 web-dist 未构建）— 预览无法加载。
+          点「启动 relay」替换失效实例，或手动执行 {RELAY_MANUAL}。
+          <button type="button" className={css.btn} onClick={() => { probe(true) }}>重新检查</button>
           {launchControls}
         </div>
       </div>

@@ -2,6 +2,7 @@ import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import {
   emitOpenFile,
   getRelayOk,
+  getRelayReady,
   probeRelay,
   resetRelayStore,
   scheduleOpenFile,
@@ -39,6 +40,33 @@ describe('shared relay store', () => {
     expect(fetch).toHaveBeenCalledTimes(1)
     await probeRelay(true)
     expect(fetch).toHaveBeenCalledTimes(2)
+  })
+
+  it('marks ready=false for a zombie instance (health ok but static roots gone)', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({
+      ok: true,
+      json: async () => ({ ok: true, ready: false, roots: [], executors: 0 }),
+    })))
+    await probeRelay(true)
+    expect(getRelayOk()).toBe(true)
+    expect(getRelayReady()).toBe(false)
+  })
+
+  it('treats an old relay without the ready field as ready', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({
+      ok: true,
+      json: async () => ({ ok: true, name: 'genoffice-web-relay', port: 8787 }),
+    })))
+    await probeRelay(true)
+    expect(getRelayOk()).toBe(true)
+    expect(getRelayReady()).toBe(true)
+  })
+
+  it('resets ready to unknown when the relay is unreachable', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => { throw new Error('ECONNREFUSED') }))
+    await probeRelay(true)
+    expect(getRelayOk()).toBe(false)
+    expect(getRelayReady()).toBe(null)
   })
 })
 

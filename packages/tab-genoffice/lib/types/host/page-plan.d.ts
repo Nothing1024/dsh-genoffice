@@ -1,6 +1,6 @@
 /**
  * Host-side deck planning. Prompt text is copied from
- * upstream/apps/slides/src/renderer/ai/local-page-gen.ts
+ * engine/apps/slides/src/renderer/ai/local-page-gen.ts
  * (`pageSpecSystemPrompt`, `pageSpecUserMessage`, `PLAN_DECK_SYSTEM_PROMPT`,
  * `STYLE_SKILL_SYSTEM_PROMPT`, `styleSkillUserMessage`, `planDeckUserMessage`).
  * Do not import the slides renderer (ASM-005).

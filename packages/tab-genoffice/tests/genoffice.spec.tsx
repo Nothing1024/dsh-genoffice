@@ -123,6 +123,55 @@ describe('path bar', () => {
   })
 })
 
+describe('business failures vs relay-down', () => {
+  it('an unreadable path shows the error without the relay-down strip', async () => {
+    const fetch = vi.fn(async (input: RequestInfo) => {
+      const url = String(input)
+      if (url.includes('/api/dir')) {
+        const path = new URL(url).searchParams.get('path') ?? ''
+        if (path === '/root/secret') {
+          return { ok: true, json: async () => ({ ok: false, error: 'EACCES: permission denied' }) }
+        }
+        return { ok: true, json: async () => ({ ok: true, path: path || '/tmp', parent: '/', entries: [] }) }
+      }
+      return { ok: true, json: async () => ({ ok: true }) }
+    })
+    vi.stubGlobal('fetch', fetch)
+    const { view } = panel('/tmp')
+    await waitFor(() => { expect(view.getByRole('button', { name: 'tmp' })).toBeTruthy() })
+    fireEvent.click(view.getByLabelText('当前路径'))
+    const input = await view.findByLabelText('跳转到路径')
+    fireEvent.change(input, { target: { value: '/root/secret' } })
+    fireEvent.keyDown(input, { key: 'Enter' })
+    await waitFor(() => { expect(view.getByText(/permission denied/)).toBeTruthy() })
+    expect(view.queryByText(/relay 不可用/)).toBeNull()
+  })
+})
+
+describe('hidden entries toggle', () => {
+  it('hides dot entries by default and shows them after toggling', async () => {
+    const entries = [
+      { name: '.secret', dir: false, hidden: true, symlink: false, size: 1, mtimeMs: 0, ext: '' },
+      { name: 'a.docx', dir: false, hidden: false, symlink: false, size: 1, mtimeMs: 0, ext: 'docx' },
+    ]
+    const fetch = vi.fn(async (input: RequestInfo) => {
+      const url = String(input)
+      if (url.includes('/api/dir')) {
+        return { ok: true, json: async () => ({ ok: true, path: '/tmp', parent: '/', entries }) }
+      }
+      return { ok: true, json: async () => ({ ok: true }) }
+    })
+    vi.stubGlobal('fetch', fetch)
+    const { view } = panel('/tmp')
+    await waitFor(() => { expect(view.getByText('a.docx')).toBeTruthy() })
+    expect(view.queryByText('.secret')).toBeNull()
+    fireEvent.click(view.getByRole('button', { name: '显示隐藏项' }))
+    expect(view.getByText('.secret')).toBeTruthy()
+    fireEvent.click(view.getByRole('button', { name: '藏起隐藏项' }))
+    expect(view.queryByText('.secret')).toBeNull()
+  })
+})
+
 describe('opening a file from the list', () => {
   it('opens a per-path document tab and keeps the directory list', async () => {
     const fetch = vi.fn(async (input: RequestInfo) => {

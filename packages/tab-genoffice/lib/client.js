@@ -42,11 +42,16 @@ window.__ModuleLoader__.load({
 		};
 		const RELAY_THROTTLE_MS = 1500;
 		let relayOk = null;
+		/** null = 未探测/relay 不可达；false = API 活着但静态根丢失（contracts/relay-api.md health.ready）。 */
+		let relayReady = null;
 		let lastProbeAt = 0;
 		let inFlight = null;
 		const listeners$1 = /* @__PURE__ */ new Set();
 		function getRelayOk() {
 			return relayOk;
+		}
+		function getRelayReady() {
+			return relayReady;
 		}
 		function subscribeRelay(fn) {
 			listeners$1.add(fn);
@@ -82,12 +87,27 @@ window.__ModuleLoader__.load({
 			const extra = nonce !== void 0 && nonce !== "" ? `&_r=${encodeURIComponent(nonce)}` : "";
 			return `${RELAY_BASE}/${app}/?${control ? "control=1&" : ""}open=${target}${extra}`;
 		}
-		/** Raw health probe (no store). */
+		/** Raw health probe (no store). Old relays without `ready` count as ready. */
 		async function checkRelay(signal) {
 			try {
-				return (await fetch(`${RELAY_BASE}/api/dir?path=`, signal === void 0 ? void 0 : { signal })).ok;
+				const resp = await fetch(`${RELAY_BASE}/api/health`, signal === void 0 ? void 0 : { signal });
+				if (!resp.ok) return {
+					up: false,
+					ready: false
+				};
+				let ready = true;
+				try {
+					ready = (await resp.json()).ready !== false;
+				} catch {}
+				return {
+					up: true,
+					ready
+				};
 			} catch {
-				return false;
+				return {
+					up: false,
+					ready: false
+				};
 			}
 		}
 		/** Shared probe with throttle. `force` bypasses throttle (「重新检查」). */
@@ -96,10 +116,11 @@ window.__ModuleLoader__.load({
 			if (!force && inFlight !== null) return inFlight;
 			if (!force && relayOk !== null && now - lastProbeAt < RELAY_THROTTLE_MS) return relayOk;
 			lastProbeAt = now;
-			inFlight = checkRelay(signal).then((ok) => {
-				relayOk = ok;
+			inFlight = checkRelay(signal).then((h) => {
+				relayOk = h.up;
+				relayReady = h.up ? h.ready : null;
 				emitRelay();
-				return ok;
+				return h.up;
 			}).finally(() => {
 				inFlight = null;
 			});
@@ -202,25 +223,25 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var genoffice_module_css_default = {
-			"pathInput": "p8QEMa_pathInput",
-			"pathBar": "p8QEMa_pathBar",
-			"btn": "p8QEMa_btn",
-			"btnDirty": "p8QEMa_btnDirty",
-			"row": "p8QEMa_row",
-			"homeNote": "p8QEMa_homeNote",
-			"rowDisabled": "p8QEMa_rowDisabled",
-			"iframe": "p8QEMa_iframe",
-			"fileName": "p8QEMa_fileName",
-			"rowTag": "p8QEMa_rowTag",
-			"list": "p8QEMa_list",
-			"hint": "p8QEMa_hint",
-			"toolbar": "p8QEMa_toolbar",
-			"pathText": "p8QEMa_pathText",
-			"panel": "p8QEMa_panel",
-			"rowIcon": "p8QEMa_rowIcon",
 			"crumb": "p8QEMa_crumb",
 			"rowClickable": "p8QEMa_rowClickable",
-			"rowName": "p8QEMa_rowName"
+			"pathBar": "p8QEMa_pathBar",
+			"hint": "p8QEMa_hint",
+			"list": "p8QEMa_list",
+			"btnDirty": "p8QEMa_btnDirty",
+			"rowName": "p8QEMa_rowName",
+			"toolbar": "p8QEMa_toolbar",
+			"fileName": "p8QEMa_fileName",
+			"pathInput": "p8QEMa_pathInput",
+			"rowDisabled": "p8QEMa_rowDisabled",
+			"btn": "p8QEMa_btn",
+			"rowTag": "p8QEMa_rowTag",
+			"panel": "p8QEMa_panel",
+			"homeNote": "p8QEMa_homeNote",
+			"row": "p8QEMa_row",
+			"iframe": "p8QEMa_iframe",
+			"rowIcon": "p8QEMa_rowIcon",
+			"pathText": "p8QEMa_pathText"
 		};
 		//#endregion
 		//#region src/tabs/genoffice.tsx
@@ -316,6 +337,8 @@ window.__ModuleLoader__.load({
 						if (e.key === "Escape") setEditing(false);
 					},
 					onBlur: () => {
+						const raw = draft.trim();
+						if (raw.startsWith("/") && raw !== props.path) props.onJump(raw);
 						setEditing(false);
 					}
 				})
@@ -365,7 +388,9 @@ window.__ModuleLoader__.load({
 			const [error, setError] = (0, react.useState)(null);
 			const [pathError, setPathError] = (0, react.useState)(null);
 			const [fellHome, setFellHome] = (0, react.useState)(false);
+			const [showHidden, setShowHidden] = (0, react.useState)(false);
 			const [relayOk, setRelayOk] = (0, react.useState)(() => getRelayOk());
+			const [relayReady, setRelayReady] = (0, react.useState)(() => getRelayReady());
 			const [launchConfigured, setLaunchConfigured] = (0, react.useState)(false);
 			const [launching, setLaunching] = (0, react.useState)(false);
 			const [launchError, setLaunchError] = (0, react.useState)(null);
@@ -380,11 +405,11 @@ window.__ModuleLoader__.load({
 					if (seq !== loadSeq.current) return;
 					if (!data.ok) {
 						setPathError(data.error ?? "路径不可读");
-						noteRelayOk(false);
+						noteRelayOk(true);
 					} else {
 						setPath(data.path ?? "");
 						setParent(data.parent);
-						setEntries((data.entries ?? []).filter((e) => !e.hidden));
+						setEntries(data.entries ?? []);
 						setFellHome(asHome || nextPath === void 0 || nextPath === "");
 						noteRelayOk(true);
 					}
@@ -403,6 +428,7 @@ window.__ModuleLoader__.load({
 					const was = prevRelay.current;
 					prevRelay.current = ok;
 					setRelayOk(ok);
+					setRelayReady(getRelayReady());
 					if (was === false && ok === true) loadList(path || cwd, cwd === void 0 && (path === "" || path === void 0));
 				});
 			}, [path, cwd]);
@@ -434,6 +460,7 @@ window.__ModuleLoader__.load({
 				const abs = joinPath(path, entry.name);
 				props.ctx.betterSidebar.openTab(fileTabSeed(abs), props.scope);
 			};
+			const visibleEntries = entries === null ? null : showHidden ? entries : entries.filter((e) => !e.hidden);
 			return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 				className: genoffice_module_css_default.panel,
 				children: [
@@ -487,6 +514,16 @@ window.__ModuleLoader__.load({
 									children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M13.5 8a5.5 5.5 0 1 1-1.7-3.9M13.5 2.5V5H11" })
 								}), "刷新"]
 							}),
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+								type: "button",
+								className: genoffice_module_css_default.btn,
+								"aria-pressed": showHidden,
+								title: showHidden ? "隐藏点前缀条目" : "显示点前缀条目",
+								onClick: () => {
+									setShowHidden((v) => !v);
+								},
+								children: showHidden ? "藏起隐藏项" : "显示隐藏项"
+							}),
 							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(PathBar, {
 								path,
 								onJump: (abs) => {
@@ -530,6 +567,18 @@ window.__ModuleLoader__.load({
 							] })] })
 						]
 					}),
+					relayOk !== false && relayReady === false && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+						className: genoffice_module_css_default.hint,
+						role: "status",
+						children: ["relay 在运行，但引擎静态资源不可达（引擎目录被移动或 web-dist 未构建）— 预览会打不开。点「启动 relay」替换失效实例，或手动执行 `node scripts/dev.mjs start-relay`。", /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+							type: "button",
+							className: genoffice_module_css_default.btn,
+							onClick: () => {
+								probeRelay(true);
+							},
+							children: "重新检查"
+						})]
+					}),
 					loading && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 						className: genoffice_module_css_default.hint,
 						children: "加载中…"
@@ -538,7 +587,7 @@ window.__ModuleLoader__.load({
 						className: genoffice_module_css_default.hint,
 						children: pathError
 					}),
-					!loading && error !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+					!loading && error !== null && relayOk !== false && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 						className: genoffice_module_css_default.hint,
 						children: [error, /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
 							type: "button",
@@ -549,13 +598,13 @@ window.__ModuleLoader__.load({
 							children: "重试"
 						})]
 					}),
-					!loading && error === null && entries !== null && entries.length === 0 && pathError === null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					!loading && error === null && visibleEntries !== null && visibleEntries.length === 0 && pathError === null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 						className: genoffice_module_css_default.hint,
 						children: "空目录"
 					}),
-					!loading && error === null && entries !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					!loading && error === null && visibleEntries !== null && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
 						className: genoffice_module_css_default.list,
-						children: entries.map((entry) => {
+						children: visibleEntries.map((entry) => {
 							const previewable = !entry.dir && !entry.symlink && PREVIEWABLE[entry.ext ?? ""] !== void 0;
 							const clickable = entry.dir || entry.symlink || previewable;
 							return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
@@ -686,6 +735,7 @@ window.__ModuleLoader__.load({
 			const { path, title, ext, onBack, renderBuiltin, tabId, updateTab } = props;
 			const degradeMode = props.degradeMode ?? "manual";
 			const [relayOk, setRelayOk] = (0, react.useState)(() => getRelayOk());
+			const [relayReady, setRelayReady] = (0, react.useState)(() => getRelayReady());
 			const [yielded, setYielded] = (0, react.useState)(false);
 			const [blocked, setBlocked] = (0, react.useState)(false);
 			const [previewLoaded, setPreviewLoaded] = (0, react.useState)(false);
@@ -721,11 +771,13 @@ window.__ModuleLoader__.load({
 				probeRelay(force, new AbortController().signal).then((ok) => {
 					if (seq !== probeSeq.current) return;
 					setRelayOk(ok);
+					setRelayReady(getRelayReady());
 				});
 			};
 			(0, react.useEffect)(() => {
 				return subscribeRelay(() => {
 					setRelayOk(getRelayOk());
+					setRelayReady(getRelayReady());
 				});
 			}, []);
 			(0, react.useEffect)(() => {
@@ -1058,6 +1110,27 @@ window.__ModuleLoader__.load({
 					})]
 				});
 			}
+			if (relayReady === false) return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+				className: genoffice_module_css_default.panel,
+				children: [toolbar, /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+					className: genoffice_module_css_default.hint,
+					role: "status",
+					children: [
+						"relay 在运行，但引擎静态资源不可达（引擎目录被移动或 web-dist 未构建）— 预览无法加载。 点「启动 relay」替换失效实例，或手动执行 ",
+						RELAY_MANUAL,
+						"。",
+						/* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+							type: "button",
+							className: genoffice_module_css_default.btn,
+							onClick: () => {
+								probe(true);
+							},
+							children: "重新检查"
+						}),
+						launchControls
+					]
+				})]
+			});
 			const url = previewUrlFor(path, ext, true, frameNonce);
 			return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 				className: genoffice_module_css_default.panel,

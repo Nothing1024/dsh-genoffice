@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent, ReactNode } from 'react'
 import type { TabComponentProps } from 'dsh-better-sidebar'
 import { TAB_ICON_PROPS } from './icon.tsx'
-import { PREVIEWABLE, RELAY_BASE, getRelayOk, launchRelay, noteRelayOk, probeRelay, probeRelayLaunch, subscribeRelay } from './relay.ts'
+import { PREVIEWABLE, RELAY_BASE, getRelayOk, getRelayReady, launchRelay, noteRelayOk, probeRelay, probeRelayLaunch, subscribeRelay } from './relay.ts'
 import { fileTabSeed } from './file-tab.ts'
 import css from './genoffice.module.css'
 
@@ -129,7 +129,12 @@ function PathBar(props: {
             if (e.key === 'Enter') submit()
             if (e.key === 'Escape') setEditing(false)
           }}
-          onBlur={() => { setEditing(false) }}
+          onBlur={() => {
+            // Valid absolute draft submits instead of being silently dropped.
+            const raw = draft.trim()
+            if (raw.startsWith('/') && raw !== props.path) props.onJump(raw)
+            setEditing(false)
+          }}
         />
       </div>
     )
@@ -184,7 +189,9 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
   const [error, setError] = useState<string | null>(null)
   const [pathError, setPathError] = useState<string | null>(null)
   const [fellHome, setFellHome] = useState(false)
+  const [showHidden, setShowHidden] = useState(false)
   const [relayOk, setRelayOk] = useState<boolean | null>(() => getRelayOk())
+  const [relayReady, setRelayReady] = useState<boolean | null>(() => getRelayReady())
   const [launchConfigured, setLaunchConfigured] = useState(false)
   const [launching, setLaunching] = useState(false)
   const [launchError, setLaunchError] = useState<string | null>(null)
@@ -200,12 +207,14 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
       const data = (await resp.json()) as DirResponse
       if (seq !== loadSeq.current) return
       if (!data.ok) {
+        // A JSON response proves the relay is alive — an unreadable path is a
+        // business failure, not a transport one. Never flip the shared flag.
         setPathError(data.error ?? '路径不可读')
-        noteRelayOk(false)
+        noteRelayOk(true)
       } else {
         setPath(data.path ?? '')
         setParent(data.parent)
-        setEntries((data.entries ?? []).filter((e) => !e.hidden))
+        setEntries(data.entries ?? [])
         setFellHome(asHome || nextPath === undefined || nextPath === '')
         noteRelayOk(true)
       }
@@ -225,6 +234,7 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
       const was = prevRelay.current
       prevRelay.current = ok
       setRelayOk(ok)
+      setRelayReady(getRelayReady())
       if (was === false && ok === true) {
         void loadList(path || cwd, cwd === undefined && (path === '' || path === undefined))
       }
@@ -264,6 +274,8 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
     const abs = joinPath(path, entry.name)
     props.ctx.betterSidebar.openTab(fileTabSeed(abs), props.scope)
   }
+
+  const visibleEntries = entries === null ? null : showHidden ? entries : entries.filter((e) => !e.hidden)
 
   return (
     <div className={css.panel}>
@@ -305,6 +317,15 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
           <svg {...ROW_ICON_PROPS}><path d="M13.5 8a5.5 5.5 0 1 1-1.7-3.9M13.5 2.5V5H11" /></svg>
           刷新
         </button>
+        <button
+          type="button"
+          className={css.btn}
+          aria-pressed={showHidden}
+          title={showHidden ? '隐藏点前缀条目' : '显示点前缀条目'}
+          onClick={() => { setShowHidden((v) => !v) }}
+        >
+          {showHidden ? '藏起隐藏项' : '显示隐藏项'}
+        </button>
         <PathBar
           path={path}
           onJump={(abs) => { void loadList(abs, false) }}
@@ -333,22 +354,29 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
           )}
         </div>
       )}
+      {relayOk !== false && relayReady === false && (
+        <div className={css.hint} role="status">
+          relay 在运行，但引擎静态资源不可达（引擎目录被移动或 web-dist 未构建）— 预览会打不开。点「启动 relay」替换失效实例，或手动执行 `node scripts/dev.mjs start-relay`。
+          <button type="button" className={css.btn} onClick={() => { void probeRelay(true) }}>重新检查</button>
+        </div>
+      )}
       {loading && <div className={css.hint}>加载中…</div>}
       {!loading && pathError !== null && (
         <div className={css.hint}>{pathError}</div>
       )}
-      {!loading && error !== null && (
+      {/* relay-down already renders the strip above — keep one message. */}
+      {!loading && error !== null && relayOk !== false && (
         <div className={css.hint}>
           {error}
           <button type="button" className={css.btn} onClick={() => { void loadList(path || cwd, fellHome) }}>重试</button>
         </div>
       )}
-      {!loading && error === null && entries !== null && entries.length === 0 && pathError === null && (
+      {!loading && error === null && visibleEntries !== null && visibleEntries.length === 0 && pathError === null && (
         <div className={css.hint}>空目录</div>
       )}
-      {!loading && error === null && entries !== null && (
+      {!loading && error === null && visibleEntries !== null && (
         <div className={css.list}>
-          {entries.map((entry) => {
+          {visibleEntries.map((entry) => {
             const previewable = !entry.dir && !entry.symlink && PREVIEWABLE[entry.ext ?? ''] !== undefined
             const clickable = entry.dir || entry.symlink || previewable
             return (

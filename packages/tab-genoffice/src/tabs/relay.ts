@@ -19,6 +19,8 @@ const RELAY_THROTTLE_MS = 1500
 type RelayListener = () => void
 
 let relayOk: boolean | null = null
+/** null = 未探测/relay 不可达；false = API 活着但静态根丢失（contracts/relay-api.md health.ready）。 */
+let relayReady: boolean | null = null
 let lastProbeAt = 0
 let inFlight: Promise<boolean> | null = null
 const listeners = new Set<RelayListener>()
@@ -28,6 +30,10 @@ const openFileListeners = new Set<OpenFileListener>()
 
 export function getRelayOk(): boolean | null {
   return relayOk
+}
+
+export function getRelayReady(): boolean | null {
+  return relayReady
 }
 
 export function subscribeRelay(fn: RelayListener): () => void {
@@ -50,6 +56,7 @@ export function noteRelayOk(ok: boolean): void {
 /** Test helper — not for production. */
 export function resetRelayStore(): void {
   relayOk = null
+  relayReady = null
   lastProbeAt = 0
   inFlight = null
   openFileListeners.clear()
@@ -76,16 +83,29 @@ export function previewUrlFor(path: string, ext: string, control: boolean, nonce
   return `${RELAY_BASE}/${app}/?${control ? 'control=1&' : ''}open=${target}${extra}`
 }
 
-/** Raw health probe (no store). */
-export async function checkRelay(signal?: AbortSignal): Promise<boolean> {
+export interface RelayHealth {
+  up: boolean
+  ready: boolean
+}
+
+/** Raw health probe (no store). Old relays without `ready` count as ready. */
+export async function checkRelay(signal?: AbortSignal): Promise<RelayHealth> {
   try {
     const resp = await fetch(
-      `${RELAY_BASE}/api/dir?path=`,
+      `${RELAY_BASE}/api/health`,
       signal === undefined ? undefined : { signal },
     )
-    return resp.ok
+    if (!resp.ok) return { up: false, ready: false }
+    let ready = true
+    try {
+      const data = (await resp.json()) as { ready?: unknown }
+      ready = data.ready !== false
+    } catch {
+      // non-JSON health (old relay / test stub) — assume ready
+    }
+    return { up: true, ready }
   } catch {
-    return false
+    return { up: false, ready: false }
   }
 }
 
@@ -95,10 +115,11 @@ export async function probeRelay(force = false, signal?: AbortSignal): Promise<b
   if (!force && inFlight !== null) return inFlight
   if (!force && relayOk !== null && now - lastProbeAt < RELAY_THROTTLE_MS) return relayOk
   lastProbeAt = now
-  inFlight = checkRelay(signal).then((ok) => {
-    relayOk = ok
+  inFlight = checkRelay(signal).then((h) => {
+    relayOk = h.up
+    relayReady = h.up ? h.ready : null
     emitRelay()
-    return ok
+    return h.up
   }).finally(() => {
     inFlight = null
   })

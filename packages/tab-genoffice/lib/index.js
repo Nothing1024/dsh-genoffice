@@ -791,7 +791,11 @@ function isRelayLaunchConfigured(env = process.env) {
 async function pollHealth(deadline) {
 	while (Date.now() < deadline) {
 		try {
-			if ((await fetch(HEALTH, { signal: AbortSignal.timeout(500) })).ok) return true;
+			const resp = await fetch(HEALTH, { signal: AbortSignal.timeout(500) });
+			if (resp.ok) {
+				const data = await resp.json().catch(() => ({}));
+				if (data.ok === true && data.ready !== false) return true;
+			}
 		} catch {}
 		await new Promise((resolve) => setTimeout(resolve, POLL_MS));
 	}
@@ -991,7 +995,7 @@ function classifyControlError(input) {
 //#region src/host/page-plan.ts
 /**
 * Host-side deck planning. Prompt text is copied from
-* upstream/apps/slides/src/renderer/ai/local-page-gen.ts
+* engine/apps/slides/src/renderer/ai/local-page-gen.ts
 * (`pageSpecSystemPrompt`, `pageSpecUserMessage`, `PLAN_DECK_SYSTEM_PROMPT`,
 * `STYLE_SKILL_SYSTEM_PROMPT`, `styleSkillUserMessage`, `planDeckUserMessage`).
 * Do not import the slides renderer (ASM-005).

@@ -8,6 +8,7 @@ export declare const PREVIEWABLE: Record<string, string>;
 type RelayListener = () => void;
 type OpenFileListener = (path: string) => void;
 export declare function getRelayOk(): boolean | null;
+export declare function getRelayReady(): boolean | null;
 export declare function subscribeRelay(fn: RelayListener): () => void;
 /** Update the shared flag without a network round-trip (list fetch already proved it). */
 export declare function noteRelayOk(ok: boolean): void;
@@ -17,8 +18,12 @@ export declare function extOf(path: string): string;
 export declare function docIdFor(absPath: string): Promise<string>;
 /** Control mode adds `control=1`; `_r` busts the iframe after save/reload (BR-014). */
 export declare function previewUrlFor(path: string, ext: string, control: boolean, nonce?: string): string;
-/** Raw health probe (no store). */
-export declare function checkRelay(signal?: AbortSignal): Promise<boolean>;
+export interface RelayHealth {
+    up: boolean;
+    ready: boolean;
+}
+/** Raw health probe (no store). Old relays without `ready` count as ready. */
+export declare function checkRelay(signal?: AbortSignal): Promise<RelayHealth>;
 /** Shared probe with throttle. `force` bypasses throttle (「重新检查」). */
 export declare function probeRelay(force?: boolean, signal?: AbortSignal): Promise<boolean>;
 export declare function probeRelayLaunch(): Promise<boolean>;

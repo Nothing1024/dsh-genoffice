@@ -33,7 +33,12 @@ async function pollHealth(deadline: number): Promise<boolean> {
   while (Date.now() < deadline) {
     try {
       const resp = await fetch(HEALTH, { signal: AbortSignal.timeout(500) })
-      if (resp.ok) return true
+      if (resp.ok) {
+        // ready:false = zombie instance (static roots gone) — treat as not up
+        // so start-relay gets spawned and replaces it. Old relays lack `ready`.
+        const data = (await resp.json().catch(() => ({}))) as { ok?: unknown; ready?: unknown }
+        if (data.ok === true && data.ready !== false) return true
+      }
     } catch {
       /* still down */
     }
