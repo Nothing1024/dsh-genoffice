@@ -33,6 +33,10 @@ sh env/boot.sh            # loopback :3080
 
 构建引擎 web-dist：`cd ../engine && npm run web`。
 
+## 社区标准对齐（standards/）
+
+对齐 [dsh-community-standard](https://github.com/oh-my-dsh/dsh-community-standard) v0.15 的静态声明面：`packages/tab-genoffice/dsh-plugin.json` 是标准 manifest（与官方装载用的 `dsh.plugin.json` 并存），`standards/` 内有部署 Host Descriptor（profile `go`）、纯函数协商、fixtures 与上游触点基线。`npm run standard:check` 一键校验；私有坐标用 `x-nothing1024.*` 命名空间。client 半身受 RFC 0002 限制暂不可声明，详见 `standards/README.md`。
+
 调试网关内部状态用 `dsh-plugin-debug` skill：`~/.agents/skills/dsh-plugin-debug/scripts/dsh-rpc.sh 3080 pluginInventory/list`。
 
 ## Relay 一键启动

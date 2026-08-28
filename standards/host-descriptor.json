@@ -1,0 +1,13 @@
+{
+  "$comment": "profile go（env/，loopback :3080，DSH 0.1.0-rc.7）的部署描述。按 dsh-community-standard v0.15 的 Host Descriptor 结构书写；坐标为私有 x- 命名空间（未经 Registry 登记，不伪装标准坐标）。SidebarTab 由 profile 挂载的 dsh-better-sidebar@0.13.0 提供（第三方插件，RFC 0003 定案前按部署能力列入）。GenOffice relay（:8787）是外部进程，不属于宿主契约，缺席时侧栏按声明降级为「启动 relay」入口。trusted-in-process：能力声明用于兼容判断与审计，不构成安全边界。",
+  "descriptorVersion": "0.15",
+  "id": "io.github.nothing1024.dsh.profile-go",
+  "apiVersions": { "host": ["v1alpha1"] },
+  "execution": { "environment": "node", "trustMode": "trusted-in-process" },
+  "capabilities": [
+    { "apiVersion": "x-nothing1024.dsh.tools/v1alpha1", "kind": "ToolRegistry" },
+    { "apiVersion": "x-nothing1024.dsh.system-prompt/v1alpha1", "kind": "SystemPrompt" },
+    { "apiVersion": "x-nothing1024.dsh.web-server/v1alpha1", "kind": "WebServer" },
+    { "apiVersion": "x-nothing1024.better-sidebar/v1alpha1", "kind": "SidebarTab" }
+  ]
+}

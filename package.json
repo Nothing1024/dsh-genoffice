@@ -10,6 +10,7 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
+    "standard:check": "node standards/validate.mjs",
     "env:setup": "sh env/setup.sh",
     "env:boot": "sh env/boot.sh",
     "relay": "node scripts/dev.mjs start-relay",
