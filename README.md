@@ -40,7 +40,14 @@ GenOffice web 编辑器（docs / markdown / sheets / slides / pdf）
 
 ## 快速开始
 
+> **只想先看编辑器本体？** 不需要 DSH：只 clone [engine 仓](https://github.com/Nothing1024/dsh-genoffice-engine)，`npm install && npm run web`，浏览器打开 `http://127.0.0.1:8787/` 即可（六款编辑器的 Web 版）。下面是接入 DSH 的完整路径。
+
 前置：Node ≥ 22、pnpm；两仓并列 clone（本仓与 engine 同级，目录名任意，下例用 `plugin/` 与 `engine/`）。
+
+```sh
+git clone https://github.com/Nothing1024/dsh-genoffice.git plugin
+git clone https://github.com/Nothing1024/dsh-genoffice-engine.git engine
+```
 
 ```sh
 # 1. 构建引擎 web-dist 并起 relay（:8787）
@@ -62,6 +69,32 @@ sh env/boot.sh
 打开 `http://127.0.0.1:3080`，右侧抽屉「+」添加 GenOffice 页签即可浏览/预览文件。`env/boot.sh` 会导出 `DSH_GENOFFICE_ROOT`，之后侧栏在 relay 未启动时会显示「启动 relay」一键拉起（host 路由 `GET/POST /dsh-artifact/genoffice-relay`）。
 
 > `env/` 是仓内自带的 loopback `DSH_HOME` 配方（凭据、sessions、storages 均不进 git）。不要提交凭据。
+
+## 让 AI 帮你装（复制给你的 AI 助手）
+
+不想手动折腾的话，把下面这段整体复制给任意能执行命令的 AI 编码助手（Cursor / Claude Code / DSH agent 等），它会替你装好并演示：
+
+```text
+你是我的装机助手。请把 GenOffice 的 DSH 插件整套在我机器上跑起来并验证。要求逐步执行、每步核对成功再继续，失败先排查：
+
+1. 环境检查：需要 Node ≥ 22、pnpm、git，缺什么先装。
+2. 在同一个目录下并列 clone 两个仓：
+   git clone https://github.com/Nothing1024/dsh-genoffice.git plugin
+   git clone https://github.com/Nothing1024/dsh-genoffice-engine.git engine
+3. 构建引擎并启动 relay：cd engine && npm install && npm run web
+   验证：curl -s http://127.0.0.1:8787/api/health 应返回 "ready":true。
+4. 构建插件：cd ../plugin && pnpm install && pnpm run build && pnpm test（测试应全绿）。
+5. 启动 DSH 调试实例：sh env/setup.sh && sh env/boot.sh（loopback :3080；若 3080 被占用，先停掉占用进程再启动）。
+6. 冒烟验证：node scripts/dev.mjs smoke 应全部通过。
+7. 教我使用：打开 http://127.0.0.1:3080，右侧抽屉「+」添加 GenOffice 页签，演示浏览目录、
+   预览一个 .md 或 .docx 文件，并解释「写入磁盘 / 从磁盘重载」按钮和 agent 工具族
+   （docx_* / markdown_* / xlsx_* / pptx_* / pdf_* 与各族 *_save）分别是干什么的。
+8. 演示 agent 编辑闭环：按仓内 README「真实案例」一节，在 /tmp 新建一个测试 markdown，
+   通过控制面完成 insert_content 插入内容并 export 写回，最后展示磁盘文件的变化。
+
+约束：所有服务只绑 127.0.0.1，不要用 --lan 或对外网暴露；不要修改我的 ~/.dsh 主目录；
+平台包版本以仓内钉死的为准（@deepseek-ai/dsh@0.1.0-rc.7），不要装 latest。
+```
 
 ## 真实案例：agent 通过控制面编辑并保存
 
