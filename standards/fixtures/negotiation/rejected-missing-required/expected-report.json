@@ -1,0 +1,8 @@
+{
+  "reportVersion": "0.15",
+  "verdict": "rejected",
+  "message": "拒载：该插件需要 x-example.tools/v1alpha1（ToolRegistry），当前宿主不提供。",
+  "missingRequired": [
+    { "apiVersion": "x-example.tools/v1alpha1", "kind": "ToolRegistry" }
+  ]
+}

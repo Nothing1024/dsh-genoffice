@@ -1,0 +1,8 @@
+{
+  "reportVersion": "0.15",
+  "verdict": "pending-authorization",
+  "message": "宿主支持该插件，但 ToolRegistry 为敏感能力，等待用户或策略授权后才能激活。",
+  "awaitingAuthorization": [
+    { "apiVersion": "x-example.tools/v1alpha1", "kind": "ToolRegistry" }
+  ]
+}

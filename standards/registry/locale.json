@@ -1,0 +1,11 @@
+{
+  "$comment": "registry 条目（本地镜像）。字段与 sensitivity 语义见 README.md；服务面与理由见 doc。client facet 归 RFC 0002，本坐标暂不进 manifest。",
+  "apiVersion": "x-nothing1024.dsh.locale/v1alpha1",
+  "kind": "Locale",
+  "facet": "client",
+  "status": "x-private",
+  "owner": "io.github.nothing1024",
+  "sensitivity": "low",
+  "doc": "./locale.md",
+  "upstreamCounterpart": "RFC 0002 Runtime Presentation 候选（客户端本地化）"
+}

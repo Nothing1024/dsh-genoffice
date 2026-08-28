@@ -1,0 +1,11 @@
+{
+  "$comment": "registry 条目（本地镜像）。字段与 sensitivity 语义见 README.md；服务面与理由见 doc。提供方是第三方插件而非宿主本体。",
+  "apiVersion": "x-nothing1024.better-sidebar/v1alpha1",
+  "kind": "SidebarTab",
+  "facet": "client",
+  "status": "x-private",
+  "owner": "io.github.nothing1024",
+  "sensitivity": "low",
+  "doc": "./sidebar-tab.md",
+  "upstreamCounterpart": "RFC 0005 contributes.views 候选（第三方 UI 槽位）"
+}

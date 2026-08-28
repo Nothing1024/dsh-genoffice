@@ -1,0 +1,8 @@
+{
+  "reportVersion": "0.15",
+  "verdict": "rejected",
+  "message": "拒载：该插件需要 facet host 的 API v2alpha1，当前宿主不提供。",
+  "unsupportedFacets": [
+    { "facet": "host", "requiredApiVersion": "v2alpha1", "supportedApiVersions": ["v1alpha1"] }
+  ]
+}

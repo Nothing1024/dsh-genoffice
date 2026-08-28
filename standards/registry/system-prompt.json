@@ -1,0 +1,11 @@
+{
+  "$comment": "registry 条目（本地镜像）。字段与 sensitivity 语义见 README.md；服务面与理由见 doc。",
+  "apiVersion": "x-nothing1024.dsh.system-prompt/v1alpha1",
+  "kind": "SystemPrompt",
+  "facet": "host",
+  "status": "x-private",
+  "owner": "io.github.nothing1024",
+  "sensitivity": "medium",
+  "doc": "./system-prompt.md",
+  "upstreamCounterpart": "RFC 0006 的 PromptSections"
+}

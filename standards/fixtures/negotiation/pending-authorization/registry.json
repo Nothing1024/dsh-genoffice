@@ -1,0 +1,3 @@
+[
+  { "apiVersion": "x-example.tools/v1alpha1", "kind": "ToolRegistry", "sensitivity": "high" }
+]

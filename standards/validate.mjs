@@ -2,20 +2,27 @@
 /**
  * dsh-community-standard v0.15 对齐检查器（自包含，零依赖）。
  *
- * 做四件事，全部离线、不执行任何插件代码：
+ * 六个环节：
  *   1. Manifest 校验：packages/*\/dsh-plugin.json 按 spec/manifest.md 的 v0.15
  *      规则做静态校验（含 JSON Schema 表达不了的两条：contributes id 去重、
  *      entry 不得越出包根目录），并做跨包 contributes id 冲突检测。
- *   2. 协商：对每份 manifest 与 standards/host-descriptor.json 跑纯函数协商
- *      （required 缺失 = incompatible 拒载；optional 缺失 = degraded 降级）。
- *   3. Fixtures 自检：standards/fixtures/valid 必须全过，invalid 必须各自
- *      报出预期错误码（"每条必须配一个违反它的 fixture"）。
- *   4. Adapter 审计：扫描 packages/*\/src 里对上游包（@deepseek-ai/*、cordis、
- *      schemastery）的 import，比对 standards/adapter-baseline.json 基线——
- *      新增上游触点必须显式评审（--update-baseline 更新基线）。
+ *   2. Facet 入口装载检查：entry 文件必须存在（缺失 = 未构建，fail closed）、
+ *      源码不得 import 上游私有包（facet-model §2.2「只走前门」）、动态 import
+ *      后默认导出必须是 defineFacet 品牌定义。装载只执行模块顶层（标准要求
+ *      顶层无业务副作用），不调用 setup——与上游 conformance/fixtures/facet 同法。
+ *   3. 协商：negotiate(manifest, descriptor, registrySnapshot) 纯函数，按
+ *      spec/negotiation.md 产出 v0.15 报告（compatible / rejected /
+ *      pending-authorization；facet apiVersion 检查；registry 敏感级别 →
+ *      awaitingAuthorization）。快照来自 standards/registry/*.json。
+ *   4. Manifest fixtures 自检：valid 全过，invalid 各自报出预期错误码。
+ *   5. 协商 fixtures 自检：五种结局各一目录（manifest + descriptor + registry
+ *      → expected-report 深比较），镜像上游 conformance/fixtures/negotiation。
+ *   6. Adapter 审计：packages/*\/src 对上游包（@deepseek-ai/*、cordis、
+ *      schemastery）的 import 比对基线，新增触点必须显式评审。
  *
  * 用法：node standards/validate.mjs [--update-baseline]
  * 退出码：0 = 全部通过；1 = 任一环节失败。
+ * 注意：环节 2 依赖构建产物（先 npm run build -w @deepseek-ai/dsh-tab-genoffice）。
  *
  * 上游标准：https://github.com/oh-my-dsh/dsh-community-standard （Draft v0.15）
  * 本脚本是仓库本地纪律工具，不是标准的一致性认证。
@@ -23,7 +30,7 @@
 
 import { readdirSync, readFileSync, writeFileSync, existsSync, statSync } from 'node:fs'
 import { dirname, join, resolve, isAbsolute } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const STANDARDS_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(STANDARDS_DIR, '..')
@@ -31,12 +38,14 @@ const PACKAGES_DIR = join(REPO_ROOT, 'packages')
 const DESCRIPTOR_PATH = join(STANDARDS_DIR, 'host-descriptor.json')
 const BASELINE_PATH = join(STANDARDS_DIR, 'adapter-baseline.json')
 const FIXTURES_DIR = join(STANDARDS_DIR, 'fixtures')
+const REGISTRY_DIR = join(STANDARDS_DIR, 'registry')
 
 const CANONICAL_SCHEMA_ID = 'https://dsh-std.example/schemas/dsh-plugin/v0.15.json'
 const ID_RE = /^[a-z][a-z0-9]*(\.[a-z0-9][a-z0-9-]*)+$/
 const SEMVER_RE = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$/
 const TOP_FIELDS = new Set(['$schema', 'id', 'name', 'version', 'manifestVersion', 'facets', 'requires', 'permissions', 'contributes', 'subscriptions'])
 const UPSTREAM_RE = /^(@deepseek-ai\/|cordis$|schemastery$)/
+const FACET_BRAND = Symbol.for('dsh-community-standard.facet-definition')
 
 // ---------------------------------------------------------------- manifest 校验
 
@@ -155,24 +164,122 @@ function validateManifest(m) {
   return errors
 }
 
-// ---------------------------------------------------------------- 协商（纯函数）
+// ---------------------------------------------------------------- facet 入口装载检查
 
 /**
- * manifest × descriptor → 兼容判定（spec/negotiation.md 的最小实现）。
+ * 提取一份源码的 import/require 说明符。
+ * @param {string} source - 源码文本。
+ * @returns {string[]} 说明符列表。
+ */
+function importSpecifiersOf(source) {
+  const specs = []
+  const patterns = [
+    /(?:import|export)\s+(?:[^'"]*?\sfrom\s+)?['"]([^'"]+)['"]/g,
+    /\brequire\(\s*['"]([^'"]+)['"]\s*\)/g,
+    /\bimport\(\s*['"]([^'"]+)['"]\s*\)/g,
+  ]
+  for (const re of patterns) {
+    for (const match of source.matchAll(re)) specs.push(match[1])
+  }
+  return specs
+}
+
+/**
+ * 装载检查一个 facet entry 文件。
+ * @param {string} entryPath - entry 的绝对路径。
+ * @returns {Promise<{code: string, msg: string} | undefined>} 失败项或通过。
+ */
+async function checkFacetEntry(entryPath) {
+  if (!existsSync(entryPath)) {
+    return { code: 'entry-missing', msg: `entry 不存在：${entryPath}（先构建：npm run build -w @deepseek-ai/dsh-tab-genoffice）` }
+  }
+  const source = readFileSync(entryPath, 'utf8')
+  const privateImports = importSpecifiersOf(source).filter((s) => UPSTREAM_RE.test(s))
+  if (privateImports.length > 0) {
+    return { code: 'private-import', msg: `facet entry 引用上游私有包（只走前门，facet-model §2.2）：${privateImports.join('、')}` }
+  }
+  let mod
+  try {
+    mod = await import(pathToFileURL(entryPath).href)
+  } catch (e) {
+    return { code: 'entry-load-failed', msg: `entry 无法装载：${e instanceof Error ? e.message : String(e)}` }
+  }
+  const def = mod.default
+  const branded = typeof def === 'object' && def !== null && def[FACET_BRAND] === true && typeof def.setup === 'function'
+  if (!branded) {
+    return { code: 'not-a-facet', msg: '默认导出不是 defineFacet 创建的 facet 定义' }
+  }
+  return undefined
+}
+
+// ---------------------------------------------------------------- 协商（纯函数）
+
+/** @returns {object[]} standards/registry/*.json 的条目快照（无目录时为空）。 */
+function loadRegistrySnapshot() {
+  if (!existsSync(REGISTRY_DIR)) return []
+  return readdirSync(REGISTRY_DIR)
+    .filter((f) => f.endsWith('.json'))
+    .sort()
+    .map((f) => JSON.parse(readFileSync(join(REGISTRY_DIR, f), 'utf8')))
+}
+
+/**
+ * manifest × descriptor × registrySnapshot → v0.15 协商报告
+ * （spec/negotiation.md §2.3–2.5 的实现；纯函数，无 I/O）。
  * @param {object} manifest - 合法 manifest。
  * @param {object} descriptor - 合法 host descriptor。
- * @returns {{status: 'compatible'|'degraded'|'incompatible', missingRequired: string[], missingOptional: string[]}}
+ * @param {object[]} registrySnapshot - registry 条目冻结快照。
+ * @returns {object} 协商报告（compatible / rejected / pending-authorization）。
  */
-function negotiate(manifest, descriptor) {
-  const caps = new Set(descriptor.capabilities.map((c) => `${c.apiVersion} # ${c.kind}`))
+function negotiate(manifest, descriptor, registrySnapshot) {
+  const caps = new Set((descriptor.capabilities ?? []).map((c) => `${c.apiVersion} # ${c.kind}`))
+  const sensitivity = new Map(registrySnapshot.map((e) => [`${e.apiVersion} # ${e.kind}`, e.sensitivity]))
+
+  const unsupportedFacets = []
+  for (const [facet, decl] of Object.entries(manifest.facets ?? {})) {
+    const supported = descriptor.apiVersions?.[facet] ?? []
+    if (!supported.includes(decl.apiVersion)) {
+      unsupportedFacets.push({ facet, requiredApiVersion: decl.apiVersion, supportedApiVersions: supported })
+    }
+  }
+
   const missingRequired = []
-  const missingOptional = []
+  const degradedOptional = []
+  const awaitingAuthorization = []
   for (const c of manifest.requires?.contracts ?? []) {
     const key = `${c.apiVersion} # ${c.kind}`
-    if (!caps.has(key)) (c.optional === true ? missingOptional : missingRequired).push(key)
+    const coordinate = { apiVersion: c.apiVersion, kind: c.kind }
+    if (!caps.has(key)) {
+      ;(c.optional === true ? degradedOptional : missingRequired).push(coordinate)
+      continue
+    }
+    // 敏感检查只针对匹配成功的声明——缺席即降级，人都不在，不需要授权。
+    if (sensitivity.get(key) === 'high') awaitingAuthorization.push(coordinate)
   }
-  const status = missingRequired.length > 0 ? 'incompatible' : missingOptional.length > 0 ? 'degraded' : 'compatible'
-  return { status, missingRequired, missingOptional }
+
+  const verdict = missingRequired.length > 0 || unsupportedFacets.length > 0
+    ? 'rejected'
+    : awaitingAuthorization.length > 0
+      ? 'pending-authorization'
+      : 'compatible'
+
+  const message = verdict === 'rejected'
+    ? `拒载：该插件需要 ${[
+      ...missingRequired.map((c) => `${c.apiVersion}（${c.kind}）`),
+      ...unsupportedFacets.map((f) => `facet ${f.facet} 的 API ${f.requiredApiVersion}`),
+    ].join('、')}，当前宿主不提供。`
+    : verdict === 'pending-authorization'
+      ? `宿主支持该插件，但 ${awaitingAuthorization.map((c) => c.kind).join('、')} 为敏感能力，等待用户或策略授权后才能激活。`
+      : degradedOptional.length > 0
+        ? `静态协商通过；可选能力 ${degradedOptional.map((c) => c.kind).join('、')} 不可用，插件将按声明的降级路径运行。`
+        : '静态协商通过。'
+
+  const report = { reportVersion: '0.15', verdict, message }
+  if (missingRequired.length > 0) report.missingRequired = missingRequired
+  if (degradedOptional.length > 0) report.degradedOptional = degradedOptional
+  if (awaitingAuthorization.length > 0) report.awaitingAuthorization = awaitingAuthorization
+  if (unsupportedFacets.length > 0) report.unsupportedFacets = unsupportedFacets
+  return report
 }
 
 /**
@@ -185,6 +292,9 @@ function validateDescriptor(d) {
   if (typeof d !== 'object' || d === null) return ['descriptor 必须是 JSON object']
   if (d.descriptorVersion !== '0.15') errors.push('descriptorVersion 必须为 "0.15"')
   if (typeof d.id !== 'string' || !ID_RE.test(d.id)) errors.push('id 必须是反向域名语法')
+  if (typeof d.apiVersions !== 'object' || d.apiVersions === null || Object.values(d.apiVersions).some((v) => !Array.isArray(v) || v.some((x) => typeof x !== 'string'))) {
+    errors.push('apiVersions 必须是 facet → string[] 的映射')
+  }
   if (typeof d.execution !== 'object' || d.execution === null || d.execution.environment !== 'node' || d.execution.trustMode !== 'trusted-in-process') {
     errors.push('execution 必须为 { environment: "node", trustMode: "trusted-in-process" }（v0.15 唯一档位）')
   }
@@ -220,24 +330,6 @@ function sourceFilesOf(dir) {
 }
 
 /**
- * 从一份源码文本提取 import/require 说明符。
- * @param {string} source - 源码文本。
- * @returns {string[]} 说明符列表。
- */
-function importSpecifiersOf(source) {
-  const specs = []
-  const patterns = [
-    /(?:import|export)\s+(?:[^'"]*?\sfrom\s+)?['"]([^'"]+)['"]/g,
-    /\brequire\(\s*['"]([^'"]+)['"]\s*\)/g,
-    /\bimport\(\s*['"]([^'"]+)['"]\s*\)/g,
-  ]
-  for (const re of patterns) {
-    for (const match of source.matchAll(re)) specs.push(match[1])
-  }
-  return specs
-}
-
-/**
  * 扫描 packages/*\/src 的上游触点。
  * @returns {Record<string, string[]>} 包名 → 排序去重后的上游说明符。
  */
@@ -258,7 +350,7 @@ function scanUpstreamTouches() {
 
 // ---------------------------------------------------------------- 主流程
 
-/** @type {Record<string, string>} invalid fixture 文件名 → 必须报出的错误码。 */
+/** @type {Record<string, string>} manifest invalid fixture 文件名 → 必须报出的错误码。 */
 const INVALID_FIXTURE_EXPECT = {
   'missing-schema.json': 'missing-schema',
   'wrong-manifest-version.json': 'wrong-manifest-version',
@@ -272,7 +364,22 @@ const INVALID_FIXTURE_EXPECT = {
   'entry-outside-root.json': 'entry-outside-root',
 }
 
-function main() {
+/** @type {Record<string, string>} facet invalid fixture 目录名 → 必须报出的错误码。 */
+const FACET_FIXTURE_EXPECT = {
+  'not-a-facet': 'not-a-facet',
+  'private-import': 'private-import',
+}
+
+/** 五种协商结局的 fixture 目录名（各含 manifest / host-descriptor / registry / expected-report）。 */
+const NEGOTIATION_FIXTURES = [
+  'compatible',
+  'degraded-optional',
+  'rejected-missing-required',
+  'rejected-unsupported-facet',
+  'pending-authorization',
+]
+
+async function main() {
   const updateBaseline = process.argv.includes('--update-baseline')
   let failed = false
   const section = (title) => console.log(`\n== ${title} ==`)
@@ -310,29 +417,48 @@ function main() {
     }
   }
 
-  // 2. 协商
-  section('协商（manifest × host-descriptor）')
+  // 2. facet 入口装载检查
+  section('facet 入口装载检查（entry 存在 / 无私有 import / 品牌默认导出）')
+  for (const { pkg, manifest } of manifests) {
+    for (const [facetName, facet] of Object.entries(manifest.facets ?? {})) {
+      const entryPath = join(PACKAGES_DIR, pkg, facet.entry)
+      const failure = await checkFacetEntry(entryPath)
+      if (failure !== undefined) {
+        failed = true
+        console.log(`✗ ${pkg} facets.${facetName}: [${failure.code}] ${failure.msg}`)
+      } else {
+        console.log(`✓ ${pkg} facets.${facetName} → ${facet.entry}`)
+      }
+    }
+  }
+
+  // 3. 协商
+  section('协商（manifest × host-descriptor × registry 快照）')
   const descriptor = JSON.parse(readFileSync(DESCRIPTOR_PATH, 'utf8'))
   const descriptorErrors = validateDescriptor(descriptor)
+  const registrySnapshot = loadRegistrySnapshot()
   if (descriptorErrors.length > 0) {
     failed = true
     for (const e of descriptorErrors) console.log(`✗ descriptor: ${e}`)
   } else {
     for (const { pkg, manifest } of manifests) {
-      const report = negotiate(manifest, descriptor)
-      if (report.status === 'incompatible') {
+      const report = negotiate(manifest, descriptor, registrySnapshot)
+      if (report.verdict === 'rejected') {
         failed = true
-        console.log(`✗ ${pkg}: 拒载 —— required 契约缺失：${report.missingRequired.join('、')}`)
-      } else if (report.status === 'degraded') {
-        console.log(`△ ${pkg}: 降级运行 —— optional 契约缺失：${report.missingOptional.join('、')}`)
+        console.log(`✗ ${pkg}: ${report.message}`)
+      } else if (report.verdict === 'pending-authorization') {
+        console.log(`△ ${pkg}: pending-authorization —— ${report.message}`)
       } else {
-        console.log(`✓ ${pkg}: compatible`)
+        console.log(`✓ ${pkg}: compatible${report.degradedOptional !== undefined ? `（降级：${report.degradedOptional.map((c) => c.kind).join('、')}）` : ''}`)
+      }
+      if (Array.isArray(manifest.permissions) && manifest.permissions.length > 0) {
+        console.log(`  permissions（契约之外的敏感 scope，授权归 authorize 阶段）：${manifest.permissions.join('、')}`)
       }
     }
   }
 
-  // 3. fixtures 自检
-  section('fixtures 自检')
+  // 4. manifest fixtures 自检
+  section('manifest fixtures 自检')
   const validDir = join(FIXTURES_DIR, 'valid')
   const invalidDir = join(FIXTURES_DIR, 'invalid')
   for (const f of readdirSync(validDir).sort()) {
@@ -360,12 +486,54 @@ function main() {
     }
   }
 
-  // 4. adapter 审计
+  // 4b. facet fixtures 自检
+  const facetValid = join(FIXTURES_DIR, 'facet', 'valid', 'entry.js')
+  const validFailure = await checkFacetEntry(facetValid)
+  if (validFailure !== undefined) {
+    failed = true
+    console.log(`✗ facet/valid/entry.js 应通过却报错：[${validFailure.code}]`)
+  } else {
+    console.log('✓ facet/valid/entry.js')
+  }
+  for (const [dir, expectedCode] of Object.entries(FACET_FIXTURE_EXPECT)) {
+    const failure = await checkFacetEntry(join(FIXTURES_DIR, 'facet', 'invalid', dir, 'entry.js'))
+    if (failure !== undefined && failure.code === expectedCode) {
+      console.log(`✓ facet/invalid/${dir} → [${expectedCode}]`)
+    } else {
+      failed = true
+      console.log(`✗ facet/invalid/${dir} 未报出预期错误码 ${expectedCode}（实报：${failure?.code ?? '无'}）`)
+    }
+  }
+
+  // 5. 协商 fixtures 自检
+  section('协商 fixtures 自检（五种结局）')
+  for (const name of NEGOTIATION_FIXTURES) {
+    const dir = join(FIXTURES_DIR, 'negotiation', name)
+    if (!existsSync(dir)) {
+      failed = true
+      console.log(`✗ negotiation/${name} 缺失`)
+      continue
+    }
+    const load = (f) => JSON.parse(readFileSync(join(dir, f), 'utf8'))
+    const registry = existsSync(join(dir, 'registry.json')) ? load('registry.json') : []
+    const report = negotiate(load('manifest.json'), load('host-descriptor.json'), registry)
+    const expected = load('expected-report.json')
+    if (JSON.stringify(report) === JSON.stringify(expected)) {
+      console.log(`✓ negotiation/${name} → ${report.verdict}`)
+    } else {
+      failed = true
+      console.log(`✗ negotiation/${name} 报告不符`)
+      console.log(`    期望：${JSON.stringify(expected)}`)
+      console.log(`    实得：${JSON.stringify(report)}`)
+    }
+  }
+
+  // 6. adapter 审计
   section('adapter 审计（上游触点基线）')
   const current = scanUpstreamTouches()
   if (updateBaseline || !existsSync(BASELINE_PATH)) {
     writeFileSync(BASELINE_PATH, JSON.stringify({
-      $comment: '上游触点基线：packages/*/src 中 import 的上游说明符（@deepseek-ai/*、cordis、schemastery）。新增触点属于耦合面扩张，须评审后用 --update-baseline 更新；目标是把触点收敛进未来的版本化 adapter 层（对齐 dsh-community-standard 原则⑤）。',
+      $comment: '上游触点基线：packages/*/src 中 import 的上游说明符（@deepseek-ai/*、cordis、schemastery）。新增触点属于耦合面扩张，须评审后用 --update-baseline 更新；目标是把触点收敛进 src/standard/cordis-*.ts 适配层（对齐 dsh-community-standard 原则⑤）。',
       packages: current,
     }, null, 2) + '\n')
     console.log(`✓ 基线已写入 ${BASELINE_PATH}`)
@@ -393,4 +561,4 @@ function main() {
   process.exit(failed ? 1 : 0)
 }
 
-main()
+await main()

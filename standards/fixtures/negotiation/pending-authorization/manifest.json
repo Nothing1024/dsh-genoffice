@@ -1,0 +1,15 @@
+{
+  "$schema": "https://dsh-std.example/schemas/dsh-plugin/v0.15.json",
+  "id": "com.example.sensitive",
+  "name": "Pending Authorization Fixture",
+  "version": "1.0.0",
+  "manifestVersion": "0.15",
+  "facets": {
+    "host": { "entry": "dist/host.js", "apiVersion": "v1alpha1" }
+  },
+  "requires": {
+    "contracts": [
+      { "apiVersion": "x-example.tools/v1alpha1", "kind": "ToolRegistry" }
+    ]
+  }
+}

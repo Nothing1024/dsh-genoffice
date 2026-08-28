@@ -1,0 +1,8 @@
+{
+  "reportVersion": "0.15",
+  "verdict": "compatible",
+  "message": "静态协商通过；可选能力 WebServer 不可用，插件将按声明的降级路径运行。",
+  "degradedOptional": [
+    { "apiVersion": "x-example.web-server/v1alpha1", "kind": "WebServer" }
+  ]
+}

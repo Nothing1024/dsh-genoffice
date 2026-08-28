@@ -1,0 +1,7 @@
+{
+  "descriptorVersion": "0.15",
+  "id": "com.example.host",
+  "apiVersions": { "host": ["v1alpha1"] },
+  "execution": { "environment": "node", "trustMode": "trusted-in-process" },
+  "capabilities": []
+}
