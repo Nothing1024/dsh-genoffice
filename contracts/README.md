@@ -16,6 +16,21 @@
 3. 改完跑 `node scripts/dev.mjs smoke`——它对运行中的 relay 做形状断言，形状漂移会直接报错；
 4. 事件名等字符串常量改动：重启 DSH 后再点一次路径联动（内测 wt-artifact 已删）。
 
+## 社区标准对齐（dsh-community-standard，Draft v0.15）
+
+对齐面在 [`../standards/`](../standards/README.md)：validator + schema 快照 + fixtures + adapter 基线（`npm run standard:check`）。标准 manifest 为 `packages/tab-genoffice/dsh-plugin.json`——反向域名 id `io.github.nothing1024.tab-genoffice`，与官方装载用的 `dsh.plugin.json`（私有 id `dsh-external/dsh-tab-genoffice`）双 manifest 并存、互不覆盖。本节从**跨侧契约**视角补一份宿主依赖盘点：哪个依赖缺了会怎样，是 `requires` 声明与降级路径的单一事实源。
+
+| 依赖 | required/optional | 现有降级路径 | 契约坐标（x- 私有命名空间，坐标表见 standards/README） |
+|---|---|---|---|
+| `ctx.tools`（`dsh-tools` defineTool，94 个控制/打开工具） | required（host 半身） | 无（核心功能） | `x-nothing1024.dsh.tools/v1alpha1` ToolRegistry——已列入 `requires` |
+| `ctx.betterSidebar`（tab / FileViewer UI） | optional（client 半身） | 缺席时跳过注册不崩（BR-003） | `x-nothing1024.better-sidebar/v1alpha1` SidebarTab——已列入 `requires`（optional） |
+| `ctx.locale` | required（client 半身） | — | 缺位——client facet 归 RFC 0002，v0.15 不可声明 |
+| `ctx.webServer`（`/dsh-artifact/genoffice-relay`、`genoffice-sync` 路由） | optional（host 半身） | 注入 PENDING 时「启动 relay」按钮隐藏、sync 走兜底（见 `src/host/lookup.ts`） | `x-nothing1024.dsh.web-server/v1alpha1` WebServer——坐标已备案，未列入 `requires` |
+| loopback 网络（fetch `localhost:8787`） | required | relay 挂时面板/视图显示降级横幅 | 缺位——部署级依赖，超出插件-宿主契约（standards/README「外部进程依赖」） |
+| 子进程 spawn（start-relay） | optional | 手动命令提示 | 缺位——敏感能力无 RFC |
+
+待社区推动（征求意见期供稿）：跨面插件 client facet 样本（RFC 0002）；LLM 工具注册契约（工具名实测受 DeepSeek API `^[a-zA-Z0-9_-]+$` 约束，registry 设计的一手输入）；敏感能力授权 UX。
+
 ## 消费方清单
 
 - `../engine/web/server.mjs` — relay 实现（权威；控制面段为 control-api.md 的权威实现）
