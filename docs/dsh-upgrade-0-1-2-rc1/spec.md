@@ -272,8 +272,8 @@ P0 版本号文件升级 → P1 源码 import 修复 → P2 安装与命令级�
 |---|---|---|---|---|
 | 1 | 升级根 `pnpm-workspace.yaml` 版本号 | 无 | `grep -c "0.1.2-rc.1" pnpm-workspace.yaml` → ≥62 | 已完成 |
 | 2 | 升级 `packages/tab-genoffice/package.json` 依赖并移除 `dsh-client-runtime` | 无 | `grep -c "dsh-client-runtime" packages/tab-genoffice/package.json` → 0 | 已完成 |
-| 3 | 修复 `src/client/index.ts` 与 `src/standard/cordis-client-adapter.ts` 的 `ClientContext` 导入 | 无 | `grep -rn "dsh-client-runtime" packages/tab-genoffice/src` → 无输出 | 待开始 |
-| 4 | 同步 `env/profiles/go` 与 `env/README.md`、`standards/host-descriptor.json` 版本号提示 | 1 | `grep -rln "0.1.0-rc.7" env/profiles/go env/README.md standards/host-descriptor.json` → 无输出 | 待开始 |
+| 3 | 修复 `src/client/index.ts` 与 `src/standard/cordis-client-adapter.ts` 的 `ClientContext` 导入 | 无 | `grep -rn "dsh-client-runtime" packages/tab-genoffice/src` → 无输出 | 已完成 |
+| 4 | 同步 `env/profiles/go` 与 `env/README.md`、`standards/host-descriptor.json` 版本号提示 | 1 | `grep -rln "0.1.0-rc.7" env/profiles/go env/README.md standards/host-descriptor.json` → 无输出 | 已完成 |
 | 5 | `pnpm install` 重新解析依赖（根 workspace + `env/profiles/go`） | 1;2;3;4 | `pnpm install && echo OK` → OK，无 peer 冲突报错 | 待开始 |
 | 6 | 命令级验证：typecheck + build + test | 5 | `npm run typecheck --workspaces && npm run build --workspaces && npm run test --workspaces` → 全部退出码 0 | 待开始 |
 | 7 | 执行 spec 5.2 真实场景全套测试（网关冒烟 + 侧栏功能回放） | 6 | 按 5.2 执行矩阵逐行回放，全部通过 | 待开始 |

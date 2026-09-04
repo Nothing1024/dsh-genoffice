@@ -3,7 +3,7 @@
  * better-sidebar（optional peer，可能晚到）映射成标准 activation。
  * client 侧的 cordis 耦合止步于此文件与 src/client/index.ts 两行胶水。
  */
-import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client'
+import type { Context as ClientContext } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-client-locale/client'
 import type { BetterSidebarService } from 'dsh-better-sidebar'
 import { acquireFromCordis, type CordisLike } from './cordis-acquire.ts'
