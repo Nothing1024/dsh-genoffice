@@ -3,7 +3,7 @@
  * better-sidebar（optional peer，可能晚到）映射成标准 activation。
  * client 侧的 cordis 耦合止步于此文件与 src/client/index.ts 两行胶水。
  */
-import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client';
+import type { Context as ClientContext } from '@deepseek-ai/cordis';
 import { type ActivationController } from './sdk.ts';
 export declare function createClientActivation(ctx: ClientContext): ActivationController;
 //# sourceMappingURL=cordis-client-adapter.d.ts.map

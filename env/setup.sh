@@ -14,4 +14,4 @@ cd "$GO"
 pnpm install
 echo "env/setup: ok"
 echo "boot: $ROOT/boot.sh"
-echo "or:   DSH_HOME=$ROOT npx --yes @deepseek-ai/dsh@0.1.0-rc.7 --profile go --port 3080"
+echo "or:   DSH_HOME=$ROOT npx --yes @deepseek-ai/dsh@0.1.2-rc.1 --profile go --port 3080"

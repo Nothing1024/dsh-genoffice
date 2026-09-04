@@ -6,7 +6,7 @@
  * 注册不崩）。本文件只是 cordis 胶水；RFC 0002 定案后 manifest 直接声明
  * facet 产物，本入口保持不变服务官方装载。
  */
-import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client';
+import type { Context as ClientContext } from '@deepseek-ai/cordis';
 /** Locale is required; betterSidebar is acquired lazily so its absence
  *  skips registration instead of leaving this fiber PENDING (BR-003). */
 export declare const inject: string[];

@@ -1,10 +1,9 @@
 {
-  "$comment": "上游触点基线：packages/*/src 中 import 的上游说明符（@deepseek-ai/*、cordis、schemastery）。新增触点属于耦合面扩张，须评审后用 --update-baseline 更新；目标是把触点收敛进未来的版本化 adapter 层（对齐 dsh-community-standard 原则⑤）。",
+  "$comment": "上游触点基线：packages/*/src 中 import 的上游说明符（@deepseek-ai/*、cordis、schemastery）。新增触点属于耦合面扩张，须评审后用 --update-baseline 更新；目标是把触点收敛进 src/standard/cordis-*.ts 适配层（对齐 dsh-community-standard 原则⑤）。",
   "packages": {
     "tab-genoffice": [
       "@deepseek-ai/cordis",
       "@deepseek-ai/dsh-client-locale/client",
-      "@deepseek-ai/dsh-client-runtime/client",
       "@deepseek-ai/dsh-host-webserver",
       "@deepseek-ai/dsh-llm",
       "@deepseek-ai/dsh-llm/message",

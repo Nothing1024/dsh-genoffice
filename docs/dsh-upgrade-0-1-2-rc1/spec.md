@@ -78,7 +78,10 @@
 
 ### 1.5 变更记录
 
-首次生成，无历史变更。
+| 日期 | 变更条目 ID | 原因 | 影响任务与处置 |
+|---|---|---|---|
+| 2026-09-05 | Task-6（`pnpm install`）执行期发现 | `pnpm peers check` 报 `@deepseek-ai/cordis` 需 `^4.0.2`（新版 dsh 包全线要求），插件原锁定 `4.0.1`；`@deepseek-ai/cordis@4.0.2` 自身又要求 `@deepseek-ai/cordis-plugin-include@^1.0.7`/`-loader@^1.0.3`（原装 1.0.6/1.0.2）。这三个包不在原 3.3 节定位清单内（Stage 1 勘察遗漏，因为 Phase 1-3 调研判断"cordis 核心文件逐字节相同"时只看了 API 内容，未核对包自身版本号需求） | 追加改动：`packages/tab-genoffice/package.json` 的 `@deepseek-ai/cordis` devDeps/peerDeps 从 `4.0.1`/`^4.0.1` 提到 `4.0.2`/`^4.0.2`；根 `pnpm-workspace.yaml` overrides 新增 `@deepseek-ai/cordis: 4.0.2`、`@deepseek-ai/cordis-plugin-include: 1.0.7`、`@deepseek-ai/cordis-plugin-loader: 1.0.3` 三行。Task-1、Task-2 状态不变（仍是已完成，视为该任务范围内的正常收尾扩展）；`pnpm peers check` 复跑后 0 警告 |
+| 2026-09-05 | Task-6（`sh env/setup.sh`）执行期发现 | `env/setup.sh` 与 `env/boot.sh` 两个 shell 脚本各有一行硬编码 `@deepseek-ai/dsh@0.1.0-rc.7`（作为提示文本/实际启动命令），未被 Stage 1 的 3.3 节定位清单覆盖——原勘察只搜了 `*.json`/`*.yaml`/`*.md`，漏了 `*.sh` | 新增改动：`env/boot.sh` L12、`env/setup.sh` L17 版本号改为 `0.1.2-rc.1`。`env/boot.sh` 是 UF-001 冒烟测试的真实启动命令，若不修复会导致 Phase 3 用旧版本网关验证，判定结果无效——已在真实场景测试前修复 |
 
 ---
 
@@ -274,8 +277,8 @@ P0 版本号文件升级 → P1 源码 import 修复 → P2 安装与命令级�
 | 2 | 升级 `packages/tab-genoffice/package.json` 依赖并移除 `dsh-client-runtime` | 无 | `grep -c "dsh-client-runtime" packages/tab-genoffice/package.json` → 0 | 已完成 |
 | 3 | 修复 `src/client/index.ts` 与 `src/standard/cordis-client-adapter.ts` 的 `ClientContext` 导入 | 无 | `grep -rn "dsh-client-runtime" packages/tab-genoffice/src` → 无输出 | 已完成 |
 | 4 | 同步 `env/profiles/go` 与 `env/README.md`、`standards/host-descriptor.json` 版本号提示 | 1 | `grep -rln "0.1.0-rc.7" env/profiles/go env/README.md standards/host-descriptor.json` → 无输出 | 已完成 |
-| 5 | `pnpm install` 重新解析依赖（根 workspace + `env/profiles/go`） | 1;2;3;4 | `pnpm install && echo OK` → OK，无 peer 冲突报错 | 待开始 |
-| 6 | 命令级验证：typecheck + build + test | 5 | `npm run typecheck --workspaces && npm run build --workspaces && npm run test --workspaces` → 全部退出码 0 | 待开始 |
+| 5 | `pnpm install` 重新解析依赖（根 workspace + `env/profiles/go`） | 1;2;3;4 | `pnpm install && echo OK` → OK，无 peer 冲突报错 | 已完成 |
+| 6 | 命令级验证：typecheck + build + test | 5 | `npm run typecheck --workspaces && npm run build --workspaces && npm run test --workspaces` → 全部退出码 0 | 已完成 |
 | 7 | 执行 spec 5.2 真实场景全套测试（网关冒烟 + 侧栏功能回放） | 6 | 按 5.2 执行矩阵逐行回放，全部通过 | 待开始 |
 
 ### Phase 0: 版本号文件升级
