@@ -1,0 +1,30 @@
+[smoke] 契约断言（relay-api.md）:
+  PASS  GET /api/health
+  PASS  GET /api/dir?path=/tmp → ok
+  PASS    path/parent 为字符串
+  PASS    entries 为数组且每项含 name/dir/hidden/symlink
+  PASS    /api/dir 缺省 = 主目录
+  PASS  GET /api/file 读绝对路径
+  PASS    name 为文件名
+  PASS    不可读路径 → ok:false
+  PASS  POST /api/inject → token
+  PASS  GET /api/inject/<token> 字节回读
+  PASS    token 一次性（二次读取 404）
+  PASS  GET /docs/?open=path:… 可达（docx 预览 URL 形态）
+  PASS  GET /markdown/?open=path:… 可达（md 预览 URL 形态）
+  PASS  未知 /api/* → 404
+  PASS  事件名镜像一致（local-paths.ts ↔ client/index.ts）
+  PASS  tab 可预览扩展名 ⊆ 渲染器白名单
+  提示: 渲染器额外链接 mdx（无预览，文档化漂移，见 contracts/relay-api.md 映射表）
+  PASS  GET /api/control/stream 非法 docId → 400
+  PASS  POST /api/control/notify 未注册 → ok:false
+  PASS  POST tool 未注册 → executor not registered
+  PASS  POST tool 非法 input → invalid input（不执行）
+  PASS  POST /api/control/<app>/… 未知 app → 404
+  PASS  POST /api/control/open → 64hex docId
+  PASS    docId 与 sha256(绝对路径) 一致
+  PASS  契约工具名集合表可解析（docx 11 + markdown 5）
+  PASS  工具名集合镜像（契约 ↔ docs skill AGENT_TOOLS）
+  PASS  工具名集合镜像（契约 ↔ markdown skill AGENT_TOOLS）
+  提示: tab-genoffice host 工具未接线（P4 任务），契约↔host 镜像断言待生效
+[smoke] 全部通过 ✔

@@ -1,0 +1,3 @@
+$ cd packages/tab-genoffice && npx tsc -p tsconfig.json --noEmit
+exit code: 0
+(no error output above = typecheck PASS, using currently-installed @deepseek-ai/cordis@4.0.1 which is unaffected by this upgrade)

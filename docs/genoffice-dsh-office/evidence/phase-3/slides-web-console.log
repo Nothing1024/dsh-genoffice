@@ -1,0 +1,29 @@
+# slides Web 化基础验证（Task 12）
+
+## 构建
+$ npm run web:build -w @genoffice/slides → ✓ built（~2.4s）→ apps/slides/web-dist/
+$ npm run typecheck -w @genoffice/slides → 0 error
+
+## 浏览器验证（chrome MCP，isolated context）
+URL: http://localhost:8787/slides/?open=path:/tmp/demo-slides.pptx
+- window.slidesApi 已安装；?open 消费后 URL 清除
+- Konva 渲染：3 canvases（舞台/缩略图）
+- 完整 Ribbon（开始/插入/绘图/设计/切换/动画/幻灯片放映/审阅/视图）+ AI 面板（非 control 语义）
+- console：无 error；仅 3 条文档化 subset warn（getLayouts/getAnimations/getSections）
+- 截图 slides-web-loaded.png
+
+## 关键实现
+- apps/slides/vite.web.config.ts（新）：docs 式桥注入 + node: 别名 shim
+- apps/slides/src/renderer/web-node-shims.ts（新）：Buffer/SHA-256/randomUUID/deflateSync/pipeline 桩
+- apps/slides/src/renderer/web-slides-session.ts（新）：pptx-engine/pptx-render 会话模型
+  （openPptx/savePptx/commitSaved/materializeSlide；快照 undo/redo；makeMediaResolver；
+   编辑处理器：editText/setElementFont/ParagraphFormat/editTransform/batchEditTransform/
+   editFill/editStroke/editBackground/addElement/deleteElement/addSlide/addBlankSlide/
+   deleteSlide/reorderElement/setNotes/getNotes；HeuristicMetrics 文本布局）
+- apps/slides/src/renderer/web-bridge.ts（新）：window.slidesApi 全接口（核心子集真实实现 +
+   未覆盖方法显式 console.warn + 安全默认值，防呆不静默）
+- apps/slides/package.json：web:build/web:dev
+
+## 决策落点
+- 未覆盖方法（presenter/export/pdf/print/master/cloud/clipboard/animations/comments/sections…）
+  显式不可用；数组型方法返回 []（渲染器读 .length，null 会崩——已修）

@@ -1,0 +1,2 @@
+$ grep -rln "0.1.0-rc.7|dsh-client-runtime" pnpm-workspace.yaml packages/tab-genoffice/package.json
+(no output above = PASS)

@@ -1,0 +1,31 @@
+# sheets 控制适配器验证（Task 9）+ xlsx 读写后端（Task 8）
+
+## 验证链路（真实运行，chrome MCP + curl）
+URL: http://localhost:8787/sheets/?control=1&open=path:/tmp/demo-sheets.xlsx
+
+1. 打开 → 适配器注册执行器（docId = sha256(/tmp/demo-sheets.xlsx) = bf7e91…）
+2. POST /api/control/sheets/<docId>/context → 真实上下文
+   "Active sheet: Data (id=sheet-1, data extent about 1048576 rows × 16384 columns)…"
+3. POST …/tool {name: read_range, input:{range:"A1:C5"}} →
+   {"ok":true,"execution":{"output":"…A1=Hello, C1=5, B3=5 (=SUM(C1:C2))…","mutated":false}}
+   （值 + 公式均来自 Univer 懒加载状态 = 浏览器解析的 xlsx）
+4. POST …/tool {name: propose_operations, input:{operations:[
+     {op:"set_cell",sheetId:"sheet-1",address:"D1",value:42},
+     {op:"format_range",sheetId:"sheet-1",range:"B1:B10",format:{numberFormat:"0.00"}}]}}
+   → {"ok":true,"execution":{"output":"Auto-applied 2 change(s)…B1:B10: number format 0.00 | D1: (empty) → 42","mutated":true}}
+   ★ iframe 内工作表更新；磁盘文件 sha256 未变（BR-008）
+5. POST …/export {path} → {"ok":true,"path":"/tmp/demo-sheets.xlsx"}
+   ★ 写回成功（BR-004 tmp+rename）；sha256 259f58… → 6bca37…
+6. 写回产物校验（BR-009）：
+   - zip 完整性 OK（15 entries）
+   - <c r="D1"><v>42</v></c> 落盘
+   - B1 样式引用 s="2"；styles.xml 新增 <xf numFmtId="2" applyNumberFormat="1"/>（内置 0.00）
+   - 未编辑条目字节不变：[Content_Types].xml / customXml/item1.xml / xl/charts/chart1.xml（cmp 一致）
+
+## 失败分支（contract 语义）
+- 未注册 docId → {"ok":false,"error":"executor not registered"}
+- 非法 input（字符串）→ {"ok":false,"error":"invalid input"}（不转发不执行）
+- 未知 app → 404
+
+## console
+- 页面 console 无 error；EventSource stream open/registered 日志可见

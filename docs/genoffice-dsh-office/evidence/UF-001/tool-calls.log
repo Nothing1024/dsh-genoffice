@@ -1,0 +1,21 @@
+CALL xlsx_get_workbook_context {"path": "/Users/nothing/Downloads/genoffice-e2e/demo.xlsx"}
+RESULT [{'type': 'text', 'text': 'Active sheet: Data (id=sheet-1, data extent about 1048576 rows × 16384 columns)\nMode: imported real xlsx file (some regions may still be streaming in)\nActive sheet data area: A1:XFD1048576 (a
+TEXT 工作簿已打开，活动工作表为 Data（sheet-1）。先加载操作指南以确认 format_range 与公式写入的字段定义。
+CALL xlsx_load_guide {"path": "/Users/nothing/Downloads/genoffice-e2e/demo.xlsx", "guides": ["writing", "formatting"]}
+RESULT [{'type': 'text', 'text': '# Content writing guide (writing)\n\n## Operation definitions\n\n- `{op:"set_cell", sheetId, address:"B2", value}` — writes a single value (string/number/boolean/null). Optional `expectedValue`
+TEXT 指南已加载。现在提交操作：B1:B10 设为两位小数格式，B11 写入求和公式。
+CALL xlsx_propose_operations {"path": "/Users/nothing/Downloads/genoffice-e2e/demo.xlsx", "operations": [{"op": "format_range", "sheetId": "sheet-1", "range": "B1:B10", "format": {"numberFormat": "0.00"}}, {"op": "set_formula", "
+RESULT [{'type': 'text', 'text': 'Error: 控制通道超时：文档可能已关闭或连接中断。请刷新 GenOffice tab 后重试；本次调用不会被重放，不会产生重复编辑。'}]
+TEXT 控制通道超时，调用未被重放（不会产生重复编辑）。先重新获取工作簿上下文以恢复连接，再重试。
+CALL xlsx_get_workbook_context {"path": "/Users/nothing/Downloads/genoffice-e2e/demo.xlsx"}
+RESULT [{'type': 'text', 'text': 'Active sheet: Data (id=sheet-1, data extent about 1048576 rows × 16384 columns)\nMode: imported real xlsx file (some regions may still be streaming in)\nActive sheet data area: A1:XFD1048576 (a
+TEXT 连接已恢复，文档仍在打开状态。重试提交操作。
+CALL xlsx_propose_operations {"operations": [{"format": {"numberFormat": "0.00"}, "op": "format_range", "range": "B1:B10", "sheetId": "sheet-1"}, {"address": "B11", "formula": "=SUM(B1:B10)", "op": "set_formula", "sheetId": "shee
+RESULT [{'type': 'text', 'text': 'Auto-applied 2 change(s) (undo via the side panel [Undo] button or ⌘Z): B1:B10: number format 0.00 | B11: (empty) → =SUM(B1:B10)\nFormula results: B11 = 5'}]
+TEXT 操作已应用（B11 公式计算结果为 5）。现在写回原文件。
+CALL xlsx_save {"path": "/Users/nothing/Downloads/genoffice-e2e/demo.xlsx"}
+RESULT [{'type': 'text', 'text': '已保存到 /Users/nothing/Downloads/genoffice-e2e/demo.xlsx'}]
+TEXT 完成。三步全部按你的要求执行（仅用 xlsx_* 工具）：
+
+1. **xlsx_get_workbook_context** — 确认文档已打开，活动工作表 Data（sheet-1）。首次提交操作时控制通道超时，调用未被重放；重新获取上下文确认连接后重试成功。
+2. **xlsx_propose

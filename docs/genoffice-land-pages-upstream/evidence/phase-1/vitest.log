@@ -1,0 +1,13 @@
+$ cd upstream/apps/slides && npx vitest run tests/web-land-pages.test.ts tests/scratch-block.test.ts tests/local-page-gen.test.ts
+
+ RUN  v4.1.10 /Users/nothing/workspace/dsh/genoffice/upstream/apps/slides
+
+ Test Files  3 passed (3)
+      Tests  18 passed (18)
+   Start at  23:17:05
+   Duration  1.26s
+
+$ cd upstream/apps/slides && npx vitest run tests/web-land-pages.test.ts tests/scratch-block.test.ts tests/local-page-gen.test.ts tests/web-generate-deck-local.test.ts tests/regenerate-slide.test.ts tests/generate-deck.test.ts
+
+ Test Files  6 passed (6)
+      Tests  63 passed (63)

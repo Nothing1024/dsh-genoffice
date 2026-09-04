@@ -1,0 +1,20 @@
+# pptx_* 工具定义与 host 执行 + tab 接线验证（Task 14）
+
+## 插件变更
+- tool-schema.ts：pptx_* 37 个工具（36 skill + pptx_save）；app 类型含 slides
+- tools.ts：READ_SKILLS 含 slides 读类（get_deck_context/read_slide/analyze_media/list_style_templates）
+
+## 构建
+$ cd plugin && npm run build && npm run typecheck → 全绿
+3099 重启 → HTTP 200
+
+## 验证
+- node scripts/dev.mjs smoke → 全部通过（pptx 族契约↔skill↔host 三向严格镜像）
+- 会话实测（Task 13 完成）：pptx_get_deck_context / pptx_read_slide / pptx_set_element_text /
+  pptx_save 全链路真实数据（通过 control 平面直接验证，等价 agent 调用）
+
+## 备注
+- 依赖 LLM 管线的工具（plan_deck/generate_deck/regenerate_slide/ask_clarification）与
+  未 Web 化能力（add_chart/add_smartart/add_table/edit_table_*/edit_chart/ungroup_element/
+  generate_image/analyze_media/save_style_template/crop_image/set_picture_opacity/
+  replace_image/insert_web_image）在控制模式下返回 isError 显式错误（不静默）

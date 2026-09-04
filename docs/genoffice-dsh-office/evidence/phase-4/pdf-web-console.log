@@ -1,0 +1,27 @@
+# pdf Web 化基础验证（Task 16）
+
+## 构建
+$ npm run web:build -w @genoffice/pdf → ✓ built → apps/pdf/web-dist/
+$ npm run typecheck -w @genoffice/pdf → 0 error
+
+## 浏览器验证（chrome MCP，isolated context）
+URL: http://localhost:8787/pdf/?open=path:/tmp/demo-pdf.pdf
+- window.pdfApi 已安装；pdf.js 渲染 4 canvases（两页 + 文本层）
+- 完整工具栏（开始/注释/编辑/页面/视图）+ AI 面板（非 control 语义）
+- 页面文本可见："Demo PDF Page One / This is a body paragraph containing the word wrong…"
+- 截图 pdf-web-loaded.png
+
+## 关键实现
+- vite.web.config.ts（新）：桥注入 + node:fs 别名 + wasm/font ?url 资产
+- web-node-shims.ts（新）：Buffer（含 utf16le 编解码 + readUInt32BE）+ 桩
+- web-wasm-assets.ts（新）：pdfium.wasm / hb-subset.wasm / LiberationSans 四字重 ?url
+- web-font-locate.ts（新）：findSystemFont → null（浏览器无系统字体）
+- web-font-subset.ts（新）：fetch 版 hb-subset 加载
+- web-text-edit.ts（新）：主进程 text-edit.ts 浏览器移植（fetch pdfium + 捆绑字体）
+- web-pdf-save.ts（新）：save-pdf.ts 的 pdf-lib 合并（imageEdits 显式跳过）
+- web-bridge.ts（新）：window.pdfApi 全接口
+- server.mjs：MIME 表补 .mjs（pdf.js worker 模块）
+
+## 决策落点
+- 文本改写（edit_text/edit_block）走 pdfium wasm + hb-subset wasm + LiberationSans 捆绑字体（全量）
+- 图片编辑（insert/transform/replace/delete image）→ 显式 skippedTextEdits 语义（nativeImage 依赖）

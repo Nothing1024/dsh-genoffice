@@ -1,0 +1,17 @@
+# pdf_* 工具定义与 host 执行 + tab 接线验证（Task 18）
+
+## 插件变更
+- tool-schema.ts：pdf_* 20 个工具（19 skill + pdf_save）；PDF_CONTROL_NOTE
+- tools.ts：READ_SKILLS 含 pdf 读类（read_pages/search_text/goto_page/list_page_images/list_form_fields/get_outline）
+
+## 构建与验证
+$ cd plugin && npm run build && npm run typecheck → 全绿
+$ node scripts/dev.mjs smoke → 全部通过（pdf 族契约↔skill↔host 三向严格镜像；五族全接线）
+3099 重启 → HTTP 200
+
+## 会话实测（Task 17 完成）
+pdf_read_pages / pdf_search_text / pdf_markup_text / pdf_edit_text / pdf_save 全链路真实数据
+
+## 备注
+- 图片编辑类（insert/transform/rotate/replace/delete image）在网页版显式不可用（isError/skipped）
+- agent 端到端留待 Task 23

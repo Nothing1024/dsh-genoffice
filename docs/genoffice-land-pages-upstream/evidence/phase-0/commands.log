@@ -1,0 +1,19 @@
+# Phase 0 回归 2026-08-24
+
+## rg land_pages contracts/control-api.md
+161: pptx_regenerate_slide … 控制模式需 page_spec 或改用 land_pages
+163: pptx_generate_deck … 控制模式需 pages_spec 或改用 land_pages，iframe 不 BYOK
+164: | `pptx_land_pages` | land_pages | slides | …
+207: pptx 39 … skill 38 … land_pages
+220: control mode requires pages_spec; use land_pages
+221: land_pages requires a non-empty pages array
+
+## rg pptx 39 scripts/dev.mjs
+260: check('契约工具名集合表可解析（docx 11 + markdown 5 + xlsx 13 + pptx 39 + pdf 21）',
+262: familyCount('pptx') === 39
+
+## 契约加法核对
+- 新增行 pptx_land_pages ↔ land_pages（无新 HTTP path）
+- 删除「控制模式 LLM 用 slides iframe 的 BYOK」
+- 错误语义表增加 BR-009 精确串与空 pages 串
+- 本包未改 plugin/

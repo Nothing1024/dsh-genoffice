@@ -1,0 +1,24 @@
+# sheets Web 化基础验证（Task 7）
+
+## 构建
+$ npm run web:build -w @genoffice/sheets
+✓ built in ~10s → apps/sheets/web-dist/（含 web-bridge 注入；vite 合并单 bundle）
+
+## 浏览器验证（chrome MCP，isolated context）
+URL: http://localhost:8787/sheets/?open=path:/tmp/demo-sheets.xlsx
+- window.__GENOFFICE_WEB__ = true；window.desktopApi / window.projectApi 已安装
+- Univer 渲染：3 canvases（网格/行头/列头）
+- 工作簿懒加载：状态栏 "正在流式加载 demo-sheets.xlsx：1,048,576 行可用"（桌面版同语义状态文案）
+- 工作表标签："Data"（fixture 解析成功）
+- 网络：仅 1 次 GET /api/file?path=%2Ftmp%2Fdemo-sheets.xlsx [200]（打开取字节，无轮询循环）
+- console：无 error（msgid 列表为空）
+
+## 关键实现
+- apps/sheets/vite.web.config.ts（新）：docs 版 + node: 别名 → web-node-shims.ts
+- apps/sheets/src/renderer/web-node-shims.ts（新）：Buffer 子集 + 同步 SHA-256 + fs/path/os/zlib 桩
+- apps/sheets/src/renderer/web-xlsx.ts（新）：浏览器 xlsx 解析（workbook/rels/sharedStrings/styles/worksheet/dimension/merges/freeze）+ 范围/公式读取 + gateway applyCellEditsToXlsx 保存
+- apps/sheets/src/renderer/web-bridge.ts（新）：window.desktopApi 全接口（26+ 方法）浏览器实现
+- apps/sheets/package.json：web:build / web:dev 脚本
+
+## 类型检查
+$ npm run typecheck -w @genoffice/sheets → 通过（无 error TS）

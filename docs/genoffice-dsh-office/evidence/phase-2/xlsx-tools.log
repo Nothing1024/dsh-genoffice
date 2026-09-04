@@ -1,0 +1,25 @@
+# xlsx_* 工具定义与 host 执行 + tab 接线验证（Task 10）
+
+## 插件变更
+- tool-schema.ts：app 类型扩为五 app；追加 xlsx_* 8 个工具（7 skill + xlsx_save）
+- tools.ts：READ_SKILLS 集合扩展（含 xlsx/pptx/pdf 读类工具名）
+- genoffice.tsx：PREVIEWABLE = {docx:docs, md:markdown, xlsx:sheets, pptx:slides, pdf:pdf}
+
+## 构建
+$ cd plugin && npm run build && npm run typecheck → 全绿
+3099 实例重启（rev 缓存陷阱：改 bundle 后必须重启）→ HTTP 200
+
+## 浏览器验证（3099 GUI GenOffice tab）
+1. 文件列表：demo.xlsx 行不再显示「仅桌面版可用」，可点击
+2. 点击 → iframe src = http://localhost:8787/sheets/?control=1&open=path%3A%2F…demo.xlsx
+   （control=1 + path: 目标，BR-001/UF-004 接线）
+3. tab 显示「写入磁盘 / 在浏览器中打开」按钮
+4. 经 tab iframe 注册的执行器（docId=fc0f7c…=sha256(绝对路径)）：
+   - context → 真实工作簿上下文
+   - read_range A1:C5 → Hello / 5 / 5 (=SUM(C1:C2))
+   - propose_operations set_cell E1=99 → mutated:true；磁盘文件 sha 不变（BR-008）
+5. 点击「写入磁盘」→ 文件 sha 259f58… → b62352…；E1=99 落盘（BR-004/BR-008）
+
+## 结论
+xlsx 工具链 + tab 接线 + 写回按钮全链路可用（会话实测代替 agent 调用，
+agent 端到端在 Task 23 执行矩阵验证）

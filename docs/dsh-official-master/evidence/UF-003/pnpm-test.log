@@ -1,0 +1,23 @@
+$ npm run test --workspaces --if-present
+
+> @deepseek-ai/dsh-tab-genoffice@0.2.0 test
+> vitest run
+
+
+ RUN  v4.1.10 /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/packages/tab-genoffice
+
+ ✓ tests/relay.spec.ts (4 tests) 3ms
+ ✓ tests/prompt.spec.ts (2 tests) 2ms
+ ✓ tests/errors.spec.ts (9 tests) 7ms
+ ✓ tests/open-tools.spec.ts (5 tests) 11ms
+ ✓ tests/assets.spec.ts (4 tests) 9ms
+ ✓ tests/capability.spec.ts (8 tests) 19ms
+ ✓ tests/click-preview.spec.tsx (1 test) 1ms
+ ✓ tests/genoffice.spec.tsx (5 tests) 88ms
+ ✓ tests/integration.spec.tsx (14 tests) 131ms
+
+ Test Files  9 passed (9)
+      Tests  52 passed (52)
+   Start at  05:23:48
+   Duration  445ms (transform 370ms, setup 0ms, import 575ms, tests 271ms, environment 455ms)
+

@@ -1,6 +1,6 @@
 # dsh-upgrade-0-1-2-rc1 Spec
 
-> Version: 0.1.0 | Date: 2026-09-05 | Status: Ready
+> Version: 1.0.0 | Date: 2026-09-05 | Status: Done（含 1 项未验证缺口 + 4 条 Phase-Fix 遗留，见第 4 章）
 
 本文件是本需求的**唯一事实源**：事实基线、业务合同、技术方案、任务计划、验收协议全部在此。当前会话直接执行本包，不生成 handoff.md（shared-rules §10：交给别的 Agent/另开会话才生成）。
 
@@ -14,6 +14,7 @@
 - **做什么**：把插件工程从锁定的 DSH `0.1.0-rc.7` 升级到 `0.1.2-rc.1`，并同步升级插件依赖的第三方侧栏插件 `dsh-better-sidebar` 到 `0.18.0`（它是官方架构重写后重新适配 0.1.2-rc.1 的正式版）。
 - **改哪里**：5 处版本号声明文件（workspace overrides、插件 package.json、开发环境 profile、README）+ 2 处插件源码里的 client 类型导入（因为上游删除了 `@deepseek-ai/dsh-client-runtime` 这个包）。
 - **怎么算做完**：`pnpm install` + `typecheck` + `build` 全绿，本地起一个真实的 DSH 网关（`env/boot.sh`），侧栏能看到 GenOffice 的 tab、点开能正常打开文件、relay 状态正常，且插件在 pluginInventory 里 `fiberPhase` 是 `active`（不是白屏或加载失败）。
+- **最终结果（2026-09-05 收尾）**：升级完成，插件在 DSH `0.1.2-rc.1` 上实际可用——网关正常启动无白屏，侧栏 GenOffice tab 可见，文件浏览正常，pptx 预览渲染成功（relay `executors` 由 0 变 3 为客观佐证），relay 未启动时正确降级为「启动 relay」引导且不崩溃。命令级验证 typecheck/build/test 全绿（16 文件 148 测试）。**两点如实说明**：① BR-002 要求的 `fiberPhase: active` 因缺少 RPC 查询通道未取得直接证据，判为「未验证」（详见第 4 章「验收缺口」）；② 验收期发现 4 条遗留问题，已登记为 Phase-Fix-1~4，本轮未修。
 - **不做什么**：不追新到最新版 `0.1.3-alpha.1`（那是 alpha 通道，风险更高，本次先小步升到 `0.1.2-rc.1` 这个 rc 通道）；不改插件的业务逻辑（file-tab/docx 预览/relay 等功能行为不变）；不改 host 侧代码（已确认 host 侧 6 个上游包在此区间无破坏性变更）。
 
 ---
@@ -81,6 +82,8 @@
 | 日期 | 变更条目 ID | 原因 | 影响任务与处置 |
 |---|---|---|---|
 | 2026-09-05 | Task-6（`pnpm install`）执行期发现 | `pnpm peers check` 报 `@deepseek-ai/cordis` 需 `^4.0.2`（新版 dsh 包全线要求），插件原锁定 `4.0.1`；`@deepseek-ai/cordis@4.0.2` 自身又要求 `@deepseek-ai/cordis-plugin-include@^1.0.7`/`-loader@^1.0.3`（原装 1.0.6/1.0.2）。这三个包不在原 3.3 节定位清单内（Stage 1 勘察遗漏，因为 Phase 1-3 调研判断"cordis 核心文件逐字节相同"时只看了 API 内容，未核对包自身版本号需求） | 追加改动：`packages/tab-genoffice/package.json` 的 `@deepseek-ai/cordis` devDeps/peerDeps 从 `4.0.1`/`^4.0.1` 提到 `4.0.2`/`^4.0.2`；根 `pnpm-workspace.yaml` overrides 新增 `@deepseek-ai/cordis: 4.0.2`、`@deepseek-ai/cordis-plugin-include: 1.0.7`、`@deepseek-ai/cordis-plugin-loader: 1.0.3` 三行。Task-1、Task-2 状态不变（仍是已完成，视为该任务范围内的正常收尾扩展）；`pnpm peers check` 复跑后 0 警告 |
+| 2026-09-05 | Task-7（真实场景验证）执行期发现 | 首次打开浏览器时侧栏显示「relay 不可用」。排查确认 relay 进程健康（`/api/health` 返回 `ready:true`）、CORS 正常、host 路由 `{"configured":true}`、无 CSP 拦截；真实原因是网关比 relay 早启动 109 秒，而面板的 relay 探测只在挂载期执行一次且无任何自动重试 | 不改代码——该缺陷不由本次升级引入（Task 1-6 只动版本号、依赖、`ClientContext` 导入与 env 同步，均未触及探测路径），点击「重新检查」后功能全部正常。登记为 Phase-Fix-1，不阻塞 Task 7 判定 |
+| 2026-09-05 | Task-7 后执行 5.4 Review 检查清单发现 | 检查项 #1（版本号/`dsh-client-runtime` 残留）失败，命中 5 个文件：`tsdown.config.ts` L40 仍把已移除的 `dsh-client-runtime` 声明为打包 external（功能性死配置），另有 4 处文档/注释仍写 `0.1.0-rc.7` | 本轮不改，避免使 Task 6 已取证的 typecheck/build/test 绿色状态失效。登记为 Phase-Fix-2（P1）与 Phase-Fix-3（P2） |
 | 2026-09-05 | Task-6（`sh env/setup.sh`）执行期发现 | `env/setup.sh` 与 `env/boot.sh` 两个 shell 脚本各有一行硬编码 `@deepseek-ai/dsh@0.1.0-rc.7`（作为提示文本/实际启动命令），未被 Stage 1 的 3.3 节定位清单覆盖——原勘察只搜了 `*.json`/`*.yaml`/`*.md`，漏了 `*.sh` | 新增改动：`env/boot.sh` L12、`env/setup.sh` L17 版本号改为 `0.1.2-rc.1`。`env/boot.sh` 是 UF-001 冒烟测试的真实启动命令，若不修复会导致 Phase 3 用旧版本网关验证，判定结果无效——已在真实场景测试前修复 |
 
 ---
@@ -279,7 +282,7 @@ P0 版本号文件升级 → P1 源码 import 修复 → P2 安装与命令级�
 | 4 | 同步 `env/profiles/go` 与 `env/README.md`、`standards/host-descriptor.json` 版本号提示 | 1 | `grep -rln "0.1.0-rc.7" env/profiles/go env/README.md standards/host-descriptor.json` → 无输出 | 已完成 |
 | 5 | `pnpm install` 重新解析依赖（根 workspace + `env/profiles/go`） | 1;2;3;4 | `pnpm install && echo OK` → OK，无 peer 冲突报错 | 已完成 |
 | 6 | 命令级验证：typecheck + build + test | 5 | `npm run typecheck --workspaces && npm run build --workspaces && npm run test --workspaces` → 全部退出码 0 | 已完成 |
-| 7 | 执行 spec 5.2 真实场景全套测试（网关冒烟 + 侧栏功能回放） | 6 | 按 5.2 执行矩阵逐行回放，全部通过 | 待开始 |
+| 7 | 执行 spec 5.2 真实场景全套测试（网关冒烟 + 侧栏功能回放） | 6 | 按 5.2 执行矩阵逐行回放，全部通过 | 已完成（含 1 项未验证缺口）——4 行矩阵全部通过；但 BR-002 的 `fiberPhase: active` 未取得直接证据，见下方「验收缺口」 |
 
 ### Phase 0: 版本号文件升级
 
@@ -501,6 +504,68 @@ P0 版本号文件升级 → P1 源码 import 修复 → P2 安装与命令级�
 **验证**：`npm run test --workspaces`（收尾复跑一次确认真实场景验证过程未意外改动业务代码导致测试回归）+ 关联 UF-001/UF-002 逐条核对通过
 
 **Evidence**：`evidence/phase-3/final-regression.log`
+
+### 验收缺口：BR-002 `fiberPhase: active` 未取得直接证据
+
+> 状态：**未验证**（不是「已通过」，也不是「失败」）
+
+- **要求来源**：BR-002 —— 插件在 pluginInventory 中必须显示为 `active`；spec 5.2 UF-001 主路径核对点之一。
+- **未能验证的原因**：查询 `pluginInventory/list` 需要宿主内部 RPC 通道。本会话已尝试并全部落空：
+  - 网关侧探测 `/rpc`、`/api/rpc`、`/dsh-rpc`、`/api` → 全部 404
+  - `dsh --help` → CLI 无查询运行态的子命令（只有 `web`/`plugin` 两个）
+  - 网关 HTML 与插件 client bundle 内均未出现 `pluginInventory` 字样（它是宿主内部 API，不在插件产物里）
+  - 唯一可行路径是浏览器控制台执行 `await __DSH__.rpc('pluginInventory/list')`，需用户操作；用户选择跳过。
+- **现有间接证据（强，但不等价）**：
+  - `dsh-tab-genoffice` 出现在 `__DSH_BOOT__` 引导清单中，且排在 `dsh-better-sidebar` 之后（依赖顺序正确）
+  - 插件 host 侧路由 `/dsh-artifact/genoffice-relay` 返回 200 —— 证明 `apply()` 执行完成且路由注册成功
+  - client bundle 经网关正常下发（61327 字节）
+  - 侧栏 tab 可见、文件列表可浏览、pptx 预览渲染成功 —— 插件双端功能实际可用
+- **为什么仍判为未验证**：`fiberPhase: pending` 状态下，上述 host 路由同样可能是通的。间接证据只能推定「`apply()` 大概率没抛异常」，不能等价替换 BR-002 要求的状态字段值。
+- **补测方法（一行）**：浏览器控制台执行 `await __DSH__.rpc('pluginInventory/list')`，核对 `dsh-tab-genoffice` 条目的 `fiberPhase`。
+- **影响评估**：不阻塞本次升级的实际交付——升级目标（跑在 0.1.2-rc.1 上、功能可用）已由功能级证据充分证明。此缺口仅影响 BR-002 的形式化核销。
+
+### Phase-Fix: Task 7 验收期发现的遗留问题
+
+> 来源：2026-09-05 Task 7 真实场景验证 + 5.4 Review 检查清单执行
+> 处置约定：本轮升级**不改**，避免使 Task 6 已取证的 typecheck/build/test 绿色状态失效。以下任务独立于本次升级验收，不阻塞 Task 7/10 判定完成。
+
+| ID | 问题 | 等级 | 性质 |
+|---|---|---|---|
+| Phase-Fix-1 | relay 探测仅在挂载期执行一次，relay 晚于页面启动时面板永久停留「relay 不可用」 | P1 | 既有 UX 缺陷，非本次升级回归 |
+| Phase-Fix-2 | `tsdown.config.ts` 仍将已移除的 `dsh-client-runtime` 声明为 external | P1 | 死配置，5.4 #1 检查项失败 |
+| Phase-Fix-3 | 4 处文档/注释仍写 `0.1.0-rc.7` | P2 | 文档陈旧，5.4 #1 检查项失败 |
+| Phase-Fix-4 | `RELAY_BASE` 用 `localhost`，relay 仅监听 IPv4 | P2 | 潜在缺陷，当前被浏览器回退掩盖 |
+
+#### Phase-Fix-1: relay 探测无自动重试（P1）
+
+- **关联**：UF-002 失败分支
+- **现象**：网关 00:42:02 启动并自动打开浏览器，relay 00:43:51 才启动（晚 109 秒）。面板显示「relay 不可用」，点击「重新检查」后立即恢复。
+- **根因**：`packages/tab-genoffice/src/tabs/genoffice.tsx` L260-266 的初始加载被 `mounted.current` 守卫且依赖数组为 `[]`，只执行一次；失败后 `loadList` catch 分支（L222-224）置 `setError('relay 不可用')` + `noteRelayOk(false)`。全仓库 `tab-genoffice/src` 内无 `setInterval`、无 `visibilitychange`、无 `focus` 重探测（已 grep 确认）。
+- **对比佐证**：同页面的 `EventSource`（`relay.ts` L189）具备浏览器原生自动重连，relay 起来后连接成功建立（`lsof` 观测到 Chrome→:8787 的长连接），唯独 `loadList` 不会重试——证明是探测策略问题而非网络层问题。
+- **建议修复**：`visibilitychange` 或 `EventSource` 重连成功时触发 `probeRelay(true)`；或对 `relayOk === false` 状态做低频退避轮询。
+- **验证**：先启网关后启 relay，不点「重新检查」，面板应能在 relay 就绪后自动恢复文件列表。
+
+#### Phase-Fix-2: `tsdown.config.ts` 残留 dead external（P1）
+
+- **关联**：INV-002、5.4 检查项 #1
+- **位置**：`packages/tab-genoffice/tsdown.config.ts` L40，`CLIENT_EXTERNALS` 数组内 `'@deepseek-ai/dsh-client-runtime/client'`
+- **说明**：Task 2 已从 `package.json` 移除该依赖，Task 3 已从 `src/` 清空其 import，但打包配置仍将其声明为 external。当前 build 通过仅因为已无任何代码 import 它；一旦有人重新引入，会打出一个指向不存在依赖的 external 引用。
+- **验证**：删除该行后 `npm run build --workspaces` 退出码 0，且 `lib/client.js` 大小与产物内容无变化。
+
+#### Phase-Fix-3: 文档版本号陈旧（P2）
+
+- **关联**：5.4 检查项 #1
+- **位置**：`README.md` L3、L96；`tsconfig.base.json` L4（注释）；`standards/README.md` L16；`standards/contributions/0001-host-service-contracts.md` L4
+- **说明**：均为纯文本描述，其中 `README.md` L3 同时写了 `dsh-better-sidebar@0.13.0`（现为 `0.18.0`），面向公开读者，优先级高于其余三处。
+- **验证**：`grep -rln "0\.1\.0-rc\.7\|dsh-client-runtime" --include="*.json" --include="*.yaml" --include="*.ts" --include="*.md" .`（排除 `node_modules`/`lib`/`docs`）无输出。
+
+#### Phase-Fix-4: `RELAY_BASE` 主机名与 relay 监听地址不一致（P2）
+
+- **关联**：INV-001
+- **位置**：`packages/tab-genoffice/src/tabs/relay.ts` L7 `RELAY_BASE = 'http://localhost:8787'`；`engine/web/server.mjs` L46 `HOST = process.env.HOST || '127.0.0.1'`
+- **说明**：macOS 下 `localhost` 优先解析到 `::1`（`dscacheutil -q host -a name localhost` 已确认），而 relay 仅绑 IPv4。实测 `curl http://[::1]:8787/api/health` 连接被拒，`curl http://127.0.0.1:8787/api/health` 返回 200。当前浏览器会自动回退到 IPv4 所以不可见，但更严格的客户端会直接失败。
+- **建议修复**：`RELAY_BASE` 改用 `127.0.0.1`，或让 server 同时监听 `::1`。注意 `server.mjs` L1070/L1171 的 CORS 白名单已同时接受两种写法，改任一侧都不会破坏 CORS。
+- **验证**：`curl` 两种 loopback 写法均返回 200。
 
 ---
 

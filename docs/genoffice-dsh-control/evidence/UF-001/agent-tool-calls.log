@@ -1,0 +1,22 @@
+# UF-001 agent 工具调用链日志（真实 DSH 会话，3099 实例，2026-08-12 19:17）
+
+会话「改写文档段落并保存」（1 轮 · 4 步，LLM 7.2s）：
+
+1. markdown_get_document_context /Users/nothing/workspace/dsh/genoffice/docs/genoffice-dsh-control/evidence/fixtures/demo.md
+   ✅ 文档共 8 个顶层块，最后一段为索引 7（「第三章正文段落。」）
+
+2. markdown_replace_blocks · /Users/nothing/workspace/dsh/genoffice/docs/genoffice-dsh-control/evidence/fixtures/demo.md
+   ✅ 索引 7 的段落块改写为「第三章正文已被 DSH agent 改写。」（替换为 1 个块）
+   → iframe 内块级更新实时可见（截图 main-*.png）
+
+3. markdown_save · /Users/nothing/workspace/dsh/genoffice/docs/genoffice-dsh-control/evidence/fixtures/demo.md
+   ✅ 已显式写回原文件，磁盘内容已更新
+
+agent 汇报：「全部三步已按顺序完成：markdown_get_document_context ✅ / markdown_replace_blocks ✅ / markdown_save ✅ — 已显式写回原文件，磁盘内容已更新。」
+
+relay 写回日志（instrumented）：expected=<打开时 mtime> disk=<写回时 mtime> —— 精确匹配 → 原子写回成功
+
+对照（修复前）：僵尸 iframe（P2 遗留的独立 control 页）与 GUI iframe 对同一 docId 反复抢占执行器注册，
+导致保存被旧 mtime 基线拒绝（conflict）甚至写回陈旧内容；修复（tab 卸载旧 iframe + 适配器仅可见时重连）后单执行器稳定。
+
+BR-008 验证：编辑工具（get_document_context/replace_blocks）不写盘——磁盘 md5 在保存前不变；仅 markdown_save/「写入磁盘」触发写回。

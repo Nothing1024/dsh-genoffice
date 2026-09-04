@@ -1,0 +1,44 @@
+[smoke] 契约断言（relay-api.md）:
+  PASS  GET /api/health
+  PASS  GET /api/dir?path=/tmp → ok
+  PASS    path/parent 为字符串
+  PASS    entries 为数组且每项含 name/dir/hidden/symlink
+  PASS    /api/dir 缺省 = 主目录
+  PASS  GET /api/file 读绝对路径
+  PASS    name 为文件名
+  PASS    不可读路径 → ok:false
+  PASS  POST /api/file 成功含数值 mtimeMs
+  PASS  POST /api/inject → token
+  PASS  GET /api/inject/<token> 字节回读
+  PASS    token 一次性（二次读取 404）
+  PASS  GET /docs/?open=path:… 可达（docx 预览 URL 形态）
+  PASS  GET /markdown/?open=path:… 可达（md 预览 URL 形态）
+  PASS  未知 /api/* → 404
+  PASS  tab PREVIEWABLE 可解析
+  PASS  GET /api/control/stream 非法 docId → 400
+  PASS  POST /api/control/notify 未注册 → ok:false
+  PASS  POST tool 未注册 → executor not registered
+  PASS  POST tool 非法 input → invalid input（不执行）
+  PASS  五 app 控制面未注册 → executor not registered
+  PASS  POST /api/control/<app>/… 未知 app → 404
+  PASS  POST /api/control/open → 64hex docId
+  PASS    docId 与 sha256(绝对路径) 一致
+  PASS    registered 为 boolean（执行器是否已挂上 SSE）
+  PASS  export saveAs 未注册 → executor not registered
+  PASS  相对 saveAs → invalid saveAs（或执行器未注册）
+  PASS  GET /api/open/stream → SSE
+  PASS    open/stream hello
+  PASS  POST /api/open → ok
+  PASS    subscribers 为数字（/api/open/stream 连接数）
+  PASS    open/stream file 带 sessionId
+  PASS  契约 §2.1 事件表含 saved
+  PASS  契约工具名集合表可解析（docx 11 + markdown 5 + xlsx 13 + pptx 39 + pdf 21）
+  PASS  工具名集合镜像（契约 ↔ docs skill AGENT_TOOLS）
+  PASS  工具名集合镜像（契约 ↔ markdown skill AGENT_TOOLS）
+  PASS  工具名集合镜像（契约 ↔ sheets skill AGENT_TOOLS）
+  PASS  工具名集合镜像（契约 ↔ slides skill AGENT_TOOLS）
+  PASS  工具名集合镜像（契约 ↔ pdf skill AGENT_TOOLS）
+  PASS  工具名集合镜像（契约 ↔ 插件 host 注册）
+  PASS  五族 host 均已声明
+  PASS  工具名集合镜像（契约 ↔ 插件 capability）
+[smoke] 全部通过 ✔

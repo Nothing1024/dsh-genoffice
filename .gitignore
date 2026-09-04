@@ -8,6 +8,8 @@ coverage/
 
 # logs
 *.log
+# ...except PRD 包归档的验收证据（spec 5.3 要求 evidence/ 目录完整入库）
+!docs/*/evidence/**/*.log
 
 # local DSH_HOME (loopback profile). Recipe files are tracked; runtime is not.
 env/.env

@@ -1,0 +1,22 @@
+# slides 控制适配器验证（Task 13）
+
+URL: http://localhost:8787/slides/?control=1&open=path:/tmp/demo-slides.pptx
+docId = sha256(/tmp/demo-slides.pptx) = 43c91054…
+
+## 链路（curl + chrome MCP）
+1. context → 真实大纲：
+   "The presentation has 1 pages; page 1 is currently shown. Canvas 1280×720px.
+    Page 1 (slideIndex=0): sp_0 | text | 演示文稿标题 / sp_1 | text | 第二页待编辑"
+2. read_slide(0) → 元素位置/尺寸/字体/颜色：sp_0 pos(48,48) 630×105 18pt #1F4E79…
+3. set_element_text(0, sp_1, [{text:"标题已由 DSH 修改", bold:true}]) →
+   {"ok":true,"execution":{"output":"Replaced the text of element sp_1 on page 1 (1 paragraphs).","mutated":true}}
+   ★ iframe 内幻灯片实时更新；文件 sha 未变（BR-008）
+4. export → {"ok":true,"path":"/tmp/demo-slides.pptx"}
+   ★ 写回成功；解包校验：a:t runs = ['演示文稿标题','标题已由 DSH 修改']，
+     bold 落盘（<a:rPr i="0" b="1"/>）；zip 完整
+5. 冲突分支（意外触发）：编辑后外部替换原文件（mtime 变化）→ export 返回
+   {"ok":false,"error":"conflict"}，原文件保留（BR-004/UF-002 冲突语义 ✓）
+
+## 关键实现
+- apps/slides/src/renderer/control.ts（新）：M0 适配器结构；执行器 = createSlidesSkill(access).executeTool
+- App.tsx 接线：initControlMode({getDeckAccess: 从 ctxRef 实时构建 DeckAccess})

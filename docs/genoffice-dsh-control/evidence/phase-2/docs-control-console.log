@@ -1,0 +1,5 @@
+[control] stream open (docId=d7422052…)          ← EventSource 建立
+[control] executor registered (/Users/nothing/workspace/dsh/genoffice/docs/genoffice-dsh-control/evidence/fixtures/demo.docx)
+                                                ← hello 事件 → 执行器注册
+console 无 error（仅浏览器扩展 Immersive Translate 的无关报错）
+URL 参数 control=1&open=… 打开后已从地址栏清除（Task 12）

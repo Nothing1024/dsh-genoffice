@@ -1,0 +1,20 @@
+=== relay 健康检查 ===
+{"ok":true,"name":"genoffice-web-relay","port":8787,"ready":true,"roots":["shell","docs","markdown","pdf","sheets","slides"],"executors":0}
+
+=== relay 目录浏览 API（UF-002 主路径 Step 1 后端验证）===
+{"ok":true,"path":"/Users/nothing","parent":"/Users","entries":[{"name":"Applications","dir":true,"hidden":false,"symlink":false},{"name":"bin","dir":true,"hidden":false,"symlink":false},{"name":"deploy","dir":true,"hidden":false,"symlink":false},{"name":"Desktop","dir":true,"hidden":false,"symlink":false},{"name":"Documents","dir":true,"hidden":false,"symlink":false},{"name":"Downloads","dir":true,"hidden":false,"symlink":false},{"name":"ESX-temp-stage2","dir":true,"hidden":false,"symlink":false},{"name":"go","dir":true,"hidden":false,"symlink":false},{"name":"Library","dir":true,"hidden":false,"symlink":false},{"name":"Movies","dir":true,"hidden":false,"symlink":false},{"name":"Music","dir":true,"hidden":false,"symlink":false},{"name":"Nutstore Files","dir":true,"hidden":false,"symlink":
+
+=== 说明：本会话环境无浏览器自动化 MCP 工具（Playwright/浏览器 MCP 均未挂载），
+按 spec 5.2「可用测试工具」降级策略执行——已完成的是 HTTP/relay 协议层验证，
+证明插件 host+client 双端在新版本网关下正确加载、路由可达、relay 联通。
+真实浏览器视觉验证（侧栏 tab 图标、点击打开文件、docx 预览渲染）需要用户
+在浏览器中打开下面的 URL 并回填截图：
+
+  http://127.0.0.1:3080/?token=<REDACTED-launch-token>
+
+手动验证步骤（对应 spec 2.3 节 UF-002 成功主路径）：
+  1. 打开上面的 URL，确认页面正常加载（非白屏）
+  2. 侧栏找到 GenOffice tab 图标并点击
+  3. 确认文件浏览器面板显示当前目录文件树
+  4. 双击一个已知的 .docx/.xlsx/.pptx 文件
+  5. 确认以 control-mode 方式渲染出来，无报错弹窗/控制台 error

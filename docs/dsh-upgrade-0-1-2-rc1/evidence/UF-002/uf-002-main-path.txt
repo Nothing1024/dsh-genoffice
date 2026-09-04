@@ -1,0 +1,22 @@
+=== UF-002 主路径 — 真实场景验证结果（2026-09-05）===
+
+环境：DSH 网关 0.1.2-rc.1 @ :3080（PID 47790），relay @ :8787（PID 50375）
+
+--- Step 1-3：侧栏 tab + 文件列表 ---
+用户确认：侧栏 GenOffice tab 可见，文件浏览器面板正常显示目录树。
+备注：首次加载时曾显示「relay 不可用」，原因为挂载期单次探测早于 relay 启动
+     （网关 00:42:02 启动，relay 00:43:51 启动，晚 109 秒），点击「重新检查」后恢复。
+     此为既有 UX 行为，非本次升级引入的回归（详见 spec 4 章 Phase-Fix-1）。
+
+--- Step 4-5：pptx 预览渲染 ---
+用户确认：双击 .pptx 文件，渲染正常，无报错。
+
+客观佐证 —— relay executors 计数由 0 变为 3（证明 slides 执行器被真实拉起，
+非静态页面加载）：
+
+渲染前： {"ok":true,...,"roots":[...],"executors":0}
+渲染后： {"ok":true,"name":"genoffice-web-relay","port":8787,"ready":true,"roots":["shell","docs","markdown","pdf","sheets","slides"],"executors":3}
+
+证据形式说明：本会话环境未挂载浏览器自动化 MCP，按 spec 5.2「可用测试工具」
+降级为「手动脚本 + 用户回填」。sidebar-tab.png / file-list.png / preview.png
+未采集，以用户文字确认 + 上述 relay 侧客观指标替代。

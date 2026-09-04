@@ -1,0 +1,104 @@
+=== genoffice-dsh-office Task 1 baseline (2026-08-12) ===
+--- stack root git status ---
+ M README.md
+ M contracts/README.md
+ M contracts/relay-api.md
+ M docs/genoffice-dsh-control/tasks.csv
+ M scripts/dev.mjs
+?? contracts/control-api.md
+?? docs/.DS_Store
+?? docs/genoffice-dsh-control/README.md
+?? docs/genoffice-dsh-control/evidence/API-control/
+?? docs/genoffice-dsh-control/evidence/UF-001/
+?? docs/genoffice-dsh-control/evidence/UF-002/
+?? docs/genoffice-dsh-control/evidence/UF-003/
+?? docs/genoffice-dsh-control/evidence/UF-004/
+?? docs/genoffice-dsh-control/evidence/acceptance-guide.md
+?? docs/genoffice-dsh-control/evidence/fixtures/
+?? docs/genoffice-dsh-control/evidence/phase-0/
+?? docs/genoffice-dsh-control/evidence/phase-1/
+?? docs/genoffice-dsh-control/evidence/phase-2/
+?? docs/genoffice-dsh-control/evidence/phase-3/
+?? docs/genoffice-dsh-control/evidence/phase-4/
+?? docs/genoffice-dsh-control/evidence/phase-5/
+?? docs/genoffice-dsh-control/evidence/review-fixes.md
+?? docs/genoffice-dsh-control/integration.md
+?? docs/genoffice-dsh-office/evidence/phase-0/
+--- stack root git log ---
+fac5248 handoff: 修正控制契约路径为栈根 contracts（../../）
+447e32e handoff: 修正资料路径为包内相对路径（校验器要求）
+85b11ca handoff+evidence: 生成交付 Prompt 与证据目录骨架（Stage 3）
+--- upstream git status ---
+ M apps/docs/src/renderer/App.tsx
+ M apps/docs/src/renderer/components/Ribbon.tsx
+ M apps/docs/src/renderer/components/ribbon-tabs.tsx
+ M apps/markdown/src/renderer/App.tsx
+ M apps/markdown/src/renderer/components/Ribbon.tsx
+ M web/README.md
+ M web/server.mjs
+?? apps/docs/src/renderer/control.ts
+?? apps/markdown/src/renderer/control.ts
+--- upstream git log ---
+dd33cb8 chore: 移除已迁移的 dsh-plugin*/ 源码与归档快照（均已并入 plugin/dsh-artifact；历史保留在 git 记录中）
+1009491 dsh-plugin: 布局调整——工作区保留官方左侧边栏，终端/GenOffice/文件移至右侧浮动 Dock（details 槽位被官方占用，改为 fixed 浮层直挂，不注册槽位）；spec 同步 BR-001/UF-001/UF-006/3.1/3.3/Task-9/10/21
+f157067 docs: 归档 genoffice Web 化调研报告（Q1-Q7 证据索引）
+--- stack status ---
+relay  :8787  UP
+dsh    :3099  UP
+--- smoke baseline ---
+[smoke] 契约断言（relay-api.md）:
+  PASS  GET /api/health
+  PASS  GET /api/dir?path=/tmp → ok
+  PASS    path/parent 为字符串
+  PASS    entries 为数组且每项含 name/dir/hidden/symlink
+  PASS    /api/dir 缺省 = 主目录
+  PASS  GET /api/file 读绝对路径
+  PASS    name 为文件名
+  PASS    不可读路径 → ok:false
+  PASS  POST /api/inject → token
+  PASS  GET /api/inject/<token> 字节回读
+  PASS    token 一次性（二次读取 404）
+  PASS  GET /docs/?open=path:… 可达（docx 预览 URL 形态）
+  PASS  GET /markdown/?open=path:… 可达（md 预览 URL 形态）
+  PASS  未知 /api/* → 404
+  PASS  事件名镜像一致（local-paths.ts ↔ client/index.ts）
+  PASS  tab 可预览扩展名 ⊆ 渲染器白名单
+  提示: 渲染器额外链接 mdx（无预览，文档化漂移，见 contracts/relay-api.md 映射表）
+  PASS  GET /api/control/stream 非法 docId → 400
+  PASS  POST /api/control/notify 未注册 → ok:false
+  PASS  POST tool 未注册 → executor not registered
+  PASS  POST tool 非法 input → invalid input（不执行）
+  PASS  POST /api/control/<app>/… 未知 app → 404
+  PASS  POST /api/control/open → 64hex docId
+  PASS    docId 与 sha256(绝对路径) 一致
+  PASS  契约工具名集合表可解析（docx 11 + markdown 5）
+  PASS  工具名集合镜像（契约 ↔ docs skill AGENT_TOOLS）
+  PASS  工具名集合镜像（契约 ↔ markdown skill AGENT_TOOLS）
+  PASS  工具名集合镜像（契约 ↔ 插件 host 注册）
+[smoke] 全部通过 ✔
+
+=== 勘察命令（Task 1 实际执行） ===
+# slidesApi 方法清单（129 方法，245 处，22 文件）
+grep -rhoE 'window\.slidesApi\.[a-zA-Z0-9_]+' apps/slides/src/renderer | sort | uniq -c | sort -rn
+# slidesApi 使用文件
+grep -rln 'window\.slidesApi' apps/slides/src/renderer | sort
+# sheets desktopApi 使用面（26 方法）
+grep -rhoE 'desktopApi\.[a-zA-Z0-9_]+' apps/sheets/src/renderer | sort | uniq -c | sort -rn
+# pdf pdfApi 使用面（26 方法）+ 窗口依赖
+grep -rhoE 'window\.pdfApi\.[a-zA-Z0-9_]+' apps/pdf/src/renderer | sort | uniq -c | sort -rn
+# web-dist 存在性
+ls apps/{shell,docs,markdown,pdf,sheets,slides}/web-dist/index.html
+# vite.web.config.ts 存在性
+ls apps/{docs,sheets,slides,pdf}/vite.web.config.ts
+# gateway 纯 JSZip 管线
+grep -n 'export (async )?function \(readBasicWorkbook\|assembleWithJsZip\|planCellEditsToXlsx\|applyCellEditsToXlsx\)' apps/sheets/src/gateway/xlsx-gateway.ts
+# pptx-engine node 依赖面
+grep -rn "from 'node:" packages/pptx-engine/src/
+# pdf 保存管线库
+grep -n 'pdf-lib\|pdfjs-dist' apps/pdf/package.json
+# wasm 资产
+find apps/pdf -name '*.wasm' -not -path '*/node_modules/*'; ls apps/pdf/node_modules/harfbuzzjs/*.wasm
+# 基线：未构建 app 的 HTTP 行为
+curl -s -o /dev/null -w '%{http_code}' http://localhost:8787/sheets/  → 200（shell 首页回退，非 404）
+# smoke 基线全绿
+node scripts/dev.mjs smoke → 全部通过（30 断言）

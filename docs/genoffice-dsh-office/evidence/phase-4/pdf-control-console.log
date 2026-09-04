@@ -1,0 +1,28 @@
+# pdf 控制适配器验证（Task 17）
+
+URL: http://localhost:8787/pdf/?control=1&open=path:/tmp/demo-pdf.pdf
+docId = sha256(/tmp/demo-pdf.pdf) = 0fc92aeb…
+
+## 链路（curl + chrome MCP）
+1. context → "Current document: "demo-pdf.pdf", 2 pages; the user is viewing page 1."
+2. read_pages(start=1,end=1) → "[Page 1]\nDemo PDF Page One\nThis is a body paragraph containing the word wrong to fix later.\n…"
+3. search_text("wrong") → "Page 1: …containing the word wrong to fix later…"
+4. markup_text(page=1, text="wrong", type="highlight") → mutated:true
+5. edit_text(page=1, old_text="wrong", new_text="right") → "Replaced occurrence 1 of \"wrong\" on page 1 (unsaved; …)" mutated:true
+6. export → {"ok":true,"path":"/tmp/demo-pdf.pdf"}
+   ★ 写回产物校验：
+   - Annots + /Highlight 子类型存在（高亮标注落盘）
+   - pdfium 重读页面文本："…containing the word right to fix later."（文本改写落盘）
+   - 标注合并 + 内容流改写均经编辑器状态（INV-005）
+
+## 排障记录（3 次主动修复内完成）
+1. pdf.js worker MIME（.mjs → text/javascript）：server.mjs MIME 表补 .mjs
+2. web-font-locate 的 WebBuffer 类型-only import 被 tree-shake → shim 未进 bundle
+   → globalThis.Buffer undefined → 改为副作用 import（import './web-node-shims'）
+3. Buffer.toString('utf16le') 缺实现 → 文本提取出现 NUL 间插 → 补 utf16le 解码
+4. validateTextEdits 误用 verifyTextEdits（只校验未应用）→ 改回干跑 match（validateTextEdits）
+
+## 关键实现
+- apps/pdf/src/renderer/control.ts（新）：M0 适配器结构；executePdfTool(deps) 桥接；
+  export 前先以 getSaveRequest()（⌘S 同源 payload）应用当前编辑状态再取字节
+- App.tsx 接线：aiApiRef + buildSaveRequestRef + initControlMode

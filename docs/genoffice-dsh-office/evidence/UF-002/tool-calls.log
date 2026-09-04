@@ -1,0 +1,20 @@
+CALL pptx_read_slide {"path": "/Users/nothing/Downloads/genoffice-e2e/demo.pptx", "slideIndex": 1}
+RESULT [{'type': 'text', 'text': 'Canvas 1280×720px\nsp_2 | text | pos(48,48) size 630×105 font 18pt | (no text)\n---\nsp_3 | text | pos(48,168) size 630×84 font 18pt | (no text
+TEXT Slide 2 有两个文本元素（sp_2、sp_3），但读取显示无文本。先查看整体大纲确认哪个是标题：
+CALL pptx_get_deck_context {"path": "/Users/nothing/Downloads/genoffice-e2e/demo.pptx"}
+RESULT [{'type': 'text', 'text': 'The presentation has 2 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from genera
+TEXT 第 2 页（slideIndex=1）顶部元素 sp_2（位置 48,48，居上，符合标题位）即标题。将 sp_2 的文本改为「已由 DSH 修改」：
+CALL pptx_set_element_text {"path": "/Users/nothing/Downloads/genoffice-e2e/demo.pptx", "slideIndex": 1, "sourceId": "sp_2", "paragraphs": [{"text": "已由 DSH 修改"}]}
+RESULT [{'type': 'text', 'text': 'Replaced the text of element sp_2 on page 2 (1 paragraphs).'}]
+TEXT 修改成功。现在用 pptx_save 写回原文件：
+CALL pptx_save {"path": "/Users/nothing/Downloads/genoffice-e2e/demo.pptx"}
+RESULT [{'type': 'text', 'text': '已保存到 /Users/nothing/Downloads/genoffice-e2e/demo.pptx'}]
+TEXT 验证一下保存结果：
+CALL pptx_read_slide {"path": "/Users/nothing/Downloads/genoffice-e2e/demo.pptx", "slideIndex": 1}
+RESULT [{'type': 'text', 'text': 'Canvas 1280×720px\nsp_2 | text | pos(48,48) size 630×105 font 18pt | text#000000\n已由 DSH 修改\n---\nsp_3 | text | pos(48,168) size 630×84 font 18
+TEXT 已完成 ✅
+
+操作过程（全部使用 pptx_* 工具）：
+
+1. **pptx_read_slide** 确认第 2 页（slideIndex=1）元素：`sp_2`（位置 48,48，页面顶部，即标题框）和 `sp_3`（下方正文框）。
+

@@ -1,0 +1,31 @@
+# UF-005 kind:vibee hook
+date: 2026-08-19T01:24:43Z
+
+## session-marks unit
+
+ RUN  v4.1.10 /Users/nothing/workspace/dsh/plugin/session-tool/plugin
+
+ ✓ packages/session-marks/tests/marks.spec.ts (8 tests) 11ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  09:24:43
+   Duration  111ms (transform 19ms, setup 0ms, import 28ms, tests 11ms, environment 0ms)
+
+
+## vibee-host kind.spec (tmp DSH_HOME)
+
+ RUN  v4.1.10 /Users/nothing/workspace/dsh/plugin/vibee/plugin
+
+ ✓ packages/vibee-host/tests/kind.spec.ts (2 tests) 24ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  09:24:44
+   Duration  266ms (transform 112ms, setup 0ms, import 171ms, tests 24ms, environment 0ms)
+
+
+## hook sites
+engine.start -> markVibeeSession(parent)
+executor.create -> markVibeeSession(child)
+registerTab: none
