@@ -1,7 +1,7 @@
 # 供稿 0001：宿主服务契约的田野报告（→ RFC 0006 Host Services）
 
 - **状态**：草拟，未提交。目标场馆：oh-my-dsh/dsh-community-standard 的 RFC 0006 征求意见。
-- **来源**：dsh-genoffice 插件（`io.github.nothing1024.tab-genoffice`）——一个真实跑在 DSH 0.1.0-rc.7 上的双半身插件，host 半身消费四条宿主服务契约，全部以 x- 私有坐标 + branded facet 落地（`packages/tab-genoffice/src/standard/`）。
+- **来源**：dsh-genoffice 插件（`io.github.nothing1024.tab-genoffice`）——一个真实跑在 DSH 0.1.2-rc.1 上的双半身插件，host 半身消费四条宿主服务契约，全部以 x- 私有坐标 + branded facet 落地（`packages/tab-genoffice/src/standard/`）。
 
 ## 我们实测的四条契约
 

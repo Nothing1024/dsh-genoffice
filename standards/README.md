@@ -13,7 +13,7 @@ node standards/validate.mjs --update-baseline   # 评审后固化 adapter 基线
 |---|---|
 | `validate.mjs` | 自包含检查器，六环节：manifest 校验 → facet 入口装载检查（entry 存在/无私有 import/品牌默认导出）→ 纯函数协商（v0.15 报告）→ manifest fixtures → 协商 fixtures（五结局）→ adapter 审计 |
 | `dsh-plugin.schema.json` / `host-descriptor.schema.json` | 上游 schema 本地快照（仅参考；本仓权威校验在 validate.mjs） |
-| `host-descriptor.json` | profile `go` 的部署描述（:3080，DSH 0.1.0-rc.7），含 `apiVersions` 与五条 capabilities |
+| `host-descriptor.json` | profile `go` 的部署描述（:3080，DSH 0.1.2-rc.1），含 `apiVersions` 与五条 capabilities |
 | `adapter-baseline.json` | packages/*/src 的上游 import 基线（新增触点须评审） |
 | `fixtures/` | `valid/` 与 `invalid/`：manifest 样本，每条「必须」配一个违反它的样本；`facet/`：装载检查样本；`negotiation/`：五结局四件套（manifest × descriptor × registry × expected-report） |
 | `registry/` | 六条 x- 契约的本地注册表镜像（JSON 供协商器加载 + md 语义卡片），含 sensitivity 档位与 [permissions.md](./registry/permissions.md) |

@@ -533,7 +533,7 @@ P0 版本号文件升级 → P1 源码 import 修复 → P2 安装与命令级�
 |---|---|---|---|
 | Phase-Fix-1 | relay 探测仅在挂载期执行一次，relay 晚于页面启动时面板永久停留「relay 不可用」 | P1 | 既有 UX 缺陷，非本次升级回归 |
 | Phase-Fix-2 | `tsdown.config.ts` 仍将已移除的 `dsh-client-runtime` 声明为 external | P1 | 死配置，5.4 #1 检查项失败 |
-| Phase-Fix-3 | 4 处文档/注释仍写 `0.1.0-rc.7` | P2 | 文档陈旧，5.4 #1 检查项失败 |
+| Phase-Fix-3 | ~~4 处文档/注释仍写 `0.1.0-rc.7`~~ | P2 | **已修复（2026-09-05）**，见下方 |
 | Phase-Fix-4 | `RELAY_BASE` 用 `localhost`，relay 仅监听 IPv4 | P2 | 潜在缺陷，当前被浏览器回退掩盖 |
 
 #### Phase-Fix-1: relay 探测无自动重试（P1）
@@ -552,12 +552,19 @@ P0 版本号文件升级 → P1 源码 import 修复 → P2 安装与命令级�
 - **说明**：Task 2 已从 `package.json` 移除该依赖，Task 3 已从 `src/` 清空其 import，但打包配置仍将其声明为 external。当前 build 通过仅因为已无任何代码 import 它；一旦有人重新引入，会打出一个指向不存在依赖的 external 引用。
 - **验证**：删除该行后 `npm run build --workspaces` 退出码 0，且 `lib/client.js` 大小与产物内容无变化。
 
-#### Phase-Fix-3: 文档版本号陈旧（P2）
+#### Phase-Fix-3: 文档版本号陈旧（P2）— 已修复
 
 - **关联**：5.4 检查项 #1
-- **位置**：`README.md` L3、L96；`tsconfig.base.json` L4（注释）；`standards/README.md` L16；`standards/contributions/0001-host-service-contracts.md` L4
-- **说明**：均为纯文本描述，其中 `README.md` L3 同时写了 `dsh-better-sidebar@0.13.0`（现为 `0.18.0`），面向公开读者，优先级高于其余三处。
-- **验证**：`grep -rln "0\.1\.0-rc\.7\|dsh-client-runtime" --include="*.json" --include="*.yaml" --include="*.ts" --include="*.md" .`（排除 `node_modules`/`lib`/`docs`）无输出。
+- **状态**：**已修复（2026-09-05，commit 见下）**
+- **重新定级说明**：初次登记时判为 P2「文档陈旧」，属**归类失误**。复核发现 `README.md` L96 位于一段「可复制粘贴给 AI 的 setup prompt」内，是**祈使性操作指令**而非描述：原文「平台包版本以仓内钉死的为准（`@deepseek-ai/dsh@0.1.0-rc.7`），不要装 latest」自相矛盾——仓内 `pnpm-workspace.yaml` 实际钉的是 `0.1.2-rc.1`（122 处）。人类读者看到版本对不上会去核对源文件，AI 则大概率直接照做，装出与 `pnpm-lock.yaml` 冲突的环境，复现本次升级刚消除的 peer 依赖/导入故障。实际影响等级为 P1。
+- **修复内容**（5 处，均为纯文本，不参与构建）：
+  - `README.md` L3：`dsh@0.1.0-rc.7` → `0.1.2-rc.1`；`dsh-better-sidebar@0.13.0`（peer `^0.13.0`）→ `0.18.0`（peer `^0.18.0`）
+  - `README.md` L96：AI setup prompt 内的 `@deepseek-ai/dsh@0.1.0-rc.7` → `0.1.2-rc.1`
+  - `tsconfig.base.json` L4 注释：`pinned 0.1.0-rc.7 / 0.13.0` → `0.1.2-rc.1 / 0.18.0`
+  - `standards/README.md` L16：`DSH 0.1.0-rc.7` → `0.1.2-rc.1`（核对 `host-descriptor.json` 实物 `$comment` 确认其已是 `0.1.2-rc.1`，属描述与实物不符）
+  - `standards/contributions/0001-host-service-contracts.md` L4：`DSH 0.1.0-rc.7` → `0.1.2-rc.1`
+- **改前事实核对**：`pnpm-workspace.yaml` overrides `'@deepseek-ai/dsh': 0.1.2-rc.1`；`packages/tab-genoffice/package.json` `dsh-better-sidebar` devDep `0.18.0` / peer `^0.18.0`。所有新值取自实物，非推断。
+- **验证**：`npm run typecheck --workspaces` 退出码 0；`npm run test --workspaces` 16 文件 148 测试全绿（确认 `tsconfig.base.json` 虽只改注释但 JSONC 仍合法、构建平面未受影响）。5.4 检查项 #1 残留由 5 个文件降至 1 个（仅剩 `tsdown.config.ts` = Phase-Fix-2）。
 
 #### Phase-Fix-4: `RELAY_BASE` 主机名与 relay 监听地址不一致（P2）
 

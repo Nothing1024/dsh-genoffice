@@ -1,6 +1,6 @@
 # dsh-genoffice
 
-> **状态：实验性（experimental）· 维护中** · 适配 DSH `@deepseek-ai/dsh@0.1.0-rc.7`（平台包 `@deepseek-ai/dsh-*@0.1.0-rc.7`）+ `dsh-better-sidebar@0.13.0`（optional peer `^0.13.0`）。接口与契约仍在演进，随时可能变化。
+> **状态：实验性（experimental）· 维护中** · 适配 DSH `@deepseek-ai/dsh@0.1.2-rc.1`（平台包 `@deepseek-ai/dsh-*@0.1.2-rc.1`）+ `dsh-better-sidebar@0.18.0`（optional peer `^0.18.0`）。接口与契约仍在演进，随时可能变化。
 
 把 [GenOffice](https://github.com/genspark-ai/genoffice)（开源 AI Office 套件）接进 DSH：侧栏文件浏览、五族文档（`docx` / `xlsx` / `pptx` / `pdf` / `md`）网页预览编辑，以及 **agent 工具驱动的文档编辑与保存**——DSH 里的 agent 可以直接调用 `docx_*` / `markdown_*` / `xlsx_*` / `pptx_*` / `pdf_*` 工具族读写真实的 Office 文件。
 
@@ -93,7 +93,7 @@ sh env/boot.sh
    通过控制面完成 insert_content 插入内容并 export 写回，最后展示磁盘文件的变化。
 
 约束：所有服务只绑 127.0.0.1，不要用 --lan 或对外网暴露；不要修改我的 ~/.dsh 主目录；
-平台包版本以仓内钉死的为准（@deepseek-ai/dsh@0.1.0-rc.7），不要装 latest。
+平台包版本以仓内钉死的为准（@deepseek-ai/dsh@0.1.2-rc.1），不要装 latest。
 ```
 
 ## 真实案例：agent 通过控制面编辑并保存
