@@ -270,8 +270,8 @@ P0 版本号文件升级 → P1 源码 import 修复 → P2 安装与命令级�
 
 | 序号 | 任务 | 前置 | 验证命令 | 状态 |
 |---|---|---|---|---|
-| 1 | 升级根 `pnpm-workspace.yaml` 版本号 | 无 | `grep -c "0.1.2-rc.1" pnpm-workspace.yaml` → ≥62 | 待开始 |
-| 2 | 升级 `packages/tab-genoffice/package.json` 依赖并移除 `dsh-client-runtime` | 无 | `grep -c "dsh-client-runtime" packages/tab-genoffice/package.json` → 0 | 待开始 |
+| 1 | 升级根 `pnpm-workspace.yaml` 版本号 | 无 | `grep -c "0.1.2-rc.1" pnpm-workspace.yaml` → ≥62 | 已完成 |
+| 2 | 升级 `packages/tab-genoffice/package.json` 依赖并移除 `dsh-client-runtime` | 无 | `grep -c "dsh-client-runtime" packages/tab-genoffice/package.json` → 0 | 已完成 |
 | 3 | 修复 `src/client/index.ts` 与 `src/standard/cordis-client-adapter.ts` 的 `ClientContext` 导入 | 无 | `grep -rn "dsh-client-runtime" packages/tab-genoffice/src` → 无输出 | 待开始 |
 | 4 | 同步 `env/profiles/go` 与 `env/README.md`、`standards/host-descriptor.json` 版本号提示 | 1 | `grep -rln "0.1.0-rc.7" env/profiles/go env/README.md standards/host-descriptor.json` → 无输出 | 待开始 |
 | 5 | `pnpm install` 重新解析依赖（根 workspace + `env/profiles/go`） | 1;2;3;4 | `pnpm install && echo OK` → OK，无 peer 冲突报错 | 待开始 |
@@ -307,6 +307,8 @@ P0 版本号文件升级 → P1 源码 import 修复 → P2 安装与命令级�
 **Evidence**：`evidence/phase-0/task-1-diff.txt`（`git diff pnpm-workspace.yaml` 输出）
 
 **注意事项**：易错点——两个块（overrides / minimumReleaseAgeExclude）包名列表必须保持一致，禁止只改一处导致两块版本号不一致触发 pnpm 警告。
+
+**执行记录（偏差）**：`@deepseek-ai/dsh-client-runtime` 这个包名在 `0.1.2-rc.1` 已不存在于 npm registry（`npm view @deepseek-ai/dsh-client-runtime@0.1.2-rc.1` → 404），仅替换版本号会让 overrides/exclude 指向一个不存在的版本。追加操作：从两个块中各删除 1 行 `@deepseek-ai/dsh-client-runtime` 条目（与 Task 2 移除插件自身依赖的逻辑一致）。最终 `pnpm-workspace.yaml` 含 122 处 `0.1.2-rc.1`、0 处 `dsh-client-runtime`、0 处 `0.1.0-rc.7`。
 
 ### Task 2: 升级 `packages/tab-genoffice/package.json` 依赖并移除 `dsh-client-runtime`
 
