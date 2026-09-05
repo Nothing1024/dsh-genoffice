@@ -1,6 +1,6 @@
 # 运行手册 / 验证路径
 
-活文档。`genoffice-dsh-control/`、`genoffice-dsh-office/` 里的 spec / evidence 是当时验收存档，路径仍写 `dsh-artifact` / `:3099`，不要当现在的启动手册。
+活文档。过程文档（spec / tasks / handoff / evidence）已归档到 [project-dev-library `dsh-genoffice`](https://github.com/Nothing1024/project-dev-library/tree/project/dsh-genoffice/dsh-genoffice)；旧路径仍可能写 `dsh-artifact` / `:3099`，不要当现在的启动手册。
 
 ## 现状速查
 

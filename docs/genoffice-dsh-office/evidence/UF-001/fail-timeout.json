@@ -1,1 +1,0 @@
-{"note":"真实超时在 agent 主路径中自然发生（UF-001 tool-calls.log：首次 propose_operations → 控制通道超时，调用未被重放；agent 重取上下文后重试成功）。此处记录契约语义：relay 等待 notify TTL 60s 后返回 {ok:false,error:'timeout'} 且不重放（BR-010，server.mjs waitForResult）。","contract":{"ok":false,"error":"timeout"}}

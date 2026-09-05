@@ -1,7 +1,0 @@
-{
-  "request": {"method": "POST", "url": "http://127.0.0.1:8787/api/control/markdown/<docId>/export", "body": {"path": "/tmp/genoffice-export-test.md"}},
-  "downstream": {"event": "export", "data": {"requestId": "<uuid>"}},
-  "notify": {"docId": "<docId>", "kind": "export", "requestId": "<uuid>", "payload": {"base64": "<bytes>", "name": "genoffice-export-test.md", "path": "/tmp/genoffice-export-test.md"}},
-  "response": {"ok": true, "path": "/tmp/genoffice-export-test.md", "name": "genoffice-export-test.md"},
-  "note": "UF-002 保存链路：导出字节经 notify 回传 → relay tmp+rename 原子写回；磁盘内容 = 回传字节"
-}

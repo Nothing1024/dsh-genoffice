@@ -1,8 +1,0 @@
-{"type": "CALL", "name": "pptx_open", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\"}"}
-{"type": "RES", "isError": false, "text": "已打开控制模式：/tmp/genoffice-land-pages-e2e/blank.pptx"}
-{"type": "CALL", "name": "pptx_generate_deck", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\", \"topic\": \"季度复盘三页演示\", \"approx_pages\": 3}"}
-{"type": "RES", "isError": true, "text": "Error: 宿主规划失败，未落地。\n上游原文：planning failed: empty model output\n下一步：改 topic/brief，或改调 pptx_land_pages 自写 PageSpec。不要把 key 写入 iframe。"}
-{"type": "CALL", "name": "pptx_get_deck_context", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\"}"}
-{"type": "RES", "isError": false, "text": "The presentation has 1 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage 1 (slideIndex=0):\n(Use read_slide to see element positions/sizes/colors)"}
-{"type": "CALL", "name": "pptx_add_shape", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\", \"slideIndex\": 0, \"kind\": \"rect\", \"x\": 40, \"y\": 40, \"w\": 80, \"h\": 40}"}
-{"type": "RES", "isError": true, "text": "Error: 未识别的上游错误。\n上游原文：For blank/from-scratch scenarios don't hand-assemble pages element by element with add_text_box/add_shape/add_smartart (crude layout). Use the generation pipeline instead: new whole deck → generate_deck; new pages for an existing deck → generate_deck(pages, insert_mode:\"append\"). Write it beautifully in HTML/CSS and the system converts it into editable elements. Use native tools only when the deck already has polished content and one element needs refining.\n下一步：规划失败看 planni"}

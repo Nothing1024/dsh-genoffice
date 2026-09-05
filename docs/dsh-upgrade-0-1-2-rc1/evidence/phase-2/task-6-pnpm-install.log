@@ -1,8 +1,0 @@
-=== pnpm install (root) ===
-Packages: +58 -99 (after cordis 4.0.2 bump), 0 dependency resolution errors
-
-=== pnpm peers check (root) — after adding @deepseek-ai/cordis, cordis-plugin-include/loader overrides ===
-No peer dependency issues found
-
-=== pnpm peers check (env/profiles/go) — informational, autoInstallPeers:false, not blocking install ===
-(dsh-base/dsh-web-app 内部依赖图新增细粒度包的 peer 提示，非本插件直接依赖面；真实性以 Task 9 冒烟结果为准)

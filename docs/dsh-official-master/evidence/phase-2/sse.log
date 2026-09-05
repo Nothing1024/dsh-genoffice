@@ -1,8 +1,0 @@
-GET /api/open/stream 200 text/event-stream
-event: hello
-data: {}
-
-event: file
-data: {"path":"/tmp/sm-demo.md"}
-
-POST /api/open 200 {"ok":true,"path":"/tmp/sm-demo.md","subscribers":1}

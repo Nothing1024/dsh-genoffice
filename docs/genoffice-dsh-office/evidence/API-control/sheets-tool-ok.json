@@ -1,1 +1,0 @@
-{"ok":true,"execution":{"output":"Read metadata: requested range A1:C3; authoritative worksheet data extent A1:XFD1048576 (1048576 worksheet rows including any header). Do not infer total rows or records from the requested range.\n\tA\tB\tC\n1\tHello\t\t5\n2\t\t\t\n3\t\t5.00 (=SUM(C1:C2))\t","mutated":false,"summary":"读取范围 A1:C3"}}

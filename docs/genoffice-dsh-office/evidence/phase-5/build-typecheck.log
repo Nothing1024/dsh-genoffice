@@ -1,7 +1,0 @@
-== npm run build ==
-ℹ [CJS] lib/client.js.map  591.29 kB │ gzip: 114.46 kB
-ℹ [CJS] 2 files, total: 993.13 kB
-✔ Build complete in 51ms
-== npm run typecheck ==
-> tsc -p tsconfig.json
-

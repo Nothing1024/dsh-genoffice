@@ -1,9 +1,0 @@
-{
-  "request": {
-    "method": "POST",
-    "url": "http://127.0.0.1:8787/api/control/notify",
-    "body": {"docId": "<64hex: sha256(/tmp/never-opened.md)>", "kind": "tool-result", "requestId": "r2", "payload": {}}
-  },
-  "response": {"ok": false, "error": "executor not registered"},
-  "note": "BR-003：无 SSE 连接的 docId → 明确错误"
-}

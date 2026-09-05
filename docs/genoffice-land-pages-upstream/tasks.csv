@@ -1,9 +1,0 @@
-序号,Phase,名称,详情锚点,前置任务,验证命令,状态,备注
-1,P0:契约,冻结 land_pages 契约与 smoke 计数,spec.md#task-1,无,rg land_pages contracts/control-api.md,已完成,pptx 38→39
-2,P0:契约,执行 Phase 0 回归验证,spec.md#task-2,1,核对契约加法与错误串,已完成,
-3,P1:iframe 原语,iframe 新增 land_pages 并拆除控制模式 LLM,spec.md#task-3,2,rg land_pages slides-skill.ts；control-deck-access 无 withLocalLlm,已完成,禁止改 plugin
-4,P1:iframe 原语,控制模式 generate_deck regenerate_slide plan_deck 短路,spec.md#task-4,3,topic-only 返回 control mode requires pages_spec,已完成,
-5,P1:iframe 原语,单测落地与守卫,spec.md#task-5,3;4,npx vitest run tests/web-land-pages.test.ts,已完成,
-6,P1:iframe 原语,执行 Phase 1 回归验证,spec.md#task-6,3;4;5,vitest 全绿,已完成,
-7,P2:端到端,执行 spec 5.2 真实场景全套测试,spec.md#task-7,6,5.2 curl 矩阵全行通过,已完成,不跑 DSH generate_deck
-8,P2:端到端,执行 Phase 2 回归验证,spec.md#task-8,7,validate_package.py 0 FAIL,已完成,

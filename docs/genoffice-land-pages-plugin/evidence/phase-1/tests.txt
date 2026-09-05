@@ -1,5 +1,0 @@
-vitest run: 13 files, 104 tests passed
-typecheck: tsc -p tsconfig.json green (via build)
-build: tsc -p tsconfig.build.json && tsdown green
-lib/index.js contains pptx_land_pages / skillName land_pages
-host tests: pptx_generate_deck POSTs land_pages, never generate_deck

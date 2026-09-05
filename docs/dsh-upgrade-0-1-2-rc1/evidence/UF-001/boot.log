@@ -1,3 +1,0 @@
-npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
-dsh web: http://127.0.0.1:3080/?token=<REDACTED-launch-token>
-dsh web: opening the default browser; pass --no-open to disable

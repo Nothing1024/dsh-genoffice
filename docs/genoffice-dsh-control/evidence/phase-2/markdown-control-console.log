@@ -1,4 +1,0 @@
-[control] stream open (docId=f4b8522a…)          ← EventSource 建立
-[control] executor registered (/Users/nothing/workspace/dsh/genoffice/docs/genoffice-dsh-control/evidence/fixtures/demo.md)
-console 无 error（仅浏览器扩展 Immersive Translate 无关报错）
-文档内容正常加载（修复了 control 参数清除竞态：适配器只清 control，open 由 app 自身流程清除）

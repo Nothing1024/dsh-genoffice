@@ -1,6 +1,0 @@
-# UF-001 主路径 BR-008 校验（原文件 diff）
-打开时文件 sha256: 259f58f05be42f98b89b257381cb17fe87a13b8211f118d8b6ef1d256c1699b8
-（agent 编辑完成后、xlsx_save 前）: 259f58f05be42f98b89b257381cb17fe87a13b8211f118d8b6ef1d256c1699b8 → diff 为空（编辑只改 iframe 内状态）
-xlsx_save 写回后: 29fdc464fe8f5f177a727af0e438c13377973c523f6f060f62f18b81cff8391c
-写回产物: B11 = <f>SUM(B1:B10)</f>；B1 s=2 + numFmtId=2（0.00）；zip 完整
-（编辑前未写回时文件字节不变，由 phase-2 sheets-export-bytes.json 与本次会话 tool-calls.log 共同佐证）

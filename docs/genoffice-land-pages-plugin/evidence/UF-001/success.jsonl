@@ -1,8 +1,0 @@
-{"type": "CALL", "name": "pptx_open", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\"}"}
-{"type": "RES", "isError": false, "text": "已打开控制模式：/tmp/genoffice-land-pages-e2e/blank.pptx"}
-{"type": "CALL", "name": "pptx_generate_deck", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\", \"topic\": \"季度复盘三页演示\", \"approx_pages\": 3}"}
-{"type": "RES", "isError": false, "text": "Landed 3 host-authored page(s) (insert_mode:replace). Deck now has 3 page(s)."}
-{"type": "CALL", "name": "pptx_get_deck_context", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\"}"}
-{"type": "RES", "isError": false, "text": "The presentation has 3 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage 1 (slideIndex=0):\n  - e_2a6c4813 | text | \"季度复盘三页演示\"\n  - e_5d167e9e | text | \"季度复盘三页演示。封面：主标题与一句话钩子。\"\nPage 2 (slideIndex=1):\n  - e_7e16934a | text | \"季度复盘三页演示 2\"\n  - e_37b19884 | text | \"季度复盘三页演示 要点 1。\"\nPage 3 (slideIndex=2):\n  - e_21799429 | text | \"季度复盘三页演示 3\"\n  - e_7c8e9"}
-{"type": "CALL", "name": "pptx_add_shape", "arguments": "{\"path\": \"/tmp/genoffice-land-pages-e2e/blank.pptx\", \"slideIndex\": 0, \"kind\": \"rect\", \"x\": 40, \"y\": 40, \"w\": 80, \"h\": 40}"}
-{"type": "RES", "isError": false, "text": "Created a new shape on page 1, element id=spnew_3_mt7gdrwi."}

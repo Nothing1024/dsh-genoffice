@@ -1,6 +1,6 @@
 # 控制契约（genoffice-dsh-office）
 
-> 本文件是 DSH 控制 GenOffice 文档编辑的**单一事实源**（INV-004）。版本：0.3.0 | 2026-08-25（控制 UX，见 `docs/genoffice-control-ux/spec.md`）。
+> 本文件是 DSH 控制 GenOffice 文档编辑的**单一事实源**（INV-004）。版本：0.3.0 | 2026-08-25（控制 UX 过程文档已归档到 [project-dev-library `genoffice-control-ux-prd`](https://github.com/Nothing1024/project-dev-library/blob/project/dsh-genoffice/dsh-genoffice/genoffice-control-ux-prd.md)）。
 >
 > 四处镜像点（各侧独立声明，改动后必须同步本文件并跑 `node scripts/dev.mjs smoke` 验证）：
 > 1. app 控制适配器：`upstream/apps/{docs,markdown,sheets,slides,pdf}/src/renderer/control.ts`

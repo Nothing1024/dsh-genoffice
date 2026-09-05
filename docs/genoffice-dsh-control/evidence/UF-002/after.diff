@@ -1,8 +1,0 @@
---- /tmp/demo-before-save.md	2026-08-12 19:24:31
-+++ /Users/nothing/workspace/dsh/genoffice/docs/genoffice-dsh-control/evidence/fixtures/demo.md	2026-08-12 19:24:44
-@@ -12,4 +12,4 @@
- 
- # 第三章 计划
- 
--第三章正文段落。
-+第三章正文已被 DSH agent 改写。

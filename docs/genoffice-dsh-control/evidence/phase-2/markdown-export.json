@@ -1,6 +1,0 @@
-{
-  "request": {"method": "POST", "url": "/api/control/markdown/<docId>/export", "body": {"path": ".../evidence/fixtures/demo.md"}},
-  "response": {"ok": true, "path": ".../evidence/fixtures/demo.md", "name": "demo.md"},
-  "verification": "磁盘 demo.md 内容 = iframe 当前内容（第三章段落已被控制工具改写后落盘）",
-  "note": "markdown 导出走 serializeDocText + getMarkdown（保存管线，INV-005）；已还原 fixture"
-}
