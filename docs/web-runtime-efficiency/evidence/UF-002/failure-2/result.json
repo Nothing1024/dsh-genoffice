@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-002",
+  "branch": "failure-2",
+  "run_id": "wre-readiness-2026-09-12T22:37:09.068Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "bd830edd2b397db6cedf2b5e57ec99804f2b3f41",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "print-dependency-disabled-live",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "live",
+          "status": "passed",
+          "expected": true,
+          "actual": true
+        },
+        {
+          "name": "print-disabled-live",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "available": false,
+            "reason": "print-service-disabled"
+          }
+        },
+        {
+          "name": "print-disabled-reason",
+          "status": "passed",
+          "expected": "print-service-disabled",
+          "actual": {
+            "available": false,
+            "reason": "print-service-disabled"
+          }
+        }
+      ]
+    }
+  ]
+}

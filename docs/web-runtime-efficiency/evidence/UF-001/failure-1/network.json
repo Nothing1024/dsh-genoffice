@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-001",
+  "branch": "failure-1",
+  "event_count": 1,
+  "file_gets": [
+    {
+      "bytes": 268,
+      "url": "http://127.0.0.1:18787/api/file?path=%2FUsers%2Fnothing%2Fworkspace%2Fdsh%2Fplugin%2Fdsh-genoffice%2Fplugin%2Fdocs%2Fweb-runtime-efficiency%2Fevidence%2Fphase-0%2Fwork-no-duplicate-read%2Fmd-small.md",
+      "hasBase64": true,
+      "base64Chars": 80
+    }
+  ],
+  "requests": [
+    {
+      "bytes": 268,
+      "url": "http://127.0.0.1:18787/api/file?path=%2FUsers%2Fnothing%2Fworkspace%2Fdsh%2Fplugin%2Fdsh-genoffice%2Fplugin%2Fdocs%2Fweb-runtime-efficiency%2Fevidence%2Fphase-0%2Fwork-no-duplicate-read%2Fmd-small.md",
+      "hasBase64": true,
+      "base64Chars": 80
+    }
+  ]
+}

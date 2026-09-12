@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-002",
+  "branch": "success",
+  "event_count": 7,
+  "routes": {
+    "shell": {
+      "path": "/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "html": true,
+      "bytes": 694,
+      "missingDist": false
+    },
+    "docs": {
+      "path": "/docs/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "html": true,
+      "bytes": 709,
+      "missingDist": false
+    },
+    "markdown": {
+      "path": "/markdown/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "html": true,
+      "bytes": 721,
+      "missingDist": false
+    },
+    "sheets": {
+      "path": "/sheets/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "html": true,
+      "bytes": 712,
+      "missingDist": false
+    },
+    "slides": {
+      "path": "/slides/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "html": true,
+      "bytes": 837,
+      "missingDist": false
+    },
+    "pdf": {
+      "path": "/pdf/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "html": true,
+      "bytes": 806,
+      "missingDist": false
+    },
+    "html": {
+      "path": "/html/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "html": true,
+      "bytes": 758,
+      "missingDist": false
+    }
+  }
+}

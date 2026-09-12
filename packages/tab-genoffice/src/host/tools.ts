@@ -2,7 +2,7 @@
  * Host tools: GenOffice control plane via relay POST /api/control/<app>/<docId>/…
  *
  * Registration is filtered by CAPABILITY (BR-001 / BR-015). The table lists
- * every control tool (docx 11 + markdown 5 + xlsx 13 + pptx 39 + pdf 21 = 89);
+ * every control tool (docx 16 + markdown 6 + xlsx 13 + pptx 39 + pdf 21 + html 5);
  * a row without a CAPABILITY key is not registered. DSH_GENOFFICE_ALL_TOOLS=1
  * re-opens the filter.
  * Write-back only through *_save and the tab button (BR-011).
@@ -48,6 +48,7 @@ const OPEN_TOOL_BY_APP: Partial<Record<ControlToolEntry['app'], string>> = {
   sheets: 'xlsx_open',
   slides: 'pptx_open',
   pdf: 'pdf_open',
+  html: 'html_open',
 }
 
 function describeEntry(entry: ControlToolEntry, cap: CapabilityEntry | undefined, allTools: boolean): string {
@@ -116,9 +117,14 @@ async function waitUntilRegistered(path: string, signal: AbortSignal): Promise<b
         signal,
       })
       if (resp.ok) {
-        const data = (await resp.json()) as { registered?: unknown }
-        if (data.registered === true) return true
-        if (data.registered === undefined) return true
+        const data = (await resp.json()) as { registered?: unknown; readiness?: unknown; error?: unknown }
+        if (data.readiness === 'error') return false
+        if (data.readiness === 'ready') return true
+        // Old relays without readiness: fall back to registered, but never
+        // treat a missing field as ready once the field exists as non-ready.
+        if (data.readiness == null && (data.registered === true || data.registered === undefined)) {
+          return true
+        }
       }
     } catch (e) {
       if (signal.aborted) return false
@@ -144,7 +150,7 @@ async function callRelay(
   entry: ControlToolEntry,
   input: Record<string, unknown>,
   signal: AbortSignal,
-): Promise<{ ok: boolean; output: string; summary: string }> {
+): Promise<{ ok: boolean; output: string; summary: string; revision?: string }> {
   const path = String(input.path ?? '')
   if (!path.startsWith('/')) fail('path 必须是目标文件的本机绝对路径', path, 'local')
   if (isInSyncWindow(path)) fail('sync window', path, 'sync')
@@ -168,17 +174,20 @@ async function callRelay(
   const data = (await resp.json()) as {
     ok?: boolean
     error?: string
-    execution?: { output?: string; isError?: boolean; mutated?: boolean; summary?: string }
+    revision?: unknown
+    execution?: { output?: string; isError?: boolean; mutated?: boolean; summary?: string; revision?: unknown }
   }
   if (!data.ok) fail(String(data.error ?? 'unknown error'), path, 'relay')
   const execution = data.execution ?? {}
   if (execution.isError) {
     fail(String(execution.output ?? 'executor error'), path, 'executor')
   }
+  const revision = data.revision ?? execution.revision
   return {
     ok: true,
     output: String(execution.output ?? ''),
     summary: String(execution.summary ?? entry.skillName),
+    ...(revision != null ? { revision: String(revision) } : {}),
   }
 }
 
@@ -226,6 +235,8 @@ async function saveViaRelay(
 const READ_SKILLS = new Set([
   'get_document_context',
   'read_blocks',
+  'read_comments',
+  'read_revisions',
   'web_search',
   'image_search',
   'get_workbook_context',
@@ -244,6 +255,7 @@ const READ_SKILLS = new Set([
   'list_page_images',
   'list_form_fields',
   'get_outline',
+  'read_source',
 ])
 
 function callKindFor(entry: ControlToolEntry): 'read' | 'edit' {
@@ -295,24 +307,6 @@ function planningFail(error: unknown, path: string): never {
 function isTimeoutError(error: unknown): boolean {
   const raw = error instanceof Error ? error.message : String(error)
   return /timeout/i.test(raw)
-}
-
-async function callRelayRetry(
-  entry: ControlToolEntry,
-  input: Record<string, unknown>,
-  signal: AbortSignal,
-): Promise<{ ok: boolean; output: string; summary: string }> {
-  let last: unknown
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      return await callRelay(entry, input, signal)
-    } catch (e) {
-      last = e
-      if (!isTimeoutError(e) || attempt === 2) throw e
-      await sleep(400, signal)
-    }
-  }
-  throw last instanceof Error ? last : new Error(String(last))
 }
 
 function parseLandedCount(output: string): number | undefined {
@@ -391,17 +385,32 @@ async function waitLanded(
   }
 }
 
+function isAbortError(error: unknown): boolean {
+  return error instanceof Error && (error.name === 'AbortError' || /aborted|abort/i.test(error.message))
+}
+
+const LAND_UNCERTAIN =
+  '落页写入回执不确定（超时或断线）。本次最多发送一次写请求，不要重试本写入。请先 pptx_get_deck_context 或 pptx_read_slide 核对实际页数后再决定是否补做。'
+
 async function executeLandPages(
   input: Record<string, unknown>,
   signal: AbortSignal,
   settle: { settleMs: number; pollMs: number },
 ): Promise<{ ok: boolean; output: string; summary: string }> {
-  const result = await callRelayRetry(landPagesEntry(), input, signal)
-  const expected = parseLandedCount(result.output)
-  if (expected !== undefined) {
-    await waitLanded(String(input.path ?? ''), expected, signal, firstTextNeedle(input.pages), settle)
+  try {
+    const result = await callRelay(landPagesEntry(), input, signal)
+    const expected = parseLandedCount(result.output)
+    if (expected !== undefined) {
+      await waitLanded(String(input.path ?? ''), expected, signal, firstTextNeedle(input.pages), settle)
+    }
+    return result
+  } catch (e) {
+    if (signal.aborted) throw e
+    if (isTimeoutError(e) || isAbortError(e)) {
+      return { ok: false, output: LAND_UNCERTAIN, summary: '落页结果待核对' }
+    }
+    throw e
   }
-  return result
 }
 
 async function executeGenerateDeck(
@@ -466,7 +475,7 @@ export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<t
       name: entry.name,
       description: describeEntry(entry, cap, allTools),
       parameters: entry.parameters,
-      timeoutMs: entry.name === 'pptx_generate_deck' ? GENERATE_DECK_TIMEOUT_MS : CONTROL_TIMEOUT_MS,
+      timeoutMs: entry.name === 'pptx_generate_deck' || entry.name === 'html_export_docx' ? GENERATE_DECK_TIMEOUT_MS : CONTROL_TIMEOUT_MS,
       output: {
         schema: {
           type: 'object',
@@ -519,19 +528,149 @@ export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<t
         if (entry.skillName === 'land_pages') {
           return await executeLandPages(input, exec.signal, settle)
         }
+        if (entry.name === 'html_export_docx') {
+          return await executeHtmlExportDocx(input, exec.signal)
+        }
         const result = await callRelay(entry, input, exec.signal)
         return { ok: result.ok, output: result.output, summary: result.summary }
       },
     })
   })
-  return [...controlTools, ...createOpenTools()]
+  return [...controlTools, ...createOpenTools(), ...createServiceTools()]
 }
 
-const OPEN_TOOL_EXTS = ['pptx', 'docx', 'xlsx', 'md', 'pdf'] as const
+const OPEN_TOOL_EXTS = ['pptx', 'docx', 'xlsx', 'md', 'pdf', 'html'] as const
 type OpenExt = (typeof OPEN_TOOL_EXTS)[number]
 
 function openToolDesc(ext: OpenExt): string {
   return `【必做第一步】用 GenOffice 控制模式打开本机 .${ext} 文件。做或改该类型文档时必须先调用本工具，等到返回「已打开控制模式」后才能调用其它 ${ext}_* 工具。禁止用 python、python-pptx、soffice、skill ppt-image-first、third-imagegen 代替本工具。path 为本机绝对路径，文件必须存在。`
+}
+
+function decodeBase64Utf8(b64: string): string {
+  const bin = atob(b64)
+  const bytes = new Uint8Array(bin.length)
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i)
+  return new TextDecoder().decode(bytes)
+}
+
+async function executeHtmlExportDocx(
+  input: Record<string, unknown>,
+  signal: AbortSignal,
+): Promise<{ ok: boolean; output: string; summary: string }> {
+  const path = String(input.path ?? '')
+  if (!path.startsWith('/')) fail('path 必须是目标文件的本机绝对路径', path, 'local')
+  const destHint = input.dest
+  const dest = typeof destHint === 'string' && destHint.startsWith('/')
+    ? destHint
+    : `${path.replace(/\.html?$/i, '')}.docx`
+  let ready: { available?: boolean; reason?: string }
+  try {
+    const resp = await fetch(`${RELAY_BASE}/api/html/docx/ready`, { signal })
+    ready = (await resp.json()) as { available?: boolean; reason?: string }
+  } catch (e) {
+    fail(e instanceof Error ? e.message : String(e), path, 'fetch')
+  }
+  if (ready.available !== true) {
+    fail(String(ready.reason ?? 'html-to-docx-unavailable'), path, 'relay')
+  }
+  let html = ''
+  try {
+    const resp = await fetch(`${RELAY_BASE}/api/file?path=${encodeURIComponent(path)}`, { signal })
+    const file = (await resp.json()) as { ok?: boolean; base64?: string; error?: string }
+    if (file.ok !== true || typeof file.base64 !== 'string') {
+      fail(String(file.error ?? 'html source unreadable'), path, 'relay')
+    }
+    html = decodeBase64Utf8(file.base64)
+  } catch (e) {
+    fail(e instanceof Error ? e.message : String(e), path, 'fetch')
+  }
+  let started: { ok?: boolean; jobId?: string; error?: string }
+  try {
+    const resp = await fetch(`${RELAY_BASE}/api/html/docx/jobs`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal,
+      body: JSON.stringify({ html, dest }),
+    })
+    started = (await resp.json()) as { ok?: boolean; jobId?: string; error?: string }
+  } catch (e) {
+    fail(e instanceof Error ? e.message : String(e), path, 'fetch')
+  }
+  if (started.ok !== true || !started.jobId) {
+    fail(String(started.error ?? 'html-docx-rejected'), path, 'relay')
+  }
+  let done: { ok?: boolean; dest?: string; error?: string; status?: string; canceled?: boolean }
+  try {
+    const resp = await fetch(`${RELAY_BASE}/api/html/docx/jobs/wait`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal,
+      body: JSON.stringify({ id: started.jobId }),
+    })
+    done = (await resp.json()) as { ok?: boolean; dest?: string; error?: string; status?: string; canceled?: boolean }
+  } catch (e) {
+    fail(e instanceof Error ? e.message : String(e), path, 'fetch')
+  }
+  if (done.status === 'cancelled' || done.canceled === true) {
+    fail('cancelled', path, 'relay')
+  }
+  if (done.ok !== true) {
+    fail(String(done.error ?? 'html-docx-failed'), path, 'relay')
+  }
+  const out = done.dest ?? dest
+  return { ok: true, output: `已转换为 ${out}`, summary: 'HTML 已转为 Word' }
+}
+
+function createServiceTools(): ReturnType<typeof defineTool>[] {
+  return [
+    defineTool({
+      name: 'genoffice_services',
+      description:
+        '规划前查询 GenOffice 网页服务是否可用（打印、OCR、HTML→Word、provider、文档加解密/附件提取、Markdown 资源）。不可用时只报告 reason，不要要求安装桌面版。',
+      parameters: {},
+      output: {
+        schema: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            ok: { type: 'boolean', required: true },
+            output: { type: 'string', required: true },
+            summary: { type: 'string', required: true },
+          },
+        },
+        render: (_args, value) => [{ type: 'text', text: value.output }],
+      },
+      presentCall: () => ({ card: 'generic', title: 'genoffice_services', kind: 'read', rawInput: '' }),
+      presentResult: (_args, result) => ({
+        card: 'generic',
+        title: result.isError ? 'genoffice_services 失败' : 'genoffice_services',
+      }),
+      async execute(_args, exec) {
+        let resp: Response
+        try {
+          resp = await fetch(`${RELAY_BASE}/api/health`, { signal: exec.signal })
+        } catch (e) {
+          fail(e instanceof Error ? e.message : String(e), undefined, 'fetch')
+        }
+        const data = (await resp.json()) as Record<string, unknown>
+        const slice = {
+          live: data.live,
+          ready: data.ready,
+          roots: data.roots,
+          claimed: data.claimed,
+          apps: data.apps,
+          print: data.print,
+          ocr: data.ocr,
+          htmlDocx: data.htmlDocx,
+          providers: data.providers,
+          docsCrypto: data.docsCrypto,
+          docsExtract: data.docsExtract,
+          markdownAssets: data.markdownAssets,
+        }
+        return { ok: true, output: JSON.stringify(slice), summary: '服务可用性' }
+      },
+    }),
+  ]
 }
 
 /** Open tools: POST /api/open — bypasses the control plane (no docId needed). */
@@ -571,7 +710,10 @@ export function createOpenTools(): ReturnType<typeof defineTool>[] {
         if (!filePath.startsWith('/')) fail('path 必须是目标文件的本机绝对路径', filePath, 'local')
         const slash = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'))
         const base = slash < 0 ? filePath : filePath.slice(slash + 1)
-        if (!base.toLowerCase().endsWith(`.${ext}`)) {
+        const extOk = ext === 'html'
+          ? (base.toLowerCase().endsWith('.html') || base.toLowerCase().endsWith('.htm'))
+          : base.toLowerCase().endsWith(`.${ext}`)
+        if (!extOk) {
           fail(`path 必须是 .${ext} 文件`, filePath, 'local')
         }
         let resp: Response

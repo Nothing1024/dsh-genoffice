@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-002",
+  "branch": "failure-1",
+  "event_count": 1,
+  "health": {
+    "ok": true,
+    "name": "genoffice-web-relay",
+    "port": 18787,
+    "live": true,
+    "ready": false,
+    "roots": [
+      "shell",
+      "docs",
+      "markdown",
+      "pdf",
+      "slides",
+      "html"
+    ],
+    "claimed": [
+      "shell",
+      "docs",
+      "markdown",
+      "pdf",
+      "sheets",
+      "slides",
+      "html"
+    ],
+    "apps": {
+      "shell": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "docs": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "markdown": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "pdf": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "sheets": {
+        "build": false,
+        "ready": false,
+        "missing": [
+          "web-dist"
+        ]
+      },
+      "slides": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "html": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      }
+    },
+    "executors": 0,
+    "print": {
+      "available": true,
+      "executor": "playwright-chromium"
+    },
+    "ocr": {
+      "available": true,
+      "executor": "platform-ocr-helper",
+      "helper": "/private/tmp/genoffice-official-sync-engine/packages/pdf2docx/ocr-helper/vision-ocr"
+    },
+    "providers": {
+      "search": {
+        "available": true,
+        "fixture": false
+      },
+      "imageSearch": {
+        "available": true,
+        "fixture": false
+      },
+      "generate": {
+        "available": false,
+        "reason": "generate-provider-unconfigured",
+        "fixture": false
+      },
+      "analyze": {
+        "available": false,
+        "reason": "analyze-provider-unconfigured",
+        "fixture": false
+      },
+      "model": {
+        "available": true,
+        "echo": true
+      },
+      "credit": {
+        "available": false,
+        "reason": "credit-provider-unconfigured",
+        "url": "https://www.genspark.ai/credit-usage"
+      }
+    },
+    "docsCrypto": {
+      "available": true,
+      "executor": "officecrypto-tool"
+    },
+    "docsExtract": {
+      "available": true,
+      "executor": "pdfjs-dist"
+    },
+    "markdownAssets": {
+      "available": true
+    },
+    "htmlDocx": {
+      "available": true,
+      "executor": "html2docx-cli"
+    }
+  }
+}

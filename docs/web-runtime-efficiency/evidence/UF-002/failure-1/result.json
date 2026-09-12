@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-002",
+  "branch": "failure-1",
+  "run_id": "wre-readiness-2026-09-12T22:37:09.068Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "bd830edd2b397db6cedf2b5e57ec99804f2b3f41",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "missing-app-build-then-restore",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "missing-sheets-not-ready",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "build": false,
+            "ready": false,
+            "missing": [
+              "web-dist"
+            ]
+          }
+        },
+        {
+          "name": "missing-sheets-markdown-ready",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "build": true,
+            "ready": true,
+            "missing": []
+          }
+        },
+        {
+          "name": "missing-sheets-route",
+          "status": "passed",
+          "expected": 404,
+          "actual": {
+            "status": 404,
+            "snippet": "<!doctype html><meta charset=\"utf-8\"><title>GenOffice 404</title><body style=\"font: 14px/1.7 system-ui; padding: 2em; color: #444\"><h3>GenOffice \u9759\u6001\u8d44\u6e90\u4e0d\u53ef\u8fbe</h3><p>web-dist \u672a\u6784\u5efa\uff0c\u6216 relay"
+          }
+        },
+        {
+          "name": "other-app-still-served",
+          "status": "passed",
+          "expected": 200,
+          "actual": 200
+        },
+        {
+          "name": "restore-sheets",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "build": true,
+            "ready": true,
+            "missing": []
+          }
+        }
+      ]
+    }
+  ]
+}

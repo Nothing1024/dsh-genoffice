@@ -1,0 +1,509 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-002",
+  "branch": "readiness",
+  "status": "passed",
+  "run_id": "wre-readiness-2026-09-12T22:37:09.068Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "bd830edd2b397db6cedf2b5e57ec99804f2b3f41",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "full": {
+    "ok": true,
+    "name": "genoffice-web-relay",
+    "port": 18787,
+    "live": true,
+    "ready": true,
+    "roots": [
+      "shell",
+      "docs",
+      "markdown",
+      "pdf",
+      "sheets",
+      "slides",
+      "html"
+    ],
+    "claimed": [
+      "shell",
+      "docs",
+      "markdown",
+      "pdf",
+      "sheets",
+      "slides",
+      "html"
+    ],
+    "apps": {
+      "shell": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "docs": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "markdown": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "pdf": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "sheets": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "slides": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "html": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      }
+    },
+    "executors": 0,
+    "print": {
+      "available": true,
+      "executor": "playwright-chromium"
+    },
+    "ocr": {
+      "available": true,
+      "executor": "platform-ocr-helper",
+      "helper": "/private/tmp/genoffice-official-sync-engine/packages/pdf2docx/ocr-helper/vision-ocr"
+    },
+    "providers": {
+      "search": {
+        "available": true,
+        "fixture": false
+      },
+      "imageSearch": {
+        "available": true,
+        "fixture": false
+      },
+      "generate": {
+        "available": false,
+        "reason": "generate-provider-unconfigured",
+        "fixture": false
+      },
+      "analyze": {
+        "available": false,
+        "reason": "analyze-provider-unconfigured",
+        "fixture": false
+      },
+      "model": {
+        "available": true,
+        "echo": true
+      },
+      "credit": {
+        "available": false,
+        "reason": "credit-provider-unconfigured",
+        "url": "https://www.genspark.ai/credit-usage"
+      }
+    },
+    "docsCrypto": {
+      "available": true,
+      "executor": "officecrypto-tool"
+    },
+    "docsExtract": {
+      "available": true,
+      "executor": "pdfjs-dist"
+    },
+    "markdownAssets": {
+      "available": true
+    },
+    "htmlDocx": {
+      "available": true,
+      "executor": "html2docx-cli"
+    }
+  },
+  "missing": {
+    "ok": true,
+    "name": "genoffice-web-relay",
+    "port": 18787,
+    "live": true,
+    "ready": false,
+    "roots": [
+      "shell",
+      "docs",
+      "markdown",
+      "pdf",
+      "slides",
+      "html"
+    ],
+    "claimed": [
+      "shell",
+      "docs",
+      "markdown",
+      "pdf",
+      "sheets",
+      "slides",
+      "html"
+    ],
+    "apps": {
+      "shell": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "docs": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "markdown": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "pdf": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "sheets": {
+        "build": false,
+        "ready": false,
+        "missing": [
+          "web-dist"
+        ]
+      },
+      "slides": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "html": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      }
+    },
+    "executors": 0,
+    "print": {
+      "available": true,
+      "executor": "playwright-chromium"
+    },
+    "ocr": {
+      "available": true,
+      "executor": "platform-ocr-helper",
+      "helper": "/private/tmp/genoffice-official-sync-engine/packages/pdf2docx/ocr-helper/vision-ocr"
+    },
+    "providers": {
+      "search": {
+        "available": true,
+        "fixture": false
+      },
+      "imageSearch": {
+        "available": true,
+        "fixture": false
+      },
+      "generate": {
+        "available": false,
+        "reason": "generate-provider-unconfigured",
+        "fixture": false
+      },
+      "analyze": {
+        "available": false,
+        "reason": "analyze-provider-unconfigured",
+        "fixture": false
+      },
+      "model": {
+        "available": true,
+        "echo": true
+      },
+      "credit": {
+        "available": false,
+        "reason": "credit-provider-unconfigured",
+        "url": "https://www.genspark.ai/credit-usage"
+      }
+    },
+    "docsCrypto": {
+      "available": true,
+      "executor": "officecrypto-tool"
+    },
+    "docsExtract": {
+      "available": true,
+      "executor": "pdfjs-dist"
+    },
+    "markdownAssets": {
+      "available": true
+    },
+    "htmlDocx": {
+      "available": true,
+      "executor": "html2docx-cli"
+    }
+  },
+  "restored": {
+    "ok": true,
+    "name": "genoffice-web-relay",
+    "port": 18787,
+    "live": true,
+    "ready": true,
+    "roots": [
+      "shell",
+      "docs",
+      "markdown",
+      "pdf",
+      "sheets",
+      "slides",
+      "html"
+    ],
+    "claimed": [
+      "shell",
+      "docs",
+      "markdown",
+      "pdf",
+      "sheets",
+      "slides",
+      "html"
+    ],
+    "apps": {
+      "shell": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "docs": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "markdown": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "pdf": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "sheets": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "slides": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      },
+      "html": {
+        "build": true,
+        "ready": true,
+        "missing": []
+      }
+    },
+    "executors": 0,
+    "print": {
+      "available": true,
+      "executor": "playwright-chromium"
+    },
+    "ocr": {
+      "available": true,
+      "executor": "platform-ocr-helper",
+      "helper": "/private/tmp/genoffice-official-sync-engine/packages/pdf2docx/ocr-helper/vision-ocr"
+    },
+    "providers": {
+      "search": {
+        "available": true,
+        "fixture": false
+      },
+      "imageSearch": {
+        "available": true,
+        "fixture": false
+      },
+      "generate": {
+        "available": false,
+        "reason": "generate-provider-unconfigured",
+        "fixture": false
+      },
+      "analyze": {
+        "available": false,
+        "reason": "analyze-provider-unconfigured",
+        "fixture": false
+      },
+      "model": {
+        "available": true,
+        "echo": true
+      },
+      "credit": {
+        "available": false,
+        "reason": "credit-provider-unconfigured",
+        "url": "https://www.genspark.ai/credit-usage"
+      }
+    },
+    "docsCrypto": {
+      "available": true,
+      "executor": "officecrypto-tool"
+    },
+    "docsExtract": {
+      "available": true,
+      "executor": "pdfjs-dist"
+    },
+    "markdownAssets": {
+      "available": true
+    },
+    "htmlDocx": {
+      "available": true,
+      "executor": "html2docx-cli"
+    }
+  },
+  "disabledPrint": {
+    "available": false,
+    "reason": "print-service-disabled"
+  },
+  "cases": [
+    {
+      "id": "per-app-readiness-and-recovery",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "live",
+          "status": "passed",
+          "expected": true,
+          "actual": true
+        },
+        {
+          "name": "suite-ready-full",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "shell": {
+              "build": true,
+              "ready": true,
+              "missing": []
+            },
+            "docs": {
+              "build": true,
+              "ready": true,
+              "missing": []
+            },
+            "markdown": {
+              "build": true,
+              "ready": true,
+              "missing": []
+            },
+            "pdf": {
+              "build": true,
+              "ready": true,
+              "missing": []
+            },
+            "sheets": {
+              "build": true,
+              "ready": true,
+              "missing": []
+            },
+            "slides": {
+              "build": true,
+              "ready": true,
+              "missing": []
+            },
+            "html": {
+              "build": true,
+              "ready": true,
+              "missing": []
+            }
+          }
+        },
+        {
+          "name": "claimed-covers-apps",
+          "status": "passed",
+          "expected": [
+            "shell",
+            "docs",
+            "markdown",
+            "sheets",
+            "slides",
+            "pdf",
+            "html"
+          ],
+          "actual": [
+            "shell",
+            "docs",
+            "markdown",
+            "pdf",
+            "sheets",
+            "slides",
+            "html"
+          ]
+        },
+        {
+          "name": "missing-sheets-not-ready",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "build": false,
+            "ready": false,
+            "missing": [
+              "web-dist"
+            ]
+          }
+        },
+        {
+          "name": "missing-sheets-markdown-ready",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "build": true,
+            "ready": true,
+            "missing": []
+          }
+        },
+        {
+          "name": "missing-sheets-route",
+          "status": "passed",
+          "expected": 404,
+          "actual": {
+            "status": 404,
+            "snippet": "<!doctype html><meta charset=\"utf-8\"><title>GenOffice 404</title><body style=\"font: 14px/1.7 system-ui; padding: 2em; color: #444\"><h3>GenOffice 静态资源不可达</h3><p>web-dist 未构建，或 relay"
+          }
+        },
+        {
+          "name": "other-app-still-served",
+          "status": "passed",
+          "expected": 200,
+          "actual": 200
+        },
+        {
+          "name": "restore-sheets",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "build": true,
+            "ready": true,
+            "missing": []
+          }
+        },
+        {
+          "name": "print-disabled-live",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "available": false,
+            "reason": "print-service-disabled"
+          }
+        },
+        {
+          "name": "print-disabled-reason",
+          "status": "passed",
+          "expected": "print-service-disabled",
+          "actual": {
+            "available": false,
+            "reason": "print-service-disabled"
+          }
+        }
+      ]
+    }
+  ]
+}

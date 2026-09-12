@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-002",
+  "branch": "success",
+  "event_count": 0,
+  "serveLogs": "[genoffice-web] serving: shell, docs, markdown, pdf, sheets, slides, html\n[genoffice-web] http://localhost:18787   (health: /api/health)\n",
+  "events": []
+}

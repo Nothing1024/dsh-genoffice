@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-001",
+  "branch": "success",
+  "event_count": 9,
+  "file_gets": [
+    {
+      "bytes": 221,
+      "url": "http://127.0.0.1:18787/api/file?path=%2FUsers%2Fnothing%2Fworkspace%2Fdsh%2Fplugin%2Fdsh-genoffice%2Fplugin%2Fdocs%2Fweb-runtime-efficiency%2Fevidence%2Fphase-0%2Fwork-no-duplicate-read%2Fmd-small.md",
+      "hasBase64": true,
+      "base64Chars": 32
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18787/api/file?path=%2FUsers%2Fnothing%2Fworkspace%2Fdsh%2Fplugin%2Fdsh-genoffice%2Fplugin%2Fdocs%2Fweb-runtime-efficiency%2Fevidence%2Fphase-0%2Fwork-no-duplicate-read%2Fmd-small.md",
+      "when": "open-edit-save"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:18787/api/control/notify",
+      "when": "open-edit-save"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18787/api/control/stream?docId=a4414a991be2cbcb05b90e926cf5534f8f10bdc031fbe5a6189d559e94334948&owner=2f8f7c5d-b815-4dd1-b59c-f43b562db12b",
+      "when": "open-edit-save"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:18787/api/control/notify",
+      "when": "open-edit-save"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:18787/api/control/notify",
+      "when": "open-edit-save"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:18787/api/control/notify",
+      "when": "open-edit-save"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:18787/api/control/notify",
+      "when": "open-edit-save"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:18787/api/control/notify",
+      "when": "open-edit-save"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:18787/api/control/notify",
+      "when": "open-edit-save"
+    }
+  ]
+}

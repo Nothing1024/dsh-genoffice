@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-002",
+  "branch": "build-serve",
+  "status": "passed",
+  "run_id": "wre-build-serve-2026-09-12T22:34:32.767Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "20803c6bb62337acec64a5bde28ef8d553f796ba",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "protocol": {
+    "version": 1,
+    "repeats": {
+      "markdown": 3,
+      "other": 2
+    },
+    "cold": "new browser page against a freshly started relay; first sample of that app/size",
+    "warm": "same relay process; a later page for the same fixture",
+    "sizes": {
+      "small": "hand-built keep fixture or official generated sample",
+      "medium": "markdown ~50KiB repeated paragraphs",
+      "large": "markdown ~250KiB repeated paragraphs"
+    }
+  },
+  "scripts": {
+    "web": "npm run web:build -w @genoffice/shell && npm run web:build -w @genoffice/docs && npm run web:build -w @genoffice/markdown && node web/server.mjs",
+    "webBuild": "npm run web:build --workspaces --if-present",
+    "webServe": "node web/server.mjs",
+    "workspaceBuilds": {
+      "shell": "vite build --config vite.web.config.ts",
+      "docs": "vite build --config vite.web.config.ts",
+      "markdown": "vite build --config vite.web.config.ts",
+      "sheets": "vite build --config vite.web.config.ts",
+      "slides": "vite build --config vite.web.config.ts",
+      "pdf": "vite build --config vite.web.config.ts",
+      "html": "vite build --config vite.web.config.ts"
+    }
+  },
+  "buildMs": 70224,
+  "serveMs": 830,
+  "serveLogs": "[genoffice-web] serving: shell, docs, markdown, pdf, sheets, slides, html\n[genoffice-web] http://localhost:18787   (health: /api/health)\n",
+  "routes": {
+    "shell": {
+      "path": "/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "html": true,
+      "bytes": 694,
+      "missingDist": false
+    },
+    "docs": {
+      "path": "/docs/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "html": true,
+      "bytes": 709,
+      "missingDist": false
+    },
+    "markdown": {
+      "path": "/markdown/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "html": true,
+      "bytes": 721,
+      "missingDist": false
+    },
+    "sheets": {
+      "path": "/sheets/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "html": true,
+      "bytes": 712,
+      "missingDist": false
+    },
+    "slides": {
+      "path": "/slides/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "html": true,
+      "bytes": 837,
+      "missingDist": false
+    },
+    "pdf": {
+      "path": "/pdf/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "html": true,
+      "bytes": 806,
+      "missingDist": false
+    },
+    "html": {
+      "path": "/html/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "html": true,
+      "bytes": 758,
+      "missingDist": false
+    }
+  },
+  "cases": [
+    {
+      "id": "build-and-pure-serve",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "web-default-kept",
+          "status": "passed",
+          "expected": true,
+          "actual": "npm run web:build -w @genoffice/shell && npm run web:build -w @genoffice/docs && npm run web:build -w @genoffice/markdown && node web/server.mjs"
+        },
+        {
+          "name": "web-build-covers-workspaces",
+          "status": "passed",
+          "expected": true,
+          "actual": "npm run web:build --workspaces --if-present"
+        },
+        {
+          "name": "web-serve-pure",
+          "status": "passed",
+          "expected": "node web/server.mjs",
+          "actual": "node web/server.mjs"
+        },
+        {
+          "name": "workspace-web-build",
+          "status": "passed",
+          "expected": [
+            "shell",
+            "docs",
+            "markdown",
+            "sheets",
+            "slides",
+            "pdf",
+            "html"
+          ],
+          "actual": {
+            "shell": "vite build --config vite.web.config.ts",
+            "docs": "vite build --config vite.web.config.ts",
+            "markdown": "vite build --config vite.web.config.ts",
+            "sheets": "vite build --config vite.web.config.ts",
+            "slides": "vite build --config vite.web.config.ts",
+            "pdf": "vite build --config vite.web.config.ts",
+            "html": "vite build --config vite.web.config.ts"
+          }
+        },
+        {
+          "name": "explicit-build-ok",
+          "status": "passed",
+          "expected": 0,
+          "actual": {
+            "code": 0,
+            "ms": 70224,
+            "tail": "39 kB\n../../web-dist/assets/canvas-BRJXZk8M.png                 23.00 kB\n../../web-dist/assets/wood-D70XEBVa.png                   23.40 kB\n../../web-dist/assets/denim-DTrT_oct.png                  29.17 kB\n../../web-dist/assets/cork-BseXy6tu.png                   29.53 kB\n../../web-dist/assets/granite--1xJtYY3.png                41.09 kB\n../../web-dist/assets/Carlito-Italic-KkZUqxJW.ttf        619.05 kB\n../../web-dist/assets/Carlito-Regular-Cbe9FLjp.ttf       631.71 kB\n../../web-dist/assets/Carlito-Bold-BhbXr__n.ttf          686.24 kB\n../../web-dist/assets/Carlito-BoldItalic-0dXjwGA0.ttf    812.34 kB\n../../web-dist/assets/index-Bk7G29c9.css                 135.84 kB │ gzip:    24.51 kB\n../../web-dist/assets/index-CTX5lwqw.js                3,677.45 kB │ gzip: 1,098.83 kB\n✓ built in 6.52s\n"
+          }
+        },
+        {
+          "name": "serve-no-implicit-build",
+          "status": "passed",
+          "expected": false,
+          "actual": "[genoffice-web] serving: shell, docs, markdown, pdf, sheets, slides, html\n[genoffice-web] http://localhost:18787   (health: /api/health)\n"
+        },
+        {
+          "name": "serve-startup-recorded",
+          "status": "passed",
+          "expected": "<20s",
+          "actual": {
+            "serveMs": 830,
+            "relayStartMs": 830
+          }
+        },
+        {
+          "name": "plugin-start-relay-pure",
+          "status": "passed",
+          "expected": true,
+          "actual": "scripts/dev.mjs start-relay"
+        },
+        {
+          "name": "all-apps-served",
+          "status": "passed",
+          "expected": 200,
+          "actual": {
+            "shell": {
+              "path": "/",
+              "status": 200,
+              "contentType": "text/html; charset=utf-8",
+              "html": true,
+              "bytes": 694,
+              "missingDist": false
+            },
+            "docs": {
+              "path": "/docs/",
+              "status": 200,
+              "contentType": "text/html; charset=utf-8",
+              "html": true,
+              "bytes": 709,
+              "missingDist": false
+            },
+            "markdown": {
+              "path": "/markdown/",
+              "status": 200,
+              "contentType": "text/html; charset=utf-8",
+              "html": true,
+              "bytes": 721,
+              "missingDist": false
+            },
+            "sheets": {
+              "path": "/sheets/",
+              "status": 200,
+              "contentType": "text/html; charset=utf-8",
+              "html": true,
+              "bytes": 712,
+              "missingDist": false
+            },
+            "slides": {
+              "path": "/slides/",
+              "status": 200,
+              "contentType": "text/html; charset=utf-8",
+              "html": true,
+              "bytes": 837,
+              "missingDist": false
+            },
+            "pdf": {
+              "path": "/pdf/",
+              "status": 200,
+              "contentType": "text/html; charset=utf-8",
+              "html": true,
+              "bytes": 806,
+              "missingDist": false
+            },
+            "html": {
+              "path": "/html/",
+              "status": 200,
+              "contentType": "text/html; charset=utf-8",
+              "html": true,
+              "bytes": 758,
+              "missingDist": false
+            }
+          }
+        },
+        {
+          "name": "dist-index-present",
+          "status": "passed",
+          "expected": true,
+          "actual": [
+            "shell",
+            "docs",
+            "markdown",
+            "sheets",
+            "slides",
+            "pdf",
+            "html"
+          ]
+        }
+      ]
+    }
+  ]
+}

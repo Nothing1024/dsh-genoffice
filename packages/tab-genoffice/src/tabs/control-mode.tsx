@@ -11,6 +11,7 @@ import {
   PREVIEWABLE,
   RELAY_BASE,
   docIdFor,
+  getAppReady,
   getRelayOk,
   getRelayReady,
   launchRelay,
@@ -230,9 +231,11 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
       const data = (await resp.json()) as { ok?: boolean; error?: string; path?: string; mtimeMs?: unknown }
       if (data.ok) {
         setSaveState('saved')
+        // Do not clear dirty just because mtimeMs is a number; the iframe
+        // genoffice:dirty event is authoritative. A numeric baseline means
+        // the session stays mounted and the editor state is retained.
         if (typeof data.mtimeMs === 'number') {
-          setDirty(false)
-          setSaveMessage(`已保存到 ${data.path ?? path}（编辑状态已保留）`)
+          setSaveMessage('编辑状态已保留；磁盘已写入，未重载预览')
         } else {
           setSaveMessage(`已保存到 ${data.path ?? path}`)
           await remountControl()
@@ -434,6 +437,20 @@ export function ControlModeViewer(props: ControlModeViewerProps): ReactNode {
         <div className={css.hint} role="status">
           relay 在运行，但引擎静态资源不可达（引擎目录被移动或 web-dist 未构建）— 预览无法加载。
           点「启动 relay」替换失效实例，或手动执行 {RELAY_MANUAL}。
+          <button type="button" className={css.btn} onClick={() => { probe(true) }}>重新检查</button>
+          {launchControls}
+        </div>
+      </div>
+    )
+  }
+
+  const targetApp = PREVIEWABLE[ext]
+  if (targetApp !== undefined && getAppReady(targetApp) === false) {
+    return (
+      <div className={css.panel}>
+        {toolbar}
+        <div className={css.hint} role="status">
+          目标应用 {targetApp} 尚未构建 web-dist，其他已就绪应用仍可打开。运行 `npm run web:build --workspaces --if-present` 后点「重新检查」。
           <button type="button" className={css.btn} onClick={() => { probe(true) }}>重新检查</button>
           {launchControls}
         </div>

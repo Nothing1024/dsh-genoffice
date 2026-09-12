@@ -12,6 +12,8 @@ export const PREVIEWABLE: Record<string, string> = {
   xlsx: 'sheets',
   pptx: 'slides',
   pdf: 'pdf',
+  html: 'html',
+  htm: 'html',
 }
 
 const RELAY_THROTTLE_MS = 1500
@@ -22,6 +24,7 @@ let relayOk: boolean | null = null
 /** null = 未探测/relay 不可达；false = API 活着但静态根丢失（contracts/relay-api.md health.ready）。 */
 let relayReady: boolean | null = null
 let lastProbeAt = 0
+let lastHealth: RelayHealth | null = null
 let inFlight: Promise<boolean> | null = null
 const listeners = new Set<RelayListener>()
 
@@ -57,9 +60,24 @@ export function noteRelayOk(ok: boolean): void {
 export function resetRelayStore(): void {
   relayOk = null
   relayReady = null
+  lastHealth = null
   lastProbeAt = 0
   inFlight = null
   openFileListeners.clear()
+}
+
+export function getAppReady(app: string): boolean | null {
+  if (lastHealth == null) return null
+  if (!lastHealth.up) return false
+  if (lastHealth.apps[app]) return lastHealth.apps[app].ready
+  if (lastHealth.roots.length > 0) return lastHealth.roots.includes(app)
+  return lastHealth.ready
+}
+
+export function getSuiteReady(): boolean | null {
+  if (lastHealth == null) return null
+  if (!lastHealth.up) return false
+  return lastHealth.suiteReady
 }
 
 export function extOf(path: string): string {
@@ -83,9 +101,52 @@ export function previewUrlFor(path: string, ext: string, control: boolean, nonce
   return `${RELAY_BASE}/${app}/?${control ? 'control=1&' : ''}open=${target}${extra}`
 }
 
+export interface AppHealth {
+  build: boolean
+  ready: boolean
+  missing: string[]
+}
+
 export interface RelayHealth {
   up: boolean
+  /** Static serving is possible (not a zombie). Missing one app is still ready. */
   ready: boolean
+  live: boolean
+  suiteReady: boolean
+  roots: string[]
+  apps: Record<string, AppHealth>
+}
+
+function emptyHealth(up: boolean, ready: boolean): RelayHealth {
+  return { up, ready, live: up, suiteReady: ready, roots: [], apps: {} }
+}
+
+function interpretHealth(data: Record<string, unknown>): Omit<RelayHealth, 'up'> {
+  const roots = Array.isArray(data.roots) ? data.roots.filter((row): row is string => typeof row === 'string') : []
+  const apps: Record<string, AppHealth> = {}
+  if (data.apps && typeof data.apps === 'object') {
+    for (const [name, value] of Object.entries(data.apps as Record<string, { build?: unknown; ready?: unknown; missing?: unknown }>)) {
+      if (!value || typeof value !== 'object') continue
+      apps[name] = {
+        build: value.build === true,
+        ready: value.ready === true,
+        missing: Array.isArray(value.missing) ? value.missing.map(String) : [],
+      }
+    }
+  }
+  const hasApps = Object.keys(apps).length > 0
+  const staticOk = hasApps ? Object.values(apps).some((row) => row.build) : (roots.length > 0 || data.ready !== false)
+  const claimed = Array.isArray(data.claimed) ? data.claimed.map(String) : Object.keys(apps)
+  const suiteReady = hasApps
+    ? claimed.every((name) => apps[name]?.ready === true)
+    : data.ready !== false
+  return {
+    ready: staticOk,
+    live: data.live === true || data.live == null,
+    suiteReady,
+    roots,
+    apps,
+  }
 }
 
 /** Raw health probe (no store). Old relays without `ready` count as ready. */
@@ -95,17 +156,15 @@ export async function checkRelay(signal?: AbortSignal): Promise<RelayHealth> {
       `${RELAY_BASE}/api/health`,
       signal === undefined ? undefined : { signal },
     )
-    if (!resp.ok) return { up: false, ready: false }
-    let ready = true
+    if (!resp.ok) return emptyHealth(false, false)
     try {
-      const data = (await resp.json()) as { ready?: unknown }
-      ready = data.ready !== false
+      const data = (await resp.json()) as Record<string, unknown>
+      return { up: true, ...interpretHealth(data) }
     } catch {
-      // non-JSON health (old relay / test stub) — assume ready
+      return emptyHealth(true, true)
     }
-    return { up: true, ready }
   } catch {
-    return { up: false, ready: false }
+    return emptyHealth(false, false)
   }
 }
 
@@ -116,6 +175,7 @@ export async function probeRelay(force = false, signal?: AbortSignal): Promise<b
   if (!force && relayOk !== null && now - lastProbeAt < RELAY_THROTTLE_MS) return relayOk
   lastProbeAt = now
   inFlight = checkRelay(signal).then((h) => {
+    lastHealth = h
     relayOk = h.up
     relayReady = h.up ? h.ready : null
     emitRelay()

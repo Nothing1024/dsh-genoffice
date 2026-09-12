@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-001",
+  "branch": "failure-1",
+  "run_id": "wre-no-dup-2026-09-12T22:31:16.280Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "c596ce5aa1d8ae5eae286f45e2addad3ccface63",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "external-change-conflicts-then-reopen",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "external-change-conflicts",
+          "status": "passed",
+          "expected": "conflict",
+          "actual": {
+            "ok": false,
+            "error": "conflict",
+            "raw": {
+              "status": 200,
+              "ok": false,
+              "error": "conflict"
+            }
+          }
+        },
+        {
+          "name": "reopen-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": "ready"
+        },
+        {
+          "name": "reopen-single-full-get",
+          "status": "passed",
+          "expected": 1,
+          "actual": [
+            {
+              "bytes": 268,
+              "url": "http://127.0.0.1:18787/api/file?path=%2FUsers%2Fnothing%2Fworkspace%2Fdsh%2Fplugin%2Fdsh-genoffice%2Fplugin%2Fdocs%2Fweb-runtime-efficiency%2Fevidence%2Fphase-0%2Fwork-no-duplicate-read%2Fmd-small.md",
+              "hasBase64": true,
+              "base64Chars": 80
+            }
+          ]
+        },
+        {
+          "name": "recover-save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/evidence/phase-0/work-no-duplicate-read/md-small.md",
+            "name": "md-small.md",
+            "mtimeMs": 1789252276270.219
+          }
+        },
+        {
+          "name": "recover-keeps-external-marker",
+          "status": "passed",
+          "expected": true,
+          "actual": "# WreKeep\n\nkeep phrase\n\nWreNoDupKeep\n\nexternal-change-keep\n"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-001",
+  "branch": "success",
+  "run_id": "wre-no-dup-2026-09-12T22:31:16.280Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "c596ce5aa1d8ae5eae286f45e2addad3ccface63",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "markdown-open-edit-save-no-duplicate-read",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "capture-mtime-no-full-get",
+          "status": "passed",
+          "expected": false,
+          "actual": false
+        },
+        {
+          "name": "markdown-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": "ready"
+        },
+        {
+          "name": "markdown-edit",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "ops[0] insertContent: Inserted 1 block(s).\nBlock indexes may have changed; call get_document_context before further index-based edits.",
+              "mutated": true,
+              "summary": "\u63d2\u5165\u5185\u5bb9",
+              "revision": "c8fce5ff2361751d9ed6e58039cf947b75d6be3929f2625ed04cfce5e82fd650"
+            },
+            "revision": "c8fce5ff2361751d9ed6e58039cf947b75d6be3929f2625ed04cfce5e82fd650"
+          }
+        },
+        {
+          "name": "first-save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/evidence/phase-0/work-no-duplicate-read/md-small.md",
+            "name": "md-small.md",
+            "mtimeMs": 1789252275644.0508
+          }
+        },
+        {
+          "name": "single-full-file-get",
+          "status": "passed",
+          "expected": 1,
+          "actual": {
+            "count": 1,
+            "extra": 0,
+            "gets": [
+              {
+                "bytes": 221,
+                "url": "http://127.0.0.1:18787/api/file?path=%2FUsers%2Fnothing%2Fworkspace%2Fdsh%2Fplugin%2Fdsh-genoffice%2Fplugin%2Fdocs%2Fweb-runtime-efficiency%2Fevidence%2Fphase-0%2Fwork-no-duplicate-read%2Fmd-small.md",
+                "hasBase64": true,
+                "base64Chars": 32
+              }
+            ]
+          }
+        },
+        {
+          "name": "no-duplicate-full-get",
+          "status": "passed",
+          "expected": 0,
+          "actual": 0
+        }
+      ]
+    }
+  ]
+}

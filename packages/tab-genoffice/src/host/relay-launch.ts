@@ -34,8 +34,16 @@ async function pollHealth(deadline: number): Promise<boolean> {
       if (resp.ok) {
         // ready:false = zombie instance (static roots gone) — treat as not up
         // so start-relay gets spawned and replaces it. Old relays lack `ready`.
-        const data = (await resp.json().catch(() => ({}))) as { ok?: unknown; ready?: unknown }
-        if (data.ok === true && data.ready !== false) return true
+        const data = (await resp.json().catch(() => ({}))) as {
+          ok?: unknown
+          ready?: unknown
+          live?: unknown
+          roots?: unknown
+        }
+        if (data.ok !== true) continue
+        const roots = Array.isArray(data.roots) ? data.roots : null
+        if (roots && roots.length === 0) continue
+        if (data.live === true || data.ready !== false) return true
       }
     } catch {
       /* still down */

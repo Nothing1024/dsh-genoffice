@@ -53,11 +53,12 @@ function killRelayOnPort() {
 
 async function startRelay() {
   const h = await relayHealth()
-  if (h?.ok === true && h.ready !== false) {
+  const staticOk = Array.isArray(h?.roots) ? h.roots.length > 0 : h?.ready !== false
+  if (h?.ok === true && staticOk) {
     console.log('[dev] relay 已在运行:', RELAY_BASE)
     return
   }
-  if (h?.ok === true && h.ready === false) {
+  if (h?.ok === true && !staticOk) {
     // 失效实例：API 活着但静态根丢失（引擎目录被移动/改名后遗留的旧进程）
     if ((h.executors ?? 0) > 0) {
       console.error('[dev] relay 静态资源不可达，但仍有控制执行器在线 — 先关闭编辑页再重试')
@@ -89,7 +90,15 @@ async function startRelay() {
 async function status() {
   const h = await relayHealth()
   const relay = h?.ok === true
-  const readyNote = relay && h.ready === false ? '（静态根不可达 — start-relay 会替换）' : ''
+  const staticOk = Array.isArray(h?.roots) ? h.roots.length > 0 : h?.ready !== false
+  const missing = h?.apps && typeof h.apps === 'object'
+    ? Object.entries(h.apps).filter(([, row]) => row && row.ready !== true).map(([name]) => name)
+    : []
+  const readyNote = relay && !staticOk
+    ? '（静态根不可达 — start-relay 会替换）'
+    : relay && missing.length
+      ? `（缺构建: ${missing.join(',')}）`
+      : ''
   console.log(`relay  :8787  ${relay ? 'UP' : 'DOWN'}${readyNote}`)
   try {
     const resp = await fetch(DSH_URL, { signal: AbortSignal.timeout(3000) })
@@ -123,10 +132,15 @@ async function smoke() {
   const health = await (await fetch(`${RELAY_BASE}/api/health`)).json()
   check('GET /api/health', health.ok === true && health.name === 'genoffice-web-relay',
     JSON.stringify(health))
-  check('  health.ready 为 true 且 roots/executors 形状正确',
-    health.ready === true && Array.isArray(health.roots) && health.roots.length > 0 &&
+  check('  health.live/apps 形状正确',
+    health.live === true && health.apps && typeof health.apps === 'object' &&
+    Array.isArray(health.claimed) && Array.isArray(health.roots) &&
     typeof health.executors === 'number',
-    JSON.stringify({ ready: health.ready, roots: health.roots, executors: health.executors }))
+    JSON.stringify({ live: health.live, ready: health.ready, roots: health.roots, claimed: health.claimed }))
+  check('  整套 ready 覆盖宣称 app',
+    health.ready === true && Array.isArray(health.claimed) &&
+    health.claimed.every((name) => health.apps?.[name]?.ready === true),
+    JSON.stringify({ ready: health.ready, apps: health.apps }))
 
   // 2. /api/dir 形状（插件面板的消费形状）
   const dir = await (await fetch(`${RELAY_BASE}/api/dir?path=${encodeURIComponent('/tmp')}`)).json()

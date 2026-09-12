@@ -13,11 +13,12 @@
 
 ### GET /api/health
 ```json
-{ "ok": true, "name": "genoffice-web-relay", "port": 8787, "ready": true, "roots": ["shell", "docs"], "executors": 0 }
+{ "ok": true, "name": "genoffice-web-relay", "port": 8787, "live": true, "ready": true, "roots": ["shell", "docs"], "claimed": ["shell", "docs", "markdown", "pdf", "sheets", "slides", "html"], "apps": { "docs": { "build": true, "ready": true, "missing": [] } }, "executors": 0 }
 ```
-- `ready` / `roots` 为**每次请求现算**的静态根状态（各 app `web-dist/index.html` 仍可读）。`ok:true` 只代表 API 进程活着（liveness）；`ready:false` 说明引擎目录被移动/改名或 web-dist 未构建——此时预览路由全 404，应重启 relay（`node scripts/dev.mjs start-relay` 会自动替换无执行器的失效实例）。
+- `ok` / `live` 表示 API 进程存活。`ready` 表示**全部宣称 app** 的 `web-dist/index.html` 可读；缺一个 app 时 `ready` 为 false，但其他已构建 app 仍可用。
+- `roots` 是当前可读的静态根；`apps` / `claimed` 是每次请求现算的每 app 构建状态。`roots.length === 0` 才是僵尸实例（应重启 relay）。旧客户端勿把 `ready:false` 当成进程已死。
 - `executors` = 当前控制面 SSE 执行器数（contracts/control-api.md §2.1 的注册表大小）。
-- 旧 relay 无这三个字段；消费方按「缺字段视为 ready」向后兼容。
+- 旧 relay 无 `live` / `apps` / `claimed`；消费方按「缺字段视为有静态根」向后兼容。
 
 ### GET /api/dir?path=  — 目录列表（DSH 插件文件浏览）
 `path` 缺省 = 用户主目录。符号链接**只标记不跟随**（`symlink: true` 且不视为目录）；不可读路径返回 `ok:false` 而非 500。

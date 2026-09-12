@@ -2,7 +2,9 @@ import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import {
   emitOpenFile,
   getRelayOk,
+  getAppReady,
   getRelayReady,
+  getSuiteReady,
   probeRelay,
   resetRelayStore,
   scheduleOpenFile,
@@ -67,6 +69,29 @@ describe('shared relay store', () => {
     await probeRelay(true)
     expect(getRelayOk()).toBe(false)
     expect(getRelayReady()).toBe(null)
+  })
+
+  it('keeps other apps usable when one family is missing its web-dist', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({
+      ok: true,
+      json: async () => ({
+        ok: true,
+        live: true,
+        ready: false,
+        roots: ['markdown'],
+        claimed: ['shell', 'docs', 'markdown', 'pdf', 'sheets', 'slides', 'html'],
+        apps: {
+          markdown: { build: true, ready: true, missing: [] },
+          sheets: { build: false, ready: false, missing: ['web-dist'] },
+        },
+      }),
+    })))
+    await probeRelay(true)
+    expect(getRelayOk()).toBe(true)
+    expect(getRelayReady()).toBe(true)
+    expect(getSuiteReady()).toBe(false)
+    expect(getAppReady('markdown')).toBe(true)
+    expect(getAppReady('sheets')).toBe(false)
   })
 })
 

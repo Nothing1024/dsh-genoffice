@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-001",
+  "branch": "failure-1",
+  "event_count": 0,
+  "note": "browser console collected in phase-0/task-2.log requests/opened; zero unexpected console errors",
+  "events": []
+}
