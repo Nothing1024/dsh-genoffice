@@ -4,9 +4,9 @@
   "uf": "UF-001",
   "branch": "failure-2",
   "status": "passed",
-  "run_id": "joint-sched-fail2-2026-09-13T12:21:50.377Z",
+  "run_id": "joint-sched-fail2-2026-09-13T13:43:27.347Z",
   "source_revisions": {
-    "plugin": "5f7fb91444951b0bc0a98e430b2484421140800a",
+    "plugin": "a596ebf9c9918411153c0786d04d71180a114031",
     "engine": "ff8772767e379ef40105c8d76db5a7ca116aaa3d"
   },
   "cases": [
@@ -17,11 +17,64 @@
         {
           "name": "false-complete-blocked",
           "status": "passed",
-          "expected": 0,
+          "expected": true,
           "actual": {
-            "code": 0,
-            "tail": ""
+            "false_complete_action": "blocked",
+            "false_complete_errors": [
+              "母包 Task 2 已标完成，但子包闸门未通过",
+              "first-package Task 1: 待开始，尚未完成",
+              "first-package Task 2: 待开始，尚未完成",
+              "first-package Task 3: 待开始，尚未完成",
+              "first-package Task 4: 待开始，尚未完成",
+              "first-package Task 5: 待开始，尚未完成",
+              "first-package: 证据文件缺失、不是普通文件或为空: evidence/UF-001/success/console.log",
+              "first-package: 证据文件缺失、不是普通文件或为空: evidence/UF-001/success/result.json"
+            ],
+            "empty_gate_passed": false,
+            "empty_gate_errors": [
+              "first-package Task 1: 待开始，尚未完成",
+              "first-package Task 2: 待开始，尚未完成",
+              "first-package Task 3: 待开始，尚未完成",
+              "first-package Task 4: 待开始，尚未完成",
+              "first-package Task 5: 待开始，尚未完成",
+              "first-package: 证据文件缺失、不是普通文件或为空: evidence/UF-001/success/result.json"
+            ],
+            "downstream_locked": true
           }
+        },
+        {
+          "name": "empty-result-rejected",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "false_complete_action": "blocked",
+            "false_complete_errors": [
+              "母包 Task 2 已标完成，但子包闸门未通过",
+              "first-package Task 1: 待开始，尚未完成",
+              "first-package Task 2: 待开始，尚未完成",
+              "first-package Task 3: 待开始，尚未完成",
+              "first-package Task 4: 待开始，尚未完成",
+              "first-package Task 5: 待开始，尚未完成",
+              "first-package: 证据文件缺失、不是普通文件或为空: evidence/UF-001/success/console.log",
+              "first-package: 证据文件缺失、不是普通文件或为空: evidence/UF-001/success/result.json"
+            ],
+            "empty_gate_passed": false,
+            "empty_gate_errors": [
+              "first-package Task 1: 待开始，尚未完成",
+              "first-package Task 2: 待开始，尚未完成",
+              "first-package Task 3: 待开始，尚未完成",
+              "first-package Task 4: 待开始，尚未完成",
+              "first-package Task 5: 待开始，尚未完成",
+              "first-package: 证据文件缺失、不是普通文件或为空: evidence/UF-001/success/result.json"
+            ],
+            "downstream_locked": true
+          }
+        },
+        {
+          "name": "real-csv-untouched",
+          "status": "passed",
+          "expected": true,
+          "actual": true
         }
       ]
     }

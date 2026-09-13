@@ -1,3 +1,132 @@
 {
-  "missingProvider": true
+  "events": [
+    {
+      "url": "/api/generate-image",
+      "body": {
+        "error": "generate-provider-unconfigured",
+        "available": false,
+        "status": 200,
+        "_bytes": 60,
+        "destExists": false,
+        "health": {
+          "ok": true,
+          "name": "genoffice-web-relay",
+          "port": 18787,
+          "live": true,
+          "ready": true,
+          "roots": [
+            "shell",
+            "docs",
+            "markdown",
+            "pdf",
+            "sheets",
+            "slides",
+            "html"
+          ],
+          "claimed": [
+            "shell",
+            "docs",
+            "markdown",
+            "pdf",
+            "sheets",
+            "slides",
+            "html"
+          ],
+          "apps": {
+            "shell": {
+              "build": true,
+              "ready": true,
+              "missing": []
+            },
+            "docs": {
+              "build": true,
+              "ready": true,
+              "missing": []
+            },
+            "markdown": {
+              "build": true,
+              "ready": true,
+              "missing": []
+            },
+            "pdf": {
+              "build": true,
+              "ready": true,
+              "missing": []
+            },
+            "sheets": {
+              "build": true,
+              "ready": true,
+              "missing": []
+            },
+            "slides": {
+              "build": true,
+              "ready": true,
+              "missing": []
+            },
+            "html": {
+              "build": true,
+              "ready": true,
+              "missing": []
+            }
+          },
+          "executors": 0,
+          "print": {
+            "available": true,
+            "executor": "playwright-chromium"
+          },
+          "ocr": {
+            "available": true,
+            "executor": "platform-ocr-helper",
+            "helper": "/private/tmp/genoffice-official-sync-engine/packages/pdf2docx/ocr-helper/vision-ocr"
+          },
+          "providers": {
+            "search": {
+              "available": true,
+              "fixture": false
+            },
+            "imageSearch": {
+              "available": true,
+              "fixture": false
+            },
+            "generate": {
+              "available": false,
+              "reason": "generate-provider-unconfigured",
+              "fixture": false
+            },
+            "analyze": {
+              "available": false,
+              "reason": "analyze-provider-unconfigured",
+              "fixture": false
+            },
+            "model": {
+              "available": true,
+              "echo": true
+            },
+            "credit": {
+              "available": false,
+              "reason": "credit-provider-unconfigured",
+              "url": "https://www.genspark.ai/credit-usage"
+            }
+          },
+          "docsCrypto": {
+            "available": true,
+            "executor": "officecrypto-tool"
+          },
+          "docsExtract": {
+            "available": true,
+            "executor": "pdfjs-dist"
+          },
+          "markdownAssets": {
+            "available": true
+          },
+          "htmlDocx": {
+            "available": true,
+            "executor": "html2docx-cli"
+          },
+          "status": 200
+        }
+      }
+    }
+  ],
+  "count": 1
 }

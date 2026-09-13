@@ -606,7 +606,7 @@ export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<t
           return await executeLandPages(input, exec.signal, settle, contractHeaders(opts, entry))
         }
         if (entry.name === 'html_export_docx') {
-          return await executeHtmlExportDocx(input, exec.signal)
+          return await executeHtmlExportDocx(input, exec.signal, contractHeaders(opts, entry))
         }
         const result = await callRelay(entry, input, exec.signal, contractHeaders(opts, entry))
         return { ok: result.ok, output: result.output, summary: result.summary }
@@ -633,6 +633,7 @@ function decodeBase64Utf8(b64: string): string {
 async function executeHtmlExportDocx(
   input: Record<string, unknown>,
   signal: AbortSignal,
+  extraHeaders: Record<string, string> = {},
 ): Promise<{ ok: boolean; output: string; summary: string }> {
   const path = String(input.path ?? '')
   if (!path.startsWith('/')) fail('path 必须是目标文件的本机绝对路径', path, 'local')
@@ -665,7 +666,7 @@ async function executeHtmlExportDocx(
   try {
     const resp = await fetch(`${RELAY_BASE}/api/html/docx/jobs`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...extraHeaders },
       signal,
       body: JSON.stringify({ html, dest }),
     })
@@ -680,7 +681,7 @@ async function executeHtmlExportDocx(
   try {
     const resp = await fetch(`${RELAY_BASE}/api/html/docx/jobs/wait`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...extraHeaders },
       signal,
       body: JSON.stringify({ id: started.jobId }),
     })
@@ -753,16 +754,15 @@ function createServiceTools(): ReturnType<typeof defineTool>[] {
 /** Open tools: POST /api/open — bypasses the control plane (no docId needed). */
 export function createOpenTools(family?: string | null): ReturnType<typeof defineTool>[] {
   const familyApp = resolveControlFamily(family)
-  const exts = familyApp
-    ? OPEN_TOOL_EXTS.filter((ext) => (
-      (ext === 'docx' && familyApp === 'docs')
-      || (ext === 'md' && familyApp === 'markdown')
-      || (ext === 'xlsx' && familyApp === 'sheets')
-      || (ext === 'pptx' && familyApp === 'slides')
-      || (ext === 'pdf' && familyApp === 'pdf')
-      || (ext === 'html' && familyApp === 'html')
-    ))
-    : OPEN_TOOL_EXTS
+  const openExtByApp: Record<NonNullable<ControlToolEntry['app']>, OpenExt> = {
+    docs: 'docx',
+    markdown: 'md',
+    sheets: 'xlsx',
+    slides: 'pptx',
+    pdf: 'pdf',
+    html: 'html',
+  }
+  const exts = familyApp ? [openExtByApp[familyApp]] : OPEN_TOOL_EXTS
   return exts.map((ext: OpenExt) =>
     defineTool({
       name: `${ext}_open` as const,

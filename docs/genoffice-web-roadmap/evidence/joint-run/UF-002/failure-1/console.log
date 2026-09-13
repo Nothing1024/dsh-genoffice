@@ -1,1 +1,1 @@
-{"threw":true,"code":"occupied"}
+{"occupiedThrew":true,"code":"occupied","revA":"6d333fc737c13dc5864f138f86aa88c3c0b01d4103c2d751c55b2d445a558c82","staleWrite":{"ok":false,"error":"conflict","revision":"8e591c566e045242833e4daf41444eea43e9a3ead72920080edfe5804c214f22","status":200,"_bytes":109},"staleRejected":true,"unchanged":true}

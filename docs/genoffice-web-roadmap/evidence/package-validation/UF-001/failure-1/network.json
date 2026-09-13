@@ -1,3 +1,13 @@
 {
-  "tests": 0
+  "events": [
+    {
+      "op": "temp-next-missing",
+      "code": 1
+    },
+    {
+      "op": "temp-next-cyclic",
+      "code": 1
+    }
+  ],
+  "count": 2
 }

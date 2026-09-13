@@ -1,4 +1,16 @@
 {
-  "threw": true,
-  "code": "occupied"
+  "events": [
+    {
+      "ok": false,
+      "error": "conflict",
+      "revision": "8e591c566e045242833e4daf41444eea43e9a3ead72920080edfe5804c214f22",
+      "status": 200,
+      "_bytes": 109
+    }
+  ],
+  "count": 1,
+  "occupied": {
+    "threw": true,
+    "code": "occupied"
+  }
 }

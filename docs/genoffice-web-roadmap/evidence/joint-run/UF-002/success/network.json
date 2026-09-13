@@ -1,46 +1,93 @@
 {
+  "events": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18787/",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18787/assets/index-CRuUa2ay.css",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18787/assets/index-DpGNE1Rg.js",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:18787/assets/genoffice-logo-BMY41_x1.svg",
+      "status": 200
+    }
+  ],
+  "count": 4,
   "families": [
     {
       "app": "markdown",
       "opened": "ready",
       "contextOk": true,
       "editOk": true,
-      "saveOk": true
+      "saveOk": true,
+      "reopened": "ready",
+      "reContextOk": true,
+      "persisted": true,
+      "marker": "Jointmarkdown"
     },
     {
       "app": "html",
       "opened": "ready",
       "contextOk": true,
       "editOk": true,
-      "saveOk": true
+      "saveOk": true,
+      "reopened": "ready",
+      "reContextOk": true,
+      "persisted": true,
+      "marker": "Jointhtml"
     },
     {
       "app": "docs",
       "opened": "ready",
       "contextOk": true,
       "editOk": true,
-      "saveOk": true
+      "saveOk": true,
+      "reopened": "ready",
+      "reContextOk": true,
+      "persisted": true,
+      "marker": "Jointdocs"
     },
     {
       "app": "sheets",
       "opened": "ready",
       "contextOk": true,
       "editOk": true,
-      "saveOk": true
+      "saveOk": true,
+      "reopened": "ready",
+      "reContextOk": true,
+      "persisted": true,
+      "marker": "Jointsheets"
     },
     {
       "app": "slides",
       "opened": "ready",
       "contextOk": true,
       "editOk": true,
-      "saveOk": true
+      "saveOk": true,
+      "reopened": "ready",
+      "reContextOk": true,
+      "persisted": true,
+      "marker": "Jointslides"
     },
     {
       "app": "pdf",
       "opened": "ready",
       "contextOk": true,
       "editOk": true,
-      "saveOk": true
+      "saveOk": true,
+      "reopened": "ready",
+      "reContextOk": true,
+      "persisted": true,
+      "marker": "Jointpdf"
     }
   ]
 }

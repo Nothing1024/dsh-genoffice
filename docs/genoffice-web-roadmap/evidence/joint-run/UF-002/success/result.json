@@ -4,9 +4,9 @@
   "uf": "UF-002",
   "branch": "success",
   "status": "passed",
-  "run_id": "joint-uf002-2026-09-13T12:21:59.071Z",
+  "run_id": "joint-uf002-2026-09-13T13:41:19.998Z",
   "source_revisions": {
-    "plugin": "5f7fb91444951b0bc0a98e430b2484421140800a",
+    "plugin": "a596ebf9c9918411153c0786d04d71180a114031",
     "engine": "ff8772767e379ef40105c8d76db5a7ca116aaa3d"
   },
   "cases": [
@@ -17,73 +17,148 @@
         {
           "name": "family-markdown",
           "status": "passed",
-          "expected": "ready",
+          "expected": "ready+reopen",
           "actual": {
             "app": "markdown",
             "opened": "ready",
             "contextOk": true,
             "editOk": true,
-            "saveOk": true
+            "saveOk": true,
+            "reopened": "ready",
+            "reContextOk": true,
+            "persisted": true,
+            "marker": "Jointmarkdown"
           }
         },
         {
           "name": "family-docs",
           "status": "passed",
-          "expected": "ready",
+          "expected": "ready+reopen",
           "actual": {
             "app": "docs",
             "opened": "ready",
             "contextOk": true,
             "editOk": true,
-            "saveOk": true
+            "saveOk": true,
+            "reopened": "ready",
+            "reContextOk": true,
+            "persisted": true,
+            "marker": "Jointdocs"
           }
         },
         {
           "name": "family-sheets",
           "status": "passed",
-          "expected": "ready",
+          "expected": "ready+reopen",
           "actual": {
             "app": "sheets",
             "opened": "ready",
             "contextOk": true,
             "editOk": true,
-            "saveOk": true
+            "saveOk": true,
+            "reopened": "ready",
+            "reContextOk": true,
+            "persisted": true,
+            "marker": "Jointsheets"
           }
         },
         {
           "name": "family-slides",
           "status": "passed",
-          "expected": "ready",
+          "expected": "ready+reopen",
           "actual": {
             "app": "slides",
             "opened": "ready",
             "contextOk": true,
             "editOk": true,
-            "saveOk": true
+            "saveOk": true,
+            "reopened": "ready",
+            "reContextOk": true,
+            "persisted": true,
+            "marker": "Jointslides"
           }
         },
         {
           "name": "family-pdf",
           "status": "passed",
-          "expected": "ready",
+          "expected": "ready+reopen",
           "actual": {
             "app": "pdf",
             "opened": "ready",
             "contextOk": true,
             "editOk": true,
-            "saveOk": true
+            "saveOk": true,
+            "reopened": "ready",
+            "reContextOk": true,
+            "persisted": true,
+            "marker": "Jointpdf"
           }
         },
         {
           "name": "family-html",
           "status": "passed",
-          "expected": "ready",
+          "expected": "ready+reopen",
           "actual": {
             "app": "html",
             "opened": "ready",
             "contextOk": true,
             "editOk": true,
-            "saveOk": true
+            "saveOk": true,
+            "reopened": "ready",
+            "reContextOk": true,
+            "persisted": true,
+            "marker": "Jointhtml"
+          }
+        },
+        {
+          "name": "html-export-docx",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "ok": true,
+            "zip": true,
+            "wait": {
+              "ok": true,
+              "jobId": "f80d0f43-e92b-4053-b639-33ac7886fcdf",
+              "status": 200,
+              "progress": 100,
+              "dest": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/genoffice-web-roadmap/evidence/joint-run/work/html-joint.docx",
+              "error": null,
+              "canceled": false,
+              "available": true,
+              "_bytes": 272
+            },
+            "error": null
+          }
+        },
+        {
+          "name": "user-page-open",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "count": 4,
+            "sample": [
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:18787/",
+                "status": 200
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:18787/assets/index-CRuUa2ay.css",
+                "status": 200
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:18787/assets/index-DpGNE1Rg.js",
+                "status": 200
+              },
+              {
+                "method": "GET",
+                "url": "http://127.0.0.1:18787/assets/genoffice-logo-BMY41_x1.svg",
+                "status": 200
+              }
+            ]
           }
         }
       ]

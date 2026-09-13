@@ -4,9 +4,9 @@
   "uf": "UF-002",
   "branch": "failure-1",
   "status": "passed",
-  "run_id": "joint-uf002-2026-09-13T12:21:59.071Z",
+  "run_id": "joint-uf002-2026-09-13T13:41:19.998Z",
   "source_revisions": {
-    "plugin": "5f7fb91444951b0bc0a98e430b2484421140800a",
+    "plugin": "a596ebf9c9918411153c0786d04d71180a114031",
     "engine": "ff8772767e379ef40105c8d76db5a7ca116aaa3d"
   },
   "cases": [
@@ -15,12 +15,41 @@
       "status": "passed",
       "assertions": [
         {
-          "name": "occupied-no-steal",
+          "name": "stale-revision-rejected",
+          "status": "passed",
+          "expected": "conflict + no STALE",
+          "actual": {
+            "occupiedThrew": true,
+            "code": "occupied",
+            "revA": "6d333fc737c13dc5864f138f86aa88c3c0b01d4103c2d751c55b2d445a558c82",
+            "staleWrite": {
+              "ok": false,
+              "error": "conflict",
+              "revision": "8e591c566e045242833e4daf41444eea43e9a3ead72920080edfe5804c214f22",
+              "status": 200,
+              "_bytes": 109
+            },
+            "staleRejected": true,
+            "unchanged": true
+          }
+        },
+        {
+          "name": "second-agent-occupied",
           "status": "passed",
           "expected": "occupied",
           "actual": {
-            "threw": true,
-            "code": "occupied"
+            "occupiedThrew": true,
+            "code": "occupied",
+            "revA": "6d333fc737c13dc5864f138f86aa88c3c0b01d4103c2d751c55b2d445a558c82",
+            "staleWrite": {
+              "ok": false,
+              "error": "conflict",
+              "revision": "8e591c566e045242833e4daf41444eea43e9a3ead72920080edfe5804c214f22",
+              "status": 200,
+              "_bytes": 109
+            },
+            "staleRejected": true,
+            "unchanged": true
           }
         }
       ]

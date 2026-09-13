@@ -4,9 +4,9 @@
   "uf": "UF-002",
   "branch": "failure-2",
   "status": "passed",
-  "run_id": "joint-uf002-2026-09-13T12:21:59.071Z",
+  "run_id": "joint-uf002-2026-09-13T13:41:19.998Z",
   "source_revisions": {
-    "plugin": "5f7fb91444951b0bc0a98e430b2484421140800a",
+    "plugin": "a596ebf9c9918411153c0786d04d71180a114031",
     "engine": "ff8772767e379ef40105c8d76db5a7ca116aaa3d"
   },
   "cases": [
@@ -18,7 +18,259 @@
           "name": "generate-unconfigured-reported",
           "status": "passed",
           "expected": true,
-          "actual": true
+          "actual": {
+            "error": "generate-provider-unconfigured",
+            "available": false,
+            "status": 200,
+            "_bytes": 60,
+            "destExists": false,
+            "health": {
+              "ok": true,
+              "name": "genoffice-web-relay",
+              "port": 18787,
+              "live": true,
+              "ready": true,
+              "roots": [
+                "shell",
+                "docs",
+                "markdown",
+                "pdf",
+                "sheets",
+                "slides",
+                "html"
+              ],
+              "claimed": [
+                "shell",
+                "docs",
+                "markdown",
+                "pdf",
+                "sheets",
+                "slides",
+                "html"
+              ],
+              "apps": {
+                "shell": {
+                  "build": true,
+                  "ready": true,
+                  "missing": []
+                },
+                "docs": {
+                  "build": true,
+                  "ready": true,
+                  "missing": []
+                },
+                "markdown": {
+                  "build": true,
+                  "ready": true,
+                  "missing": []
+                },
+                "pdf": {
+                  "build": true,
+                  "ready": true,
+                  "missing": []
+                },
+                "sheets": {
+                  "build": true,
+                  "ready": true,
+                  "missing": []
+                },
+                "slides": {
+                  "build": true,
+                  "ready": true,
+                  "missing": []
+                },
+                "html": {
+                  "build": true,
+                  "ready": true,
+                  "missing": []
+                }
+              },
+              "executors": 0,
+              "print": {
+                "available": true,
+                "executor": "playwright-chromium"
+              },
+              "ocr": {
+                "available": true,
+                "executor": "platform-ocr-helper",
+                "helper": "/private/tmp/genoffice-official-sync-engine/packages/pdf2docx/ocr-helper/vision-ocr"
+              },
+              "providers": {
+                "search": {
+                  "available": true,
+                  "fixture": false
+                },
+                "imageSearch": {
+                  "available": true,
+                  "fixture": false
+                },
+                "generate": {
+                  "available": false,
+                  "reason": "generate-provider-unconfigured",
+                  "fixture": false
+                },
+                "analyze": {
+                  "available": false,
+                  "reason": "analyze-provider-unconfigured",
+                  "fixture": false
+                },
+                "model": {
+                  "available": true,
+                  "echo": true
+                },
+                "credit": {
+                  "available": false,
+                  "reason": "credit-provider-unconfigured",
+                  "url": "https://www.genspark.ai/credit-usage"
+                }
+              },
+              "docsCrypto": {
+                "available": true,
+                "executor": "officecrypto-tool"
+              },
+              "docsExtract": {
+                "available": true,
+                "executor": "pdfjs-dist"
+              },
+              "markdownAssets": {
+                "available": true
+              },
+              "htmlDocx": {
+                "available": true,
+                "executor": "html2docx-cli"
+              },
+              "status": 200
+            }
+          }
+        },
+        {
+          "name": "no-fake-generate-file",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "error": "generate-provider-unconfigured",
+            "available": false,
+            "status": 200,
+            "_bytes": 60,
+            "destExists": false,
+            "health": {
+              "ok": true,
+              "name": "genoffice-web-relay",
+              "port": 18787,
+              "live": true,
+              "ready": true,
+              "roots": [
+                "shell",
+                "docs",
+                "markdown",
+                "pdf",
+                "sheets",
+                "slides",
+                "html"
+              ],
+              "claimed": [
+                "shell",
+                "docs",
+                "markdown",
+                "pdf",
+                "sheets",
+                "slides",
+                "html"
+              ],
+              "apps": {
+                "shell": {
+                  "build": true,
+                  "ready": true,
+                  "missing": []
+                },
+                "docs": {
+                  "build": true,
+                  "ready": true,
+                  "missing": []
+                },
+                "markdown": {
+                  "build": true,
+                  "ready": true,
+                  "missing": []
+                },
+                "pdf": {
+                  "build": true,
+                  "ready": true,
+                  "missing": []
+                },
+                "sheets": {
+                  "build": true,
+                  "ready": true,
+                  "missing": []
+                },
+                "slides": {
+                  "build": true,
+                  "ready": true,
+                  "missing": []
+                },
+                "html": {
+                  "build": true,
+                  "ready": true,
+                  "missing": []
+                }
+              },
+              "executors": 0,
+              "print": {
+                "available": true,
+                "executor": "playwright-chromium"
+              },
+              "ocr": {
+                "available": true,
+                "executor": "platform-ocr-helper",
+                "helper": "/private/tmp/genoffice-official-sync-engine/packages/pdf2docx/ocr-helper/vision-ocr"
+              },
+              "providers": {
+                "search": {
+                  "available": true,
+                  "fixture": false
+                },
+                "imageSearch": {
+                  "available": true,
+                  "fixture": false
+                },
+                "generate": {
+                  "available": false,
+                  "reason": "generate-provider-unconfigured",
+                  "fixture": false
+                },
+                "analyze": {
+                  "available": false,
+                  "reason": "analyze-provider-unconfigured",
+                  "fixture": false
+                },
+                "model": {
+                  "available": true,
+                  "echo": true
+                },
+                "credit": {
+                  "available": false,
+                  "reason": "credit-provider-unconfigured",
+                  "url": "https://www.genspark.ai/credit-usage"
+                }
+              },
+              "docsCrypto": {
+                "available": true,
+                "executor": "officecrypto-tool"
+              },
+              "docsExtract": {
+                "available": true,
+                "executor": "pdfjs-dist"
+              },
+              "markdownAssets": {
+                "available": true
+              },
+              "htmlDocx": {
+                "available": true,
+                "executor": "html2docx-cli"
+              },
+              "status": 200
+            }
+          }
         }
       ]
     }

@@ -1,4 +1,21 @@
 {
-  "validate": 0,
-  "wreGate": true
+  "events": [
+    {
+      "op": "validate",
+      "code": 0
+    },
+    {
+      "op": "status",
+      "code": 0
+    },
+    {
+      "op": "next",
+      "action": "complete"
+    },
+    {
+      "op": "gate-wre",
+      "passed": true
+    }
+  ],
+  "count": 4
 }

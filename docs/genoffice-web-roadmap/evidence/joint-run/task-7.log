@@ -4,9 +4,9 @@
   "uf": "joint",
   "branch": "all",
   "status": "passed",
-  "run_id": "joint-all-2026-09-13T12:21:59.137Z",
+  "run_id": "joint-all-2026-09-13T13:43:27.419Z",
   "source_revisions": {
-    "plugin": "5f7fb91444951b0bc0a98e430b2484421140800a",
+    "plugin": "a596ebf9c9918411153c0786d04d71180a114031",
     "engine": "ff8772767e379ef40105c8d76db5a7ca116aaa3d"
   }
 }

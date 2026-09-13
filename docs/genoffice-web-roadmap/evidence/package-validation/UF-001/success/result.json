@@ -4,9 +4,9 @@
   "uf": "UF-001",
   "branch": "success",
   "status": "passed",
-  "run_id": "joint-sched-2026-09-13T12:21:42.523Z",
+  "run_id": "joint-sched-2026-09-13T13:43:25.251Z",
   "source_revisions": {
-    "plugin": "5f7fb91444951b0bc0a98e430b2484421140800a",
+    "plugin": "a596ebf9c9918411153c0786d04d71180a114031",
     "engine": "ff8772767e379ef40105c8d76db5a7ca116aaa3d"
   },
   "cases": [
@@ -40,15 +40,7 @@
           "status": "passed",
           "expected": true,
           "actual": {
-            "action": "resume_task",
-            "package": "genoffice-web-roadmap",
-            "spec": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/genoffice-web-roadmap/spec.md",
-            "tasks": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/genoffice-web-roadmap/tasks.csv",
-            "taskId": 7,
-            "anchor": "spec.md#task-7",
-            "name": "执行 spec 5.2 跨包真实场景全套测试",
-            "status": "进行中",
-            "instruction": "阅读 spec 对应任务及关联合同；实现、真实验证并归档证据后，只更新 tasks.csv 对应状态，再调用 next。",
+            "action": "complete",
             "note": "闸门只核验状态、结构和证据记录；执行者仍须核对真实场景语义、源码版本及证据时效。不会执行 CSV 命令或修改状态。"
           }
         },
@@ -58,7 +50,7 @@
           "expected": 0,
           "actual": {
             "code": 0,
-            "tail": ""
+            "tail": "\n..........................\n----------------------------------------------------------------------\nRan 26 tests in 3.779s\n\nOK\n"
           }
         }
       ]
