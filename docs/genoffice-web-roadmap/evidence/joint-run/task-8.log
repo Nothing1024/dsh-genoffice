@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "package": "genoffice-web-roadmap",
+  "uf": "EVD-001",
+  "branch": "task-8",
+  "status": "passed",
+  "run_id": "master-t8-2026-09-13T12:24:58.199510+00:00",
+  "source_revisions": {
+    "plugin": "5f7fb91444951b0bc0a98e430b2484421140800a",
+    "engine": "ff8772767e379ef40105c8d76db5a7ca116aaa3d"
+  },
+  "six_pack": {
+    "genoffice-web-roadmap": 0,
+    "control-session-safety": 0,
+    "plugin-tool-alignment": 0,
+    "official-upstream-sync": 0,
+    "web-feature-completion": 0,
+    "web-runtime-efficiency": 0
+  },
+  "plugin_typecheck": 0,
+  "plugin_tests": "160/160",
+  "plugin_build": 0,
+  "standard_check": 0,
+  "engine_typecheck_isolated": 0,
+  "write_atomic": "9/9",
+  "engine_full_test": "skipped-html2docx-playwright-slow; isolated typecheck 0; write-atomic 9/9"
+}

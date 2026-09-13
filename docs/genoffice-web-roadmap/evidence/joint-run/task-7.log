@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "package": "genoffice-web-roadmap",
+  "uf": "joint",
+  "branch": "all",
+  "status": "passed",
+  "run_id": "joint-all-2026-09-13T12:21:59.137Z",
+  "source_revisions": {
+    "plugin": "5f7fb91444951b0bc0a98e430b2484421140800a",
+    "engine": "ff8772767e379ef40105c8d76db5a7ca116aaa3d"
+  }
+}

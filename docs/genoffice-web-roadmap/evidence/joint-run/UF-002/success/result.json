@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "package": "genoffice-web-roadmap",
+  "uf": "UF-002",
+  "branch": "success",
+  "status": "passed",
+  "run_id": "joint-uf002-2026-09-13T12:21:59.071Z",
+  "source_revisions": {
+    "plugin": "5f7fb91444951b0bc0a98e430b2484421140800a",
+    "engine": "ff8772767e379ef40105c8d76db5a7ca116aaa3d"
+  },
+  "cases": [
+    {
+      "id": "five-family-html-open-save-reopen",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "family-markdown",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "app": "markdown",
+            "opened": "ready",
+            "contextOk": true,
+            "editOk": true,
+            "saveOk": true
+          }
+        },
+        {
+          "name": "family-docs",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "app": "docs",
+            "opened": "ready",
+            "contextOk": true,
+            "editOk": true,
+            "saveOk": true
+          }
+        },
+        {
+          "name": "family-sheets",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "app": "sheets",
+            "opened": "ready",
+            "contextOk": true,
+            "editOk": true,
+            "saveOk": true
+          }
+        },
+        {
+          "name": "family-slides",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "app": "slides",
+            "opened": "ready",
+            "contextOk": true,
+            "editOk": true,
+            "saveOk": true
+          }
+        },
+        {
+          "name": "family-pdf",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "app": "pdf",
+            "opened": "ready",
+            "contextOk": true,
+            "editOk": true,
+            "saveOk": true
+          }
+        },
+        {
+          "name": "family-html",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "app": "html",
+            "opened": "ready",
+            "contextOk": true,
+            "editOk": true,
+            "saveOk": true
+          }
+        }
+      ]
+    }
+  ]
+}
