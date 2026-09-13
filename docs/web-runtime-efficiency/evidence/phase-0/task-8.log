@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-004",
+  "branch": "sdk-cli",
+  "status": "passed",
+  "run_id": "wre-sdk-cli-2026-09-13T11:51:19.095Z",
+  "source_revisions": {
+    "plugin": "b69e482ed4f7f665c63ef3d4dcb36eeac493dc5d",
+    "engine": "0d5e3a545e01ec574b4e54a5803b517bb2984a75",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "opened": {
+    "ok": true,
+    "command": "open",
+    "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/evidence/phase-0/work-sdk-cli/md-small.md",
+    "app": "markdown",
+    "docId": "aeca2660883c937b244f8261dd43a440effaed6420d0978a3ec745746ffafd73",
+    "registered": true,
+    "readiness": "ready",
+    "revision": "024b825fceda1923face1f575cd2a72c620a1a32ba4f6c187504f96c65e8ac10",
+    "error": null,
+    "occupied": true,
+    "owner": "86df395f-9433-487e-a046-81a2b8915b25",
+    "status": 200,
+    "code": 0
+  },
+  "saved": {
+    "ok": true,
+    "command": "save",
+    "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/evidence/phase-0/work-sdk-cli/md-small.md",
+    "app": "markdown",
+    "mtimeMs": 1789300276735.7878,
+    "code": 0
+  },
+  "cancelled": {
+    "threw": true,
+    "name": "AbortError",
+    "message": "This operation was aborted"
+  },
+  "cases": [
+    {
+      "id": "sdk-cli-existing-executor",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "help-exit-0",
+          "status": "passed",
+          "expected": 0,
+          "actual": {
+            "code": 0,
+            "snippet": "genoffice-agent — reuse the GenOffice control protocol (HTTP+SSE)\n\nUsage:\n  node web/agent-cli.mjs <command> --path <abs"
+          }
+        },
+        {
+          "name": "cli-open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "ok": true,
+            "command": "open",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/evidence/phase-0/work-sdk-cli/md-small.md",
+            "app": "markdown",
+            "docId": "aeca2660883c937b244f8261dd43a440effaed6420d0978a3ec745746ffafd73",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "024b825fceda1923face1f575cd2a72c620a1a32ba4f6c187504f96c65e8ac10",
+            "error": null,
+            "occupied": true,
+            "owner": "86df395f-9433-487e-a046-81a2b8915b25",
+            "status": 200,
+            "code": 0
+          }
+        },
+        {
+          "name": "cli-context",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "ok": true,
+            "command": "context",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/evidence/phase-0/work-sdk-cli/md-small.md",
+            "app": "markdown",
+            "context": "## Document state\n2 top-level blocks:\n\n0 | h1 | WreKeep\n1 | paragraph | keep phrase",
+            "revision": "024b825fceda1923face1f575cd2a72c620a1a32ba4f6c187504f96c65e8ac10",
+            "code": 0
+          }
+        },
+        {
+          "name": "cli-edit",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "ok": true,
+            "command": "edit",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/evidence/phase-0/work-sdk-cli/md-small.md",
+            "app": "markdown",
+            "output": "ops[0] insertContent: Inserted 1 block(s).\nBlock indexes may have changed; call get_document_context before further index-based edits.",
+            "revision": "7b29c0b1f82ef5da08d92e592d95fbd1e5db5c8ec5dad42e8d475305d8166d3f",
+            "code": 0
+          }
+        },
+        {
+          "name": "cli-save",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "ok": true,
+            "command": "save",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/evidence/phase-0/work-sdk-cli/md-small.md",
+            "app": "markdown",
+            "mtimeMs": 1789300276735.7878,
+            "code": 0
+          }
+        },
+        {
+          "name": "cli-reopen-disk",
+          "status": "passed",
+          "expected": true,
+          "actual": "# WreKeep\n\nkeep phrase\n\nWreSdkKeep\n"
+        },
+        {
+          "name": "missing-file-nonzero",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "ok": false,
+            "error": "waitReady timeout: unknown",
+            "code": 2
+          }
+        },
+        {
+          "name": "sdk-abort",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "threw": true,
+            "name": "AbortError",
+            "message": "This operation was aborted"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -6,7 +6,7 @@
 5,P0:依赖批次,执行 Phase 0 回归验证,spec.md#task-5,4,node ../engine/web/e2e-agent-runtime.mjs --case startup-file；npm --prefix ../engine run typecheck；npm run typecheck → 全通过,已完成,isolated=/tmp/genoffice-official-sync-engine HEAD=07522fc; startup-file passed; FileLoadMeta undefined; evidence/phase-0/task-5.log
 6,P1:依赖批次,建立版本化能力单源和按族发现,spec.md#task-6,5,node ../engine/web/e2e-agent-runtime.mjs --case discovery → 按族范围、真实调用与错版本负例通过,已完成,isolated=/tmp/genoffice-official-sync-engine HEAD=bec9197; discovery 15/15; UF-003 archived
 7,P1:依赖批次,接入插件按族协商并保留旧宿主模式,spec.md#task-7,6,npm run typecheck；npm test；npm run build；npm run standard:check；node ../engine/web/e2e-agent-runtime.mjs --case plugin-discovery → 新旧模式、切族和真实参数均通过,已完成,isolated HEAD=bec9197; plugin family=xlsx/pptx; tests 160/160; plugin-discovery 9/9
-8,P1:依赖批次,提供复用控制协议的 SDK 与 CLI,spec.md#task-8,7,node ../engine/web/e2e-agent-runtime.mjs --case sdk-cli → 真实现有执行器闭环及错误/取消通过,待开始,
+8,P1:依赖批次,提供复用控制协议的 SDK 与 CLI,spec.md#task-8,7,node ../engine/web/e2e-agent-runtime.mjs --case sdk-cli → 真实现有执行器闭环及错误/取消通过,已完成,isolated=/tmp/genoffice-official-sync-engine HEAD=f8d0476; sdk-cli 8/8
 9,P1:依赖批次,按需启动 Markdown 执行器纵向闭环,spec.md#task-9,8,node ../engine/web/e2e-agent-runtime.mjs --case headless-markdown → 无 DSH 的实际磁盘闭环通过,待开始,
 10,P1:依赖批次,推广外部 agent 到五族和 HTML,spec.md#task-10,9,node ../engine/web/e2e-agent-runtime.mjs --case headless-families → 五族+HTML 无人工开页闭环通过,待开始,
 11,P1:依赖批次,完善可视交接和资源释放状态机,spec.md#task-11,10,node ../engine/web/e2e-agent-runtime.mjs --case lifecycle → 崩溃/交接/繁忙/dirty 保留和资源回收通过,待开始,
