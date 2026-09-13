@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-003",
+  "branch": "plugin-discovery",
+  "status": "passed",
+  "run_id": "wre-plugin-discovery-2026-09-13T11:46:36.218Z",
+  "source_revisions": {
+    "plugin": "cb3ad1e7891da72e1364428a19b435ddd761edaa",
+    "engine": "bec9197ef0e6f82d3d35064d100659ad1e1beaab",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "compatible": {
+    "tool_count": 100,
+    "schema_bytes": 48943
+  },
+  "familyXlsx": {
+    "tool_count": 13,
+    "schema_bytes": 5483
+  },
+  "familyPptx": {
+    "tool_count": 39,
+    "schema_bytes": 21759
+  },
+  "cases": [
+    {
+      "id": "plugin-family-negotiation",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "compatible-full",
+          "status": "passed",
+          "expected": 100,
+          "actual": 100
+        },
+        {
+          "name": "xlsx-family",
+          "status": "passed",
+          "expected": 13,
+          "actual": [
+            "xlsx_get_workbook_context",
+            "xlsx_read_range",
+            "xlsx_load_guide",
+            "xlsx_read_formats",
+            "xlsx_read_sheet_features",
+            "xlsx_read_cells",
+            "xlsx_aggregate_range",
+            "xlsx_find_cells",
+            "xlsx_select_range",
+            "xlsx_trace_precedents",
+            "xlsx_trace_dependents",
+            "xlsx_propose_operations",
+            "xlsx_save"
+          ]
+        },
+        {
+          "name": "pptx-family",
+          "status": "passed",
+          "expected": 39,
+          "actual": {
+            "count": 39,
+            "sample": [
+              "pptx_get_deck_context",
+              "pptx_read_slide",
+              "pptx_set_element_text",
+              "pptx_set_element_style",
+              "pptx_set_element_transform"
+            ]
+          }
+        },
+        {
+          "name": "switch-no-overlap",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "xlsx": 13,
+            "pptx": 39
+          }
+        },
+        {
+          "name": "schema-bytes-smaller",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "full": 48943,
+            "xlsx": 5483,
+            "pptx": 21759
+          }
+        },
+        {
+          "name": "workbook-real",
+          "status": "passed",
+          "expected": true,
+          "actual": "Active sheet: Sheet1 (id=sheet-1, data extent about 100 rows × 26 columns)\nMode: imported real xlsx file (some regions may still be streaming in)\nActive sheet data area: A1:Z100 (a"
+        },
+        {
+          "name": "deck-real",
+          "status": "passed",
+          "expected": true,
+          "actual": "<deck outline>\nThe presentation has 1 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier co"
+        },
+        {
+          "name": "cross-family-write-refused",
+          "status": "passed",
+          "expected": 409,
+          "actual": {
+            "status": 409,
+            "error": "family-unsupported",
+            "changed": false
+          }
+        },
+        {
+          "name": "legacy-write-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": "WrePluginKeep\n\n# WreKeep\n\nkeep phrase\n"
+        }
+      ]
+    }
+  ]
+}

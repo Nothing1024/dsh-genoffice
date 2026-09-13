@@ -30,11 +30,45 @@ const LAND_POLL_MS = 250
 export interface ControlToolsOptions {
   assets?: AssetChannel | null
   allTools?: boolean
+  /** Explicit family negotiation (xlsx/sheets/pptx/…). Absent = compatible full table. */
+  family?: string | null
+  /** Optional discovered tool names from GET /api/discovery. */
+  discoveryTools?: readonly string[] | null
+  schemaRevision?: string
   /** Test seam: skip session LLM. Production uses the calling agent's model. */
   planLlm?: HostLlmOnce
   /** Test seam: shorten land settle polling. */
   landSettleMs?: number
   landPollMs?: number
+}
+
+export const GENOFFICE_SCHEMA_REVISION = '2026.09.1'
+export const GENOFFICE_PROTOCOL = 'genoffice-control'
+
+const FAMILY_TO_APP: Record<string, ControlToolEntry['app']> = {
+  docs: 'docs',
+  docx: 'docs',
+  word: 'docs',
+  markdown: 'markdown',
+  md: 'markdown',
+  sheets: 'sheets',
+  xlsx: 'sheets',
+  slides: 'slides',
+  pptx: 'slides',
+  pdf: 'pdf',
+  html: 'html',
+  htm: 'html',
+}
+
+export function resolveControlFamily(token?: string | null): ControlToolEntry['app'] | null {
+  if (token == null || token === '') return null
+  return FAMILY_TO_APP[String(token).trim().toLowerCase()] ?? null
+}
+
+export function familySchemaBytes(family?: string | null): number {
+  const app = resolveControlFamily(family)
+  const tools = app ? CONTROL_TOOL_TABLE.filter((row) => row.app === app) : CONTROL_TOOL_TABLE
+  return new TextEncoder().encode(JSON.stringify(tools.map((row) => ({ name: row.name, skillName: row.skillName, parameters: row.parameters })))).length
 }
 
 async function sha256Hex(s: string): Promise<string> {
@@ -70,8 +104,15 @@ function describeEntry(entry: ControlToolEntry, cap: CapabilityEntry | undefined
 
 function shouldRegister(
   entry: ControlToolEntry,
-  opts: { allTools: boolean; assetsAvailable: boolean },
+  opts: {
+    allTools: boolean
+    assetsAvailable: boolean
+    familyApp: ControlToolEntry['app'] | null
+    discoveryTools: ReadonlySet<string> | null
+  },
 ): boolean {
+  if (opts.familyApp && entry.app !== opts.familyApp) return false
+  if (opts.discoveryTools && opts.discoveryTools.has(entry.name) === false) return false
   if (opts.allTools) return true
   const cap = capabilityOf(entry.app, entry.skillName)
   if (cap === undefined || !isExposed(cap)) return false
@@ -79,11 +120,22 @@ function shouldRegister(
     (entry.name === 'docx_insert_image' ||
       entry.name === 'pdf_insert_image' ||
       entry.name === 'pdf_replace_image') &&
-    !opts.assetsAvailable
+    opts.assetsAvailable === false
   ) {
     return false
   }
   return true
+}
+
+function contractHeaders(opts: ControlToolsOptions, entry?: ControlToolEntry): Record<string, string> {
+  if (opts.family == null && opts.schemaRevision == null) return {}
+  const headers: Record<string, string> = {
+    'X-GenOffice-Protocol': GENOFFICE_PROTOCOL,
+    'X-GenOffice-Schema-Revision': opts.schemaRevision || GENOFFICE_SCHEMA_REVISION,
+  }
+  const family = resolveControlFamily(opts.family) ?? entry?.app
+  if (family) headers['X-GenOffice-Family'] = family
+  return headers
 }
 
 function sleep(ms: number, signal: AbortSignal): Promise<void> {
@@ -150,6 +202,7 @@ async function callRelay(
   entry: ControlToolEntry,
   input: Record<string, unknown>,
   signal: AbortSignal,
+  extraHeaders: Record<string, string> = {},
 ): Promise<{ ok: boolean; output: string; summary: string; revision?: string }> {
   const path = String(input.path ?? '')
   if (!path.startsWith('/')) fail('path 必须是目标文件的本机绝对路径', path, 'local')
@@ -160,16 +213,23 @@ async function callRelay(
   try {
     resp = await fetch(`${RELAY_BASE}/api/control/${entry.app}/${docId}/tool`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...extraHeaders },
       signal,
       body: JSON.stringify({ call: { id: crypto.randomUUID(), name: entry.skillName, input: skillInput } }),
     })
   } catch (e) {
     fail(e instanceof Error ? e.message : String(e), path, 'fetch')
   }
-  if (!resp.ok) {
+  if (resp.ok === false) {
     const text = await resp.text().catch(() => '')
-    fail(`relay 返回 HTTP ${resp.status}${text ? `: ${text}` : ''}`, path, 'fetch')
+    let err = `relay 返回 HTTP ${resp.status}${text ? `: ${text}` : ''}`
+    try {
+      const parsed = JSON.parse(text) as { error?: string }
+      if (typeof parsed.error === 'string' && parsed.error !== '') err = parsed.error
+    } catch {
+      /* keep status text */
+    }
+    fail(err, path, resp.status === 409 ? 'capability' : 'fetch')
   }
   const data = (await resp.json()) as {
     ok?: boolean
@@ -195,6 +255,7 @@ async function saveViaRelay(
   entry: ControlToolEntry,
   input: Record<string, unknown>,
   signal: AbortSignal,
+  extraHeaders: Record<string, string> = {},
 ): Promise<{ ok: boolean; output: string; summary: string }> {
   const path = String(input.path ?? '')
   if (!path.startsWith('/')) fail('path 必须是目标文件的本机绝对路径', path, 'local')
@@ -212,16 +273,23 @@ async function saveViaRelay(
   try {
     resp = await fetch(`${RELAY_BASE}/api/control/${entry.app}/${docId}/export`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...extraHeaders },
       signal,
       body: JSON.stringify(body),
     })
   } catch (e) {
     fail(e instanceof Error ? e.message : String(e), path, 'fetch')
   }
-  if (!resp.ok) {
+  if (resp.ok === false) {
     const text = await resp.text().catch(() => '')
-    fail(`relay 返回 HTTP ${resp.status}${text ? `: ${text}` : ''}`, path, 'fetch')
+    let err = `relay 返回 HTTP ${resp.status}${text ? `: ${text}` : ''}`
+    try {
+      const parsed = JSON.parse(text) as { error?: string }
+      if (typeof parsed.error === 'string' && parsed.error !== '') err = parsed.error
+    } catch {
+      /* keep status text */
+    }
+    fail(err, path, resp.status === 409 ? 'capability' : 'fetch')
   }
   const data = (await resp.json()) as { ok?: boolean; error?: string; path?: string; mtimeMs?: unknown }
   if (!data.ok) fail(String(data.error ?? 'unknown error'), path, 'relay')
@@ -270,6 +338,7 @@ async function executeInsertImage(
   input: Record<string, unknown>,
   signal: AbortSignal,
   assets: AssetChannel | null | undefined,
+  extraHeaders: Record<string, string> = {},
 ): Promise<{ ok: boolean; output: string; summary: string }> {
   const path = String(input.path ?? '')
   const imagePath = String(input.imagePath ?? '')
@@ -287,7 +356,7 @@ async function executeInsertImage(
   }
   try {
     const { imagePath: _drop, ...rest } = input
-    return await callRelay(entry, { ...rest, url: published.url }, signal)
+    return await callRelay(entry, { ...rest, url: published.url }, signal, extraHeaders)
   } finally {
     published.dispose()
   }
@@ -359,6 +428,7 @@ async function waitLanded(
   signal: AbortSignal,
   needle: string | undefined,
   settle: { settleMs: number; pollMs: number },
+  extraHeaders: Record<string, string> = {},
 ): Promise<void> {
   const entry = deckContextEntry()
   if (entry === undefined) return
@@ -367,7 +437,7 @@ async function waitLanded(
     if (signal.aborted) return
     let output = ''
     try {
-      output = (await callRelay(entry, { path }, signal)).output
+      output = (await callRelay(entry, { path }, signal, extraHeaders)).output
     } catch {
       output = ''
     }
@@ -396,12 +466,13 @@ async function executeLandPages(
   input: Record<string, unknown>,
   signal: AbortSignal,
   settle: { settleMs: number; pollMs: number },
+  extraHeaders: Record<string, string> = {},
 ): Promise<{ ok: boolean; output: string; summary: string }> {
   try {
-    const result = await callRelay(landPagesEntry(), input, signal)
+    const result = await callRelay(landPagesEntry(), input, signal, extraHeaders)
     const expected = parseLandedCount(result.output)
     if (expected !== undefined) {
-      await waitLanded(String(input.path ?? ''), expected, signal, firstTextNeedle(input.pages), settle)
+      await waitLanded(String(input.path ?? ''), expected, signal, firstTextNeedle(input.pages), settle, extraHeaders)
     }
     return result
   } catch (e) {
@@ -418,6 +489,7 @@ async function executeGenerateDeck(
   signal: AbortSignal,
   planLlm: HostLlmOnce,
   settle: { settleMs: number; pollMs: number },
+  extraHeaders: Record<string, string> = {},
 ): Promise<{ ok: boolean; output: string; summary: string }> {
   const path = String(input.path ?? '')
   let pages
@@ -432,7 +504,7 @@ async function executeGenerateDeck(
     insert_mode: input.insert_mode === 'append' ? 'append' : 'replace',
   }
   if (typeof input.deck_name === 'string') landInput.deck_name = input.deck_name
-  return await executeLandPages(landInput, signal, settle)
+  return await executeLandPages(landInput, signal, settle, extraHeaders)
 }
 
 async function executeRegenerateSlide(
@@ -440,6 +512,7 @@ async function executeRegenerateSlide(
   signal: AbortSignal,
   planLlm: HostLlmOnce,
   settle: { settleMs: number; pollMs: number },
+  extraHeaders: Record<string, string> = {},
 ): Promise<{ ok: boolean; output: string; summary: string }> {
   const path = String(input.path ?? '')
   const atIndex = input.slideIndex
@@ -457,18 +530,22 @@ async function executeRegenerateSlide(
     pages: [page],
     insert_mode: 'replace_at',
     at_index: atIndex,
-  }, signal, settle)
+  }, signal, settle, extraHeaders)
 }
 
 /** Build the control tool definitions from the contract mirror table. */
 export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<typeof defineTool>[] {
   const allTools = opts.allTools ?? process.env.DSH_GENOFFICE_ALL_TOOLS === '1'
   const assetsAvailable = opts.assets?.available === true
+  const familyToken = opts.family ?? process.env.DSH_GENOFFICE_FAMILY ?? null
+  const familyApp = resolveControlFamily(familyToken)
+  if (familyToken && familyApp === null) return [...createServiceTools()]
+  const discoveryTools = opts.discoveryTools ? new Set(opts.discoveryTools) : null
   const settle = {
     settleMs: opts.landSettleMs ?? LAND_SETTLE_MS,
     pollMs: opts.landPollMs ?? LAND_POLL_MS,
   }
-  const controlTools = CONTROL_TOOL_TABLE.filter((entry) => shouldRegister(entry, { allTools, assetsAvailable })).map((entry) => {
+  const controlTools = CONTROL_TOOL_TABLE.filter((entry) => shouldRegister(entry, { allTools, assetsAvailable, familyApp, discoveryTools })).map((entry) => {
     const isSave = isSaveEntry(entry)
     const cap = capabilityOf(entry.app, entry.skillName)
     return defineTool({
@@ -511,32 +588,32 @@ export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<t
           entry.name === 'pdf_insert_image' ||
           entry.name === 'pdf_replace_image'
         ) {
-          return await executeInsertImage(entry, input, exec.signal, opts.assets)
+          return await executeInsertImage(entry, input, exec.signal, opts.assets, contractHeaders(opts, entry))
         }
         if (isSave) {
-          const result = await saveViaRelay(entry, input, exec.signal)
+          const result = await saveViaRelay(entry, input, exec.signal, contractHeaders(opts, entry))
           return { ok: result.ok, output: result.output, summary: result.summary }
         }
         if (entry.name === 'pptx_generate_deck') {
           const planLlm = opts.planLlm ?? sessionPlanLlm(exec.agent)
-          return await executeGenerateDeck(input, exec.signal, planLlm, settle)
+          return await executeGenerateDeck(input, exec.signal, planLlm, settle, contractHeaders(opts, entry))
         }
         if (entry.name === 'pptx_regenerate_slide') {
           const planLlm = opts.planLlm ?? sessionPlanLlm(exec.agent)
-          return await executeRegenerateSlide(input, exec.signal, planLlm, settle)
+          return await executeRegenerateSlide(input, exec.signal, planLlm, settle, contractHeaders(opts, entry))
         }
         if (entry.skillName === 'land_pages') {
-          return await executeLandPages(input, exec.signal, settle)
+          return await executeLandPages(input, exec.signal, settle, contractHeaders(opts, entry))
         }
         if (entry.name === 'html_export_docx') {
           return await executeHtmlExportDocx(input, exec.signal)
         }
-        const result = await callRelay(entry, input, exec.signal)
+        const result = await callRelay(entry, input, exec.signal, contractHeaders(opts, entry))
         return { ok: result.ok, output: result.output, summary: result.summary }
       },
     })
   })
-  return [...controlTools, ...createOpenTools(), ...createServiceTools()]
+  return [...controlTools, ...createOpenTools(familyApp ? familyToken : null), ...createServiceTools()]
 }
 
 const OPEN_TOOL_EXTS = ['pptx', 'docx', 'xlsx', 'md', 'pdf', 'html'] as const
@@ -674,8 +751,19 @@ function createServiceTools(): ReturnType<typeof defineTool>[] {
 }
 
 /** Open tools: POST /api/open — bypasses the control plane (no docId needed). */
-export function createOpenTools(): ReturnType<typeof defineTool>[] {
-  return OPEN_TOOL_EXTS.map((ext: OpenExt) =>
+export function createOpenTools(family?: string | null): ReturnType<typeof defineTool>[] {
+  const familyApp = resolveControlFamily(family)
+  const exts = familyApp
+    ? OPEN_TOOL_EXTS.filter((ext) => (
+      (ext === 'docx' && familyApp === 'docs')
+      || (ext === 'md' && familyApp === 'markdown')
+      || (ext === 'xlsx' && familyApp === 'sheets')
+      || (ext === 'pptx' && familyApp === 'slides')
+      || (ext === 'pdf' && familyApp === 'pdf')
+      || (ext === 'html' && familyApp === 'html')
+    ))
+    : OPEN_TOOL_EXTS
+  return exts.map((ext: OpenExt) =>
     defineTool({
       name: `${ext}_open` as const,
       description: openToolDesc(ext),

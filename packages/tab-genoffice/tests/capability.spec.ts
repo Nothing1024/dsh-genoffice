@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { CAPABILITY, EXPOSED_COUNT, isExposed } from '../src/host/capability.ts'
-import { createControlTools, registeredToolNames } from '../src/host/tools.ts'
+import { createControlTools, familySchemaBytes, registeredToolNames } from '../src/host/tools.ts'
 import { apply as applyHost } from '../src/index.ts'
 import { CONTROL_TOOL_TABLE } from '../src/host/tool-schema.ts'
 
@@ -14,7 +14,8 @@ const fakeAssets = {
 const UP = resolve(import.meta.dirname, '../../../../engine')
 
 const ASSET_GATED = ['docx_insert_image', 'pdf_insert_image', 'pdf_replace_image'] as const
-const OPEN_TOOLS = ['pptx_open', 'docx_open', 'xlsx_open', 'md_open', 'pdf_open'] as const
+const OPEN_TOOLS = ['pptx_open', 'docx_open', 'xlsx_open', 'md_open', 'pdf_open', 'html_open'] as const
+const SERVICE_TOOLS = ['genoffice_services'] as const
 const tableKeys = CONTROL_TOOL_TABLE.map((row) => `${row.app}:${row.skillName}`)
 const exposedNames = CONTROL_TOOL_TABLE
   .filter((row) => {
@@ -31,7 +32,7 @@ describe('capability filter', () => {
 
   it('exposes the capability-available control tools plus 5 open tools when the asset channel is available', () => {
     const names = registeredToolNames({ assets: fakeAssets })
-    expect(names).toHaveLength(exposedNames.length + OPEN_TOOLS.length)
+    expect(names).toHaveLength(exposedNames.length + OPEN_TOOLS.length + SERVICE_TOOLS.length)
     expect(names).toEqual(expect.arrayContaining([...exposedNames, ...OPEN_TOOLS]))
     expect(names).toContain('xlsx_aggregate_range')
     expect(names).toContain('xlsx_find_cells')
@@ -41,6 +42,9 @@ describe('capability filter', () => {
     expect(names).toContain('pptx_apply_ops')
     expect(names).toContain('pdf_insert_text')
     expect(names).toContain('docx_insert_image')
+    expect(names).toContain('docx_read_comments')
+    expect(names).toContain('docx_reply_comment')
+    expect(names).toContain('markdown_apply_ops')
     expect(names).toContain('pptx_add_chart')
     expect(names).toContain('pptx_add_smartart')
     expect(names).toContain('pptx_analyze_media')
@@ -53,6 +57,10 @@ describe('capability filter', () => {
     expect(names).toContain('pdf_rotate_image')
     expect(names).toContain('pdf_replace_image')
     expect(names).toContain('pdf_delete_image')
+    expect(names).toContain('html_apply_ops')
+    expect(names).toContain('html_export_docx')
+    expect(names).toContain('html_open')
+    expect(names).toContain('genoffice_services')
     expect(names).not.toContain('docx_web_search')
     expect(names).not.toContain('docx_image_search')
     expect(names).not.toContain('pptx_generate_image')
@@ -61,7 +69,7 @@ describe('capability filter', () => {
 
   it('skips insert/replace image tools without webServer and still registers the other exposed control tools plus 5 open tools', () => {
     const names = registeredToolNames()
-    expect(names).toHaveLength(exposedNames.length - ASSET_GATED.length + OPEN_TOOLS.length)
+    expect(names).toHaveLength(exposedNames.length - ASSET_GATED.length + OPEN_TOOLS.length + SERVICE_TOOLS.length)
     expect(names).not.toContain('docx_insert_image')
     expect(names).not.toContain('pdf_insert_image')
     expect(names).not.toContain('pdf_replace_image')
@@ -75,7 +83,7 @@ describe('capability filter', () => {
 
   it('DSH_GENOFFICE_ALL_TOOLS registers every CONTROL_TOOL_TABLE row plus 5 open tools and labels egress tools', () => {
     const tools = createControlTools({ allTools: true, assets: fakeAssets })
-    expect(tools).toHaveLength(CONTROL_TOOL_TABLE.length + OPEN_TOOLS.length)
+    expect(tools).toHaveLength(CONTROL_TOOL_TABLE.length + OPEN_TOOLS.length + SERVICE_TOOLS.length)
     const search = tools.find((t) => t.name === 'docx_web_search')
     expect(search?.description).toMatch(/会向公网发起请求/)
     expect(tools.filter((t) => t.name.endsWith('_open')).map((t) => t.name)).toEqual([
@@ -84,6 +92,7 @@ describe('capability filter', () => {
       'xlsx_open',
       'md_open',
       'pdf_open',
+      'html_open',
     ])
   })
 
@@ -95,6 +104,51 @@ describe('capability filter', () => {
       evidence: 'test',
     })).toBe(false)
     expect(registeredToolNames({ assets: fakeAssets })).not.toContain('pptx_generate_image')
+  })
+
+  it('family=xlsx registers only sheets tools plus xlsx_open and genoffice_services', () => {
+    const names = registeredToolNames({ assets: fakeAssets, family: 'xlsx' })
+    expect(names).toContain('xlsx_open')
+    expect(names).toContain('xlsx_save')
+    expect(names).toContain('xlsx_get_workbook_context')
+    expect(names).toContain('genoffice_services')
+    expect(names).not.toContain('pptx_open')
+    expect(names).not.toContain('docx_save')
+    expect(names).not.toContain('md_open')
+    expect(names.every((name) => name.startsWith('xlsx_') || name === 'genoffice_services')).toBe(true)
+  })
+
+  it('switching family xlsx→pptx replaces the tool list without dropping open/save', () => {
+    const xlsx = registeredToolNames({ assets: fakeAssets, family: 'xlsx' })
+    const pptx = registeredToolNames({ assets: fakeAssets, family: 'pptx' })
+    expect(xlsx).toContain('xlsx_open')
+    expect(xlsx).toContain('xlsx_save')
+    expect(pptx).toContain('pptx_open')
+    expect(pptx).toContain('pptx_save')
+    expect(pptx).toContain('pptx_get_deck_context')
+    expect(pptx).not.toContain('xlsx_open')
+    expect(xlsx).not.toContain('pptx_open')
+  })
+
+  it('unknown family does not silently fall back to another app', () => {
+    const names = registeredToolNames({ assets: fakeAssets, family: 'not-a-family' })
+    expect(names).toEqual(['genoffice_services'])
+  })
+
+  it('family schema bytes are smaller than the compatible table', () => {
+    const full = familySchemaBytes()
+    const xlsx = familySchemaBytes('xlsx')
+    const pptx = familySchemaBytes('pptx')
+    expect(xlsx).toBeGreaterThan(0)
+    expect(xlsx).toBeLessThan(full)
+    expect(pptx).toBeLessThan(full)
+    expect(xlsx).toBeLessThan(pptx)
+  })
+
+  it('compatible default still registers the full exposed table', () => {
+    const names = registeredToolNames({ assets: fakeAssets })
+    expect(names).toHaveLength(exposedNames.length + OPEN_TOOLS.length + SERVICE_TOOLS.length)
+    expect(names).toEqual(expect.arrayContaining([...exposedNames, ...OPEN_TOOLS, ...SERVICE_TOOLS]))
   })
 
   it('exposed set has zero netEgress and no public url parameter', () => {

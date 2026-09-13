@@ -2,7 +2,7 @@
  * Host tools: GenOffice control plane via relay POST /api/control/<app>/<docId>/…
  *
  * Registration is filtered by CAPABILITY (BR-001 / BR-015). The table lists
- * every control tool (docx 11 + markdown 5 + xlsx 13 + pptx 39 + pdf 21 = 89);
+ * every control tool (docx 16 + markdown 6 + xlsx 13 + pptx 39 + pdf 21 + html 5);
  * a row without a CAPABILITY key is not registered. DSH_GENOFFICE_ALL_TOOLS=1
  * re-opens the filter.
  * Write-back only through *_save and the tab button (BR-011).
@@ -12,18 +12,28 @@
 import { defineTool } from '@deepseek-ai/dsh-tools';
 import type { AssetChannel } from './assets.ts';
 import { type HostLlmOnce } from './page-plan.ts';
+import { type ControlToolEntry } from './tool-schema.ts';
 export interface ControlToolsOptions {
     assets?: AssetChannel | null;
     allTools?: boolean;
+    /** Explicit family negotiation (xlsx/sheets/pptx/…). Absent = compatible full table. */
+    family?: string | null;
+    /** Optional discovered tool names from GET /api/discovery. */
+    discoveryTools?: readonly string[] | null;
+    schemaRevision?: string;
     /** Test seam: skip session LLM. Production uses the calling agent's model. */
     planLlm?: HostLlmOnce;
     /** Test seam: shorten land settle polling. */
     landSettleMs?: number;
     landPollMs?: number;
 }
+export declare const GENOFFICE_SCHEMA_REVISION = "2026.09.1";
+export declare const GENOFFICE_PROTOCOL = "genoffice-control";
+export declare function resolveControlFamily(token?: string | null): ControlToolEntry['app'] | null;
+export declare function familySchemaBytes(family?: string | null): number;
 /** Build the control tool definitions from the contract mirror table. */
 export declare function createControlTools(opts?: ControlToolsOptions): ReturnType<typeof defineTool>[];
 /** Open tools: POST /api/open — bypasses the control plane (no docId needed). */
-export declare function createOpenTools(): ReturnType<typeof defineTool>[];
+export declare function createOpenTools(family?: string | null): ReturnType<typeof defineTool>[];
 export declare function registeredToolNames(opts?: ControlToolsOptions): string[];
 //# sourceMappingURL=tools.d.ts.map
