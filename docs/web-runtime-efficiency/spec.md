@@ -74,6 +74,7 @@
 | 2026-09-12 | 用户明确：只生成任务包并运行校验 | 本轮业务实现和真实应用验收均不执行，状态全部待开始。 |
 | 2026-09-12 | 响应用户对 master 连续执行和 CSV 完整性的要求 | 增量升级现母包；六包均使用 tasks.csv，原任务编号/依赖/状态保留，本轮统一 CSV 的选择覆盖 skill 的小包内嵌表默认规则。 |
 | 2026-09-12 | 规划审查：状态安全→插件契合→官方同步→Web 补齐→效率，源码按依赖串行 | 调整跨包边界，禁止把 no-replay 视为幂等或把参数镜像视为版本化单源；任务保持待开始。 |
+| 2026-09-12 | Task 6 落地公开发现 | `GET/POST /api/discovery`；单源 `web/capability-manifest.json`；schema_revision=`2026.09.1`；错版本写拒绝；按族不回落。 |
 | 2026-09-12 | oneclick 阶段提交遇到 Git 作者身份缺失 | 保留生成文件，未改 Git 身份配置，未提交用户既有改动。 |
 
 ## 2. 业务合同
@@ -249,7 +250,9 @@ After:  DSH / SDK / CLI → 版本化按族能力 → 同一 relay 会话合同
 |---|---|---|---|---|
 | `../engine/package.json` | web / web:build / web:serve | `rg "\"web:serve\":" ../engine/package.json` | L33 | 校准名：`web` 保持兼容默认；`web:build` 全 app；`web:serve` 纯运行 |
 | `../engine/web/server.mjs` | findStaticRoots | `rg "function findStaticRoots" ../engine/web/server.mjs` | L186 | 每 app 静态 readiness |
-| `../engine/web/server.mjs` | handleApi | `rg "async function handleApi" ../engine/web/server.mjs` | L540 | health/file/control 协议承载 |
+| `../engine/web/server.mjs` | handleApi | `rg "async function handleApi" ../engine/web/server.mjs` | L540 | health/discovery/file/control 协议承载 |
+| `../engine/web/capability-manifest.mjs` | buildDiscovery / checkWriteContract | `rg "export function buildDiscovery" ../engine/web/capability-manifest.mjs` | L1 | Task 6 单源；`capability-manifest.json` 由对齐的 CONTROL_TOOL_TABLE+CAPABILITY 生成 |
+| `../engine/web/capability-manifest.json` | schema_revision / families / tools | `rg "schema_revision" ../engine/web/capability-manifest.json` | L1 | 协议 `genoffice-control` 1.0.0，revision `2026.09.1` |
 | `../engine/apps/markdown/src/renderer/control.ts` | captureMtime | `rg "captureMtime" ../engine/apps/markdown/src/renderer/control.ts` | L225 | 仅标现基线；安全包后改用其共享适配，不重复重构 |
 | `packages/tab-genoffice/src/host/tools.ts` | createControlTools | `rg "export function createControlTools" packages/tab-genoffice/src/host/tools.ts` | L455 | 按族发现消费点 |
 | `packages/tab-genoffice/src/host/tool-schema.ts` | CONTROL_TOOL_TABLE | `rg "export const CONTROL_TOOL_TABLE" packages/tab-genoffice/src/host/tool-schema.ts` | L72 | 现有 schema，版本化单源由本包建立 |
@@ -265,7 +268,18 @@ After:  DSH / SDK / CLI → 版本化按族能力 → 同一 relay 会话合同
 
 ### 3.4 API / 数据 / 权限 / 路由影响
 
-扩展前置控制协议，新增版本化发现与会话生命周期接口，保留现 HTTP+SSE 和兼容模式；不改 Office 文件格式。新增 CLI/SDK 是同协议客户端，headless 归服务生命周期管理；所有访问继续受现有权限限制。新文件路径和具体接口字段需在 P0 基于前置包真实产物确定。
+扩展前置控制协议，新增版本化发现与会话生命周期接口，保留现 HTTP+SSE 和兼容模式；不改 Office 文件格式。新增 CLI/SDK 是同协议客户端，headless 归服务生命周期管理；所有访问继续受现有权限限制。
+
+公开发现入口（Task 6 已落地）：
+
+- `GET|POST /api/discovery`（别名 `/api/capabilities`）
+- 查询/正文：`family`/`app`/`ext`、`mode=family|compatible`、`schema_revision`、`protocol_version`
+- 头：`X-GenOffice-Schema-Revision`、`X-GenOffice-Family`、`X-GenOffice-Protocol`
+- 200 字段：`ok, protocol=genoffice-control, protocol_version=1.0.0, schema_revision=2026.09.1, supported_schema_revisions, mode, family, state, ready, families, public, tools, schema_bytes, tool_count, refresh`
+- 409 `schema-revision-unsupported` / `protocol-version-unsupported`；404 `family-unsupported`（`tools: []`，不回落其他族）
+- 族未构建：200 + `state=dependency-missing` + 该族真实 schema
+- 写操作（`/tool` 非读 skill、`/export`）在客户端声明不受支持的 revision/family 时 `409` 且不转发执行器；缺头的旧客户端不受影响
+- 单源：`web/capability-manifest.json`（由插件 `CONTROL_TOOL_TABLE` + `CAPABILITY` 生成）+ `web/capability-manifest.mjs`
 
 
 P0 先固定可比较性能协议，再把实测目标写入 §1.4 与任务验收；前后基点只跨本包优化，不用旧官方版本比较新功能版。按族模式减少无关 schema 的字节数不等于同等 token 收益，不能把字符/字节当 token。默认完整工具表继续兼容，动态模式仅在宿主明确协商支持时启用。
@@ -437,8 +451,8 @@ P0 先固定可比较性能协议，再把实测目标写入 §1.4 与任务验�
 
 **具体操作**：
 
-1. 从前置已对齐执行器/插件声明收敛单份版本化 manifest，登记协议/schema 版本、文档族、真实 readiness 和公共入口；参数与能力不在两侧长期手写维护。
-2. 按族发现只返回目标族与必要公共工具；未知族/不兼容版本拒绝写请求并给刷新方式，不能默默回落其他 app。实现公开发现入口后将准确路径/字段写回 spec 和 harness。
+1. 从已对齐的 `CONTROL_TOOL_TABLE` + `CAPABILITY` 生成 `web/capability-manifest.json`（`protocol=genoffice-control` / `protocol_version=1.0.0` / `schema_revision=2026.09.1`），由 `web/capability-manifest.mjs` 注入每 app readiness。
+2. 公开 `GET|POST /api/discovery`：无 family 为兼容完整表；`family=xlsx|sheets` 只返回该族 tools + discovery/health/open 公共入口；未知族 404；错 revision 409 且写工具不执行。路径与字段已写回 §3.4 与 `e2e-agent-runtime.mjs --case discovery`。
 
 **验证**：`node ../engine/web/e2e-agent-runtime.mjs --case discovery` → 按族范围、真实调用与错版本负例通过
 

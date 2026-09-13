@@ -1,0 +1,3430 @@
+{
+  "compatible": {
+    "ok": true,
+    "protocol": "genoffice-control",
+    "protocol_version": "1.0.0",
+    "schema_revision": "2026.09.1",
+    "supported_schema_revisions": [
+      "2026.09.1"
+    ],
+    "mode": "compatible",
+    "family": null,
+    "state": "compatible",
+    "ready": false,
+    "families": {
+      "docs": {
+        "app": "docs",
+        "aliases": [
+          "docs",
+          "docx",
+          "word"
+        ],
+        "ready": true,
+        "open": "docx_open"
+      },
+      "markdown": {
+        "app": "markdown",
+        "aliases": [
+          "markdown",
+          "md"
+        ],
+        "ready": true,
+        "open": "md_open"
+      },
+      "sheets": {
+        "app": "sheets",
+        "aliases": [
+          "sheets",
+          "xlsx"
+        ],
+        "ready": true,
+        "open": "xlsx_open"
+      },
+      "slides": {
+        "app": "slides",
+        "aliases": [
+          "slides",
+          "pptx"
+        ],
+        "ready": true,
+        "open": "pptx_open"
+      },
+      "pdf": {
+        "app": "pdf",
+        "aliases": [
+          "pdf"
+        ],
+        "ready": false,
+        "open": "pdf_open"
+      },
+      "html": {
+        "app": "html",
+        "aliases": [
+          "html",
+          "htm"
+        ],
+        "ready": false,
+        "open": "html_open"
+      }
+    },
+    "public": [
+      {
+        "name": "discovery",
+        "path": "/api/discovery"
+      },
+      {
+        "name": "health",
+        "path": "/api/health"
+      },
+      {
+        "name": "open",
+        "path": "/api/control/open"
+      },
+      {
+        "name": "docx_open"
+      },
+      {
+        "name": "md_open"
+      },
+      {
+        "name": "xlsx_open"
+      },
+      {
+        "name": "pptx_open"
+      },
+      {
+        "name": "pdf_open"
+      },
+      {
+        "name": "html_open"
+      }
+    ],
+    "tools": [
+      {
+        "name": "docx_get_document_context",
+        "skillName": "get_document_context",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "docx_read_blocks",
+        "skillName": "read_blocks",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "startBlockIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "起始块索引（0 起，含）"
+          },
+          "endBlockIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "结束块索引（含）"
+          },
+          "offset": {
+            "type": "integer",
+            "description": "继续被截断的读取时的字符偏移（默认 0）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "docx_insert_content",
+        "skillName": "insert_content",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "html": {
+            "type": "string",
+            "required": true,
+            "description": "要插入的受限 HTML 片段"
+          },
+          "afterBlockIndex": {
+            "type": "integer",
+            "description": "在该块索引之后插入；-1 = 文档开头；缺省 = 光标所在块之后"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "docx_replace_blocks",
+        "skillName": "replace_blocks",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "startBlockIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "起始块索引（0 起，含）"
+          },
+          "endBlockIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "结束块索引（含）"
+          },
+          "html": {
+            "type": "string",
+            "required": true,
+            "description": "替换用的受限 HTML 片段"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "docx_apply_commands",
+        "skillName": "apply_commands",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "commands": {
+            "type": "array",
+            "required": true,
+            "description": "按序执行的命令数组；每条命令是单键对象",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "docx_web_search",
+        "skillName": "web_search",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "query": {
+            "type": "string",
+            "required": true,
+            "description": "搜索关键词"
+          },
+          "maxResults": {
+            "type": "integer",
+            "description": "最大结果数，默认 6"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "docx_image_search",
+        "skillName": "image_search",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "query": {
+            "type": "string",
+            "required": true,
+            "description": "图片搜索关键词"
+          },
+          "maxResults": {
+            "type": "integer",
+            "description": "最大结果数，默认 8"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "docx_insert_image",
+        "skillName": "insert_image",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "imagePath": {
+            "type": "string",
+            "required": true,
+            "description": "本机图片绝对路径（png/jpeg/webp/gif）"
+          },
+          "maxWidthPx": {
+            "type": "integer",
+            "description": "最大宽度（px），默认 480"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "docx_insert_chart",
+        "skillName": "insert_chart",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "kind": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "bar",
+              "line",
+              "pie"
+            ],
+            "description": "图表类型"
+          },
+          "title": {
+            "type": "string",
+            "description": "图表标题"
+          },
+          "categories": {
+            "type": "array",
+            "required": true,
+            "description": "分类（x 轴/扇区）标签",
+            "items": {
+              "type": "string"
+            }
+          },
+          "series": {
+            "type": "array",
+            "required": true,
+            "description": "数据系列：values 长度与 categories 相同，缺失用 null；饼图只用第一个系列",
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "values": {
+                  "type": "array",
+                  "required": true,
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "afterBlockIndex": {
+            "type": "integer",
+            "description": "在该块索引之后插入；-1 = 文档开头；缺省 = 光标所在块之后"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "docx_edit_chart",
+        "skillName": "edit_chart",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "blockIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "图表的块索引"
+          },
+          "title": {
+            "type": "string",
+            "description": "新标题（省略则保留）"
+          },
+          "categories": {
+            "type": "array",
+            "description": "新分类标签，长度与原图一致；保留位置传 null",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "series": {
+            "type": "array",
+            "description": "要修改的系列",
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "index": {
+                  "type": "integer",
+                  "required": true,
+                  "description": "系列索引（0 起）"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "新系列名（省略则保留）"
+                },
+                "values": {
+                  "type": "array",
+                  "description": "新数值，长度与原系列一致；保留位置传 null",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "docx_save",
+        "skillName": "save",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "save_as": {
+            "type": "string",
+            "description": "冲突时另存到该绝对路径，不覆盖已存在文件"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "docx_read_comments",
+        "skillName": "read_comments",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "docx_reply_comment",
+        "skillName": "reply_comment",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "parentId": {
+            "type": "string",
+            "required": true,
+            "description": "目标评论线程 id"
+          },
+          "text": {
+            "type": "string",
+            "required": true,
+            "description": "回复正文"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "docx_resolve_comment",
+        "skillName": "resolve_comment",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "id": {
+            "type": "string",
+            "required": true,
+            "description": "评论或回复 id"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "docx_set_header_footer",
+        "skillName": "set_header_footer",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "kind": {
+            "type": "string",
+            "required": true,
+            "description": "header 或 footer"
+          },
+          "text": {
+            "type": "string",
+            "required": true,
+            "description": "页眉/页脚文本，最多 2000 字"
+          },
+          "view": {
+            "type": "string",
+            "description": "default / first / even，默认 default"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "docx_read_revisions",
+        "skillName": "read_revisions",
+        "app": "docs",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "markdown_get_document_context",
+        "skillName": "get_document_context",
+        "app": "markdown",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "markdown_read_blocks",
+        "skillName": "read_blocks",
+        "app": "markdown",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "startIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "起始块索引（0 起）"
+          },
+          "endIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "结束块索引（含）"
+          },
+          "offset": {
+            "type": "integer",
+            "description": "继续被截断读取的字符偏移"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "markdown_insert_content",
+        "skillName": "insert_content",
+        "app": "markdown",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "afterIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "在其后插入的块索引；-1 = 文档开头"
+          },
+          "markdown": {
+            "type": "string",
+            "required": true,
+            "description": "要插入的 Markdown 内容"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "markdown_replace_blocks",
+        "skillName": "replace_blocks",
+        "app": "markdown",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "startIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "起始块索引（0 起）"
+          },
+          "endIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "结束块索引（含）"
+          },
+          "markdown": {
+            "type": "string",
+            "required": true,
+            "description": "替换用 Markdown；空串 = 删除"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "markdown_save",
+        "skillName": "save",
+        "app": "markdown",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "save_as": {
+            "type": "string",
+            "description": "冲突时另存到该绝对路径，不覆盖已存在文件"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "markdown_apply_ops",
+        "skillName": "apply_ops",
+        "app": "markdown",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "ops": {
+            "type": "array",
+            "required": true,
+            "description": "官方 MdOp 数组，例如 {op:\"insertContent\",after:-1,markdown:\"…\"}",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "xlsx_get_workbook_context",
+        "skillName": "get_workbook_context",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_range",
+        "skillName": "read_range",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"A1:D20\"；单格 \"B2\" 也可"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_load_guide",
+        "skillName": "load_guide",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "guides": {
+            "type": "array",
+            "required": true,
+            "description": "指南名列表，如 [\"writing\",\"formatting\"]",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_formats",
+        "skillName": "read_formats",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"A1:D20\""
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_sheet_features",
+        "skillName": "read_sheet_features",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "目标工作表 id；省略读取当前工作表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_cells",
+        "skillName": "read_cells",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "addresses": {
+            "type": "array",
+            "required": true,
+            "description": "单元格地址列表，如 [\"A1\",\"B2\"]，最多 100 个",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_aggregate_range",
+        "skillName": "aggregate_range",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"D2:D88588\"（通常一列，不含表头）"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "目标工作表 id；省略读当前表"
+          },
+          "topValues": {
+            "type": "number",
+            "description": "返回多少个最高频值（0-50，默认 10）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_find_cells",
+        "skillName": "find_cells",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "query": {
+            "type": "string",
+            "description": "文本或正则；仅 errors_only=true 时可省略"
+          },
+          "regex": {
+            "type": "boolean",
+            "description": "将 query 当作 JS 正则（默认 false）"
+          },
+          "look_in": {
+            "type": "string",
+            "enum": [
+              "values",
+              "formulas",
+              "both"
+            ],
+            "description": "匹配范围（默认 both）"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "限制到一张表；省略搜全部表"
+          },
+          "errors_only": {
+            "type": "boolean",
+            "description": "只找公式错误值（默认 false）"
+          },
+          "max_results": {
+            "type": "integer",
+            "description": "最多返回条数"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_select_range",
+        "skillName": "select_range",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"A1:D20\"；单格也可"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "目标工作表 id；省略当前表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_trace_precedents",
+        "skillName": "trace_precedents",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "address": {
+            "type": "string",
+            "required": true,
+            "description": "要审计的公式格，如 \"C10\""
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "单元格所在表；省略当前表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_trace_dependents",
+        "skillName": "trace_dependents",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "address": {
+            "type": "string",
+            "required": true,
+            "description": "目标单元格，如 \"B2\""
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "单元格所在表；省略当前表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_propose_operations",
+        "skillName": "propose_operations",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "operations": {
+            "type": "array",
+            "required": true,
+            "description": "工作簿 DSL 判别联合格式的操作数组",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "summary": {
+            "type": "string",
+            "required": true,
+            "description": "本批变更的一句话总结"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "xlsx_save",
+        "skillName": "save",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "save_as": {
+            "type": "string",
+            "description": "冲突时另存到该绝对路径，不覆盖已存在文件"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_get_deck_context",
+        "skillName": "get_deck_context",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "pptx_read_slide",
+        "skillName": "read_slide",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "页码（0 起）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "pptx_set_element_text",
+        "skillName": "set_element_text",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "页码（0 起）"
+          },
+          "sourceId": {
+            "type": "string",
+            "required": true,
+            "description": "元素 id（来自大纲/read_slide）"
+          },
+          "paragraphs": {
+            "type": "array",
+            "required": true,
+            "description": "完整段落数组（替换全部内容）",
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "text": {
+                  "type": "string"
+                },
+                "bold": {
+                  "type": "boolean"
+                },
+                "italic": {
+                  "type": "boolean"
+                },
+                "underline": {
+                  "type": "boolean"
+                },
+                "fontSize": {
+                  "type": "number"
+                },
+                "fontFamily": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string",
+                  "description": "#RRGGBB"
+                }
+              }
+            }
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_set_element_style",
+        "skillName": "set_element_style",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "sourceId": {
+            "type": "string",
+            "required": true
+          },
+          "fontSize": {
+            "type": "number",
+            "description": "字号（pt）"
+          },
+          "color": {
+            "type": "string",
+            "description": "#RRGGBB"
+          },
+          "bold": {
+            "type": "boolean"
+          },
+          "italic": {
+            "type": "boolean"
+          },
+          "underline": {
+            "type": "boolean"
+          },
+          "fontFamily": {
+            "type": "string",
+            "description": "字体名；通常省略继承主题"
+          },
+          "align": {
+            "type": "string",
+            "enum": [
+              "left",
+              "center",
+              "right"
+            ]
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_set_element_transform",
+        "skillName": "set_element_transform",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "sourceId": {
+            "type": "string",
+            "required": true
+          },
+          "x": {
+            "type": "number",
+            "description": "左上角 x（px）"
+          },
+          "y": {
+            "type": "number",
+            "description": "左上角 y（px）"
+          },
+          "w": {
+            "type": "number",
+            "description": "宽（px）"
+          },
+          "h": {
+            "type": "number",
+            "description": "高（px）"
+          },
+          "rotationDeg": {
+            "type": "number",
+            "description": "旋转角（度，顺时针）"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_execute_slide_script",
+        "skillName": "execute_slide_script",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "code": {
+            "type": "string",
+            "required": true,
+            "description": "JavaScript 脚本源码（上游键名 code）"
+          },
+          "explanation": {
+            "type": "string",
+            "description": "脚本意图说明（可选）"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_set_element_fill",
+        "skillName": "set_element_fill",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "sourceId": {
+            "type": "string",
+            "required": true
+          },
+          "fill": {
+            "type": "string",
+            "required": true,
+            "description": "#RRGGBB 或 none"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_set_element_stroke",
+        "skillName": "set_element_stroke",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "sourceId": {
+            "type": "string",
+            "required": true
+          },
+          "color": {
+            "type": "string",
+            "description": "#RRGGBB"
+          },
+          "widthPt": {
+            "type": "number",
+            "description": "线宽（磅）"
+          },
+          "remove": {
+            "type": "boolean",
+            "description": "true = 移除描边"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_web_search",
+        "skillName": "web_search",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "query": {
+            "type": "string",
+            "required": true,
+            "description": "搜索关键词"
+          },
+          "maxResults": {
+            "type": "integer",
+            "description": "最大结果数，默认 6"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_image_search",
+        "skillName": "image_search",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "query": {
+            "type": "string",
+            "required": true,
+            "description": "图片搜索关键词（建议英文）"
+          },
+          "maxResults": {
+            "type": "integer",
+            "description": "最大结果数，默认 8"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_generate_image",
+        "skillName": "generate_image",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "prompt": {
+            "type": "string",
+            "required": true
+          },
+          "model": {
+            "type": "string"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_analyze_media",
+        "skillName": "analyze_media",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "mediaUrls": {
+            "type": "array",
+            "required": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "requirements": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_insert_web_image",
+        "skillName": "insert_web_image",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "url": {
+            "type": "string",
+            "required": true,
+            "description": "图片直链"
+          },
+          "xPx": {
+            "type": "number"
+          },
+          "yPx": {
+            "type": "number"
+          },
+          "wPx": {
+            "type": "number"
+          },
+          "hPx": {
+            "type": "number"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_crop_image",
+        "skillName": "crop_image",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "sourceId": {
+            "type": "string",
+            "required": true
+          },
+          "srcRect": {
+            "type": "object",
+            "required": true,
+            "additionalProperties": true,
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              },
+              "w": {
+                "type": "number"
+              },
+              "h": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_set_picture_opacity",
+        "skillName": "set_picture_opacity",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "sourceId": {
+            "type": "string",
+            "required": true
+          },
+          "opacity": {
+            "type": "number",
+            "required": true,
+            "description": "0..100"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_replace_image",
+        "skillName": "replace_image",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "sourceId": {
+            "type": "string",
+            "required": true
+          },
+          "url": {
+            "type": "string",
+            "required": true,
+            "description": "新图片直链"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_ask_clarification",
+        "skillName": "ask_clarification",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "questions": {
+            "type": "array",
+            "required": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_plan_deck",
+        "skillName": "plan_deck",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "core_hook": {
+            "type": "string",
+            "required": true,
+            "description": "核心钩子 / 主题一句话"
+          },
+          "style": {
+            "type": "string"
+          },
+          "pages": {
+            "type": "integer",
+            "description": "目标页数"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_regenerate_slide",
+        "skillName": "regenerate_slide",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "要重做的页（0 起）"
+          },
+          "brief": {
+            "type": "string",
+            "description": "新页内容与布局说明：各区域放什么、用什么 layout（如 three_column_cards）。无 page_spec 时必填。"
+          },
+          "title": {
+            "type": "string",
+            "description": "页标题"
+          },
+          "layout": {
+            "type": "string",
+            "description": "布局意图名（可选）"
+          },
+          "image_urls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "本页真实 http(s) 图片 URL；没有则 []"
+          },
+          "page_spec": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "已写好的单页 PageSpec（background + elements）；有则跳过规划直接 land"
+          },
+          "dataSource": {
+            "type": "string",
+            "enum": [
+              "user",
+              "document",
+              "search",
+              "sample"
+            ],
+            "description": "brief 含具体数字时必填：数字来源"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_delete_slide",
+        "skillName": "delete_slide",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_land_pages",
+        "skillName": "land_pages",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "pages": {
+            "type": "array",
+            "required": true,
+            "description": "PageSpec 数组：background + elements（shape/text/image）",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "insert_mode": {
+            "type": "string",
+            "enum": [
+              "replace",
+              "append",
+              "replace_at",
+              "insert_at"
+            ],
+            "description": "replace（默认）/ append / replace_at / insert_at"
+          },
+          "at_index": {
+            "type": "integer",
+            "description": "replace_at / insert_at 的页索引（0 起）"
+          },
+          "deck_name": {
+            "type": "string",
+            "description": "可选稿名"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_generate_deck",
+        "skillName": "generate_deck",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "topic": {
+            "type": "string",
+            "description": "演示主题/需求（与 approx_pages 搭配时由宿主规划，不必手写 pages）"
+          },
+          "approx_pages": {
+            "type": "integer",
+            "description": "期望页数（与 topic 联用）"
+          },
+          "context": {
+            "type": "string",
+            "description": "可选：真实材料/数据/问卷答案"
+          },
+          "core_hook": {
+            "type": "string",
+            "description": "可选：已定叙事锚点（与 pages 联用时推荐）"
+          },
+          "style": {
+            "type": "string",
+            "description": "统一设计系统（与 pages 联用时需要；与 topic 联用时作风格提示）"
+          },
+          "pages": {
+            "type": "array",
+            "description": "可选：已知道每页时直接传入；每项 title/brief/layout 必填",
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "cover|content|data|closing"
+                },
+                "brief": {
+                  "type": "string"
+                },
+                "layout": {
+                  "type": "string"
+                },
+                "image_queries": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "pages_spec": {
+            "type": "array",
+            "description": "已写好的 PageSpec[]；有则跳过规划直接 land_pages",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "insert_mode": {
+            "type": "string",
+            "enum": [
+              "replace",
+              "append"
+            ],
+            "description": "replace（默认，整套替换）或 append（追加到末尾）"
+          },
+          "style_template": {
+            "type": "string",
+            "description": "已保存样式模板名（跳过风格生成）"
+          },
+          "dataSource": {
+            "type": "string",
+            "enum": [
+              "user",
+              "document",
+              "search",
+              "sample"
+            ],
+            "description": "topic/context/briefs 含具体数字时必填：数字来源"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_save_style_template",
+        "skillName": "save_style_template",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "styleSkill": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_list_style_templates",
+        "skillName": "list_style_templates",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "pptx_add_slide",
+        "skillName": "add_slide",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "sourceIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "复制源页码（0 起）"
+          },
+          "clearText": {
+            "type": "boolean"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_add_text_box",
+        "skillName": "add_text_box",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "x": {
+            "type": "number",
+            "required": true
+          },
+          "y": {
+            "type": "number",
+            "required": true
+          },
+          "w": {
+            "type": "number",
+            "required": true
+          },
+          "h": {
+            "type": "number",
+            "required": true
+          },
+          "paragraphs": {
+            "type": "array",
+            "description": "富文本段落",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_add_shape",
+        "skillName": "add_shape",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "kind": {
+            "type": "string",
+            "required": true,
+            "description": "形状预设名"
+          },
+          "x": {
+            "type": "number",
+            "required": true
+          },
+          "y": {
+            "type": "number",
+            "required": true
+          },
+          "w": {
+            "type": "number",
+            "required": true
+          },
+          "h": {
+            "type": "number",
+            "required": true
+          },
+          "fillColor": {
+            "type": "string",
+            "description": "#RRGGBB"
+          },
+          "paragraphs": {
+            "type": "array",
+            "description": "形状内文本段落",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_add_chart",
+        "skillName": "add_chart",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "kind": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "bar",
+              "barStacked",
+              "line",
+              "area",
+              "pie",
+              "doughnut"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "description": "图表标题（可选）"
+          },
+          "categories": {
+            "type": "array",
+            "required": true,
+            "items": {
+              "type": "string"
+            },
+            "description": "分类标签"
+          },
+          "series": {
+            "type": "array",
+            "required": true,
+            "description": "数据系列",
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "values": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "dataSource": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "user",
+              "document",
+              "search",
+              "sample"
+            ],
+            "description": "数值来源"
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "w": {
+            "type": "number"
+          },
+          "h": {
+            "type": "number"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_add_smartart",
+        "skillName": "add_smartart",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "layout": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "list",
+              "process",
+              "cycle",
+              "hierarchy",
+              "pyramid",
+              "matrix",
+              "venn"
+            ],
+            "description": "示意图布局"
+          },
+          "items": {
+            "type": "array",
+            "required": true,
+            "items": {
+              "type": "string"
+            },
+            "description": "节点文本（建议 2–8 项）"
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "w": {
+            "type": "number"
+          },
+          "h": {
+            "type": "number"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_add_table",
+        "skillName": "add_table",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "rows": {
+            "type": "integer",
+            "required": true,
+            "description": "行数（含表头）"
+          },
+          "cols": {
+            "type": "integer",
+            "required": true,
+            "description": "列数"
+          },
+          "cells": {
+            "type": "array",
+            "description": "单元格文本，按行，如 [[\"Name\",\"Qty\"],[\"A\",\"1\"]]",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "w": {
+            "type": "number"
+          },
+          "h": {
+            "type": "number"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_edit_table_cell",
+        "skillName": "edit_table_cell",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "sourceId": {
+            "type": "string",
+            "required": true,
+            "description": "表格元素 id"
+          },
+          "row": {
+            "type": "integer",
+            "required": true,
+            "description": "行号（0 起）"
+          },
+          "col": {
+            "type": "integer",
+            "required": true,
+            "description": "列号（0 起）"
+          },
+          "paragraphs": {
+            "type": "array",
+            "required": true,
+            "description": "替换后的单元格段落",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_edit_table_structure",
+        "skillName": "edit_table_structure",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "sourceId": {
+            "type": "string",
+            "required": true,
+            "description": "表格元素 id"
+          },
+          "kind": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "insert-row",
+              "delete-row",
+              "insert-col",
+              "delete-col"
+            ]
+          },
+          "index": {
+            "type": "integer",
+            "required": true,
+            "description": "行/列号（0 起）"
+          },
+          "before": {
+            "type": "boolean",
+            "description": "insert 时为 true 则插在 index 之前"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_edit_table_style",
+        "skillName": "edit_table_style",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "sourceId": {
+            "type": "string",
+            "required": true,
+            "description": "表格元素 id"
+          },
+          "styleName": {
+            "type": "string",
+            "description": "预设样式名，优先级最高"
+          },
+          "firstRow": {
+            "type": "boolean",
+            "description": "强调首行表头"
+          },
+          "bandRow": {
+            "type": "boolean",
+            "description": "隔行变色"
+          },
+          "shadingColor": {
+            "type": "string",
+            "description": "底纹 #RRGGBB，none 清除"
+          },
+          "borderColor": {
+            "type": "string",
+            "description": "边框 #RRGGBB"
+          },
+          "borderWidthPt": {
+            "type": "number",
+            "description": "边框宽度 pt"
+          },
+          "borderPreset": {
+            "type": "string",
+            "enum": [
+              "all",
+              "none"
+            ]
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_edit_chart",
+        "skillName": "edit_chart",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "sourceId": {
+            "type": "string",
+            "required": true,
+            "description": "图表元素 id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "bar",
+              "barStacked",
+              "line",
+              "area",
+              "pie",
+              "doughnut"
+            ]
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "分类标签"
+          },
+          "series": {
+            "type": "array",
+            "description": "数据系列",
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "values": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "dataSource": {
+            "type": "string",
+            "enum": [
+              "user",
+              "document",
+              "search",
+              "sample"
+            ],
+            "description": "传 series 时必填的数值来源"
+          },
+          "colorScheme": {
+            "type": "string",
+            "description": "配色方案"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_set_slide_background",
+        "skillName": "set_slide_background",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true,
+            "description": "页码（0 起）；-1 = 全部"
+          },
+          "color": {
+            "type": "string",
+            "required": true,
+            "description": "#RRGGBB"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_delete_element",
+        "skillName": "delete_element",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "sourceId": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_ungroup_element",
+        "skillName": "ungroup_element",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "slideIndex": {
+            "type": "integer",
+            "required": true
+          },
+          "sourceId": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_apply_ops",
+        "skillName": "apply_ops",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "ops": {
+            "type": "array",
+            "required": true,
+            "description": "op 列表，按顺序作为一笔事务（最多 50）",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "dry_run": {
+            "type": "boolean",
+            "description": "只校验计划，不改稿"
+          },
+          "isolation": {
+            "type": "string",
+            "enum": [
+              "atomic",
+              "per_op"
+            ],
+            "description": "atomic 默认全成或全败；per_op 失败跳过"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pptx_save",
+        "skillName": "save",
+        "app": "slides",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "save_as": {
+            "type": "string",
+            "description": "冲突时另存到该绝对路径，不覆盖已存在文件"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_read_pages",
+        "skillName": "read_pages",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "start": {
+            "type": "integer",
+            "required": true,
+            "description": "起始页码（1 起）"
+          },
+          "end": {
+            "type": "integer",
+            "description": "结束页码（含）；省略只读起始页"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "pdf_search_text",
+        "skillName": "search_text",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "query": {
+            "type": "string",
+            "required": true,
+            "description": "搜索文本（大小写不敏感）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "pdf_goto_page",
+        "skillName": "goto_page",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "page": {
+            "type": "integer",
+            "required": true,
+            "description": "目标页码（1 起）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "pdf_markup_text",
+        "skillName": "markup_text",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "page": {
+            "type": "integer",
+            "required": true,
+            "description": "页码（1 起）"
+          },
+          "text": {
+            "type": "string",
+            "required": true,
+            "description": "页面上的原文片段"
+          },
+          "type": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "highlight",
+              "underline",
+              "strikeout"
+            ],
+            "description": "标注类型"
+          },
+          "all": {
+            "type": "boolean",
+            "description": "是否标注该页所有出现处；默认 false"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_edit_text",
+        "skillName": "edit_text",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "page": {
+            "type": "integer",
+            "required": true,
+            "description": "页码（1 起）"
+          },
+          "old_text": {
+            "type": "string",
+            "required": true,
+            "description": "页面上的原文片段"
+          },
+          "new_text": {
+            "type": "string",
+            "required": true,
+            "description": "替换文本；\"\\n\" 分多行"
+          },
+          "occurrence": {
+            "type": "integer",
+            "description": "第几处出现（1 起）；默认 1"
+          },
+          "font_size": {
+            "type": "number",
+            "description": "新字号（pt）；省略保持原字号"
+          },
+          "color": {
+            "type": "string",
+            "description": "新文本颜色 #RRGGBB；省略保持原色"
+          },
+          "font": {
+            "type": "string",
+            "enum": [
+              "arial",
+              "times",
+              "courier"
+            ],
+            "description": "替换字体"
+          },
+          "bold": {
+            "type": "boolean",
+            "description": "加粗"
+          },
+          "italic": {
+            "type": "boolean",
+            "description": "斜体"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_edit_block",
+        "skillName": "edit_block",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "page": {
+            "type": "integer",
+            "required": true
+          },
+          "paragraph_text": {
+            "type": "string",
+            "required": true,
+            "description": "定位段落的原文片段"
+          },
+          "new_text": {
+            "type": "string",
+            "required": true,
+            "description": "整段替换文本"
+          },
+          "font_size": {
+            "type": "number"
+          },
+          "color": {
+            "type": "string",
+            "description": "#RRGGBB"
+          },
+          "font": {
+            "type": "string",
+            "enum": [
+              "arial",
+              "times",
+              "courier"
+            ]
+          },
+          "bold": {
+            "type": "boolean"
+          },
+          "italic": {
+            "type": "boolean"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_insert_text",
+        "skillName": "insert_text",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "page": {
+            "type": "integer",
+            "required": true,
+            "description": "页码（1 起）"
+          },
+          "text": {
+            "type": "string",
+            "required": true,
+            "description": "要插入的文本；\"\\n\" 换行"
+          },
+          "x": {
+            "type": "number",
+            "description": "文本块左边缘，距页左（pt）"
+          },
+          "y": {
+            "type": "number",
+            "description": "文本块上边缘，距页顶（pt）"
+          },
+          "font_size": {
+            "type": "number",
+            "description": "字号 pt，默认 14"
+          },
+          "color": {
+            "type": "string",
+            "description": "颜色 #RRGGBB，默认黑"
+          },
+          "max_width": {
+            "type": "number",
+            "description": "换行宽度（pt）；省略保持给定换行"
+          },
+          "align": {
+            "type": "string",
+            "enum": [
+              "left",
+              "center",
+              "right"
+            ],
+            "description": "行对齐，默认 left"
+          },
+          "font": {
+            "type": "string",
+            "enum": [
+              "arial",
+              "times",
+              "courier"
+            ]
+          },
+          "bold": {
+            "type": "boolean"
+          },
+          "italic": {
+            "type": "boolean"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_image_search",
+        "skillName": "image_search",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "query": {
+            "type": "string",
+            "required": true,
+            "description": "图片搜索关键词（建议英文）"
+          },
+          "max_results": {
+            "type": "integer",
+            "description": "最大结果数，默认 8"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_generate_image",
+        "skillName": "generate_image",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "prompt": {
+            "type": "string",
+            "required": true
+          },
+          "aspect_ratio": {
+            "type": "string"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_list_page_images",
+        "skillName": "list_page_images",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "page": {
+            "type": "integer",
+            "description": "页码（1 起）；省略则列出每一页"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "pdf_insert_image",
+        "skillName": "insert_image",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "page": {
+            "type": "integer",
+            "required": true
+          },
+          "imagePath": {
+            "type": "string",
+            "required": true,
+            "description": "本机图片绝对路径"
+          },
+          "x": {
+            "type": "number",
+            "description": "左边缘（点，从页左缘）"
+          },
+          "y": {
+            "type": "number",
+            "description": "上边缘（点，从页顶）"
+          },
+          "width": {
+            "type": "number",
+            "description": "显示宽度（点）；高度按图片比例"
+          },
+          "anchor_text": {
+            "type": "string",
+            "description": "页内原文片段，用于相对定位"
+          },
+          "placement": {
+            "type": "string",
+            "enum": [
+              "below",
+              "above",
+              "right",
+              "left"
+            ]
+          },
+          "layer": {
+            "type": "string",
+            "enum": [
+              "above_text",
+              "below_text"
+            ]
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_transform_image",
+        "skillName": "transform_image",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "page": {
+            "type": "integer",
+            "required": true
+          },
+          "image_number": {
+            "type": "integer",
+            "required": true,
+            "description": "list_page_images 的 1 起编号"
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "layer": {
+            "type": "string",
+            "enum": [
+              "above_text",
+              "below_text"
+            ]
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_rotate_image",
+        "skillName": "rotate_image",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "page": {
+            "type": "integer",
+            "required": true
+          },
+          "image_number": {
+            "type": "integer",
+            "required": true,
+            "description": "list_page_images 的 1 起编号"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "cw",
+              "ccw",
+              "180"
+            ],
+            "required": true
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_replace_image",
+        "skillName": "replace_image",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "page": {
+            "type": "integer",
+            "required": true
+          },
+          "image_number": {
+            "type": "integer",
+            "required": true,
+            "description": "list_page_images 的 1 起编号"
+          },
+          "imagePath": {
+            "type": "string",
+            "required": true,
+            "description": "本机图片绝对路径"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_delete_image",
+        "skillName": "delete_image",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "page": {
+            "type": "integer",
+            "required": true
+          },
+          "image_number": {
+            "type": "integer",
+            "required": true,
+            "description": "list_page_images 的 1 起编号"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_list_form_fields",
+        "skillName": "list_form_fields",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "pdf_fill_form_field",
+        "skillName": "fill_form_field",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "name": {
+            "type": "string",
+            "required": true,
+            "description": "字段名"
+          },
+          "value": {
+            "type": "string",
+            "required": true
+          },
+          "checked": {
+            "type": "boolean",
+            "description": "复选框是否勾选"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_rotate_page",
+        "skillName": "rotate_page",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "page": {
+            "type": "integer",
+            "required": true
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "left",
+              "right"
+            ],
+            "required": true
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_delete_page",
+        "skillName": "delete_page",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "page": {
+            "type": "integer",
+            "required": true
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "pdf_get_outline",
+        "skillName": "get_outline",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "pdf_save",
+        "skillName": "save",
+        "app": "pdf",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "save_as": {
+            "type": "string",
+            "description": "冲突时另存到该绝对路径，不覆盖已存在文件"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "html_get_outline",
+        "skillName": "get_outline",
+        "app": "html",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "depth": {
+            "type": "integer",
+            "description": "展开深度，默认 3"
+          },
+          "from_sid": {
+            "type": "integer",
+            "description": "只看该元素及其子树"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "html_read_source",
+        "skillName": "read_source",
+        "app": "html",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "start_line": {
+            "type": "integer"
+          },
+          "end_line": {
+            "type": "integer"
+          },
+          "sid": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "html_apply_ops",
+        "skillName": "apply_ops",
+        "app": "html",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "ops": {
+            "type": "array",
+            "required": true,
+            "description": "官方 HtmlOp 数组",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "summary": {
+            "type": "string",
+            "description": "给用户看的一句摘要"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "html_save",
+        "skillName": "save",
+        "app": "html",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "save_as": {
+            "type": "string",
+            "description": "冲突时另存到该绝对路径，不覆盖已存在文件"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "html_export_docx",
+        "skillName": "export_docx",
+        "app": "html",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "dest": {
+            "type": "string",
+            "description": "目标 docx 绝对路径；省略则与源同目录同名 .docx"
+          }
+        },
+        "write": true
+      }
+    ],
+    "schema_bytes": 48943,
+    "tool_count": 100,
+    "refresh": {
+      "url": "/api/discovery"
+    },
+    "status": 200,
+    "_bytes": 50007
+  },
+  "familyXlsx": {
+    "ok": true,
+    "protocol": "genoffice-control",
+    "protocol_version": "1.0.0",
+    "schema_revision": "2026.09.1",
+    "supported_schema_revisions": [
+      "2026.09.1"
+    ],
+    "mode": "family",
+    "family": "sheets",
+    "state": "family-loaded",
+    "ready": true,
+    "families": {
+      "sheets": {
+        "app": "sheets",
+        "aliases": [
+          "sheets",
+          "xlsx"
+        ],
+        "ready": true,
+        "open": "xlsx_open"
+      }
+    },
+    "public": [
+      {
+        "name": "discovery",
+        "path": "/api/discovery"
+      },
+      {
+        "name": "health",
+        "path": "/api/health"
+      },
+      {
+        "name": "open",
+        "path": "/api/control/open"
+      },
+      {
+        "name": "xlsx_open"
+      }
+    ],
+    "tools": [
+      {
+        "name": "xlsx_get_workbook_context",
+        "skillName": "get_workbook_context",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_range",
+        "skillName": "read_range",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"A1:D20\"；单格 \"B2\" 也可"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_load_guide",
+        "skillName": "load_guide",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "guides": {
+            "type": "array",
+            "required": true,
+            "description": "指南名列表，如 [\"writing\",\"formatting\"]",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_formats",
+        "skillName": "read_formats",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"A1:D20\""
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_sheet_features",
+        "skillName": "read_sheet_features",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "目标工作表 id；省略读取当前工作表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_cells",
+        "skillName": "read_cells",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "addresses": {
+            "type": "array",
+            "required": true,
+            "description": "单元格地址列表，如 [\"A1\",\"B2\"]，最多 100 个",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_aggregate_range",
+        "skillName": "aggregate_range",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"D2:D88588\"（通常一列，不含表头）"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "目标工作表 id；省略读当前表"
+          },
+          "topValues": {
+            "type": "number",
+            "description": "返回多少个最高频值（0-50，默认 10）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_find_cells",
+        "skillName": "find_cells",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "query": {
+            "type": "string",
+            "description": "文本或正则；仅 errors_only=true 时可省略"
+          },
+          "regex": {
+            "type": "boolean",
+            "description": "将 query 当作 JS 正则（默认 false）"
+          },
+          "look_in": {
+            "type": "string",
+            "enum": [
+              "values",
+              "formulas",
+              "both"
+            ],
+            "description": "匹配范围（默认 both）"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "限制到一张表；省略搜全部表"
+          },
+          "errors_only": {
+            "type": "boolean",
+            "description": "只找公式错误值（默认 false）"
+          },
+          "max_results": {
+            "type": "integer",
+            "description": "最多返回条数"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_select_range",
+        "skillName": "select_range",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"A1:D20\"；单格也可"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "目标工作表 id；省略当前表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_trace_precedents",
+        "skillName": "trace_precedents",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "address": {
+            "type": "string",
+            "required": true,
+            "description": "要审计的公式格，如 \"C10\""
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "单元格所在表；省略当前表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_trace_dependents",
+        "skillName": "trace_dependents",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "address": {
+            "type": "string",
+            "required": true,
+            "description": "目标单元格，如 \"B2\""
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "单元格所在表；省略当前表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_propose_operations",
+        "skillName": "propose_operations",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "operations": {
+            "type": "array",
+            "required": true,
+            "description": "工作簿 DSL 判别联合格式的操作数组",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "summary": {
+            "type": "string",
+            "required": true,
+            "description": "本批变更的一句话总结"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "xlsx_save",
+        "skillName": "save",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "save_as": {
+            "type": "string",
+            "description": "冲突时另存到该绝对路径，不覆盖已存在文件"
+          }
+        },
+        "write": true
+      }
+    ],
+    "schema_bytes": 5483,
+    "tool_count": 13,
+    "refresh": {
+      "url": "/api/discovery?family=sheets"
+    },
+    "status": 200,
+    "_bytes": 6048
+  },
+  "unknown": {
+    "ok": false,
+    "error": "family-unsupported",
+    "protocol": "genoffice-control",
+    "protocol_version": "1.0.0",
+    "schema_revision": "2026.09.1",
+    "supported_schema_revisions": [
+      "2026.09.1"
+    ],
+    "tools": [],
+    "refresh": {
+      "url": "/api/discovery"
+    },
+    "mode": "family",
+    "family": "not-a-family",
+    "state": "incompatible",
+    "status": 404,
+    "_bytes": 281
+  },
+  "badRevision": {
+    "ok": false,
+    "error": "schema-revision-unsupported",
+    "protocol": "genoffice-control",
+    "protocol_version": "1.0.0",
+    "schema_revision": "2026.09.1",
+    "supported_schema_revisions": [
+      "2026.09.1"
+    ],
+    "tools": [],
+    "refresh": {
+      "url": "/api/discovery"
+    },
+    "status": 409,
+    "_bytes": 227
+  }
+}

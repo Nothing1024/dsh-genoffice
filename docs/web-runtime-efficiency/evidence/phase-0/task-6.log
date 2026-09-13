@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-003",
+  "branch": "discovery",
+  "status": "passed",
+  "run_id": "wre-discovery-2026-09-13T11:29:25.556Z",
+  "source_revisions": {
+    "plugin": "6c9e719db761aec2063f6114120ce7079ee24cdf",
+    "engine": "07522fc8b71969ee691216750a665b9db4f89935",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "compatible": {
+    "status": 200,
+    "tool_count": 100,
+    "schema_bytes": 48943,
+    "mode": "compatible"
+  },
+  "familyXlsx": {
+    "status": 200,
+    "tool_count": 13,
+    "schema_bytes": 5483,
+    "family": "sheets",
+    "public": [
+      {
+        "name": "discovery",
+        "path": "/api/discovery"
+      },
+      {
+        "name": "health",
+        "path": "/api/health"
+      },
+      {
+        "name": "open",
+        "path": "/api/control/open"
+      },
+      {
+        "name": "xlsx_open"
+      }
+    ]
+  },
+  "unknown": {
+    "status": 404,
+    "error": "family-unsupported",
+    "tools": []
+  },
+  "badRevision": {
+    "status": 409,
+    "error": "schema-revision-unsupported"
+  },
+  "missing": {
+    "status": 200,
+    "state": "dependency-missing",
+    "tool_count": 13
+  },
+  "restored": {
+    "status": 200,
+    "state": "family-loaded",
+    "ready": true
+  },
+  "refused": {
+    "status": 409,
+    "error": "schema-revision-unsupported"
+  },
+  "recovered": {
+    "ok": true,
+    "output": "ops[0] insertContent: Inserted 1 block(s).\nBlock indexes may have changed; call get_document_context before further index-based edits."
+  },
+  "workbook": "Active sheet: Sheet1 (id=sheet-1, data extent about 100 rows × 26 columns)\nMode: imported real xlsx file (some regions may still be streaming in)\nActive sheet data area: A1:Z100 (answer data-size questions directly from this — do not tally ",
+  "deck": "<deck outline>\nThe presentation has 1 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage",
+  "cases": [
+    {
+      "id": "versioned-family-discovery",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "compatible-100",
+          "status": "passed",
+          "expected": 100,
+          "actual": {
+            "status": 200,
+            "count": 100,
+            "mode": "compatible"
+          }
+        },
+        {
+          "name": "compatible-protocol",
+          "status": "passed",
+          "expected": "genoffice-control/1.0.0/2026.09.1",
+          "actual": {
+            "protocol": "genoffice-control",
+            "version": "1.0.0",
+            "rev": "2026.09.1"
+          }
+        },
+        {
+          "name": "family-xlsx-13",
+          "status": "passed",
+          "expected": 13,
+          "actual": {
+            "status": 200,
+            "count": 13,
+            "names": [
+              "xlsx_get_workbook_context",
+              "xlsx_read_range",
+              "xlsx_load_guide",
+              "xlsx_read_formats",
+              "xlsx_read_sheet_features",
+              "xlsx_read_cells",
+              "xlsx_aggregate_range",
+              "xlsx_find_cells",
+              "xlsx_select_range",
+              "xlsx_trace_precedents",
+              "xlsx_trace_dependents",
+              "xlsx_propose_operations",
+              "xlsx_save"
+            ]
+          }
+        },
+        {
+          "name": "family-public-open",
+          "status": "passed",
+          "expected": true,
+          "actual": [
+            {
+              "name": "discovery",
+              "path": "/api/discovery"
+            },
+            {
+              "name": "health",
+              "path": "/api/health"
+            },
+            {
+              "name": "open",
+              "path": "/api/control/open"
+            },
+            {
+              "name": "xlsx_open"
+            }
+          ]
+        },
+        {
+          "name": "post-family-sheets",
+          "status": "passed",
+          "expected": 13,
+          "actual": {
+            "status": 200,
+            "count": 13
+          }
+        },
+        {
+          "name": "alias-capabilities",
+          "status": "passed",
+          "expected": 13,
+          "actual": {
+            "status": 200,
+            "count": 13
+          }
+        },
+        {
+          "name": "unknown-404",
+          "status": "passed",
+          "expected": 404,
+          "actual": {
+            "status": 404,
+            "error": "family-unsupported",
+            "tools": []
+          }
+        },
+        {
+          "name": "bad-revision-409",
+          "status": "passed",
+          "expected": 409,
+          "actual": {
+            "status": 409,
+            "error": "schema-revision-unsupported"
+          }
+        },
+        {
+          "name": "missing-sheets-schema",
+          "status": "passed",
+          "expected": "dependency-missing",
+          "actual": {
+            "status": 200,
+            "state": "dependency-missing",
+            "count": 13
+          }
+        },
+        {
+          "name": "restore-sheets-ready",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ready": true,
+            "state": "family-loaded"
+          }
+        },
+        {
+          "name": "workbook-context",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "ok": true,
+            "out": "Active sheet: Sheet1 (id=sheet-1, data extent about 100 rows × 26 columns)\nMode: imported real xlsx file (some regions may still be streaming in)\nActive sheet data area: A1:Z100 (a"
+          }
+        },
+        {
+          "name": "deck-context",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "ok": true,
+            "out": "<deck outline>\nThe presentation has 1 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier co"
+          }
+        },
+        {
+          "name": "write-refused",
+          "status": "passed",
+          "expected": 409,
+          "actual": {
+            "status": 409,
+            "error": "schema-revision-unsupported",
+            "changed": false
+          }
+        },
+        {
+          "name": "recover-keep",
+          "status": "passed",
+          "expected": true,
+          "actual": "WreDiscoverKeep\n\n# WreKeep\n\nkeep phrase\n"
+        },
+        {
+          "name": "md-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "ok": true,
+            "docId": "3453c4baa7e968fde4166be4508bf0d84bd32ae8c4ad527974a6991b8f6fc3a8",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/evidence/phase-0/work-discovery/md-small.md",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "024b825fceda1923face1f575cd2a72c620a1a32ba4f6c187504f96c65e8ac10",
+            "error": null,
+            "occupied": true,
+            "owner": "06f28de3-4521-485b-856e-1490a9e0fbab",
+            "status": 200,
+            "_bytes": 416
+          }
+        }
+      ]
+    }
+  ]
+}

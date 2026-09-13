@@ -1,0 +1,34 @@
+{
+  "refused": {
+    "ok": false,
+    "error": "schema-revision-unsupported",
+    "protocol": "genoffice-control",
+    "protocol_version": "1.0.0",
+    "schema_revision": "2026.09.1",
+    "supported_schema_revisions": [
+      "2026.09.1"
+    ],
+    "tools": [],
+    "refresh": {
+      "url": "/api/discovery"
+    },
+    "status": 409,
+    "_bytes": 227
+  },
+  "badRevision": {
+    "ok": false,
+    "error": "schema-revision-unsupported",
+    "protocol": "genoffice-control",
+    "protocol_version": "1.0.0",
+    "schema_revision": "2026.09.1",
+    "supported_schema_revisions": [
+      "2026.09.1"
+    ],
+    "tools": [],
+    "refresh": {
+      "url": "/api/discovery"
+    },
+    "status": 409,
+    "_bytes": 227
+  }
+}

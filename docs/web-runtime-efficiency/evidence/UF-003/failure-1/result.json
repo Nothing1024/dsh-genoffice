@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-003",
+  "branch": "failure-1",
+  "status": "passed",
+  "run_id": "wre-discovery-2026-09-13T11:29:25.556Z",
+  "source_revisions": {
+    "plugin": "6c9e719db761aec2063f6114120ce7079ee24cdf",
+    "engine": "07522fc8b71969ee691216750a665b9db4f89935",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "cases": [
+    {
+      "id": "schema-revision-write-refused",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "bad-revision-409",
+          "status": "passed",
+          "expected": 409,
+          "actual": {
+            "status": 409,
+            "error": "schema-revision-unsupported"
+          }
+        },
+        {
+          "name": "write-refused",
+          "status": "passed",
+          "expected": 409,
+          "actual": {
+            "status": 409,
+            "error": "schema-revision-unsupported",
+            "changed": false
+          }
+        },
+        {
+          "name": "recover-keep",
+          "status": "passed",
+          "expected": true,
+          "actual": "WreDiscoverKeep\n\n# WreKeep\n\nkeep phrase\n"
+        }
+      ]
+    }
+  ]
+}

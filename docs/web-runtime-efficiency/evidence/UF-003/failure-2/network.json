@@ -1,0 +1,693 @@
+{
+  "unknown": {
+    "ok": false,
+    "error": "family-unsupported",
+    "protocol": "genoffice-control",
+    "protocol_version": "1.0.0",
+    "schema_revision": "2026.09.1",
+    "supported_schema_revisions": [
+      "2026.09.1"
+    ],
+    "tools": [],
+    "refresh": {
+      "url": "/api/discovery"
+    },
+    "mode": "family",
+    "family": "not-a-family",
+    "state": "incompatible",
+    "status": 404,
+    "_bytes": 281
+  },
+  "missing": {
+    "ok": true,
+    "protocol": "genoffice-control",
+    "protocol_version": "1.0.0",
+    "schema_revision": "2026.09.1",
+    "supported_schema_revisions": [
+      "2026.09.1"
+    ],
+    "mode": "family",
+    "family": "sheets",
+    "state": "dependency-missing",
+    "ready": false,
+    "families": {
+      "sheets": {
+        "app": "sheets",
+        "aliases": [
+          "sheets",
+          "xlsx"
+        ],
+        "ready": false,
+        "open": "xlsx_open"
+      }
+    },
+    "public": [
+      {
+        "name": "discovery",
+        "path": "/api/discovery"
+      },
+      {
+        "name": "health",
+        "path": "/api/health"
+      },
+      {
+        "name": "open",
+        "path": "/api/control/open"
+      },
+      {
+        "name": "xlsx_open"
+      }
+    ],
+    "tools": [
+      {
+        "name": "xlsx_get_workbook_context",
+        "skillName": "get_workbook_context",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_range",
+        "skillName": "read_range",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"A1:D20\"；单格 \"B2\" 也可"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_load_guide",
+        "skillName": "load_guide",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "guides": {
+            "type": "array",
+            "required": true,
+            "description": "指南名列表，如 [\"writing\",\"formatting\"]",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_formats",
+        "skillName": "read_formats",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"A1:D20\""
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_sheet_features",
+        "skillName": "read_sheet_features",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "目标工作表 id；省略读取当前工作表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_cells",
+        "skillName": "read_cells",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "addresses": {
+            "type": "array",
+            "required": true,
+            "description": "单元格地址列表，如 [\"A1\",\"B2\"]，最多 100 个",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_aggregate_range",
+        "skillName": "aggregate_range",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"D2:D88588\"（通常一列，不含表头）"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "目标工作表 id；省略读当前表"
+          },
+          "topValues": {
+            "type": "number",
+            "description": "返回多少个最高频值（0-50，默认 10）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_find_cells",
+        "skillName": "find_cells",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "query": {
+            "type": "string",
+            "description": "文本或正则；仅 errors_only=true 时可省略"
+          },
+          "regex": {
+            "type": "boolean",
+            "description": "将 query 当作 JS 正则（默认 false）"
+          },
+          "look_in": {
+            "type": "string",
+            "enum": [
+              "values",
+              "formulas",
+              "both"
+            ],
+            "description": "匹配范围（默认 both）"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "限制到一张表；省略搜全部表"
+          },
+          "errors_only": {
+            "type": "boolean",
+            "description": "只找公式错误值（默认 false）"
+          },
+          "max_results": {
+            "type": "integer",
+            "description": "最多返回条数"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_select_range",
+        "skillName": "select_range",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"A1:D20\"；单格也可"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "目标工作表 id；省略当前表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_trace_precedents",
+        "skillName": "trace_precedents",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "address": {
+            "type": "string",
+            "required": true,
+            "description": "要审计的公式格，如 \"C10\""
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "单元格所在表；省略当前表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_trace_dependents",
+        "skillName": "trace_dependents",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "address": {
+            "type": "string",
+            "required": true,
+            "description": "目标单元格，如 \"B2\""
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "单元格所在表；省略当前表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_propose_operations",
+        "skillName": "propose_operations",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "operations": {
+            "type": "array",
+            "required": true,
+            "description": "工作簿 DSL 判别联合格式的操作数组",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "summary": {
+            "type": "string",
+            "required": true,
+            "description": "本批变更的一句话总结"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "xlsx_save",
+        "skillName": "save",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "save_as": {
+            "type": "string",
+            "description": "冲突时另存到该绝对路径，不覆盖已存在文件"
+          }
+        },
+        "write": true
+      }
+    ],
+    "schema_bytes": 5483,
+    "tool_count": 13,
+    "refresh": {
+      "url": "/api/discovery?family=sheets"
+    },
+    "status": 200,
+    "_bytes": 6055
+  },
+  "restored": {
+    "ok": true,
+    "protocol": "genoffice-control",
+    "protocol_version": "1.0.0",
+    "schema_revision": "2026.09.1",
+    "supported_schema_revisions": [
+      "2026.09.1"
+    ],
+    "mode": "family",
+    "family": "sheets",
+    "state": "family-loaded",
+    "ready": true,
+    "families": {
+      "sheets": {
+        "app": "sheets",
+        "aliases": [
+          "sheets",
+          "xlsx"
+        ],
+        "ready": true,
+        "open": "xlsx_open"
+      }
+    },
+    "public": [
+      {
+        "name": "discovery",
+        "path": "/api/discovery"
+      },
+      {
+        "name": "health",
+        "path": "/api/health"
+      },
+      {
+        "name": "open",
+        "path": "/api/control/open"
+      },
+      {
+        "name": "xlsx_open"
+      }
+    ],
+    "tools": [
+      {
+        "name": "xlsx_get_workbook_context",
+        "skillName": "get_workbook_context",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_range",
+        "skillName": "read_range",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"A1:D20\"；单格 \"B2\" 也可"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_load_guide",
+        "skillName": "load_guide",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "guides": {
+            "type": "array",
+            "required": true,
+            "description": "指南名列表，如 [\"writing\",\"formatting\"]",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_formats",
+        "skillName": "read_formats",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"A1:D20\""
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_sheet_features",
+        "skillName": "read_sheet_features",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "目标工作表 id；省略读取当前工作表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_read_cells",
+        "skillName": "read_cells",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "addresses": {
+            "type": "array",
+            "required": true,
+            "description": "单元格地址列表，如 [\"A1\",\"B2\"]，最多 100 个",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_aggregate_range",
+        "skillName": "aggregate_range",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"D2:D88588\"（通常一列，不含表头）"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "目标工作表 id；省略读当前表"
+          },
+          "topValues": {
+            "type": "number",
+            "description": "返回多少个最高频值（0-50，默认 10）"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_find_cells",
+        "skillName": "find_cells",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "query": {
+            "type": "string",
+            "description": "文本或正则；仅 errors_only=true 时可省略"
+          },
+          "regex": {
+            "type": "boolean",
+            "description": "将 query 当作 JS 正则（默认 false）"
+          },
+          "look_in": {
+            "type": "string",
+            "enum": [
+              "values",
+              "formulas",
+              "both"
+            ],
+            "description": "匹配范围（默认 both）"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "限制到一张表；省略搜全部表"
+          },
+          "errors_only": {
+            "type": "boolean",
+            "description": "只找公式错误值（默认 false）"
+          },
+          "max_results": {
+            "type": "integer",
+            "description": "最多返回条数"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_select_range",
+        "skillName": "select_range",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "range": {
+            "type": "string",
+            "required": true,
+            "description": "区域如 \"A1:D20\"；单格也可"
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "目标工作表 id；省略当前表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_trace_precedents",
+        "skillName": "trace_precedents",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "address": {
+            "type": "string",
+            "required": true,
+            "description": "要审计的公式格，如 \"C10\""
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "单元格所在表；省略当前表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_trace_dependents",
+        "skillName": "trace_dependents",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "address": {
+            "type": "string",
+            "required": true,
+            "description": "目标单元格，如 \"B2\""
+          },
+          "sheetId": {
+            "type": "string",
+            "description": "单元格所在表；省略当前表"
+          }
+        },
+        "write": false
+      },
+      {
+        "name": "xlsx_propose_operations",
+        "skillName": "propose_operations",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "operations": {
+            "type": "array",
+            "required": true,
+            "description": "工作簿 DSL 判别联合格式的操作数组",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "summary": {
+            "type": "string",
+            "required": true,
+            "description": "本批变更的一句话总结"
+          }
+        },
+        "write": true
+      },
+      {
+        "name": "xlsx_save",
+        "skillName": "save",
+        "app": "sheets",
+        "parameters": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "description": "目标文件的本机绝对路径（必须与 GenOffice tab 中打开的文件一致）"
+          },
+          "save_as": {
+            "type": "string",
+            "description": "冲突时另存到该绝对路径，不覆盖已存在文件"
+          }
+        },
+        "write": true
+      }
+    ],
+    "schema_bytes": 5483,
+    "tool_count": 13,
+    "refresh": {
+      "url": "/api/discovery?family=sheets"
+    },
+    "status": 200,
+    "_bytes": 6048
+  }
+}

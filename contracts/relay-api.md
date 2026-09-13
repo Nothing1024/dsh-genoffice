@@ -20,6 +20,35 @@
 - `executors` = 当前控制面 SSE 执行器数（contracts/control-api.md §2.1 的注册表大小）。
 - 旧 relay 无 `live` / `apps` / `claimed`；消费方按「缺字段视为有静态根」向后兼容。
 
+### GET|POST /api/discovery  — 版本化按族能力（别名 `/api/capabilities`）
+查询或 JSON 正文：`family` / `app` / `ext`、`mode=family|compatible`、`schema_revision`、`protocol_version`。头：`X-GenOffice-Schema-Revision`、`X-GenOffice-Family`、`X-GenOffice-Protocol`。
+```json
+{
+  "ok": true,
+  "protocol": "genoffice-control",
+  "protocol_version": "1.0.0",
+  "schema_revision": "2026.09.1",
+  "supported_schema_revisions": ["2026.09.1"],
+  "mode": "family",
+  "family": "sheets",
+  "state": "family-loaded",
+  "ready": true,
+  "families": { "sheets": { "app": "sheets", "aliases": ["sheets", "xlsx"], "ready": true } },
+  "public": [{ "name": "discovery", "path": "/api/discovery" }, { "name": "xlsx_open" }],
+  "tools": [{ "name": "xlsx_get_workbook_context", "skillName": "get_workbook_context", "app": "sheets", "parameters": {}, "write": false }],
+  "schema_bytes": 12345,
+  "tool_count": 13,
+  "refresh": { "url": "/api/discovery?family=sheets" }
+}
+```
+- 无 family：`mode=compatible`，完整 100 工具表（旧宿主）。
+- 未知族：`404 {ok:false, error:'family-unsupported', tools:[]}`，不回落其他 app。
+- 不受支持的 schema/protocol：`409`，`tools:[]`，`refresh` 指向本入口。
+- 该族 `web-dist` 缺失：`200` + `state=dependency-missing` + 该族真实 schema。
+- 客户端在 `/api/control/<app>/<docId>/tool` 或 `/export` 声明错版本/错族时，写操作 `409` 且不转发执行器；缺头的旧客户端保持原行为。
+- 单源：`upstream/web/capability-manifest.json`（由插件 CONTROL_TOOL_TABLE + CAPABILITY 生成）。
+
+
 ### GET /api/dir?path=  — 目录列表（DSH 插件文件浏览）
 `path` 缺省 = 用户主目录。符号链接**只标记不跟随**（`symlink: true` 且不视为目录）；不可读路径返回 `ok:false` 而非 500。
 ```json
