@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-004",
+  "branch": "headless-families",
+  "status": "passed",
+  "run_id": "wre-headless-fam-2026-09-13T12:05:41.621Z",
+  "source_revisions": {
+    "plugin": "b30e51cbc9816ed8956bb19fe618f24af805c1a3",
+    "engine": "7bde3a4b6ad87c9eba1b72ffd7cfe01987715add",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "results": [
+    {
+      "app": "markdown",
+      "opened": "ready",
+      "contextOk": true,
+      "editOk": true,
+      "saveOk": true
+    },
+    {
+      "app": "html",
+      "opened": "ready",
+      "contextOk": true,
+      "editOk": true,
+      "saveOk": true
+    },
+    {
+      "app": "docs",
+      "opened": "ready",
+      "contextOk": true,
+      "editOk": true,
+      "saveOk": true
+    },
+    {
+      "app": "sheets",
+      "opened": "ready",
+      "contextOk": true,
+      "editOk": true,
+      "saveOk": true
+    },
+    {
+      "app": "slides",
+      "opened": "ready",
+      "contextOk": true,
+      "editOk": true,
+      "saveOk": true
+    },
+    {
+      "app": "pdf",
+      "opened": "ready",
+      "contextOk": true,
+      "editOk": true,
+      "saveOk": true
+    }
+  ],
+  "cases": [
+    {
+      "id": "headless-five-families-html",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "family-markdown",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "app": "markdown",
+            "opened": "ready",
+            "contextOk": true,
+            "editOk": true,
+            "saveOk": true
+          }
+        },
+        {
+          "name": "family-docs",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "app": "docs",
+            "opened": "ready",
+            "contextOk": true,
+            "editOk": true,
+            "saveOk": true
+          }
+        },
+        {
+          "name": "family-sheets",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "app": "sheets",
+            "opened": "ready",
+            "contextOk": true,
+            "editOk": true,
+            "saveOk": true
+          }
+        },
+        {
+          "name": "family-slides",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "app": "slides",
+            "opened": "ready",
+            "contextOk": true,
+            "editOk": true,
+            "saveOk": true
+          }
+        },
+        {
+          "name": "family-pdf",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "app": "pdf",
+            "opened": "ready",
+            "contextOk": true,
+            "editOk": true,
+            "saveOk": true
+          }
+        },
+        {
+          "name": "family-html",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "app": "html",
+            "opened": "ready",
+            "contextOk": true,
+            "editOk": true,
+            "saveOk": true
+          }
+        }
+      ]
+    }
+  ]
+}

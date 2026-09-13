@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-004",
+  "branch": "success",
+  "status": "passed",
+  "run_id": "wre-headless-md-2026-09-13T12:05:35.013Z",
+  "source_revisions": {
+    "plugin": "b30e51cbc9816ed8956bb19fe618f24af805c1a3",
+    "engine": "7bde3a4b6ad87c9eba1b72ffd7cfe01987715add",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "cases": [
+    {
+      "id": "headless-markdown-no-dsh",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "no-prior-executor",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "ok": true,
+            "docId": "7f9b2b43e0ff161c297db0895f1c9fddb5f9cb5294406573a9316de38f0b8522",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/evidence/phase-0/work-headless-markdown/md-small.md",
+            "registered": false,
+            "readiness": null,
+            "revision": null,
+            "error": null,
+            "occupied": false,
+            "owner": null
+          }
+        },
+        {
+          "name": "headless-run-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "ok": true,
+            "command": "run",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/evidence/phase-0/work-headless-markdown/md-small.md",
+            "app": "markdown",
+            "spawned": true,
+            "readiness": "ready",
+            "context": "## Document state\n3 top-level blocks:\n\n0 | h1 | WreKeep\n1 | paragraph | keep phrase\n2 | paragraph | WreHeadlessKeep",
+            "disk": "# WreKeep\n\nkeep phrase\n\nWreHeadlessKeep\n",
+            "persisted": true,
+            "code": 0,
+            "diskNow": "# WreKeep\n\nkeep phrase\n\nWreHeadlessKeep\n"
+          }
+        },
+        {
+          "name": "disk-keep",
+          "status": "passed",
+          "expected": true,
+          "actual": "# WreKeep\n\nkeep phrase\n\nWreHeadlessKeep\n"
+        },
+        {
+          "name": "reuse-same-path",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "firstSpawned": true,
+            "secondReused": true,
+            "firstReady": "ready",
+            "secondReady": "ready"
+          }
+        },
+        {
+          "name": "help-mentions-headless",
+          "status": "passed",
+          "expected": true,
+          "actual": "help"
+        }
+      ]
+    }
+  ]
+}

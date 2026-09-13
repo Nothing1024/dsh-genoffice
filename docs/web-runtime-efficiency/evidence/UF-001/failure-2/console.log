@@ -1,0 +1,8 @@
+Error: compare protocol mismatch
+    at compare (file:///private/tmp/genoffice-official-sync-engine/web/bench-agent-runtime.mjs:164:28)
+    at main (file:///private/tmp/genoffice-official-sync-engine/web/bench-agent-runtime.mjs:174:33)
+    at file:///private/tmp/genoffice-official-sync-engine/web/bench-agent-runtime.mjs:178:6
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+

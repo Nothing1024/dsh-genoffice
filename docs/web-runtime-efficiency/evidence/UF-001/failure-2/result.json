@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-001",
+  "branch": "failure-2",
+  "status": "passed",
+  "run_id": "wre-uf001-fail2-2026-09-13T12:15:43.510230+00:00",
+  "source_revisions": {
+    "plugin": "b30e51cbc9816ed8956bb19fe618f24af805c1a3",
+    "engine": "ff8772767e379ef40105c8d76db5a7ca116aaa3d"
+  },
+  "cases": [
+    {
+      "id": "measurement-condition-mismatch",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "compare-rejects-protocol-drift",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "ok": false,
+            "code": 1,
+            "error": "mp/genoffice-official-sync-engine/web/bench-agent-runtime.mjs:174:33)\n    at file:///private/tmp/genoffice-official-sync-engine/web/bench-agent-runtime.mjs:178:6\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n"
+          }
+        },
+        {
+          "name": "after-restored-or-absent",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "restoredProtocol": 1,
+            "beforeProtocol": 1
+          }
+        }
+      ]
+    }
+  ]
+}

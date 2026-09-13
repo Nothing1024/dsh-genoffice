@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-004",
+  "branch": "lifecycle",
+  "status": "passed",
+  "run_id": "wre-lifecycle-2026-09-13T12:05:44.007Z",
+  "source_revisions": {
+    "plugin": "b30e51cbc9816ed8956bb19fe618f24af805c1a3",
+    "engine": "7bde3a4b6ad87c9eba1b72ffd7cfe01987715add",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "occupied": {
+    "threw": true,
+    "code": "occupied",
+    "message": "occupied"
+  },
+  "retained": {
+    "released": false,
+    "retained": true,
+    "reason": "dirty",
+    "stillReady": "ready"
+  },
+  "afterSave": {
+    "released": true,
+    "retained": false
+  },
+  "crash": {
+    "closed": true
+  },
+  "cases": [
+    {
+      "id": "lifecycle-occupied-dirty-release",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "occupied-no-steal",
+          "status": "passed",
+          "expected": "occupied",
+          "actual": {
+            "threw": true,
+            "code": "occupied",
+            "message": "occupied"
+          }
+        },
+        {
+          "name": "dirty-retained",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "released": false,
+            "retained": true,
+            "reason": "dirty",
+            "stillReady": "ready"
+          }
+        },
+        {
+          "name": "force-release-after-save",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "released": true,
+            "retained": false
+          }
+        },
+        {
+          "name": "disk-dirty-keep",
+          "status": "passed",
+          "expected": true,
+          "actual": "# WreKeep\n\nkeep phrase\n\nWreDirtyKeep\n"
+        }
+      ]
+    }
+  ]
+}

@@ -248,11 +248,11 @@ After:  DSH / SDK / CLI → 版本化按族能力 → 同一 relay 会话合同
 
 | 文件 | 稳定定位 | 搜索定位 | 行号 hint | 备注 |
 |---|---|---|---|---|
-| `../engine/package.json` | web / web:build / web:serve | `rg "\"web:serve\":" ../engine/package.json` | L33 | 校准名：`web` 保持兼容默认；`web:build` 全 app；`web:serve` 纯运行 |
+| `docs/web-runtime-efficiency/isolated-engine/package.json` | web / web:build / web:serve | `rg "\"web:serve\":" docs/web-runtime-efficiency/isolated-engine/package.json` | L33 | 校准名：`web` 保持兼容默认；`web:build` 全 app；`web:serve` 纯运行 |
 | `../engine/web/server.mjs` | findStaticRoots | `rg "function findStaticRoots" ../engine/web/server.mjs` | L186 | 每 app 静态 readiness |
 | `../engine/web/server.mjs` | handleApi | `rg "async function handleApi" ../engine/web/server.mjs` | L540 | health/discovery/file/control 协议承载 |
-| `../engine/web/capability-manifest.mjs` | buildDiscovery / checkWriteContract | `rg "export function buildDiscovery" ../engine/web/capability-manifest.mjs` | L1 | Task 6 单源；`capability-manifest.json` 由对齐的 CONTROL_TOOL_TABLE+CAPABILITY 生成 |
-| `../engine/web/capability-manifest.json` | schema_revision / families / tools | `rg "schema_revision" ../engine/web/capability-manifest.json` | L1 | 协议 `genoffice-control` 1.0.0，revision `2026.09.1` |
+| `docs/web-runtime-efficiency/isolated-engine/web/capability-manifest.mjs` | buildDiscovery / checkWriteContract | `rg "export function buildDiscovery" docs/web-runtime-efficiency/isolated-engine/web/capability-manifest.mjs` | L1 | Task 6 单源；`capability-manifest.json` 由对齐的 CONTROL_TOOL_TABLE+CAPABILITY 生成 |
+| `docs/web-runtime-efficiency/isolated-engine/web/capability-manifest.json` | schema_revision / families / tools | `rg "schema_revision" docs/web-runtime-efficiency/isolated-engine/web/capability-manifest.json` | L1 | 协议 `genoffice-control` 1.0.0，revision `2026.09.1` |
 | `../engine/apps/markdown/src/renderer/control.ts` | captureMtime | `rg "captureMtime" ../engine/apps/markdown/src/renderer/control.ts` | L225 | 仅标现基线；安全包后改用其共享适配，不重复重构 |
 | `packages/tab-genoffice/src/host/tools.ts` | createControlTools | `rg "export function createControlTools" packages/tab-genoffice/src/host/tools.ts` | L455 | 按族发现消费点 |
 | `packages/tab-genoffice/src/host/tool-schema.ts` | CONTROL_TOOL_TABLE | `rg "export const CONTROL_TOOL_TABLE" packages/tab-genoffice/src/host/tool-schema.ts` | L72 | 现有 schema，版本化单源由本包建立 |

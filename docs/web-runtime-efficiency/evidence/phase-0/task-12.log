@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "5.2",
+  "branch": "all",
+  "status": "passed",
+  "run_id": "wre-all-2026-09-13T12:05:44.744Z",
+  "source_revisions": {
+    "plugin": "b30e51cbc9816ed8956bb19fe618f24af805c1a3",
+    "engine": "7bde3a4b6ad87c9eba1b72ffd7cfe01987715add",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "implemented": [
+    "baseline",
+    "no-duplicate-read",
+    "build-serve",
+    "readiness",
+    "startup-file",
+    "discovery",
+    "plugin-discovery",
+    "sdk-cli",
+    "headless-markdown",
+    "headless-families",
+    "lifecycle"
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "code": 1,
+  "stdout_tail": "     \"duplicate_full_file_get\": false\n    },\n    {\n      \"key\": \"pdf:small:cold\",\n      \"n\": 1,\n      \"ok\": 1,\n      \"p50_total_ms\": 438,\n      \"p95_total_ms\": 438,\n      \"file_gets_max\": 1,\n      \"file_get_bytes_max\": 983,\n      \"duplicate_full_file_get\": false\n    },\n    {\n      \"key\": \"pdf:small:warm\",\n      \"n\": 1,\n      \"ok\": 1,\n      \"p50_total_ms\": 418,\n      \"p95_total_ms\": 418,\n      \"file_gets_max\": 1,\n      \"file_get_bytes_max\": 983,\n      \"duplicate_full_file_get\": false\n    }\n  ]\n}\n"
+}

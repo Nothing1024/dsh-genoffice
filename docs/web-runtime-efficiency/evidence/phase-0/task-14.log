@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "EVD-005",
+  "branch": "phase-1-regression",
+  "status": "passed",
+  "run_id": "wre-t14-2026-09-13T12:13:41.425898+00:00",
+  "source_revisions": {
+    "plugin": "b30e51cbc9816ed8956bb19fe618f24af805c1a3",
+    "engine": "ff87727",
+    "engine_root": "/tmp/genoffice-official-sync-engine"
+  },
+  "checks": {
+    "plugin_typecheck": 0,
+    "plugin_test": "160/160",
+    "plugin_build": 0,
+    "standard_check": 0,
+    "engine_typecheck": 0,
+    "write_atomic": "9/9",
+    "validate_package": "0 FAIL / 22 PASS"
+  }
+}

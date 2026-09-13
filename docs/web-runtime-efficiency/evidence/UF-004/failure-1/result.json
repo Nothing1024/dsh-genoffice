@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-004",
+  "branch": "failure-1",
+  "status": "passed",
+  "run_id": "wre-headless-md-2026-09-13T12:05:35.013Z",
+  "source_revisions": {
+    "plugin": "b30e51cbc9816ed8956bb19fe618f24af805c1a3",
+    "engine": "7bde3a4b6ad87c9eba1b72ffd7cfe01987715add",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "cases": [
+    {
+      "id": "runtime-missing",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "crash-nonzero",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "ok": false,
+            "error": "headless runtime missing: browserType.launch: Executable doesn't exist at /tmp/wre-missing-chromium/chromium_headless_shell-1234/chrome-headless-shell-mac-x64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+            "code": 2
+          }
+        }
+      ]
+    }
+  ]
+}

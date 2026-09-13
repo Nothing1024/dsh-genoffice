@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "UF-001",
+  "branch": "compare",
+  "status": "passed",
+  "sameProtocol": true,
+  "beforeHead": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "fad306a45677010a4817ae2c2c17c4c071d4a0a9",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "afterHead": {
+    "plugin": "b30e51cbc9816ed8956bb19fe618f24af805c1a3",
+    "engine": "7bde3a4b6ad87c9eba1b72ffd7cfe01987715add",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "beforeSummary": [
+    {
+      "key": "markdown:small:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 530,
+      "p95_total_ms": 530,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 442,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "markdown:small:warm",
+      "n": 2,
+      "ok": 2,
+      "p50_total_ms": 436,
+      "p95_total_ms": 460,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 506,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "markdown:medium:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 451,
+      "p95_total_ms": 451,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 77252,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "markdown:medium:warm",
+      "n": 2,
+      "ok": 2,
+      "p50_total_ms": 444,
+      "p95_total_ms": 467,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 77316,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "markdown:large:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 461,
+      "p95_total_ms": 461,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 384450,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "markdown:large:warm",
+      "n": 2,
+      "ok": 2,
+      "p50_total_ms": 462,
+      "p95_total_ms": 470,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 384514,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "html:small:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 388,
+      "p95_total_ms": 388,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 744,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "html:small:warm",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 396,
+      "p95_total_ms": 396,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 770,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "docs:small:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 616,
+      "p95_total_ms": 616,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 6162,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "docs:small:warm",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 584,
+      "p95_total_ms": 584,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 6202,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "sheets:small:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 1669,
+      "p95_total_ms": 1669,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 7774,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "sheets:small:warm",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 1552,
+      "p95_total_ms": 1552,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 7908,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "slides:small:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 686,
+      "p95_total_ms": 686,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 15702,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "slides:small:warm",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 671,
+      "p95_total_ms": 671,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 15630,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "pdf:small:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 397,
+      "p95_total_ms": 397,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 1966,
+      "duplicate_full_file_get": true
+    },
+    {
+      "key": "pdf:small:warm",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 396,
+      "p95_total_ms": 396,
+      "file_gets_max": 2,
+      "file_get_bytes_max": 1966,
+      "duplicate_full_file_get": true
+    }
+  ],
+  "afterSummary": [
+    {
+      "key": "markdown:small:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 514,
+      "p95_total_ms": 514,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 220,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "markdown:small:warm",
+      "n": 2,
+      "ok": 2,
+      "p50_total_ms": 468,
+      "p95_total_ms": 494,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 248,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "markdown:medium:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 456,
+      "p95_total_ms": 456,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 38625,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "markdown:medium:warm",
+      "n": 2,
+      "ok": 2,
+      "p50_total_ms": 455,
+      "p95_total_ms": 465,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 38658,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "markdown:large:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 496,
+      "p95_total_ms": 496,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 192225,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "markdown:large:warm",
+      "n": 2,
+      "ok": 2,
+      "p50_total_ms": 490,
+      "p95_total_ms": 540,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 192252,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "html:small:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 398,
+      "p95_total_ms": 398,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 373,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "html:small:warm",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 407,
+      "p95_total_ms": 407,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 385,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "docs:small:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 609,
+      "p95_total_ms": 609,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 3081,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "docs:small:warm",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 628,
+      "p95_total_ms": 628,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 3097,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "sheets:small:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 1635,
+      "p95_total_ms": 1635,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 3887,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "sheets:small:warm",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 1691,
+      "p95_total_ms": 1691,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 3955,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "slides:small:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 793,
+      "p95_total_ms": 793,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 7851,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "slides:small:warm",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 706,
+      "p95_total_ms": 706,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 7815,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "pdf:small:cold",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 438,
+      "p95_total_ms": 438,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 983,
+      "duplicate_full_file_get": false
+    },
+    {
+      "key": "pdf:small:warm",
+      "n": 1,
+      "ok": 1,
+      "p50_total_ms": 418,
+      "p95_total_ms": 418,
+      "file_gets_max": 1,
+      "file_get_bytes_max": 983,
+      "duplicate_full_file_get": false
+    }
+  ]
+}
