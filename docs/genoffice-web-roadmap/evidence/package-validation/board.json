@@ -1,0 +1,13 @@
+{
+  "total": 8,
+  "done": 0,
+  "doing": 0,
+  "blocked": [],
+  "ready": [
+    {
+      "seq": "1",
+      "name": "核对执行范围和六包实际前置基线",
+      "verify": "python3 docs/genoffice-web-roadmap/master.py validate；python3 docs/genoffice-web-roadmap/master.py status --json；python3 docs/genoffice-web-roadmap/master.py next --json → 全包完整且下一任务符合真实依赖"
+    }
+  ]
+}

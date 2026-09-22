@@ -16,6 +16,9 @@ export interface CordisLike {
  * - 未到位 → ctx.inject 等服务出现，出现后在子 ctx 的 effect 里挂载；
  * - 部署里永远不出现 → mount 一次都不跑（声明过的降级路径）。
  * acquire 返回的取消函数可提前卸载；与 fiber 卸载互为幂等。
+ *
+ * `lookup` may receive the injected child so a bag of services can be
+ * assembled without reading undeclared properties on the parent fiber.
  */
-export declare function acquireFromCordis<S>(ctx: CordisLike, lookup: () => S | undefined, serviceName: string, label?: string): ServiceAcquire<S>;
+export declare function acquireFromCordis<S>(ctx: CordisLike, lookup: (scope?: unknown) => S | undefined, serviceName: string | readonly string[], label?: string): ServiceAcquire<S>;
 //# sourceMappingURL=cordis-acquire.d.ts.map

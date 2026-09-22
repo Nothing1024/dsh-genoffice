@@ -1,0 +1,25 @@
+official-upstream-sync Task 4
+date: 2026-09-12T18:44:40Z
+cwd: /tmp/genoffice-official-sync-engine
+ENGINE_ROOT: /tmp/genoffice-official-sync-engine
+PLUGIN_ROOT: /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin
+node: /usr/local/Cellar/node/26.8.2/bin/node
+nodeVersion: v26.8.2
+isolated HEAD before commit: a8f8f029cabe8ba1b272dba3b1a0d553faadc58f
+official ancestor: de139a061537bea40f0cc81ef8f09a95f77ac52a
+fork ancestor: 247e3f5c488afb25915e9ee97fe0fd22e27648da
+original engine HEAD (untouched): 247e3f5c488afb25915e9ee97fe0fd22e27648da
+
+commands:
+  npm run web:build -w @genoffice/docs   # ous-docs-build2 exit 0; ous-docs-build3 exit 0 after path-open fallback
+  npm run test -w @genoffice/docs         # ous-docs-test exit 0
+  ENGINE_ROOT=/tmp/genoffice-official-sync-engine node web/e2e-official-sync.mjs --case docs-context --out <plugin>/docs/official-upstream-sync/evidence
+    run_id=ous-2026-09-12T18-44-40-186Z exit 0
+    all 14 docs-context assertions passed
+    UF-002/success + UF-002/failure-1 archived
+
+notes:
+  prior ous-docs-ctx failed with load-error empty path target against stale/broken docs web-dist (codex-app-server node: imports).
+  App already wires getTrack/getComments/getHf to App-held stores (no second comments store).
+  web-bridge now captures INITIAL_OPEN_TARGET and accepts path:*.docx even if relay name is not .docx.
+  vite.web.config stubs codex-app-server onto the browser module.

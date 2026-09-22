@@ -10,7 +10,7 @@
  * land_pages — they must not POST iframe generate_deck / regenerate_slide.
  */
 import { defineTool } from '@deepseek-ai/dsh-tools';
-import type { AssetChannel } from './assets.ts';
+import { type AssetChannel } from './assets.ts';
 import { type HostLlmOnce } from './page-plan.ts';
 import { type ControlToolEntry } from './tool-schema.ts';
 export interface ControlToolsOptions {

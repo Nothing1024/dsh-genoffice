@@ -1,0 +1,36 @@
+{
+  "events": [
+    {
+      "status": 200,
+      "results": [],
+      "method": "error",
+      "error": "search-runtime-error"
+    },
+    {
+      "status": 200,
+      "error": "generate-runtime-error"
+    },
+    {
+      "status": 200,
+      "error": "analyze-runtime-error"
+    },
+    {
+      "status": 200,
+      "ok": false,
+      "error": "model-runtime-error"
+    },
+    {
+      "status": 200,
+      "results": [
+        {
+          "title": "WfcSearchKeep WfcSearchKeep",
+          "url": "https://example.com/wfc-search",
+          "snippet": "WfcSearchKeep fixture result"
+        }
+      ],
+      "method": "fixture",
+      "answer": "WfcSearchKeep"
+    }
+  ],
+  "count": 5
+}

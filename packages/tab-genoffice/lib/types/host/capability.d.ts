@@ -4,7 +4,7 @@
  */
 export type CapabilityStatus = 'available' | 'relay-fetch' | 'partial' | 'guarded' | 'bridge-missing' | 'state-locked' | 'cloud-only';
 export type CapabilityHandover = 'dsh:web_search' | 'dsh:pending';
-export type CapabilityApp = 'docs' | 'markdown' | 'sheets' | 'slides' | 'pdf';
+export type CapabilityApp = 'docs' | 'markdown' | 'sheets' | 'slides' | 'pdf' | 'html';
 export type CapabilityKey = `${CapabilityApp}:${string}`;
 export interface CapabilityEntry {
     status: CapabilityStatus;

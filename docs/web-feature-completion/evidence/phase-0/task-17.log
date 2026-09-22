@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-006",
+  "branch": "html-edit",
+  "status": "passed",
+  "cases": [
+    {
+      "id": "html-edit-success",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "task17-rows-available",
+          "status": "passed",
+          "expected": true,
+          "actual": [
+            "shell:home-new-html:available",
+            "html:web-build-route:available",
+            "html:edit-save:available"
+          ]
+        },
+        {
+          "name": "html-to-docx-available",
+          "status": "passed",
+          "expected": "available",
+          "actual": [
+            "available"
+          ]
+        },
+        {
+          "name": "home-new-html",
+          "status": "passed",
+          "expected": "/html",
+          "actual": "http://127.0.0.1:61234/html/"
+        },
+        {
+          "name": "html-static-root",
+          "status": "passed",
+          "expected": 200,
+          "actual": {
+            "status": 200,
+            "text": "<!doctype html>\n<html lang=\"zh-CN\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta\n          http-equiv=\"Content-Security-Policy\"\n          content=\"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' da"
+          }
+        },
+        {
+          "name": "open-ready",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "opened": {
+              "status": 200,
+              "ok": true,
+              "docId": "15d96ea4ca9447b2bbc8943a8df284cd1cc0d9a4ab9bdb7848aa52257c72f97f",
+              "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-edit/keep.html",
+              "registered": true,
+              "readiness": "ready",
+              "revision": "5a2ea41cb6f860e3bd48d869660c043148a081fa3a2e4e420614aa0d8e7695d9",
+              "error": null,
+              "occupied": true,
+              "owner": "c2703227-74db-4b8c-b17f-99181d5adc9b"
+            },
+            "context": {
+              "status": 200,
+              "ok": true,
+              "context": "## Document\nfile: keep.html  (140 chars, 1 lines, version 0)\ntitle: WfcHtmlKeep\n\noutline (sid = stable element id for apply_ops):\nL1          sid=4      title  \"WfcHtmlKeep\"\nL1          sid=6      h1  \"WfcHtmlKeep\"\nL1          sid=7      p  \"keep phrase\"",
+              "revision": "5a2ea41cb6f860e3bd48d869660c043148a081fa3a2e4e420614aa0d8e7695d9"
+            }
+          }
+        },
+        {
+          "name": "agent-edit",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Applied 1 op(s) at L1. Document is now version 1.",
+              "mutated": true,
+              "summary": "应用了 1 处修改",
+              "revision": "46fd27c14b74496ced45a1459e234bfa42d0bb9602afd10ccdec9df7224437cb"
+            },
+            "revision": "46fd27c14b74496ced45a1459e234bfa42d0bb9602afd10ccdec9df7224437cb"
+          }
+        },
+        {
+          "name": "explicit-save",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "saved": {
+              "status": 200,
+              "ok": true,
+              "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-edit/html-export.html",
+              "name": "keep.html",
+              "mtimeMs": 1789250673399.168
+            },
+            "hasExport": true
+          }
+        },
+        {
+          "name": "reopen",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "reopened": {
+              "status": 200,
+              "ok": true,
+              "docId": "6328ec84164f6e513ea1187239bba45c214a085ccfac23a019ff39ab4252cd82",
+              "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-edit/html-export.html",
+              "registered": true,
+              "readiness": "ready",
+              "revision": "026963265d6be666d08efb6a68ba23602aa860857e46564fae6f5d3d2acac835",
+              "error": null,
+              "occupied": true,
+              "owner": "573469b5-05ef-499b-8730-36272fc97589"
+            },
+            "reContext": {
+              "status": 200,
+              "ok": true,
+              "context": "## Document\nfile: html-export.html  (152 chars, 1 lines, version 0)\ntitle: WfcHtmlKeep\n\noutline (sid = stable element id for apply_ops):\nL1          sid=4      title  \"WfcHtmlKeep\"\nL1          sid=6      h1  \"WfcHtmlKeep\"\nL1          sid=7      p  \"keep phrase WfcHtmlEdit\"",
+              "revision": "026963265d6be666d08efb6a68ba23602aa860857e46564fae6f5d3d2acac835"
+            }
+          }
+        },
+        {
+          "name": "source-kept-until-export",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "afterKeep": "5a2ea41cb6f860e3bd48d869660c043148a081fa3a2e4e420614aa0d8e7695d9",
+            "beforeSha": "5a2ea41cb6f860e3bd48d869660c043148a081fa3a2e4e420614aa0d8e7695d9"
+          }
+        },
+        {
+          "name": "blocked-file-url",
+          "status": "passed",
+          "expected": null,
+          "actual": null
+        }
+      ]
+    },
+    {
+      "id": "html-edit-missing-build",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "missing-build-404",
+          "status": "passed",
+          "expected": 404,
+          "actual": {
+            "status": 404,
+            "body": "<!doctype html><meta charset=\"utf-8\"><title>GenOffice 404</title><p>html web-dist 未构建。不误路由到其他应用。</p><pre>cd engine &amp;&amp; npm run web:build --workspaces --if-present</pre>"
+          }
+        },
+        {
+          "name": "missing-build-no-docs-route",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "docs": 200,
+            "htmlBody": "<!doctype html><meta charset=\"utf-8\"><title>GenOffice 404</title><p>html web-dist 未构建。不误路由到其他应用。</p><pre>cd engine &amp;&amp; npm run web:build --workspaces --i"
+          }
+        },
+        {
+          "name": "unreadable-no-ready",
+          "status": "passed",
+          "expected": "error",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "2e7efab7798f6d602830a52ca6a5a943e6cda461bd2f01fbdf8c770a08fa5ea7",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-edit/missing-keep.html",
+            "registered": true,
+            "readiness": "error",
+            "revision": null,
+            "error": "load-error: ENOENT: no such file or directory, open '/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-edit/missing-keep.html'",
+            "occupied": true,
+            "owner": "c6829054-6b2e-41f7-a404-8ee65cd566ff"
+          }
+        },
+        {
+          "name": "docs-still-served",
+          "status": "passed",
+          "expected": 200,
+          "actual": 200
+        }
+      ]
+    },
+    {
+      "id": "html-edit-load-recovery",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "binary-html-error",
+          "status": "passed",
+          "expected": "error",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "b1a6b86b13a66353a860d0517fc158f6ea27202b3878e3564f0d27ac288e1cef",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-edit/binary.html",
+            "registered": true,
+            "readiness": "error",
+            "revision": null,
+            "error": "load-error: binary html is not supported",
+            "occupied": true,
+            "owner": "57b8c0c1-5b1a-4557-8461-e25232d97434"
+          }
+        },
+        {
+          "name": "binary-html-kept",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "afterBad": "f186acff22c6264f63571367d5cfcc7d08612614f5c8f627a1999798592be133",
+            "beforeBad": "f186acff22c6264f63571367d5cfcc7d08612614f5c8f627a1999798592be133"
+          }
+        },
+        {
+          "name": "load-recovery",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "15d96ea4ca9447b2bbc8943a8df284cd1cc0d9a4ab9bdb7848aa52257c72f97f",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-edit/keep.html",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "5a2ea41cb6f860e3bd48d869660c043148a081fa3a2e4e420614aa0d8e7695d9",
+            "error": null,
+            "occupied": true,
+            "owner": "d261b19e-0aec-41ce-89e2-ff77a6714bda"
+          }
+        }
+      ]
+    }
+  ]
+}

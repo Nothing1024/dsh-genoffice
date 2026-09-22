@@ -1,0 +1,2 @@
+opened={"ok":true,"docId":"f2b15b7132443b5ec670e3bc7dabd91d54faa2765b1ffe70535e1367418a8154","path":"/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/uf-extra.md","registered":true,"readiness":"ready","revision":"75a9c3a69c90c481cee5ea8ea92650f9d027941d767a1fcf08406752dba51369","error":null,"occupied":true,"owner":"126e42e3-1219-45a8-9bd7-068034f3c7e2"}
+late={"ok":false,"error":"stale-owner"}

@@ -14,13 +14,25 @@ export declare function subscribeRelay(fn: RelayListener): () => void;
 export declare function noteRelayOk(ok: boolean): void;
 /** Test helper — not for production. */
 export declare function resetRelayStore(): void;
+export declare function getAppReady(app: string): boolean | null;
+export declare function getSuiteReady(): boolean | null;
 export declare function extOf(path: string): string;
 export declare function docIdFor(absPath: string): Promise<string>;
 /** Control mode adds `control=1`; `_r` busts the iframe after save/reload (BR-014). */
 export declare function previewUrlFor(path: string, ext: string, control: boolean, nonce?: string): string;
+export interface AppHealth {
+    build: boolean;
+    ready: boolean;
+    missing: string[];
+}
 export interface RelayHealth {
     up: boolean;
+    /** Static serving is possible (not a zombie). Missing one app is still ready. */
     ready: boolean;
+    live: boolean;
+    suiteReady: boolean;
+    roots: string[];
+    apps: Record<string, AppHealth>;
 }
 /** Raw health probe (no store). Old relays without `ready` count as ready. */
 export declare function checkRelay(signal?: AbortSignal): Promise<RelayHealth>;

@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "package": "plugin-tool-alignment",
+  "uf": "UF-002",
+  "branch": "failure-1",
+  "run_id": "pta-2026-09-12T19-03-47-109Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "ffd185d2ec02480a5a7f5b1f17d9220053fcbf6c"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "unsupported-or-invalid",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "default-md",
+          "status": "passed",
+          "expected": "host-preview",
+          "actual": {
+            "error": "sidebarRight: no registered tab type claims \"dsh-resource://file/session/s/a.md\""
+          }
+        },
+        {
+          "name": "default-pdf",
+          "status": "passed",
+          "expected": "host-preview",
+          "actual": {
+            "error": "sidebarRight: no registered tab type claims \"dsh-resource://file/session/s/a.pdf\""
+          }
+        },
+        {
+          "name": "invalid-address-refused",
+          "status": "passed",
+          "expected": "refuses",
+          "actual": {
+            "error": "sidebarRight: tab type \"genoffice-file\" refuses \"not-a-file-address\""
+          }
+        }
+      ]
+    }
+  ]
+}

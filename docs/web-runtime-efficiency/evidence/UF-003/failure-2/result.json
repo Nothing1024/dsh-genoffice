@@ -4,10 +4,10 @@
   "uf": "UF-003",
   "branch": "failure-2",
   "status": "passed",
-  "run_id": "wre-discovery-2026-09-13T11:29:25.556Z",
+  "run_id": "wre-discovery-2026-09-13T12:05:18.080Z",
   "source_revisions": {
-    "plugin": "6c9e719db761aec2063f6114120ce7079ee24cdf",
-    "engine": "07522fc8b71969ee691216750a665b9db4f89935",
+    "plugin": "b30e51cbc9816ed8956bb19fe618f24af805c1a3",
+    "engine": "7bde3a4b6ad87c9eba1b72ffd7cfe01987715add",
     "engine_root": "/private/tmp/genoffice-official-sync-engine"
   },
   "cases": [

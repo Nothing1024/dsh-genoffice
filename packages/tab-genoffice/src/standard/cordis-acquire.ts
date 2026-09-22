@@ -18,13 +18,18 @@ export interface CordisLike {
  * - 未到位 → ctx.inject 等服务出现，出现后在子 ctx 的 effect 里挂载；
  * - 部署里永远不出现 → mount 一次都不跑（声明过的降级路径）。
  * acquire 返回的取消函数可提前卸载；与 fiber 卸载互为幂等。
+ *
+ * `lookup` may receive the injected child so a bag of services can be
+ * assembled without reading undeclared properties on the parent fiber.
  */
 export function acquireFromCordis<S>(
   ctx: CordisLike,
-  lookup: () => S | undefined,
-  serviceName: string,
-  label = `dsh-tab-genoffice: acquire ${serviceName}`,
+  lookup: (scope?: unknown) => S | undefined,
+  serviceName: string | readonly string[],
+  label?: string,
 ): ServiceAcquire<S> {
+  const names = typeof serviceName === 'string' ? [serviceName] : [...serviceName]
+  const resolvedLabel = label ?? `dsh-tab-genoffice: acquire ${names.join(',')}`
   return (mount) => {
     let cancelled = false
     let unmount: (() => void) | undefined
@@ -43,13 +48,18 @@ export function acquireFromCordis<S>(
 
     const existing = lookup()
     if (existing !== undefined) {
-      ctx.effect(() => runMount(existing), label)
+      ctx.effect(() => runMount(existing), resolvedLabel)
     } else {
-      ctx.inject([serviceName], (child) => {
-        const service = (child as Record<string, unknown>)[serviceName] as S
+      ctx.inject(names, (child) => {
+        const service = lookup(child) ?? (
+          names.length === 1
+            ? (child as Record<string, unknown>)[names[0]!] as S
+            : undefined
+        )
+        if (service === undefined) return
         const effect = (child as Partial<CordisLike>).effect
         if (typeof effect === 'function') {
-          effect.call(child, () => runMount(service), label)
+          effect.call(child, () => runMount(service), resolvedLabel)
         } else {
           runMount(service)
         }

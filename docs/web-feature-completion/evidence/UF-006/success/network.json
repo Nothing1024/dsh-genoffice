@@ -1,0 +1,26 @@
+{
+  "events": [
+    {
+      "ok": true,
+      "available": true,
+      "executor": "html2docx-cli"
+    },
+    {
+      "ok": true,
+      "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-docx/keep.docx"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "docId": "fc5b00457a52da53eea555629cb11b61f9af52fc0626f0322c1cfec80e692f3f",
+      "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-docx/keep.docx",
+      "registered": true,
+      "readiness": "ready",
+      "revision": "905ea74902eb98b1dc45e29496948cee45b3cb5cc340a1da8f12f27348bbce60",
+      "error": null,
+      "occupied": true,
+      "owner": "e8241507-ce35-40d4-ad99-c3cfe33668a4"
+    }
+  ],
+  "count": 3
+}

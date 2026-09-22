@@ -1,0 +1,4 @@
+# control-session-safety Task 7
+node ../engine/web/e2e-control-session.mjs --case owner → exit 0
+counts [1,0]; second window occupied; first owner stable; late/stale-owner notify rejected.
+See evidence/phase-0/task-7/summary.json

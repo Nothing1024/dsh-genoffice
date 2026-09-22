@@ -1,0 +1,13 @@
+{
+  "total": 21,
+  "done": 0,
+  "doing": 0,
+  "blocked": [],
+  "ready": [
+    {
+      "seq": "1",
+      "name": "建立完整文档能力清单和验收数据",
+      "verify": "npm --prefix ../engine run typecheck；npm --prefix ../engine run web:build --workspaces --if-present；node ../engine/web/e2e-web-features.mjs --case inventory → 清单每行有负责任务与真值数据，依赖探测有记录"
+    }
+  ]
+}

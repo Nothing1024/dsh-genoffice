@@ -1,0 +1,14 @@
+{
+  "package": "plugin-tool-alignment",
+  "title": "plugin-tool-alignment Spec · 人类可读视图",
+  "tasks": 10,
+  "completed": 0,
+  "flows": 4,
+  "consoleErrors": [],
+  "layout": {
+    "width": 1440,
+    "scrollWidth": 1440
+  },
+  "status": "passed",
+  "scope": "generated static view only; business application not started"
+}

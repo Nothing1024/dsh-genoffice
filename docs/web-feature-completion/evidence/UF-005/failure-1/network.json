@@ -1,0 +1,54 @@
+{
+  "events": [
+    {
+      "ok": true,
+      "search": {
+        "available": false,
+        "reason": "search-service-disabled",
+        "fixture": false
+      },
+      "imageSearch": {
+        "available": false,
+        "reason": "search-service-disabled",
+        "fixture": false
+      },
+      "generate": {
+        "available": false,
+        "reason": "generate-provider-unconfigured",
+        "fixture": false
+      },
+      "analyze": {
+        "available": false,
+        "reason": "analyze-provider-unconfigured",
+        "fixture": false
+      },
+      "model": {
+        "available": false,
+        "reason": "model-service-disabled",
+        "echo": true
+      },
+      "credit": {
+        "available": false,
+        "reason": "credit-provider-unconfigured",
+        "url": "https://www.genspark.ai/credit-usage"
+      }
+    },
+    {
+      "images": [],
+      "method": "error",
+      "error": "search-service-disabled"
+    },
+    {
+      "status": 200,
+      "error": "generate-provider-unconfigured",
+      "available": false
+    },
+    {
+      "status": 200,
+      "ok": false,
+      "available": false,
+      "error": "model-service-disabled"
+    }
+  ],
+  "count": 4
+}

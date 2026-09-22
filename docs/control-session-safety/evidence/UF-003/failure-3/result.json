@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "package": "control-session-safety",
+  "uf": "UF-003",
+  "branch": "failure-3",
+  "run_id": "css-2026-09-12T16-34-21-249Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "247e3f5c488afb25915e9ee97fe0fd22e27648da"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "unwritable-dest",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "permission-write-keeps-bytes",
+          "status": "passed",
+          "expected": "conflict/EACCES + keep-me",
+          "actual": {
+            "perm": {
+              "ok": false,
+              "error": "EACCES"
+            },
+            "kept": "keep-me"
+          }
+        }
+      ]
+    }
+  ]
+}

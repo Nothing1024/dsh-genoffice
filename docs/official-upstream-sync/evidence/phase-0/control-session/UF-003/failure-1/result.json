@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "package": "control-session-safety",
+  "uf": "UF-003",
+  "branch": "failure-1",
+  "run_id": "css-2026-09-12T18-56-21-190Z",
+  "source_revisions": {
+    "plugin": "unknown",
+    "engine": "731237b063dd6f4375591abd2128ae4b19fa15ab"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "file-conflict",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "external-50ms-conflict",
+          "status": "passed",
+          "expected": "conflict + keep external",
+          "actual": {
+            "ignored": {
+              "ok": false,
+              "error": "conflict"
+            },
+            "afterExternal": "external edit"
+          }
+        },
+        {
+          "name": "concurrent-at-most-one",
+          "status": "passed",
+          "expected": "<=1 ok",
+          "actual": [
+            {
+              "ok": true
+            },
+            {
+              "ok": false,
+              "error": "conflict"
+            }
+          ]
+        },
+        {
+          "name": "post-file-requires-version",
+          "status": "passed",
+          "expected": "reject missing file version",
+          "actual": {
+            "ok": false,
+            "error": "conflict"
+          }
+        }
+      ]
+    }
+  ]
+}

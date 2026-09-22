@@ -3,27 +3,21 @@
  *
  * v0.15 中 `client` 是保留 facet 名（归 RFC 0002），manifest 不声明本模块；
  * 生产路径由官方 client bundle 入口（src/client/index.ts）经
- * cordis-client-adapter 执行同一份主体。RFC 0002 定案后，把本模块的构建
- * 产物填进 facets.client.entry 即完成切换——主体零改动。
+ * cordis-client-adapter 执行同一份主体。
  *
- * 依赖（CLIENT_REQUIRED / CLIENT_OPTIONAL 镜像）：
+ * 依赖：
  * - Locale（required）：词典注册 + 翻译绑定；
- * - SidebarTab（optional peer）：缺席时跳过全部 UI 注册不崩（BR-003）。
+ * - SidebarRight（optional）：缺席时跳过全部 UI 注册不崩（BR-003）。
  */
 import { createElement } from 'react'
-import type {
-  BetterSidebarService,
-  FileViewerDescriptor,
-  TabComponentProps,
-  TabDescriptor,
-} from 'dsh-better-sidebar'
 import { GenOfficePanel } from '../tabs/genoffice.tsx'
 import { GenOfficeIcon } from '../tabs/icon.tsx'
-import { DocxControlViewer, GenOfficeFileTab } from '../tabs/docx-control-viewer.tsx'
-import { CLAIMED_EXTS } from '../tabs/coexist.ts'
-import { BROWSER_TAB_ID, FILE_TAB_ID, fileOpenOnThisPage } from '../tabs/file-tab.ts'
+import { GenOfficeFileTab } from '../tabs/docx-control-viewer.tsx'
+import { CLAIMED_EXTS, isControlExt } from '../tabs/coexist.ts'
+import { controlOpenAddress, fileNameOf, fileOpenOnThisPage } from '../tabs/file-tab.ts'
+import { parseFileAddress } from '../tabs/file-address.ts'
 import { en, NS, zh } from '../tabs/locales.ts'
-import { RELAY_BASE } from '../tabs/relay.ts'
+import { RELAY_BASE, extOf } from '../tabs/relay.ts'
 import { defineFacet } from './sdk.ts'
 import {
   LOCALE,
@@ -31,62 +25,98 @@ import {
   type LocaleHandle,
   type SidebarAcquireHandle,
 } from './coordinates.ts'
+import {
+  GENOFFICE_FILE_KIND,
+  GENOFFICE_FILE_TAB_ID,
+  GENOFFICE_KIND,
+  GENOFFICE_TAB_ID,
+  type OfficialSidebar,
+  type SidebarRightTabDefinition,
+} from './sidebar.ts'
 
-/** 全部 UI 注册（tabs + FileViewers + 全局 SSE）。返回合并卸载函数。 */
+function canOpenControlAddress(address: string): boolean {
+  const parsed = parseFileAddress(address)
+  if (parsed === undefined) return false
+  return isControlExt(extOf(parsed.path))
+}
+
+function basenameOfAddress(address: string): string {
+  const parsed = parseFileAddress(address)
+  if (parsed === undefined) return 'GenOffice'
+  const name = fileNameOf(parsed.path)
+  return name === '' ? 'GenOffice' : name
+}
+
+function registerKeyedTab(
+  sidebar: OfficialSidebar,
+  id: string,
+  component: (props: Record<string, unknown>) => unknown,
+  locale?: string,
+): () => void {
+  const { slots } = sidebar
+  return slots.inject('sidebar.right.pane.tab', () => slots.register(
+    { name: 'sidebar.right.pane.tab', key: id, ...(locale === undefined ? {} : { locale }) },
+    component,
+  ))
+}
+
 function mountSidebar(
-  betterSidebar: BetterSidebarService,
+  sidebar: OfficialSidebar,
   t: (key: string) => string,
+  activeSessionId: () => string | undefined,
 ): () => void {
   const offs: Array<() => void> = []
+  const { sidebarRight, sidebarRightTabs } = sidebar
 
-  // 0.13 required fields stay id/title/component. Do not set urlTarget
-  // (we do not claim http(s)) or FileViewer toolbar fields (internal).
-  const browserTab: TabDescriptor = {
-    id: BROWSER_TAB_ID,
+  const browserType: SidebarRightTabDefinition = {
+    id: GENOFFICE_TAB_ID,
+    kind: GENOFFICE_KIND,
     title: () => t('tab.genoffice'),
-    icon: (size: number) => createElement(GenOfficeIcon, { size }),
-    order: 20,
-    single: true,
-    // Enable/disable appears automatically in the Side card settings
-    // inventory from title + icon; we have no extra PrefsSchema toggles.
-    component: (props: TabComponentProps) => createElement(GenOfficePanel, props),
+    guide: [{
+      id: 'genoffice',
+      order: 20,
+      title: () => t('tab.genoffice'),
+      description: () => t('tab.guide'),
+      icon: GenOfficeIcon,
+    }],
   }
-  offs.push(betterSidebar.registerTab(browserTab))
+  offs.push(sidebarRightTabs.register(browserType))
+  offs.push(registerKeyedTab(
+    sidebar,
+    GENOFFICE_TAB_ID,
+    (props) => createElement(GenOfficePanel, props as never),
+    NS,
+  ))
 
-  const fileTab: TabDescriptor = {
-    id: FILE_TAB_ID,
-    title: () => t('tab.file'),
-    icon: (size: number) => createElement(GenOfficeIcon, { size }),
-    hidden: true,
-    dedupeKey: (opened) => opened.path,
-    component: (props: TabComponentProps) => createElement(GenOfficeFileTab, props),
+  const fileType: SidebarRightTabDefinition = {
+    id: GENOFFICE_FILE_TAB_ID,
+    kind: GENOFFICE_FILE_KIND,
+    patterns: CLAIMED_EXTS.map((ext) => `*.${ext}`),
+    priority: 'extension',
+    canOpen: canOpenControlAddress,
+    title: basenameOfAddress,
   }
-  offs.push(betterSidebar.registerTab(fileTab))
+  offs.push(sidebarRightTabs.register(fileType))
+  offs.push(registerKeyedTab(
+    sidebar,
+    GENOFFICE_FILE_TAB_ID,
+    (props) => createElement(GenOfficeFileTab, props as never),
+  ))
 
-  for (const ext of CLAIMED_EXTS) {
-    const viewer: FileViewerDescriptor = {
-      id: `dsh-genoffice:viewer-${ext}`,
-      title: () => `GenOffice · .${ext}`,
-      icon: (size: number) => createElement(GenOfficeIcon, { size }),
-      exts: [ext],
-      priority: 10,
-      fetchStrategy: 'none',
-      component: DocxControlViewer,
-    }
-    offs.push(betterSidebar.registerFileViewer(viewer))
-  }
-
-  // Global SSE: *_open lands on a per-path file tab even if the browser
-  // tab has not been opened yet (BR-M03). Only the page whose active
-  // session matches sessionId mounts the iframe (see fileOpenOnThisPage).
   const es = new EventSource(`${RELAY_BASE}/api/open/stream`)
   es.addEventListener('file', (ev: MessageEvent) => {
     try {
       const data = JSON.parse(ev.data) as { path?: unknown; sessionId?: unknown }
-      const activeSessionId = betterSidebar.getSnapshot?.().sessionId
-      const next = fileOpenOnThisPage(data, activeSessionId)
+      const pageSessionId = activeSessionId()
+      const next = fileOpenOnThisPage(data, pageSessionId)
       if (next === undefined) return
-      betterSidebar.openTab(next.seed)
+      try {
+        sidebarRight.openResource(controlOpenAddress(next.path, pageSessionId), {
+          kind: GENOFFICE_FILE_KIND,
+        })
+      } catch (error) {
+        console.error('[genoffice] explicit control open failed', error)
+      }
     } catch { /* malformed event — ignore */ }
   })
   offs.push(() => { es.close() })
@@ -104,6 +134,6 @@ export default defineFacet((activation) => {
   scope.add(locale.register(NS, { zh, en }))
 
   if (!contracts.has(SIDEBAR_TAB)) return
-  const sidebar = contracts.get<SidebarAcquireHandle<BetterSidebarService>>(SIDEBAR_TAB)
-  scope.add(sidebar.acquire((betterSidebar) => mountSidebar(betterSidebar, t)))
+  const sidebar = contracts.get<SidebarAcquireHandle<OfficialSidebar>>(SIDEBAR_TAB)
+  scope.add(sidebar.acquire((service) => mountSidebar(service, t, () => service.sessionId)))
 })

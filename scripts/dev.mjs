@@ -22,7 +22,7 @@ import { fileURLToPath } from 'node:url'
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const UPSTREAM = join(ROOT, '../engine')
 const RELAY_BASE = 'http://127.0.0.1:8787'
-const DSH_URL = 'http://127.0.0.1:3080'
+const DSH_URL = 'http://127.0.0.1:3082'
 const LOG_FILE = '/tmp/genoffice-web.log'
 
 async function relayHealth() {
@@ -102,9 +102,9 @@ async function status() {
   console.log(`relay  :8787  ${relay ? 'UP' : 'DOWN'}${readyNote}`)
   try {
     const resp = await fetch(DSH_URL, { signal: AbortSignal.timeout(3000) })
-    console.log(`dsh    :3080  ${resp.status === 200 ? 'UP' : `HTTP ${resp.status}`}`)
+    console.log(`dsh    :3082  ${resp.status === 200 ? 'UP' : `HTTP ${resp.status}`}`)
   } catch {
-    console.log('dsh    :3080  DOWN')
+    console.log('dsh    :3082  DOWN')
   }
   if (!relay) console.log('提示: 运行 `node scripts/dev.mjs start-relay` 拉起 relay')
   return relay ? 0 : 1

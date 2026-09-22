@@ -1,0 +1,19 @@
+official-upstream-sync Task 6
+date: 2026-09-12T18:50:33Z
+cwd: /tmp/genoffice-official-sync-engine
+node: /usr/local/Cellar/node/26.8.2/bin/node v26.8.2
+
+commands:
+  npm run test -w @genoffice/slides   # ous-slides-test2 exit 0; 72 files
+  ENGINE_ROOT=/tmp/genoffice-official-sync-engine node web/e2e-official-sync.mjs --case land-pages
+    run_id=ous-2026-09-12T18-50-33-872Z exit 0
+    land/illegal/stale/save/reopen all passed
+    UF-003/success + failure-1 + failure-2 archived
+
+notes:
+  shared/page-spec.ts is official algorithm plus async imageDims for web.
+  main/page-spec.ts re-exports shared.
+  land_pages now accepts pages / pages_spec / pages_spec.pages / page_spec and
+  coerces title+blocks into official PageSpec elements.
+  generate_deck lands via landGeneratedPages or generateFromHtml.
+  system-fonts tests accept locally installed YuMincho / Arial fallbacks.

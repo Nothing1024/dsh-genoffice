@@ -1,0 +1,5 @@
+[html] [html] [control] stream open (docId=08b90d32…)
+[html] [html] [control] executor registered (/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-docx/keep.html)
+[html] Executing inline script violates the following Content Security Policy directive 'script-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-b6aePRa8urTy1YwhGAKtMWQBqsqyTOCqpWbyJ/InS8o='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked.
+[docs] [control] stream open (docId=fc5b0045…)
+[docs] [control] executor registered (/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-docx/keep.docx)

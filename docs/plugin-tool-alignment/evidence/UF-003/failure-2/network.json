@@ -1,0 +1,65 @@
+{
+  "events": [
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Dry run — the deck was NOT modified.\nValid plan:\n[0] setText s0/e_2\nAll ops validated.\nResend with dry_run omitted to apply.",
+        "mutated": false,
+        "summary": "批量操作演习通过"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Applied 2 op(s): setText @0/e_2, setTransform @0/e_2.",
+        "mutated": true,
+        "summary": "已应用 2 个操作"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Nothing was applied (atomic):\n- ops[1]: unknown op \"not_a_real_op\". Supported ops: [deleteElement, setFill, setStroke, setText, setFont, setParagraphFormat, setTransform, setConnectorEndpoints, flipElements, setPictureSrcRect, setPictureOpacity, reorderElement, groupElements, ungroupElement, setShapeGeometry, setShapeAdjust, setTextAnchor, setLink, setImageFill, addElement, addPicture, replacePicture, addTable, addChart, addSmartArt, addMedia, addModel3d, pasteElements, setTableCell, tableMerge, tableStructure, setTableRowHeight, setTableCellAnchor, setTableColWidth, setTableStyle, setChart, deleteSlide, duplicateSlide, addBlankSlide, addSlideWithLayout, pasteSlide, moveSlide, setSlideLayout, setSlideSize, setBackground, setHidden, setTransition, setAdvanceTime, setAnimations, findReplace, applyHeaderFooter, setSections, addSection, renameSection, removeSection, moveSection, setNotes, addComment, deleteComment, applyTheme].",
+        "isError": true,
+        "mutated": false,
+        "summary": "批量操作"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "ops must be a non-empty array",
+        "isError": true,
+        "mutated": false,
+        "summary": "批量操作"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Nothing was applied (atomic):\n- ops[0]: ops must be a non-empty array (at most 50 per transaction).",
+        "isError": true,
+        "mutated": false,
+        "summary": "批量操作"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "path": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T17-17-59-551Z/apply-ops.pptx",
+      "name": "apply-ops.pptx",
+      "mtimeMs": 1789233484463.7822
+    }
+  ],
+  "count": 6
+}

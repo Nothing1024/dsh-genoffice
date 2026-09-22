@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-002",
+  "branch": "failure-2",
+  "run_id": "6dcb5014-2ada-496c-9bcf-ff73a66bb237",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "sheets-media-illegal-image-or-protect",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "bad-ext-rejected",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Only PNG/JPEG/GIF images are supported (judged by extension; URLs are validated on download).",
+              "isError": true,
+              "mutated": false,
+              "summary": "生成变更预览"
+            },
+            "revision": "4f71ca4b29995afa3869ee5a4904a74b8edadf5c1f376e11780ba61db0ac6a6a"
+          }
+        },
+        {
+          "name": "bad-png-rejected",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Apply failed — the workbook is UNCHANGED: The image is not PNG/JPEG/GIF.. Do not tell the user the changes were made; adjust the operations and retry, or explain the failure.",
+              "isError": true,
+              "mutated": false,
+              "summary": "生成变更预览"
+            },
+            "revision": "4f71ca4b29995afa3869ee5a4904a74b8edadf5c1f376e11780ba61db0ac6a6a"
+          }
+        },
+        {
+          "name": "protect-rejected",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "该工作表有密码保护——不支持移除其保护。",
+              "isError": true,
+              "mutated": false,
+              "summary": "生成变更预览"
+            },
+            "revision": "4f71ca4b29995afa3869ee5a4904a74b8edadf5c1f376e11780ba61db0ac6a6a"
+          }
+        },
+        {
+          "name": "illegal-does-not-write-disk",
+          "status": "passed",
+          "expected": "4f71ca4b29995afa3869ee5a4904a74b8edadf5c1f376e11780ba61db0ac6a6a",
+          "actual": {
+            "afterBadExtSha": "4f71ca4b29995afa3869ee5a4904a74b8edadf5c1f376e11780ba61db0ac6a6a",
+            "afterBadPngSha": "4f71ca4b29995afa3869ee5a4904a74b8edadf5c1f376e11780ba61db0ac6a6a",
+            "afterProtectSha": "4f71ca4b29995afa3869ee5a4904a74b8edadf5c1f376e11780ba61db0ac6a6a"
+          }
+        }
+      ]
+    }
+  ]
+}

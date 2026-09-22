@@ -1,0 +1,91 @@
+=== npm run typecheck (after sheets type fixes) ===
+date: 2026-09-12T20:14:42Z
+
+> genoffice@0.1.0 typecheck
+> npm run typecheck -w @genoffice/i18n && npm run typecheck -w @genoffice/electron-utils && npm run typecheck -w @genoffice/font-metrics && npm run typecheck -w @genoffice/docx-engine && npm run typecheck -w @genoffice/pdf2docx && npm run typecheck -w @genoffice/html2docx && npm run typecheck -w @genoffice/file-parse && npm run typecheck -w @genoffice/pptx-engine && npm run typecheck -w @genoffice/pptx-render && npm run typecheck -w @genoffice/ai-search && npm run typecheck -w @genoffice/agent-core && npm run typecheck -w @genoffice/ai-provider && npm run typecheck -w @genoffice/project-store && npm run typecheck -w @genoffice/ui && npm run typecheck -w @genoffice/docs && npm run typecheck -w @genoffice/sheets && npm run typecheck -w @genoffice/shell && npm run typecheck -w @genoffice/slides && npm run typecheck -w @genoffice/pdf && npm run typecheck -w @genoffice/markdown && npm run typecheck -w @genoffice/html
+
+
+> @genoffice/i18n@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/electron-utils@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/font-metrics@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/docx-engine@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/pdf2docx@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/html2docx@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/file-parse@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/pptx-engine@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/pptx-render@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/ai-search@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/agent-core@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/ai-provider@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/project-store@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/ui@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/docs@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/sheets@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/shell@0.9.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/slides@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/pdf@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/markdown@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @genoffice/html@0.1.0 typecheck
+> tsc --noEmit
+
+typecheck_exit=0

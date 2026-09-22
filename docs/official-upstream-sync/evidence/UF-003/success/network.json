@@ -1,0 +1,51 @@
+{
+  "events": [
+    {
+      "status": 200,
+      "ok": true,
+      "docId": "88dcc3652c71cb4de63e9e7605e15064f1467745d6dab200dda52e709005b7ca",
+      "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/land-pages.pptx",
+      "registered": true,
+      "readiness": "ready",
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+      "error": null,
+      "occupied": true,
+      "owner": "287ee003-790f-4d9d-95f9-6104ecf467ea"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Landed 1 host-authored page(s) (insert_mode:append). Deck now has 2 page(s).",
+        "mutated": true,
+        "summary": "land_pages 1"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "land_pages requires a non-empty pages array",
+        "isError": true,
+        "mutated": false,
+        "summary": "land_pages"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": false,
+      "error": "conflict",
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/land-pages.pptx",
+      "name": "land-pages.pptx",
+      "mtimeMs": 1789240081345.042
+    }
+  ],
+  "count": 5
+}

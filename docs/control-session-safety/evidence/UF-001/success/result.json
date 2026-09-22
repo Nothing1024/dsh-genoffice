@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "package": "control-session-safety",
+  "uf": "UF-001",
+  "branch": "success",
+  "run_id": "css-2026-09-12T16-34-21-249Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "247e3f5c488afb25915e9ee97fe0fd22e27648da"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "markdown-loading",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "loading-edit-blocked",
+          "status": "passed",
+          "expected": "not-ready",
+          "actual": {
+            "ok": false,
+            "error": "not-ready",
+            "readiness": "loading"
+          }
+        },
+        {
+          "name": "ready-edit-allowed",
+          "status": "passed",
+          "expected": "mutated",
+          "actual": {
+            "ok": true,
+            "execution": {
+              "output": "Inserted 1 block(s). Block indexes may have changed; call get_document_context before further index-based edits.",
+              "mutated": true,
+              "summary": "已插入 1 个块",
+              "revision": "560314cce34f255d90673339780f09780dd809662506baf26b8cbe53bc9b65e4"
+            },
+            "revision": "560314cce34f255d90673339780f09780dd809662506baf26b8cbe53bc9b65e4"
+          }
+        },
+        {
+          "name": "load-fail-preserves-bytes",
+          "status": "passed",
+          "expected": "original bytes + no save",
+          "actual": {
+            "failTool": {
+              "ok": false,
+              "error": "not-ready",
+              "readiness": "error",
+              "loadError": "Failed to fetch"
+            },
+            "failSave": {
+              "ok": false,
+              "error": "not-ready",
+              "readiness": "error",
+              "loadError": "Failed to fetch"
+            },
+            "failDisk": "# ORIGINAL_BYTES\n"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,30 +1,50 @@
 import { describe, expect, it } from 'vitest'
-import { BROWSER_TAB_ID, FILE_TAB_ID, fileNameOf, fileOpenFromEvent, fileOpenOnThisPage, fileTabSeed } from '../src/tabs/file-tab.ts'
+import { BROWSER_TAB_ID, FILE_TAB_ID, controlOpenAddress, fileNameOf, fileOpenFromEvent, fileOpenOnThisPage, isClaimedPath } from '../src/tabs/file-tab.ts'
+import { absoluteFileAddress, fileAddressFor, parseFileAddress, sessionFileAddress } from '../src/tabs/file-address.ts'
 
-describe('fileTabSeed', () => {
-  it('uses a path-derived id and the basename as title', () => {
-    expect(fileTabSeed('/tmp/demo.docx')).toEqual({
-      type: FILE_TAB_ID,
-      path: '/tmp/demo.docx',
-      title: 'demo.docx',
-      id: `${FILE_TAB_ID}:/tmp/demo.docx`,
-    })
+describe('file names and claimed paths', () => {
+  it('uses basename and claims office extensions', () => {
+    expect(fileNameOf('/tmp/demo.docx')).toBe('demo.docx')
     expect(fileNameOf('C:\\work\\deck.pptx')).toBe('deck.pptx')
+    expect(isClaimedPath('/tmp/demo.docx')).toBe(true)
+    expect(isClaimedPath('/tmp/notes.md')).toBe(false)
     expect(BROWSER_TAB_ID).not.toBe(FILE_TAB_ID)
   })
 })
 
+describe('fileAddressFor', () => {
+  it('encodes a session-scoped address, keeping : literal', () => {
+    expect(sessionFileAddress('s:1', '/tmp/demo.docx')).toBe(
+      'dsh-resource://file/session/s:1//tmp/demo.docx',
+    )
+    expect(parseFileAddress(sessionFileAddress('s:1', '/tmp/demo.docx'))).toEqual({
+      scope: 'session',
+      sessionId: 's:1',
+      path: '/tmp/demo.docx',
+    })
+    expect(fileAddressFor('sess', '/workspace', 'notes.docx')).toBe(
+      sessionFileAddress('sess', 'notes.docx'),
+    )
+    expect(fileAddressFor('sess', '/workspace', '/workspace/a.docx')).toBe(
+      sessionFileAddress('sess', 'a.docx'),
+    )
+    expect(fileAddressFor('sess', '/workspace', '/tmp/a.docx')).toBe(
+      sessionFileAddress('sess', '/tmp/a.docx'),
+    )
+  })
+})
+
 describe('fileOpenFromEvent', () => {
-  it('returns a path seed with no scope when the SSE payload has only path', () => {
+  it('returns a path with no session when the SSE payload has only path', () => {
     expect(fileOpenFromEvent({ path: '/tmp/demo.docx' })).toEqual({
-      seed: fileTabSeed('/tmp/demo.docx'),
+      path: '/tmp/demo.docx',
     })
   })
 
-  it('attaches the origin session so openTab does not land in another page\'s active session', () => {
+  it('attaches the origin session so openResource does not land in another page\'s active session', () => {
     expect(fileOpenFromEvent({ path: '/tmp/demo.docx', sessionId: 'session-a' })).toEqual({
-      seed: fileTabSeed('/tmp/demo.docx'),
-      scope: { sessionId: 'session-a' },
+      path: '/tmp/demo.docx',
+      sessionId: 'session-a',
     })
   })
 
@@ -33,10 +53,10 @@ describe('fileOpenFromEvent', () => {
     expect(fileOpenFromEvent({ path: 1 })).toBeUndefined()
     expect(fileOpenFromEvent({})).toBeUndefined()
     expect(fileOpenFromEvent({ path: '/tmp/a.docx', sessionId: '' })).toEqual({
-      seed: fileTabSeed('/tmp/a.docx'),
+      path: '/tmp/a.docx',
     })
     expect(fileOpenFromEvent({ path: '/tmp/a.docx', sessionId: 12 })).toEqual({
-      seed: fileTabSeed('/tmp/a.docx'),
+      path: '/tmp/a.docx',
     })
   })
 })
@@ -44,9 +64,10 @@ describe('fileOpenFromEvent', () => {
 describe('fileOpenOnThisPage', () => {
   const payload = { path: '/tmp/demo.docx', sessionId: 'session-a' }
 
-  it('opens without scope when this page is viewing the origin session', () => {
+  it('opens when this page is viewing the origin session', () => {
     expect(fileOpenOnThisPage(payload, 'session-a')).toEqual({
-      seed: fileTabSeed('/tmp/demo.docx'),
+      path: '/tmp/demo.docx',
+      sessionId: 'session-a',
     })
   })
 
@@ -54,13 +75,33 @@ describe('fileOpenOnThisPage', () => {
     expect(fileOpenOnThisPage(payload, 'session-b')).toBeUndefined()
   })
 
-  it('skips when the active session is unknown', () => {
-    expect(fileOpenOnThisPage(payload, undefined)).toBeUndefined()
+  it('opens when this page has no mounted session id', () => {
+    expect(fileOpenOnThisPage(payload, undefined)).toEqual({
+      path: '/tmp/demo.docx',
+      sessionId: 'session-a',
+    })
   })
 
   it('still opens a legacy payload that has no sessionId', () => {
     expect(fileOpenOnThisPage({ path: '/tmp/demo.docx' }, 'session-b')).toEqual({
-      seed: fileTabSeed('/tmp/demo.docx'),
+      path: '/tmp/demo.docx',
     })
+  })
+})
+
+describe('controlOpenAddress', () => {
+  it('uses the mounted page session when the page has one', () => {
+    expect(controlOpenAddress('/tmp/demo.docx', 'session-a')).toBe(
+      fileAddressFor('session-a', undefined, '/tmp/demo.docx'),
+    )
+  })
+
+  it('uses the absolute scope when the page has no session id', () => {
+    expect(controlOpenAddress('/tmp/demo.docx', undefined)).toBe(
+      absoluteFileAddress('/tmp/demo.docx'),
+    )
+    expect(controlOpenAddress('/tmp/demo.docx', '')).toBe(
+      absoluteFileAddress('/tmp/demo.docx'),
+    )
   })
 })

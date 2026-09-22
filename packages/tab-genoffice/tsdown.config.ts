@@ -88,8 +88,7 @@ const libConfig: UserConfig = {
       'schemastery',
       'react',
       'react-dom',
-      'dsh-better-sidebar',
-      /^@deepseek-ai\//,
+/^@deepseek-ai\//,
     ],
   },
 }

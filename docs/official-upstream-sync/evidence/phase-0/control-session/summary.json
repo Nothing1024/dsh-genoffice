@@ -1,0 +1,604 @@
+{
+  "run_id": "css-2026-09-12T18-56-21-190Z",
+  "port": 18787,
+  "base": "http://127.0.0.1:18787",
+  "node": "/usr/local/Cellar/node/26.8.2/bin/node",
+  "nodeVersion": "v26.8.2",
+  "fixtures": [
+    {
+      "app": "markdown",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/fixtures/session.md",
+      "sha256": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+      "bytes": 26
+    },
+    {
+      "app": "docs",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/fixtures/session.docx",
+      "source": "/private/tmp/genoffice-official-sync-engine/fixtures/generated/simple.docx",
+      "sha256": "03da2cafb3d9ce4022dbce432ca61a807114989f6cb31f9f8a60e821075dd0b5",
+      "bytes": 2166
+    },
+    {
+      "app": "sheets",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/fixtures/session.xlsx",
+      "source": "/private/tmp/genoffice-official-sync-engine/apps/sheets/fixtures/generated/compatibility-basic.xlsx",
+      "sha256": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552",
+      "bytes": 2769
+    },
+    {
+      "app": "slides",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/fixtures/session.pptx",
+      "source": "/private/tmp/genoffice-official-sync-engine/fixtures/generated/sample.pptx",
+      "sha256": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+      "bytes": 5741
+    },
+    {
+      "app": "pdf",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/fixtures/session.pdf",
+      "source": "/private/tmp/genoffice-official-sync-engine/fixtures/generated/simple.pdf",
+      "sha256": "f4f131f993ddaae8bbb518e0866440c66315103ae3a9dfcf930831ebcc9d7b48",
+      "bytes": 592
+    }
+  ],
+  "results": [
+    {
+      "name": "inventory",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "five-family-fixtures",
+          "status": "passed",
+          "expected": "md/docx/xlsx/pptx/pdf hashed",
+          "actual": [
+            {
+              "app": "markdown",
+              "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/fixtures/session.md",
+              "sha256": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+              "bytes": 26
+            },
+            {
+              "app": "docs",
+              "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/fixtures/session.docx",
+              "source": "/private/tmp/genoffice-official-sync-engine/fixtures/generated/simple.docx",
+              "sha256": "03da2cafb3d9ce4022dbce432ca61a807114989f6cb31f9f8a60e821075dd0b5",
+              "bytes": 2166
+            },
+            {
+              "app": "sheets",
+              "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/fixtures/session.xlsx",
+              "source": "/private/tmp/genoffice-official-sync-engine/apps/sheets/fixtures/generated/compatibility-basic.xlsx",
+              "sha256": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552",
+              "bytes": 2769
+            },
+            {
+              "app": "slides",
+              "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/fixtures/session.pptx",
+              "source": "/private/tmp/genoffice-official-sync-engine/fixtures/generated/sample.pptx",
+              "sha256": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+              "bytes": 5741
+            },
+            {
+              "app": "pdf",
+              "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/fixtures/session.pdf",
+              "source": "/private/tmp/genoffice-official-sync-engine/fixtures/generated/simple.pdf",
+              "sha256": "f4f131f993ddaae8bbb518e0866440c66315103ae3a9dfcf930831ebcc9d7b48",
+              "bytes": 592
+            }
+          ]
+        },
+        {
+          "name": "api-file-callers",
+          "status": "passed",
+          "expected": "enumerated",
+          "actual": [
+            {
+              "file": "engine/web/server.mjs",
+              "kind": "GET/POST /api/file + export→writeFileAtomic"
+            },
+            {
+              "file": "engine/apps/markdown/src/renderer/control.ts",
+              "kind": "GET /api/file captureMtime"
+            },
+            {
+              "file": "engine/apps/docs/src/renderer/control.ts",
+              "kind": "GET /api/file captureMtime"
+            },
+            {
+              "file": "engine/apps/sheets/src/renderer/control.ts",
+              "kind": "GET /api/file captureMtime"
+            },
+            {
+              "file": "engine/apps/slides/src/renderer/control.ts",
+              "kind": "GET /api/file captureMtime"
+            },
+            {
+              "file": "engine/apps/pdf/src/renderer/control.ts",
+              "kind": "GET /api/file captureMtime"
+            },
+            {
+              "file": "engine/apps/markdown/src/renderer/web-bridge.ts",
+              "kind": "GET /api/file load"
+            },
+            {
+              "file": "plugin/scripts/dev.mjs",
+              "kind": "GET/POST /api/file smoke"
+            },
+            {
+              "file": "plugin/packages/tab-genoffice/src/tabs/control-mode.tsx",
+              "kind": "export then clear dirty on mtimeMs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "markdown-loading",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "loading-edit-blocked",
+          "status": "passed",
+          "expected": "not-ready",
+          "actual": {
+            "ok": false,
+            "error": "not-ready",
+            "readiness": "loading"
+          }
+        },
+        {
+          "name": "ready-edit-allowed",
+          "status": "passed",
+          "expected": "mutated",
+          "actual": {
+            "ok": true,
+            "execution": {
+              "output": "ops[0] insertContent: Inserted 1 block(s).\nBlock indexes may have changed; call get_document_context before further index-based edits.",
+              "mutated": true,
+              "summary": "插入内容",
+              "revision": "560314cce34f255d90673339780f09780dd809662506baf26b8cbe53bc9b65e4"
+            },
+            "revision": "560314cce34f255d90673339780f09780dd809662506baf26b8cbe53bc9b65e4"
+          }
+        },
+        {
+          "name": "load-fail-preserves-bytes",
+          "status": "passed",
+          "expected": "original bytes + no save",
+          "actual": {
+            "failTool": {
+              "ok": false,
+              "error": "not-ready",
+              "readiness": "error",
+              "loadError": "Failed to fetch"
+            },
+            "failSave": {
+              "ok": false,
+              "error": "not-ready",
+              "readiness": "error",
+              "loadError": "Failed to fetch"
+            },
+            "failDisk": "# ORIGINAL_BYTES\n"
+          }
+        }
+      ]
+    },
+    {
+      "name": "revision",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "context-has-revision",
+          "status": "passed",
+          "expected": "revision",
+          "actual": {
+            "ok": true,
+            "context": "## Document state\n2 top-level blocks:\n\n0 | h1 | R\n1 | paragraph | body",
+            "revision": "2278ccb8e0aac77bdc5be14d402526ee4f59b1a37df0a02c38ce434973c1bd49"
+          }
+        },
+        {
+          "name": "stale-rejected",
+          "status": "passed",
+          "expected": "conflict + no STALE",
+          "actual": {
+            "stale": {
+              "ok": false,
+              "error": "conflict",
+              "revision": "ad1590de81c32644e12cd8f9c678dc81a7d4994c9b72a2b81dbb0a6bcc788c14"
+            },
+            "mid": "B_INSERT\n\nR\n\nbody"
+          }
+        },
+        {
+          "name": "reread-succeeds",
+          "status": "passed",
+          "expected": "ok",
+          "actual": {
+            "ok": true,
+            "execution": {
+              "output": "ops[0] insertContent: Inserted 1 block(s).\nBlock indexes may have changed; call get_document_context before further index-based edits.",
+              "mutated": true,
+              "summary": "插入内容",
+              "revision": "641e01a9f86618289bd903b4bf5076b9cd2488d407ef268704c22d26b348821e"
+            },
+            "revision": "641e01a9f86618289bd903b4bf5076b9cd2488d407ef268704c22d26b348821e"
+          }
+        }
+      ]
+    },
+    {
+      "name": "save-snapshot",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "save-ack-keeps-newer-dirty",
+          "status": "passed",
+          "expected": "AFTER visible + dirty",
+          "actual": {
+            "dirty": [
+              "未保存"
+            ],
+            "view": "AFTER\n\nBEFORE\n\nS\n\n\n"
+          }
+        }
+      ]
+    },
+    {
+      "name": "file-conflict",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "external-50ms-conflict",
+          "status": "passed",
+          "expected": "conflict + keep external",
+          "actual": {
+            "ignored": {
+              "ok": false,
+              "error": "conflict"
+            },
+            "afterExternal": "external edit"
+          }
+        },
+        {
+          "name": "concurrent-at-most-one",
+          "status": "passed",
+          "expected": "<=1 ok",
+          "actual": [
+            {
+              "ok": true
+            },
+            {
+              "ok": false,
+              "error": "conflict"
+            }
+          ]
+        },
+        {
+          "name": "post-file-requires-version",
+          "status": "passed",
+          "expected": "reject missing file version",
+          "actual": {
+            "ok": false,
+            "error": "conflict"
+          }
+        }
+      ]
+    },
+    {
+      "name": "owner",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "first-owner-stable",
+          "status": "passed",
+          "expected": "no flip-flop",
+          "actual": {
+            "counts": [
+              1,
+              0
+            ],
+            "open": {
+              "ok": true,
+              "docId": "e35d5cd5104f4fd93465006d8ac35a7a3147275a0f2cb7cc1bdaff23bf3c611a",
+              "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/owner.md",
+              "registered": true,
+              "readiness": "ready",
+              "revision": "4a37ab729fc5153fc91008cdf08f22335ec23718aa84a6ddb596feb4ad1022cf",
+              "error": null,
+              "occupied": true,
+              "owner": "5675f679-24ee-4e02-a29e-89ed74e8396c"
+            }
+          }
+        },
+        {
+          "name": "second-window-occupied",
+          "status": "passed",
+          "expected": "occupied",
+          "actual": {
+            "ok": true,
+            "docId": "e35d5cd5104f4fd93465006d8ac35a7a3147275a0f2cb7cc1bdaff23bf3c611a",
+            "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/owner.md",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "4a37ab729fc5153fc91008cdf08f22335ec23718aa84a6ddb596feb4ad1022cf",
+            "error": null,
+            "occupied": true,
+            "owner": "5675f679-24ee-4e02-a29e-89ed74e8396c"
+          }
+        }
+      ]
+    },
+    {
+      "name": "markdown-state",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "loading-edit-blocked",
+          "status": "passed",
+          "expected": "not-ready",
+          "actual": {
+            "ok": false,
+            "error": "not-ready",
+            "readiness": "loading"
+          }
+        },
+        {
+          "name": "ready-edit-allowed",
+          "status": "passed",
+          "expected": "mutated",
+          "actual": {
+            "ok": true,
+            "execution": {
+              "output": "ops[0] insertContent: Inserted 1 block(s).\nBlock indexes may have changed; call get_document_context before further index-based edits.",
+              "mutated": true,
+              "summary": "插入内容",
+              "revision": "560314cce34f255d90673339780f09780dd809662506baf26b8cbe53bc9b65e4"
+            },
+            "revision": "560314cce34f255d90673339780f09780dd809662506baf26b8cbe53bc9b65e4"
+          }
+        },
+        {
+          "name": "load-fail-preserves-bytes",
+          "status": "passed",
+          "expected": "original bytes + no save",
+          "actual": {
+            "failTool": {
+              "ok": false,
+              "error": "not-ready",
+              "readiness": "error",
+              "loadError": "Failed to fetch"
+            },
+            "failSave": {
+              "ok": false,
+              "error": "not-ready",
+              "readiness": "error",
+              "loadError": "Failed to fetch"
+            },
+            "failDisk": "# ORIGINAL_BYTES\n"
+          }
+        },
+        {
+          "name": "context-has-revision",
+          "status": "passed",
+          "expected": "revision",
+          "actual": {
+            "ok": true,
+            "context": "## Document state\n2 top-level blocks:\n\n0 | h1 | R\n1 | paragraph | body",
+            "revision": "2278ccb8e0aac77bdc5be14d402526ee4f59b1a37df0a02c38ce434973c1bd49"
+          }
+        },
+        {
+          "name": "stale-rejected",
+          "status": "passed",
+          "expected": "conflict + no STALE",
+          "actual": {
+            "stale": {
+              "ok": false,
+              "error": "conflict",
+              "revision": "ad1590de81c32644e12cd8f9c678dc81a7d4994c9b72a2b81dbb0a6bcc788c14"
+            },
+            "mid": "B_INSERT\n\nR\n\nbody"
+          }
+        },
+        {
+          "name": "reread-succeeds",
+          "status": "passed",
+          "expected": "ok",
+          "actual": {
+            "ok": true,
+            "execution": {
+              "output": "ops[0] insertContent: Inserted 1 block(s).\nBlock indexes may have changed; call get_document_context before further index-based edits.",
+              "mutated": true,
+              "summary": "插入内容",
+              "revision": "641e01a9f86618289bd903b4bf5076b9cd2488d407ef268704c22d26b348821e"
+            },
+            "revision": "641e01a9f86618289bd903b4bf5076b9cd2488d407ef268704c22d26b348821e"
+          }
+        },
+        {
+          "name": "save-ack-keeps-newer-dirty",
+          "status": "passed",
+          "expected": "AFTER visible + dirty",
+          "actual": {
+            "dirty": [
+              "未保存"
+            ],
+            "view": "AFTER\n\nBEFORE\n\nS\n\n\n"
+          }
+        }
+      ]
+    },
+    {
+      "name": "docs-state",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "docs-open-ready",
+          "status": "passed",
+          "expected": "ready/registered",
+          "actual": {
+            "ok": true,
+            "docId": "394a83c3e8cb0fb94538fbf5b40076deade1e49e1592071f1295f2d629a8513f",
+            "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/fixtures/session.docx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "03da2cafb3d9ce4022dbce432ca61a807114989f6cb31f9f8a60e821075dd0b5",
+            "error": null,
+            "occupied": true,
+            "owner": "3a8a3f56-bdfc-471f-b789-adb5a0dea5dc"
+          }
+        },
+        {
+          "name": "docs-context",
+          "status": "passed",
+          "expected": "context/revision",
+          "actual": {
+            "ok": true,
+            "context": "Document block list:\nThe document has 3 blocks, listed below (index|type|content preview):\n0|h1|W4-save-2\n1|p|第一段。\n2|p|第二段。\nFull-text stats: words 9, characters (no spaces) 17, characters (with spaces) 17\nHeaders & footers ({PAGE}/{NUMPAGES} are live page-number fields; change with set_header_footer):\n- header: (empty) | footer: (empty)\nNo selection; cursor is in block 2",
+            "revision": "03da2cafb3d9ce4022dbce432ca61a807114989f6cb31f9f8a60e821075dd0b5"
+          }
+        }
+      ]
+    },
+    {
+      "name": "sheets-state",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "sheets-open-ready",
+          "status": "passed",
+          "expected": "ready/registered",
+          "actual": {
+            "ok": true,
+            "docId": "16e1b51c3e80d8f7a87219ce013defbf12a04477e2126ad530c00884474e6645",
+            "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/fixtures/session.xlsx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552",
+            "error": null,
+            "occupied": true,
+            "owner": "a923d972-8a86-4ff6-9ddf-c802d722706e"
+          }
+        },
+        {
+          "name": "sheets-context",
+          "status": "passed",
+          "expected": "context/revision",
+          "actual": {
+            "ok": true,
+            "context": "Active sheet: Sheet1 (id=sheet-1, data extent about 1048576 rows × 16384 columns)\nMode: imported file in LARGE-FILE STREAMING MODE — the file is too big for a full load, so the grid materializes the viewed region on demand. Consequences: (1) formulas you write stay live — their referenced file cells are loaded into the engine automatically — but only within a session budget of ~50,000 referenced cells; batches beyond it are rejected: compute with aggregate_range and write static values instead; (2) to extract/split rows, use copy_range with filterColumn/filterValues (copies matching rows as static values, reading the real file data) into a sheet created with add_sheet rows/columns sized to the expected data (aggregate_range gives per-value counts) — never FILTER-formula spills; (3) add_pivot, refresh_pivot, duplicate_sheet, and filter edits are unavailable on the file's sheets; sort_range works, but ranges of 2000 cells or fewer must be read_range'd (loaded) first. Sheets added this session are fully live and exempt from all of this.\nActive sheet data area: A1:XFD1048576 (answer data-size questions directly from this — do not tally block by block with read_range)\nCurrent selection: A1\nCurrently loaded viewport: A1:AH160 (not the worksheet data extent)\nNo known non-empty cell information yet; read on demand with read_range/read_cells.",
+            "revision": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552"
+          }
+        }
+      ]
+    },
+    {
+      "name": "slides-state",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "slides-open-ready",
+          "status": "passed",
+          "expected": "ready/registered",
+          "actual": {
+            "ok": true,
+            "docId": "f11f60e6c5738ffee0d74493eb41ed787fddc32a9e4596038f5fe9047c7a7209",
+            "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/fixtures/session.pptx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+            "error": null,
+            "occupied": true,
+            "owner": "1e528d16-93eb-41b3-9481-f81464ceb68b"
+          }
+        },
+        {
+          "name": "slides-context",
+          "status": "passed",
+          "expected": "context/revision",
+          "actual": {
+            "ok": true,
+            "context": "<deck outline>\nThe presentation has 1 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage 1 (slideIndex=0):\n  - e_2 | shape | \"日志验证 / 示例演示文稿 · 商务深蓝风格封面 / Sample Presentation  | …\"\n(Use read_slide to see element positions/sizes/colors)\n</deck outline>",
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        }
+      ]
+    },
+    {
+      "name": "pdf-state",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "pdf-open-ready",
+          "status": "passed",
+          "expected": "ready/registered",
+          "actual": {
+            "ok": true,
+            "docId": "1478d4cc2e3b0538b7803c3c44d9b51074cb88437e6245ddc4d2887db285cacd",
+            "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/fixtures/session.pdf",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "f4f131f993ddaae8bbb518e0866440c66315103ae3a9dfcf930831ebcc9d7b48",
+            "error": null,
+            "occupied": true,
+            "owner": "89984678-3649-47bc-b361-2e148d9a6656"
+          }
+        },
+        {
+          "name": "pdf-context",
+          "status": "passed",
+          "expected": "context/revision",
+          "actual": {
+            "ok": true,
+            "context": "Current document: \"session.pdf\", 1 pages; the user is viewing page 1.\nWhether the file contains notes/markups has not been determined yet; use read_annotations to check when the user asks about review feedback.",
+            "revision": "f4f131f993ddaae8bbb518e0866440c66315103ae3a9dfcf930831ebcc9d7b48"
+          }
+        }
+      ]
+    },
+    {
+      "name": "plugin-state",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "plugin-wait-matches-tools.ts",
+          "status": "passed",
+          "expected": "readiness=ready",
+          "actual": {
+            "ok": true,
+            "docId": "ddb5268863c944a8a35f4e9b4fca43a170a4e3b83d2e7fb2ebf56c5a8ed0a339",
+            "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/plugin.md",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "26b7f45e9690cb5dbc8f76d5642cf464f31286048ddd1087eab773d4d13394fa",
+            "error": null,
+            "occupied": true,
+            "owner": "fb9e6bdb-9054-4d9d-b33b-a5b5d841b272"
+          }
+        },
+        {
+          "name": "plugin-protocol-context",
+          "status": "passed",
+          "expected": "ok",
+          "actual": {
+            "ok": true,
+            "context": "## Document state\n2 top-level blocks:\n\n0 | h1 | PLUGIN\n1 | paragraph | ",
+            "revision": "26b7f45e9690cb5dbc8f76d5642cf464f31286048ddd1087eab773d4d13394fa"
+          }
+        },
+        {
+          "name": "plugin-protocol-save",
+          "status": "passed",
+          "expected": "export path exercised",
+          "actual": {
+            "ok": true,
+            "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/plugin.md",
+            "name": "plugin.md",
+            "mtimeMs": 1789239395437.0518
+          }
+        }
+      ],
+      "note": "RELAY_BASE in packages/tab-genoffice/src/host/tools.ts is hardcoded http://localhost:8787; this driver uses the isolated port with the same HTTP protocol as waitUntilRegistered/callRelay/saveViaRelay and ControlModeViewer.saveToDisk."
+    }
+  ]
+}

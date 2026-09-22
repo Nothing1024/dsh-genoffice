@@ -1,0 +1,51 @@
+# control-session-safety Task 1
+time: 2026-09-12T16:10:00Z
+cwd: /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin
+
+## 版本与环境
+plugin HEAD: 5d5ee6d18fa87c40d587a2cc5dd429821946f90b
+engine HEAD: 247e3f5c488afb25915e9ee97fe0fd22e27648da
+engine status: 干净（e2e 工作目录改到 /tmp/genoffice-control-session）
+node (harness): /usr/local/Cellar/node/26.8.2/bin/node v26.8.2
+node (nvm): /Users/nothing/.nvm/versions/node/v22.23.2/bin/node v22.23.2
+playwright: chromium-1234
+port: 18787 空闲，已使用
+
+## 入口
+新建 ../engine/web/e2e-control-session.mjs
+flags: --baseline --case --all --out
+cases: baseline, markdown-loading, revision, save-snapshot, file-conflict, owner, markdown-state, docs-state, sheets-state, slides-state, pdf-state, plugin-state, inventory
+
+## POST /api/file 调用者
+- engine/web/server.mjs GET/POST /api/file；export 走 writeFileAtomic
+- 五族 control.ts captureMtime → GET /api/file
+- markdown/pdf/slides web-bridge 加载 → GET /api/file
+- plugin/scripts/dev.mjs smoke GET/POST /api/file
+- plugin control-mode.tsx 不直接 POST /api/file，经 export；mtimeMs 即清 dirty
+
+## 插件驱动
+e2e 内 pluginWaitUntilRegistered / pluginCallRelay / pluginSaveViaRelay 与 tools.ts 同协议。
+tools.ts RELAY_BASE 硬编码 http://localhost:8787；隔离端口用同一 HTTP，不改用户 Sidebar 源文件。
+
+## 五族 fixture 摘要
+见 evidence/phase-0/baseline/summary.json fixtures[]
+md/docx/xlsx/pptx/pdf 均复制并记录 sha256。
+
+## --baseline
+command: node ../engine/web/e2e-control-session.mjs --baseline --out docs/control-session-safety/evidence/phase-0/baseline
+exit: 0
+七项既有缺陷全部 confirmed=true：
+1. registered-before-loaded
+2. agent-global-baseline
+3. save-ack-clears-later-edits
+4. failed-load-can-overwrite-original
+5. two-visible-executors-flip-flop
+6. external-modification-within-100ms
+7. concurrent-save-with-same-baseline
+
+## typecheck
+npm --prefix ../engine run typecheck → exit 0
+
+## 保护
+sidebar.ts / file-address.ts 哈希未改。
+未创建母包 joint 脚本。

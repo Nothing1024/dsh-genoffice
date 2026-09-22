@@ -1,0 +1,11 @@
+序号,Phase,名称,详情锚点,前置任务,验证命令,状态,备注
+1,P0:依赖批次,校准前置协议与真实 Sidebar 测试入口,spec.md#task-1,无,node scripts/e2e-plugin-alignment.mjs --baseline → 已知缺陷逐项确认；npm run typecheck → 记录基线,已完成,baseline reproduced path/claim/schema/replay; isolated port
+2,P0:依赖批次,还原文件所属会话路径并接线错误态,spec.md#task-2,1,node scripts/e2e-plugin-alignment.mjs --case path；npm test → 正确文件、跨 session、缺 cwd 与畸形地址均通过,已完成,resolver + FileTab wait/error; path e2e + 146 tests
+3,P0:依赖批次,执行 Phase 0 回归验证,spec.md#task-3,2,npm run typecheck；npm test；node scripts/e2e-plugin-alignment.mjs --case path → 通过,已完成,typecheck/test/path green
+4,P1:依赖批次,分开默认预览与五族显式控制认领,spec.md#task-4,3,node scripts/e2e-plugin-alignment.mjs --case claim → 默认 md/pdf 宿主预览，五族显式打开成功，跨 session 不误开,已完成,patterns office-only; canOpen five-family; claim e2e
+5,P1:依赖批次,对齐 PPT 表格图表字段与能力说明,spec.md#task-5,4,node scripts/e2e-plugin-alignment.mjs --case ppt-schema；npm test → 所有修正参数真实执行并重开保留,已完成,schema+live table/chart; reopen AlignedCell; 146 tests
+6,P1:依赖批次,补齐批量编辑定位单位和事务用法,spec.md#task-6,5,node scripts/e2e-plugin-alignment.mjs --case apply-ops；npm run typecheck → 单位、定位、dry_run 和失败事务通过,已完成,docs+live dry_run/EMU/atomic/50; typecheck 0
+7,P1:依赖批次,移除落页包装器自动写入重放,spec.md#task-7,6,node scripts/e2e-plugin-alignment.mjs --case no-replay；npm test → 三个包装器最多一次写请求,已完成,single callRelay; timeout uncertain; 149 tests
+8,P1:依赖批次,扩展兼容校验到真实字段与错误反馈,spec.md#task-8,7,npm run typecheck；npm test；npm run build；npm run standard:check；node scripts/e2e-plugin-alignment.mjs --case contract → 声明差异能被检测且真实调用通过,已完成,contract live+154 tests; typecheck/build/standard 0
+9,P1:依赖批次,执行 spec 5.2 真实场景全套测试,spec.md#task-9,8,node scripts/e2e-plugin-alignment.mjs --all → 每个主路径及失败分支通过,已完成,--all 12 branches / 48 files
+10,P1:依赖批次,执行 Phase 1 回归验证,spec.md#task-10,9,npm run typecheck；npm test；npm run build；npm run standard:check；node ../engine/web/e2e-control-session.mjs --case plugin-state；python3 /Users/nothing/.agents/skills/prd-workflow/scripts/validate_package.py docs/plugin-tool-alignment --repo . → 全通过,已完成,typecheck/test/build/standard/plugin-state/validate 0

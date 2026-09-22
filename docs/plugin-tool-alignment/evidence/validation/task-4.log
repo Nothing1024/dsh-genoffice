@@ -1,0 +1,6 @@
+# plugin-tool-alignment Task 4
+2026-09-12T17:06:44.638507+00:00
+canOpen=CONTROL_EXTS; patterns=CLAIMED_EXTS
+official claim: default md/pdf host; explicit five-family ok
+node scripts/e2e-plugin-alignment.mjs --case claim → 0
+npm test → 146; npm run typecheck → 0

@@ -4,16 +4,16 @@
   "uf": "UF-002",
   "branch": "readiness",
   "status": "passed",
-  "run_id": "wre-readiness-2026-09-12T22:37:09.068Z",
+  "run_id": "wre-readiness-2026-09-13T12:05:11.647Z",
   "source_revisions": {
-    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
-    "engine": "bd830edd2b397db6cedf2b5e57ec99804f2b3f41",
+    "plugin": "b30e51cbc9816ed8956bb19fe618f24af805c1a3",
+    "engine": "7bde3a4b6ad87c9eba1b72ffd7cfe01987715add",
     "engine_root": "/private/tmp/genoffice-official-sync-engine"
   },
   "full": {
     "ok": true,
     "name": "genoffice-web-relay",
-    "port": 18787,
+    "port": 51915,
     "live": true,
     "ready": true,
     "roots": [
@@ -129,7 +129,7 @@
   "missing": {
     "ok": true,
     "name": "genoffice-web-relay",
-    "port": 18787,
+    "port": 51915,
     "live": true,
     "ready": false,
     "roots": [
@@ -246,7 +246,7 @@
   "restored": {
     "ok": true,
     "name": "genoffice-web-relay",
-    "port": 18787,
+    "port": 51915,
     "live": true,
     "ready": true,
     "roots": [

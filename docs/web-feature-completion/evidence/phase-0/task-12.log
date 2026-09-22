@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "task": 12,
+  "branch": "phase-1-regression",
+  "status": "passed",
+  "date": "2026-09-12T21:00:02Z",
+  "cwd": "/tmp/genoffice-official-sync-engine",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "5b1581c403442e0ecf2b1747231aa65fe88b20c8",
+    "engine_root": "/tmp/genoffice-official-sync-engine"
+  },
+  "commands": [
+    {
+      "cmd": "npm run typecheck",
+      "exit": 0,
+      "log": "evidence/phase-0/task-12-typecheck.log"
+    },
+    {
+      "cmd": "npm run web:build --workspaces --if-present",
+      "exit": 0,
+      "apps": [
+        "docs",
+        "markdown",
+        "pdf",
+        "sheets",
+        "shell",
+        "slides"
+      ]
+    },
+    {
+      "cmd": "node web/e2e-web-features.mjs --case pdf-slides",
+      "exit": 0,
+      "result": {
+        "schema_version": 1,
+        "package": "web-feature-completion",
+        "uf": "EVD-007",
+        "branch": "pdf-slides",
+        "status": "passed",
+        "cases": [
+          {
+            "id": "pdf-pages",
+            "status": "passed"
+          },
+          {
+            "id": "pdf-convert",
+            "status": "passed"
+          },
+          {
+            "id": "slides-structure",
+            "status": "passed"
+          },
+          {
+            "id": "slides-media",
+            "status": "passed"
+          },
+          {
+            "id": "slides-presentation",
+            "status": "passed"
+          }
+        ],
+        "missing": []
+      }
+    }
+  ],
+  "uf_evidence": {
+    "UF-003": [
+      "evidence/UF-003/success/result.json",
+      "evidence/UF-003/failure-1/result.json",
+      "evidence/UF-003/failure-2/result.json"
+    ],
+    "UF-004": [
+      "evidence/UF-004/success/result.json",
+      "evidence/UF-004/failure-1/result.json",
+      "evidence/UF-004/failure-2/result.json"
+    ]
+  }
+}

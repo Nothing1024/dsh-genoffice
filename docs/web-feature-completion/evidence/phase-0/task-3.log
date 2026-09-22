@@ -1,0 +1,383 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-001",
+  "branch": "entry-matrix",
+  "status": "passed",
+  "results": {
+    "success": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-001",
+      "branch": "success",
+      "run_id": "a091c7b2-d65e-4e1e-a599-ea96c79e5c55",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "entry-matrix-five-families",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "new-docs-url",
+              "status": "passed",
+              "expected": "/docs/",
+              "actual": "http://127.0.0.1:60574/docs/"
+            },
+            {
+              "name": "new-docs-bridge",
+              "status": "passed",
+              "expected": true,
+              "actual": true
+            },
+            {
+              "name": "new-markdown-url",
+              "status": "passed",
+              "expected": "/markdown/",
+              "actual": "http://127.0.0.1:60574/markdown/"
+            },
+            {
+              "name": "new-markdown-bridge",
+              "status": "passed",
+              "expected": true,
+              "actual": true
+            },
+            {
+              "name": "new-sheets-url",
+              "status": "passed",
+              "expected": "/sheets/",
+              "actual": "http://127.0.0.1:60574/sheets/"
+            },
+            {
+              "name": "new-sheets-bridge",
+              "status": "passed",
+              "expected": true,
+              "actual": true
+            },
+            {
+              "name": "new-slides-url",
+              "status": "passed",
+              "expected": "/slides/",
+              "actual": "http://127.0.0.1:60574/slides/"
+            },
+            {
+              "name": "new-slides-bridge",
+              "status": "passed",
+              "expected": true,
+              "actual": true
+            },
+            {
+              "name": "new-pdf-url",
+              "status": "passed",
+              "expected": "/pdf/",
+              "actual": "http://127.0.0.1:60574/pdf/"
+            },
+            {
+              "name": "new-pdf-bridge",
+              "status": "passed",
+              "expected": true,
+              "actual": true
+            },
+            {
+              "name": "recents-docs",
+              "status": "passed",
+              "expected": true,
+              "actual": [
+                "sample.docx"
+              ]
+            },
+            {
+              "name": "open-docs-url",
+              "status": "passed",
+              "expected": "/docs/",
+              "actual": "http://127.0.0.1:60574/docs/?open=%2Fwebdoc%2Fentry-docs%2Fsample.docx"
+            },
+            {
+              "name": "drag-docs-url",
+              "status": "passed",
+              "expected": "/docs/",
+              "actual": "http://127.0.0.1:60574/docs/?open=%2Fwebdoc%2Ff4cb9ea3-7c38-47b1-ad4f-31fb28548ab0%2Fdrag.docx"
+            },
+            {
+              "name": "file-docs-ready",
+              "status": "passed",
+              "expected": "ready",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "191ee12a1dfb67c6ba6c94b7b6246dadd4785ed5d38fefcd1af7ea2aeadd3563",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-entry-matrix/docs-loop.docx",
+                "registered": true,
+                "readiness": "ready",
+                "revision": "03da2cafb3d9ce4022dbce432ca61a807114989f6cb31f9f8a60e821075dd0b5",
+                "error": null,
+                "occupied": true,
+                "owner": "6f668621-8072-47a8-b214-859289a3582b"
+              }
+            },
+            {
+              "name": "recents-markdown",
+              "status": "passed",
+              "expected": true,
+              "actual": [
+                "sample.md",
+                "drag.docx",
+                "sample.docx"
+              ]
+            },
+            {
+              "name": "open-markdown-url",
+              "status": "passed",
+              "expected": "/markdown/",
+              "actual": "http://127.0.0.1:60574/markdown/?open=%2Fwebdoc%2Fentry-markdown%2Fsample.md"
+            },
+            {
+              "name": "drag-markdown-url",
+              "status": "passed",
+              "expected": "/markdown/",
+              "actual": "http://127.0.0.1:60574/markdown/?open=%2Fwebdoc%2F75ac3570-cf12-488a-832f-6524c12e39b9%2Fdrag.md"
+            },
+            {
+              "name": "file-markdown-ready",
+              "status": "passed",
+              "expected": "ready",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "fe3a9643b80510f23b8ca097843ed40d1399b0cd94a1a421e08ded3889e9184a",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-entry-matrix/markdown-loop.md",
+                "registered": true,
+                "readiness": "ready",
+                "revision": "fe4c9ad256a9a3c124ee8f6cb96819fd9a63ab8f09c15244d90b1cba5fe711ef",
+                "error": null,
+                "occupied": true,
+                "owner": "71dde824-7ec0-486d-8112-08600dc9ca44"
+              }
+            },
+            {
+              "name": "recents-sheets",
+              "status": "passed",
+              "expected": true,
+              "actual": [
+                "sample.xlsx",
+                "drag.md",
+                "sample.md",
+                "drag.docx",
+                "sample.docx"
+              ]
+            },
+            {
+              "name": "open-sheets-url",
+              "status": "passed",
+              "expected": "/sheets/",
+              "actual": "http://127.0.0.1:60574/sheets/?open=%2Fwebdoc%2Fentry-sheets%2Fsample.xlsx"
+            },
+            {
+              "name": "drag-sheets-url",
+              "status": "passed",
+              "expected": "/sheets/",
+              "actual": "http://127.0.0.1:60574/sheets/?open=%2Fwebdoc%2Fc1d405d4-a693-4a15-8299-684a58484eca%2Fdrag.xlsx"
+            },
+            {
+              "name": "file-sheets-ready",
+              "status": "passed",
+              "expected": "ready",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "25f1a80b67bcfc1ec31c5ef6c799ebca4cdbdbbb6c48ff9e047ceadd7419e90a",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-entry-matrix/sheets-loop.xlsx",
+                "registered": true,
+                "readiness": "ready",
+                "revision": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552",
+                "error": null,
+                "occupied": true,
+                "owner": "ff747a29-1215-4a89-84e8-4e35d9e90d30"
+              }
+            },
+            {
+              "name": "recents-slides",
+              "status": "passed",
+              "expected": true,
+              "actual": [
+                "sample.pptx",
+                "drag.xlsx",
+                "sample.xlsx",
+                "drag.md",
+                "sample.md",
+                "drag.docx",
+                "sample.docx"
+              ]
+            },
+            {
+              "name": "open-slides-url",
+              "status": "passed",
+              "expected": "/slides/",
+              "actual": "http://127.0.0.1:60574/slides/?open=%2Fwebdoc%2Fentry-slides%2Fsample.pptx"
+            },
+            {
+              "name": "drag-slides-url",
+              "status": "passed",
+              "expected": "/slides/",
+              "actual": "http://127.0.0.1:60574/slides/?open=%2Fwebdoc%2Fe85fc49c-56cf-4996-ad41-43b60427caa0%2Fdrag.pptx"
+            },
+            {
+              "name": "file-slides-ready",
+              "status": "passed",
+              "expected": "ready",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "78b83091270c2703ae373184aff9cd4a98e3b82665f3e2b7fd17b3bf6cc41691",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-entry-matrix/slides-loop.pptx",
+                "registered": true,
+                "readiness": "ready",
+                "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+                "error": null,
+                "occupied": true,
+                "owner": "a814ed27-16b8-4df8-99fd-4b62e16205d6"
+              }
+            },
+            {
+              "name": "recents-pdf",
+              "status": "passed",
+              "expected": true,
+              "actual": [
+                "sample.pdf",
+                "drag.pptx",
+                "sample.pptx",
+                "drag.xlsx",
+                "sample.xlsx",
+                "drag.md",
+                "sample.md",
+                "drag.docx",
+                "sample.docx"
+              ]
+            },
+            {
+              "name": "open-pdf-url",
+              "status": "passed",
+              "expected": "/pdf/",
+              "actual": "http://127.0.0.1:60574/pdf/?open=%2Fwebdoc%2Fentry-pdf%2Fsample.pdf"
+            },
+            {
+              "name": "drag-pdf-url",
+              "status": "passed",
+              "expected": "/pdf/",
+              "actual": "http://127.0.0.1:60574/pdf/?open=%2Fwebdoc%2F6a2c4333-89e7-46b8-a471-a130ce611fd5%2Fdrag.pdf"
+            },
+            {
+              "name": "file-pdf-ready",
+              "status": "passed",
+              "expected": "ready",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "158027a1bb24dd2bcfacec67cdd956ec38e8936cd185f99897868efd0d3dd8f3",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-entry-matrix/pdf-loop.pdf",
+                "registered": true,
+                "readiness": "ready",
+                "revision": "f4f131f993ddaae8bbb518e0866440c66315103ae3a9dfcf930831ebcc9d7b48",
+                "error": null,
+                "occupied": true,
+                "owner": "ced7d3f6-52ee-41bd-923d-8eb412fdc66c"
+              }
+            },
+            {
+              "name": "cross-app-docs-to-markdown",
+              "status": "passed",
+              "expected": "/markdown/",
+              "actual": "http://127.0.0.1:60574/markdown/?open=%2Fwebdoc%2Fe0a48f0a-b67f-4045-8118-7d5c3c734dc5%2Fcross.md"
+            }
+          ]
+        }
+      ]
+    },
+    "failure1": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-001",
+      "branch": "failure-1",
+      "run_id": "1a322f86-6bcd-4ec0-a1f0-d3761d2535e1",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "entry-matrix-cancel",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "browse-cancel-no-create",
+              "status": "passed",
+              "expected": 10,
+              "actual": 10
+            }
+          ]
+        }
+      ]
+    },
+    "failure2": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-001",
+      "branch": "failure-2",
+      "run_id": "7816ea3d-5bae-446a-bf22-ce609f34c873",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "entry-matrix-missing-or-corrupt",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "missing-docs-error",
+              "status": "passed",
+              "expected": "error",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "f9d78005e8718fbf387109bf39df2b9d6d2d6e627831a17ceae4657d420b4147",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-entry-matrix/missing-entry.docx",
+                "registered": true,
+                "readiness": "error",
+                "revision": null,
+                "error": "load-error: ENOENT: no such file or directory, open '/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-entry-matrix/missing-entry.docx'",
+                "occupied": true,
+                "owner": "237f48aa-32ff-4ec9-b159-8525d4dbc781"
+              }
+            },
+            {
+              "name": "corrupt-pdf-error",
+              "status": "passed",
+              "expected": "error",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "4e5bc1f0a5cd70d1d21550778db349dc3712e5890d3301a2af414273e50707e5",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-entry-matrix/corrupt-entry.pdf",
+                "registered": true,
+                "readiness": "error",
+                "revision": null,
+                "error": "load failed",
+                "occupied": true,
+                "owner": "0de6fd10-5042-477b-a187-340317e856ce"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

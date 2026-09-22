@@ -1,0 +1,24 @@
+{
+  "time": "2026-09-12T14:50:35.504582+00:00",
+  "scope": "master package upgrade and CSV migration only",
+  "trackedFilesCompared": 1971,
+  "trackedFilesChanged": [],
+  "preexistingUntrackedSources": [
+    {
+      "path": "packages/tab-genoffice/src/standard/sidebar.ts",
+      "sha256": "94b9f036c1a3feec053e4f6d7d51cce2df265eaf8fa51e1333bb7c35653bdd18",
+      "unchanged": true
+    },
+    {
+      "path": "packages/tab-genoffice/src/tabs/file-address.ts",
+      "sha256": "7f30f4889ae6aa6915e011ae6e8d0be769a64962d870b731312db66d34ced7b6",
+      "unchanged": true
+    }
+  ],
+  "engineWorktreeClean": true,
+  "indexEmpty": true,
+  "originalPluginStatusPreserved": true,
+  "committed": false,
+  "commitBlocker": "Git author identity was not configured; no identity was changed",
+  "masterBusinessTasksExecuted": 0
+}

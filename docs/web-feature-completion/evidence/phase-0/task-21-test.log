@@ -1,0 +1,615 @@
+=== isolated test ===
+date: 2026-09-12T22:08:41Z
+cwd: /tmp/genoffice-official-sync-engine
+HEAD: fad306a45677010a4817ae2c2c17c4c071d4a0a9
+
+> genoffice@0.1.0 test
+> npm run test -w @genoffice/i18n && npm run test -w @genoffice/electron-utils && npm run test -w @genoffice/font-metrics && npm run test -w @genoffice/docx-engine && npm run test -w @genoffice/pdf2docx && npm run test -w @genoffice/html2docx && npm run test -w @genoffice/file-parse && npm run test -w @genoffice/pptx-engine && npm run test -w @genoffice/pptx-render && npm run test -w @genoffice/ai-search && npm run test -w @genoffice/agent-core && npm run test -w @genoffice/ai-provider && npm run test -w @genoffice/project-store && npm run test -w @genoffice/ui && npm run test -w @genoffice/docs && npm run test -w @genoffice/sheets && npm run test -w @genoffice/shell && npm run test -w @genoffice/slides && npm run test -w @genoffice/pdf && npm run test -w @genoffice/markdown && npm run test -w @genoffice/html
+
+
+> @genoffice/i18n@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/packages/i18n
+
+
+ Test Files  1 passed (1)
+      Tests  18 passed (18)
+   Start at  06:08:42
+   Duration  255ms (transform 62ms, setup 0ms, import 77ms, tests 13ms, environment 0ms)
+
+
+> @genoffice/electron-utils@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/packages/electron-utils
+
+
+ Test Files  10 passed (10)
+      Tests  130 passed (130)
+   Start at  06:08:43
+   Duration  687ms (transform 1.83s, setup 0ms, import 2.68s, tests 380ms, environment 2ms)
+
+
+> @genoffice/font-metrics@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/packages/font-metrics
+
+
+ Test Files  3 passed (3)
+      Tests  16 passed (16)
+   Start at  06:08:45
+   Duration  964ms (transform 417ms, setup 0ms, import 529ms, tests 1.06s, environment 0ms)
+
+
+> @genoffice/docx-engine@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/packages/docx-engine
+
+
+ Test Files  109 passed (109)
+      Tests  1121 passed | 1 skipped (1122)
+   Start at  06:08:47
+   Duration  15.67s (transform 17.03s, setup 0ms, import 73.20s, tests 69.30s, environment 40ms)
+
+
+> @genoffice/pdf2docx@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/packages/pdf2docx
+
+
+ Test Files  47 passed (47)
+      Tests  722 passed (722)
+   Start at  06:09:03
+   Duration  17.23s (transform 24.82s, setup 0ms, import 39.35s, tests 34.30s, environment 12ms)
+
+
+> @genoffice/html2docx@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/packages/html2docx
+
+
+ Test Files  1 passed (1)
+      Tests  66 passed (66)
+   Start at  06:09:21
+   Duration  168.42s (transform 443ms, setup 0ms, import 1.13s, tests 167.11s, environment 0ms)
+
+
+> @genoffice/file-parse@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/packages/file-parse
+
+
+ Test Files  3 passed (3)
+      Tests  30 passed (30)
+   Start at  06:12:10
+   Duration  1.81s (transform 2.74s, setup 0ms, import 3.61s, tests 582ms, environment 1ms)
+
+
+> @genoffice/pptx-engine@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/packages/pptx-engine
+
+
+ Test Files  85 passed (85)
+      Tests  882 passed (882)
+   Start at  06:12:13
+   Duration  15.34s (transform 13.96s, setup 0ms, import 42.05s, tests 104.45s, environment 24ms)
+
+
+> @genoffice/pptx-render@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/packages/pptx-render
+
+
+ Test Files  10 passed (10)
+      Tests  255 passed (255)
+   Start at  06:12:29
+   Duration  3.51s (transform 4.58s, setup 0ms, import 6.19s, tests 2.95s, environment 2ms)
+
+
+> @genoffice/ai-search@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/packages/ai-search
+
+
+ Test Files  3 passed (3)
+      Tests  51 passed (51)
+   Start at  06:12:33
+   Duration  1.10s (transform 687ms, setup 0ms, import 852ms, tests 784ms, environment 0ms)
+
+
+> @genoffice/agent-core@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/packages/agent-core
+
+
+ Test Files  4 passed (4)
+      Tests  79 passed (79)
+   Start at  06:12:35
+   Duration  789ms (transform 615ms, setup 0ms, import 737ms, tests 448ms, environment 1ms)
+
+
+> @genoffice/ai-provider@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/packages/ai-provider
+
+
+ Test Files  17 passed (17)
+      Tests  213 passed (213)
+   Start at  06:12:36
+   Duration  987ms (transform 4.10s, setup 0ms, import 5.06s, tests 884ms, environment 5ms)
+
+
+> @genoffice/project-store@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/packages/project-store
+
+
+ Test Files  1 passed (1)
+      Tests  62 passed (62)
+   Start at  06:12:38
+   Duration  586ms (transform 114ms, setup 0ms, import 140ms, tests 280ms, environment 0ms)
+
+
+> @genoffice/ui@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/packages/ui
+
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  06:12:39
+   Duration  253ms (transform 50ms, setup 0ms, import 74ms, tests 8ms, environment 0ms)
+
+
+> @genoffice/docs@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/apps/docs
+
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: Window's getComputedStyle() method: with pseudo-elements
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ Test Files  203 passed (203)
+      Tests  1926 passed (1926)
+   Start at  06:12:40
+   Duration  74.27s (transform 40.03s, setup 3.41s, import 402.90s, tests 191.70s, environment 406.81s)
+
+
+> @genoffice/sheets@0.1.0 test
+> npm run native:test && npm run native:build && vitest run
+
+
+> @genoffice/sheets@0.1.0 native:test
+> cargo test --manifest-path native/xlsx-engine/Cargo.toml --config native/xlsx-engine/.cargo/config.toml
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s
+     Running unittests src/lib.rs (native/xlsx-engine/target/debug/deps/xlsx_sidecar-e7f3164e86614290)
+
+running 172 tests
+test archive::tests::canonical_entry_name_folds_producer_quirks_and_rejects_escapes ... ok
+test recalc::tests::caps_read_volume ... ok
+test recalc::tests::keeps_at_most_one_heavy_model_resident ... ok
+test archive::tests::scans_decoded_text_across_entity_references ... ok
+test shared_formulas::tests::escaped_quotes_stay_verbatim ... ok
+test shared_formulas::tests::leaves_strings_quoted_sheets_and_functions_alone ... ok
+test archive::tests::extracts_requested_entries_and_reports_manifest ... ok
+test shared_formulas::tests::numbers_and_names_pass_through ... ok
+test shared_formulas::tests::out_of_bounds_shift_fails ... ok
+test shared_formulas::tests::shifts_relative_refs_and_keeps_absolute_parts ... ok
+test shared_formulas::tests::registry_expands_followers_from_the_master ... ok
+test shared_formulas::tests::shifts_whole_column_and_row_ranges ... ok
+test shared_formulas::tests::spec_example_followers ... ok
+test archive::tests::saves_leading_slash_source_with_canonical_names ... ok
+test archive::tests::rejects_edits_on_missing_or_conflicting_entries ... ok
+test tests::blank_cell_keeps_shrink_to_fit_only_style ... ok
+test archive::tests::saves_with_raw_copy_replacement_removal_and_addition ... ok
+test tests::builtin_palette_matches_calibration ... ok
+test recalc::tests::external_link_formulas_keep_their_cached_values ... ok
+test convert::tests::converts_a_calamine_readable_workbook_into_minimal_xlsx ... ok
+test recalc::tests::rejects_unknown_sheets ... ok
+test tests::assigns_implicit_addresses_without_r ... ok
+test recalc::tests::reuses_the_resident_model_and_applies_edits_incrementally ... ok
+test tests::decodes_xlsx_character_escapes ... ok
+test tests::escaped_cr_before_raw_line_break_is_one_break ... ok
+test recalc::tests::recalculates_after_edits ... ok
+test tests::captures_array_formula_refs_on_master_cells ... ok
+test tests::ignores_worksheets_without_sparkline_ext ... ok
+test tests::applies_system_short_date_to_builtin_date_formats ... ok
+test recalc::tests::rebuilds_when_an_edit_is_reverted ... ok
+test tests::bare_ole_object_falls_back_to_the_vml_shape ... ok
+test recalc::tests::an_errored_request_does_not_poison_the_cache ... ok
+test recalc::tests::purge_drops_the_resident_model ... ok
+test recalc::tests::purge_hits_regardless_of_path_spelling ... ok
+test tests::full_width_dimension_is_remeasured ... ok
+test tests::normal_view_zoom_follows_the_view_type ... ok
+test tests::caps_header_text_by_utf16_length ... ok
+test tests::normalizes_crlf_and_stray_cr_to_lf ... ok
+test tests::normalizes_worksheet_paths_with_forward_slashes ... ok
+test tests::malformed_dimension_ref_is_ignored ... ok
+test tests::chartsheet_keeps_its_tab_and_renders_its_chart ... ok
+test tests::omits_empty_sparklines_field_from_metadata_json ... ok
+test tests::keeps_tables_with_x14_alt_text_ext ... ok
+test tests::light_table_style_carries_border_color ... ok
+test tests::custom_table_style_resolves_dxf_bands ... ok
+test tests::keeps_value_less_cells_whose_style_paints_borders_or_fill ... ok
+test tests::parses_excel_addresses ... ok
+test tests::medium_full_color_styles_fill_both_row_bands ... ok
+test tests::nameless_table_style_gets_no_palette ... ok
+test tests::parses_multiple_sparkline_cells_and_skips_empty_groups ... ok
+test tests::normal_font_name_survives_theme_substitution ... ok
+test recalc::tests::rebuilds_when_the_file_changes_on_disk ... ok
+test tests::parses_sparkline_group_types_and_colors ... ok
+test tests::empty_shared_string_value_keeps_sheet_readable ... ok
+test tests::expands_shared_formulas_into_followers ... ok
+test tests::ole_object_keeps_the_fallback_shapes_z_order_slot ... ok
+test tests::opens_leading_slash_package ... ok
+test tests::formula_cfvos_and_legacy_databar_extents ... ok
+test tests::ole_object_without_anchor_borrows_the_drawing_fallback ... ok
+test tests::opens_backslash_and_case_drifted_package ... ok
+test tests::pivot_style_palette_calibrated_bands ... ok
+test tests::parses_workbook_pr_date1904 ... ok
+test tests::parses_shrink_to_fit_alignment ... ok
+test tests::reads_cdata_wrapped_sparkline_refs ... ok
+test tests::ole_object_with_object_pr_uses_its_anchor_and_preview ... ok
+test tests::parses_sheet_view_right_to_left ... ok
+test tests::parses_workbook_view_active_tab ... ok
+test tests::rejects_oversized_ranges ... ok
+test tests::parses_one_cell_anchor_ext_and_line_style ... ok
+test tests::rejects_entries_escaping_the_package ... ok
+test tests::phonetic_runs_stay_out_of_shared_strings ... ok
+test tests::pivot_disabled_grand_totals_serialize_false ... ok
+test recalc::tests::caps_resident_models ... ok
+test tests::parses_chart_semantics_and_textbox_paragraphs ... ok
+test tests::pivot_style_light_resolves_band_fill ... ok
+test tests::prefixed_table_part_is_parsed ... ok
+test tests::pivot_light_low_stripes_off_stays_styled ... ok
+test tests::pivot_wire_carries_bands_and_row_kinds ... ok
+test tests::serializes_sparklines_in_expected_shape ... ok
+test tests::reads_saved_print_settings_and_print_names ... ok
+test tests::reports_row_heights_without_custom_height_flag ... ok
+test tests::strips_future_function_markers_outside_strings ... ok
+test tests::tint_matches_excel_shades ... ok
+test tests::resolves_alternate_content_style_entries ... ok
+test tests::reports_row_and_column_default_styles ... ok
+test tests::rich_run_bool_props_honor_val_zero ... ok
+test tests::reads_auto_filter_column_criteria ... ok
+test tests::stale_single_row_dimension_is_remeasured ... ok
+test tests::stale_single_cell_dimension_is_remeasured ... ok
+test visuals::tests::alpha_mod_fix_becomes_opacity ... ok
+test tests::rich_run_vert_align_reaches_the_wire ... ok
+test visuals::tests::blip_fill_shape_never_falls_back_to_style_fill_ref ... ok
+test tests::stale_small_dimension_is_remeasured ... ok
+test tests::shared_and_inline_strings_decode_escapes ... ok
+test visuals::tests::category_groups_and_categories_emit_in_idx_order ... ok
+test visuals::tests::category_group_spans_follow_the_expanded_idx_slots ... ok
+test visuals::tests::custom_geometry_maps_svg_commands ... ok
+test visuals::tests::collects_axis_titles ... ok
+test visuals::tests::custom_geometry_scales_secondary_paths_into_the_first ... ok
+test visuals::tests::custom_geometry_rejects_arcs ... ok
+test visuals::tests::custom_geometry_mixed_fills_expose_fillable_subpaths_only ... ok
+test tests::resolves_locale_reserved_builtin_number_formats ... ok
+test visuals::tests::custom_geometry_stroke_only_open_path_with_degenerate_height ... ok
+test visuals::tests::custom_geometry_uniform_fills_have_no_fill_d ... ok
+test visuals::tests::empty_or_degenerate_src_rect_is_no_crop ... ok
+test visuals::tests::expands_group_chart_children_with_their_part_path ... ok
+test visuals::tests::default_series_accent_follows_ser_idx ... ok
+test tests::resolves_in_cell_rich_value_pictures ... ok
+test visuals::tests::combo_series_carry_their_plot_group ... ok
+test visuals::tests::expands_group_children_through_child_space ... ok
+test visuals::tests::gradient_fill_without_resolvable_stops_stays_unfilled ... ok
+test visuals::tests::gradient_fill_blends_outermost_stops ... ok
+test visuals::tests::header_footer_slot_accepts_only_the_six_positions_and_variants ... ok
+test visuals::tests::indexed_palette_override_wins_below_system_slots ... ok
+test visuals::tests::locale_reserved_builtins_follow_viewer_locale ... ok
+test visuals::tests::folds_3d_plot_types_onto_flat_pipelines ... ok
+test tests::slicer_alternate_content_becomes_a_captioned_placeholder_not_the_fallback_text ... ok
+test visuals::tests::deleted_axes_report_hidden ... ok
+test visuals::tests::media_types_cover_gdi_metafiles ... ok
+test tests::resolves_rich_value_from_a_non_first_metadata_record ... ok
+test visuals::tests::media_types_cover_webp ... ok
+test tests::zero_default_sizes_normalize_to_none ... ok
+test visuals::tests::media_types_ignore_content_type_parameters_in_the_extension ... ok
+test visuals::tests::keeps_labelled_zero_tails_and_unlabelled_series ... ok
+test visuals::tests::marks_interior_blank_values ... ok
+test visuals::tests::numbers_unnamed_series_like_excel ... ok
+test visuals::tests::maps_legend_positions_and_defaults ... ok
+test visuals::tests::outline_solid_fill_is_not_the_shape_fill ... ok
+test visuals::tests::multi_level_categories_use_the_innermost_level_only ... ok
+test visuals::tests::parses_absolute_anchor_as_offsets_from_origin ... ok
+test visuals::tests::parses_src_rect_crop_fractions ... ok
+test visuals::tests::pivot_row_kinds_compact_bottom_subtotals ... ok
+test visuals::tests::maps_data_labels_from_plot_or_series ... ok
+test visuals::tests::pivot_row_kinds_three_levels_and_blank ... ok
+test visuals::tests::pivot_row_kinds_tabular_and_single_field_are_data ... ok
+test visuals::tests::maps_data_label_position_and_format ... ok
+test tests::vm_without_rich_data_parts_keeps_the_cached_error ... ok
+test visuals::tests::reads_gap_width_and_hole_size ... ok
+test visuals::tests::reads_gridlines_only_when_a_value_axis_exists ... ok
+test visuals::tests::reads_cell_linked_chart_titles_from_the_str_cache ... ok
+test visuals::tests::outer_category_levels_become_groups_with_spans ... ok
+test visuals::tests::reads_grouping_from_first_grouped_plot ... ok
+test visuals::tests::reads_plot_level_line_marker_flag ... ok
+test visuals::tests::reads_series_line_width_in_px ... ok
+test visuals::tests::reads_point_colors_from_srgb_and_scheme_fills ... ok
+test visuals::tests::rotated_shape_reports_true_frame_extent ... ok
+test visuals::tests::reads_category_formats_from_num_cache_and_axis ... ok
+test visuals::tests::reads_series_and_point_explosions ... ok
+test visuals::tests::reads_value_axis_bounds ... ok
+test visuals::tests::resolves_style_fill_ref_theme_gradient ... ok
+test visuals::tests::shape_with_blip_fill_keeps_geometry_and_carries_fill_media ... ok
+test visuals::tests::reads_per_point_labels_and_series_label_mode ... ok
+test visuals::tests::sole_unnamed_series_keeps_placeholder_title ... ok
+test visuals::tests::series_labels_override_an_all_zero_plot_element ... ok
+test visuals::tests::sole_named_series_still_becomes_auto_title ... ok
+test visuals::tests::serializes_category_formats_with_expected_json_names ... ok
+test visuals::tests::theme_attribute_wins_over_rgb_cache ... ok
+test visuals::tests::sys_clr_solid_fill_resolves ... ok
+test visuals::tests::sparse_string_caches_expand_into_idx_slots ... ok
+test visuals::tests::serializes_new_fields_with_expected_json_names ... ok
+test visuals::tests::vml_anchor_parses_pixel_offsets_into_emu ... ok
+test visuals::tests::vml_size_reads_points_and_converts_other_units ... ok
+test visuals::tests::text_box_reads_body_overflow_modes ... ok
+test visuals::tests::zero_extent_anchor_detection ... ok
+test visuals::tests::value_axis_prefers_the_left_axis ... ok
+test visuals::tests::uncached_series_name_reference_is_kept_for_lookup ... ok
+test visuals::tests::trims_blank_tails_and_aligns_sparse_value_caches ... ok
+test tests::x14_databar_twin_merges_axis_and_extents ... ok
+test tests::unstyled_cells_resolve_to_the_default_xf ... ok
+test tests::truncates_oversized_sparkline_groups ... ok
+test tests::over_cap_picture_cells_keep_the_cached_error ... ok
+test tests::reads_header_footer_variants_and_pictures ... ok
+
+test result: ok. 172 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s
+
+     Running unittests src/main.rs (native/xlsx-engine/target/debug/deps/xlsx_sidecar-0016baa50919e263)
+
+running 6 tests
+test tests::close_purge_queues_while_cache_is_locked ... ok
+test tests::concurrent_recalc_reports_busy ... ok
+test tests::queued_purge_applies_before_the_next_recalc ... ok
+test tests::cancelled_requests_are_skipped_once ... ok
+test tests::close_purge_applies_immediately_when_cache_is_free ... ok
+test tests::save_archive_keeps_the_source_resident_model_warm ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+   Doc-tests xlsx_sidecar
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> @genoffice/sheets@0.1.0 native:build
+> cargo build --release --manifest-path native/xlsx-engine/Cargo.toml --config native/xlsx-engine/.cargo/config.toml
+
+    Finished `release` profile [optimized] target(s) in 0.14s
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/apps/sheets
+
+
+ Test Files  220 passed (220)
+      Tests  2520 passed (2520)
+   Start at  06:13:57
+   Duration  52.51s (transform 40.96s, setup 0ms, import 598.81s, tests 64.17s, environment 67ms)
+
+
+> @genoffice/shell@0.9.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/apps/shell
+
+
+ Test Files  21 passed (21)
+      Tests  239 passed (239)
+   Start at  06:14:51
+   Duration  4.98s (transform 17.23s, setup 0ms, import 17.81s, tests 6.20s, environment 3.80s)
+
+
+> @genoffice/slides@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/apps/slides
+
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ Test Files  72 passed (72)
+      Tests  742 passed | 5 skipped (747)
+   Start at  06:14:57
+   Duration  23.71s (transform 39.33s, setup 1.66s, import 109.07s, tests 35.48s, environment 155.71s)
+
+
+> @genoffice/pdf@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/apps/pdf
+
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+
+ Test Files  47 passed (47)
+      Tests  727 passed (727)
+   Start at  06:15:21
+   Duration  9.27s (transform 9.71s, setup 0ms, import 20.05s, tests 11.74s, environment 79.34s)
+
+
+> @genoffice/markdown@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/apps/markdown
+
+
+ Test Files  15 passed (15)
+      Tests  217 passed (217)
+   Start at  06:15:31
+   Duration  5.30s (transform 12.90s, setup 508ms, import 17.48s, tests 7.26s, environment 24.60s)
+
+
+> @genoffice/html@0.1.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /private/tmp/genoffice-official-sync-engine/apps/html
+
+
+ Test Files  14 passed (14)
+      Tests  129 passed (129)
+   Start at  06:15:37
+   Duration  2.82s (transform 2.87s, setup 0ms, import 3.94s, tests 1.02s, environment 21.66s)
+
+test_exit=0
+date_end: 2026-09-12T22:15:40Z

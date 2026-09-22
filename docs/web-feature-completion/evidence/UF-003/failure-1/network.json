@@ -1,0 +1,25 @@
+{
+  "events": [
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "format must be docx, pptx, or xlsx",
+        "isError": true,
+        "summary": "PDF 转换 → rtf"
+      },
+      "revision": "46b1914919e4ff73a055efd76b5dab31f8e7e963437d46eea1932c35bb7eb69c"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "format must be docx, pptx, or xlsx",
+        "isError": true,
+        "summary": "PDF 转换"
+      },
+      "revision": "46b1914919e4ff73a055efd76b5dab31f8e7e963437d46eea1932c35bb7eb69c"
+    }
+  ],
+  "count": 2
+}

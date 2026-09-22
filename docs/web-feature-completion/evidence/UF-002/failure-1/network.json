@@ -1,0 +1,29 @@
+{
+  "events": [
+    {
+      "status": 200,
+      "ok": true,
+      "docId": "6ce4002fac36e9bf9d2909e06adea2f8dfdab34245031d3732fc8bd0acba2377",
+      "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-media/invalid-rel.xlsx",
+      "registered": true,
+      "readiness": "ready",
+      "revision": "5dc85ce8edbdcfcb603688c1d3aea7295df0c4e75bef13f964a2af6aae5be6cf",
+      "error": null,
+      "occupied": true,
+      "owner": "5d44e8d5-79fc-40d7-9f4d-5592c787e0b6"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "docId": "d0eb7247fc19ee9324e3b0161e883858922fbc4dc6067a82b3fa9f4334128578",
+      "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-media/corrupt-media.xlsx",
+      "registered": true,
+      "readiness": "ready",
+      "revision": "bc8680696ef3ddc01a827e1e0a268c91729bd63aeb774910c2db6b29aef3bbe5",
+      "error": null,
+      "occupied": true,
+      "owner": "0757d309-b59b-43c1-8937-e3c7d654c091"
+    }
+  ],
+  "count": 2
+}

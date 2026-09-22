@@ -1,0 +1,375 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-001",
+  "branch": "docs-markdown",
+  "status": "passed",
+  "results": {
+    "success": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-001",
+      "branch": "success",
+      "run_id": "e45bfb45-0578-47f1-be80-5eba4a46df47",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "docs-markdown-success",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "task16-rows-available",
+              "status": "passed",
+              "expected": true,
+              "actual": [
+                "docs:open-save:available",
+                "docs:encrypted-open:available",
+                "markdown:open-save:available",
+                "docs:attachment-extract:available",
+                "docs:protect-save:available",
+                "markdown:assets:available"
+              ]
+            },
+            {
+              "name": "leftover-unowned-zero",
+              "status": "passed",
+              "expected": 0,
+              "actual": []
+            },
+            {
+              "name": "encrypt-dest",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "ok": true,
+                "exists": true
+              }
+            },
+            {
+              "name": "encrypted-stays-loading",
+              "status": "passed",
+              "expected": "loading",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "f23e3403552c76ce63521d840146344b39cbf62222838a69c02882eed8788d33",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-docs-markdown/encrypted-keep.docx",
+                "registered": true,
+                "readiness": "loading",
+                "revision": null,
+                "error": null,
+                "occupied": true,
+                "owner": "b51193f7-8af1-4a66-9460-0ad513351abb"
+              }
+            },
+            {
+              "name": "wrong-password-no-ready",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "readiness": "loading",
+                "sha": "36fec003482203fa739e94401d71f3bb634904e7ef110fef4a9a14f46ec392db"
+              }
+            },
+            {
+              "name": "decrypt-ready-keep",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "opened": {
+                  "status": 200,
+                  "ok": true,
+                  "docId": "f23e3403552c76ce63521d840146344b39cbf62222838a69c02882eed8788d33",
+                  "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-docs-markdown/encrypted-keep.docx",
+                  "registered": true,
+                  "readiness": "ready",
+                  "revision": "36fec003482203fa739e94401d71f3bb634904e7ef110fef4a9a14f46ec392db",
+                  "error": null,
+                  "occupied": true,
+                  "owner": "b51193f7-8af1-4a66-9460-0ad513351abb"
+                },
+                "bodyText": "WfcEncKeep\n\nWfcEncKeep\n\n第二段。",
+                "context": {
+                  "status": 200,
+                  "ok": true,
+                  "context": "Document block list:\nThe document has 3 blocks, listed below (index|type|content preview):\n0|h1|WfcEncKeep\n1|p|WfcEncKeep\n2|p|第二段。\nFull-text stats: words 5, characters (no spaces) 24, characters (with spaces) 24\nHeaders & footers ({PAGE}/{NUMPAGES} are live page-number fields; change with set_header_footer):\n- header: (empty) | footer: (empty)\nNo selection; cursor is in block 2",
+                  "revision": "36fec003482203fa739e94401d71f3bb634904e7ef110fef4a9a14f46ec392db"
+                }
+              }
+            },
+            {
+              "name": "docs-open-save-export",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "exported": {
+                  "status": 200,
+                  "ok": true,
+                  "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-docs-markdown/docs-export.docx",
+                  "name": "encrypted-keep.docx",
+                  "mtimeMs": 1789250664054.9912
+                },
+                "hasXml": true
+              }
+            },
+            {
+              "name": "attachment-text",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "ok": true,
+                "name": "keep.txt",
+                "totalChars": 13,
+                "offset": 0,
+                "text": "WfcAttachKeep"
+              }
+            },
+            {
+              "name": "attachment-pdf",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "ok": true,
+                "name": "keep.pdf",
+                "totalChars": 13,
+                "offset": 0,
+                "text": "WfcAttachKeep"
+              }
+            },
+            {
+              "name": "attachment-corrupt",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "ok": false,
+                "error": "not-a-pdf"
+              }
+            },
+            {
+              "name": "protect-save-encrypted",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "protect": {
+                  "set": {
+                    "ok": true
+                  },
+                  "saved": {
+                    "ok": true
+                  }
+                },
+                "cfb": true
+              }
+            },
+            {
+              "name": "markdown-open-save",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "mdReady": {
+                  "status": 200,
+                  "ok": true,
+                  "docId": "52e90d1c943449f606b251c734c00acb300164929dbbfdb0db5200958691a56f",
+                  "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-docs-markdown/markdown-keep.md",
+                  "registered": true,
+                  "readiness": "ready",
+                  "revision": "2c7bf642faad5981bfb25a7d62d41902ef9be6464fea0a8ce3e594c8df7c018a",
+                  "error": null,
+                  "occupied": true,
+                  "owner": "731c716a-93a7-4aa1-a5f3-acd28ac2a330"
+                },
+                "mdSaved": {
+                  "status": 200,
+                  "ok": true,
+                  "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-docs-markdown/markdown-export.md",
+                  "name": "markdown-keep.md",
+                  "mtimeMs": 1789250667370.5032
+                }
+              }
+            },
+            {
+              "name": "markdown-assets",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "asset": "assets/image-4.png",
+                "image": {
+                  "base64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+                  "mime": "image/png"
+                }
+              }
+            },
+            {
+              "name": "markdown-invalid-utf8",
+              "status": "passed",
+              "expected": "error",
+              "actual": {
+                "badReady": {
+                  "status": 200,
+                  "ok": true,
+                  "docId": "32e9f55fc07c13c5eb618c82881d26d42198e638e2985cea0b158b7193aa7357",
+                  "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-docs-markdown/invalid-utf8.md",
+                  "registered": true,
+                  "readiness": "error",
+                  "revision": null,
+                  "error": "load-error: binary markdown is not supported",
+                  "occupied": true,
+                  "owner": "049282fd-3758-48c9-8e8b-09b791178069"
+                },
+                "kept": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "failure1": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-001",
+      "branch": "failure-1",
+      "run_id": "28d092af-6863-46e3-b69d-6326e8297f28",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "docs-markdown-unconfigured",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "crypto-unavailable",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "offReady": {
+                  "ok": true,
+                  "available": false,
+                  "reason": "docs-crypto-disabled"
+                },
+                "offDecrypt": {
+                  "status": 200,
+                  "ok": false,
+                  "available": false,
+                  "reason": "unsupported",
+                  "error": "docs-crypto-disabled"
+                }
+              }
+            },
+            {
+              "name": "extract-unavailable",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "ok": true,
+                "available": false,
+                "reason": "docs-extract-disabled"
+              }
+            },
+            {
+              "name": "assets-unavailable",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "ok": true,
+                "available": false,
+                "reason": "markdown-assets-disabled"
+              }
+            },
+            {
+              "name": "disabled-no-overwrite",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "offOpen": {
+                  "status": 200,
+                  "ok": true,
+                  "docId": "f23e3403552c76ce63521d840146344b39cbf62222838a69c02882eed8788d33",
+                  "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-docs-markdown/encrypted-keep.docx",
+                  "registered": true,
+                  "readiness": "loading",
+                  "revision": null,
+                  "error": null,
+                  "occupied": true,
+                  "owner": "80dcf65b-bc0d-4f73-9307-603a5c638640"
+                },
+                "offSha": "36fec003482203fa739e94401d71f3bb634904e7ef110fef4a9a14f46ec392db"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "failure2": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-001",
+      "branch": "failure-2",
+      "run_id": "a79688b2-44a3-4eca-b076-dbb08ba0721d",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "docs-markdown-runtime-and-recovery",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "crypto-runtime",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "status": 200,
+                "ok": false,
+                "available": true,
+                "reason": "error",
+                "error": "docs-crypto-fail"
+              }
+            },
+            {
+              "name": "extract-runtime",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "status": 200,
+                "ok": false,
+                "available": true,
+                "error": "docs-extract-fail"
+              }
+            },
+            {
+              "name": "assets-runtime",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "status": 200,
+                "ok": false,
+                "available": true,
+                "error": "markdown-assets-fail"
+              }
+            },
+            {
+              "name": "crypto-recovery",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "ok": true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -90,7 +90,7 @@ export function classifyControlError(input: ClassifyInput): MappedControlError {
       message: triple(
         `文档尚未在控制模式打开${path ? `（${path}）` : ''}。`,
         err,
-        '在侧栏 explorer / chat 产物行 / git 面板点击该文件，等控制模式 iframe 加载后再重试。',
+        '确认浏览器里的 DSH 页面开着，再调用一次对应 *_open。不要对同一次失败连续重试；连续重试不会注册执行器。',
       ),
     }
   }

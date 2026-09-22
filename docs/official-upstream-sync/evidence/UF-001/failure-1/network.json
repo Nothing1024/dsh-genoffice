@@ -1,0 +1,24 @@
+{
+  "events": [
+    {
+      "status": 200,
+      "ok": true,
+      "docId": "e43efb8747f762d789c95c3a4d3bf497269f629ea5d4968c51a341898c7afa52",
+      "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/invalid-open.md",
+      "registered": true,
+      "readiness": "error",
+      "revision": null,
+      "error": "load-error: markdown is not valid UTF-8",
+      "occupied": true,
+      "owner": "1055c0a4-6882-482e-aeef-1c1c00ab9020"
+    },
+    {
+      "status": 200,
+      "ok": false,
+      "error": "not-ready",
+      "readiness": "error",
+      "loadError": "load-error: markdown is not valid UTF-8"
+    }
+  ],
+  "count": 2
+}

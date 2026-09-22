@@ -1,0 +1,65 @@
+{
+  "action": "status",
+  "packages": [
+    {
+      "package": "genoffice-web-roadmap",
+      "tasks": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/genoffice-web-roadmap/tasks.csv",
+      "total": 8,
+      "completed": 0,
+      "inProgress": [],
+      "blocked": []
+    },
+    {
+      "package": "control-session-safety",
+      "tasks": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/control-session-safety/tasks.csv",
+      "total": 15,
+      "completed": 0,
+      "inProgress": [],
+      "blocked": []
+    },
+    {
+      "package": "plugin-tool-alignment",
+      "tasks": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/plugin-tool-alignment/tasks.csv",
+      "total": 10,
+      "completed": 0,
+      "inProgress": [],
+      "blocked": []
+    },
+    {
+      "package": "official-upstream-sync",
+      "tasks": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/official-upstream-sync/tasks.csv",
+      "total": 11,
+      "completed": 0,
+      "inProgress": [],
+      "blocked": []
+    },
+    {
+      "package": "web-feature-completion",
+      "tasks": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/tasks.csv",
+      "total": 21,
+      "completed": 0,
+      "inProgress": [],
+      "blocked": []
+    },
+    {
+      "package": "web-runtime-efficiency",
+      "tasks": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/tasks.csv",
+      "total": 14,
+      "completed": 0,
+      "inProgress": [],
+      "blocked": []
+    }
+  ],
+  "next": {
+    "action": "execute_task",
+    "package": "genoffice-web-roadmap",
+    "spec": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/genoffice-web-roadmap/spec.md",
+    "tasks": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/genoffice-web-roadmap/tasks.csv",
+    "taskId": 1,
+    "anchor": "spec.md#task-1",
+    "name": "核对执行范围和六包实际前置基线",
+    "status": "待开始",
+    "instruction": "阅读 spec 对应任务及关联合同；实现、真实验证并归档证据后，只更新 tasks.csv 对应状态，再调用 next。"
+  },
+  "note": "闸门只核验状态、结构和证据记录；执行者仍须核对真实场景语义、源码版本及证据时效。不会执行 CSV 命令或修改状态。"
+}

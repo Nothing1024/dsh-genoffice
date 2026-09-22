@@ -1,0 +1,63 @@
+{
+  "events": [
+    {
+      "ok": true,
+      "search": {
+        "available": true,
+        "fixture": true
+      },
+      "imageSearch": {
+        "available": true,
+        "fixture": true
+      },
+      "generate": {
+        "available": true,
+        "fixture": true
+      },
+      "analyze": {
+        "available": true,
+        "fixture": true
+      },
+      "model": {
+        "available": true,
+        "echo": true
+      },
+      "credit": {
+        "available": false,
+        "reason": "credit-provider-unconfigured",
+        "url": "https://www.genspark.ai/credit-usage"
+      }
+    },
+    {
+      "images": [
+        {
+          "title": "WfcSearchKeep WfcSearchKeep",
+          "imageUrl": "https://example.com/wfc-search.png",
+          "sourceUrl": "https://example.com/wfc-search",
+          "source": "fixture",
+          "width": 64,
+          "height": 64
+        }
+      ],
+      "method": "fixture"
+    },
+    {
+      "results": [
+        {
+          "title": "WfcSearchKeep WfcSearchKeep",
+          "url": "https://example.com/wfc-search",
+          "snippet": "WfcSearchKeep fixture result"
+        }
+      ],
+      "method": "fixture",
+      "answer": "WfcSearchKeep"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "text": "WfcModelKeep ping",
+      "model": "echo"
+    }
+  ],
+  "count": 4
+}

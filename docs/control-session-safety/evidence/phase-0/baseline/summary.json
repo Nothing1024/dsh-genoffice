@@ -1,0 +1,269 @@
+{
+  "run_id": "css-2026-09-12T16-12-00-862Z",
+  "port": 18787,
+  "base": "http://127.0.0.1:18787",
+  "node": "/usr/local/Cellar/node/26.8.2/bin/node",
+  "nodeVersion": "v26.8.2",
+  "fixtures": [
+    {
+      "app": "markdown",
+      "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/web/.e2e-control-session/css-2026-09-12T16-12-00-862Z/fixtures/session.md",
+      "sha256": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+      "bytes": 26
+    },
+    {
+      "app": "docs",
+      "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/web/.e2e-control-session/css-2026-09-12T16-12-00-862Z/fixtures/session.docx",
+      "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/fixtures/generated/simple.docx",
+      "sha256": "03da2cafb3d9ce4022dbce432ca61a807114989f6cb31f9f8a60e821075dd0b5",
+      "bytes": 2166
+    },
+    {
+      "app": "sheets",
+      "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/web/.e2e-control-session/css-2026-09-12T16-12-00-862Z/fixtures/session.xlsx",
+      "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/apps/sheets/fixtures/generated/compatibility-basic.xlsx",
+      "sha256": "a03352ad8570ee0a565ab2ca32bb0e424f5b526ae24694217315db8f6765fa02",
+      "bytes": 2769
+    },
+    {
+      "app": "slides",
+      "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/web/.e2e-control-session/css-2026-09-12T16-12-00-862Z/fixtures/session.pptx",
+      "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/fixtures/generated/sample.pptx",
+      "sha256": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+      "bytes": 5741
+    },
+    {
+      "app": "pdf",
+      "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/web/.e2e-control-session/css-2026-09-12T16-12-00-862Z/fixtures/session.pdf",
+      "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/apps/shell/tests/fixtures/testPassword4Spaces.pdf",
+      "sha256": "d5a2e3fd2aaa7a94b7c2e1bb28f64c01d34ce416654b67d45a66e57c8bf6412d",
+      "bytes": 18285
+    }
+  ],
+  "results": [
+    {
+      "name": "inventory",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "five-family-fixtures",
+          "status": "passed",
+          "expected": "md/docx/xlsx/pptx/pdf hashed",
+          "actual": [
+            {
+              "app": "markdown",
+              "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/web/.e2e-control-session/css-2026-09-12T16-12-00-862Z/fixtures/session.md",
+              "sha256": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+              "bytes": 26
+            },
+            {
+              "app": "docs",
+              "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/web/.e2e-control-session/css-2026-09-12T16-12-00-862Z/fixtures/session.docx",
+              "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/fixtures/generated/simple.docx",
+              "sha256": "03da2cafb3d9ce4022dbce432ca61a807114989f6cb31f9f8a60e821075dd0b5",
+              "bytes": 2166
+            },
+            {
+              "app": "sheets",
+              "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/web/.e2e-control-session/css-2026-09-12T16-12-00-862Z/fixtures/session.xlsx",
+              "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/apps/sheets/fixtures/generated/compatibility-basic.xlsx",
+              "sha256": "a03352ad8570ee0a565ab2ca32bb0e424f5b526ae24694217315db8f6765fa02",
+              "bytes": 2769
+            },
+            {
+              "app": "slides",
+              "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/web/.e2e-control-session/css-2026-09-12T16-12-00-862Z/fixtures/session.pptx",
+              "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/fixtures/generated/sample.pptx",
+              "sha256": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+              "bytes": 5741
+            },
+            {
+              "app": "pdf",
+              "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/web/.e2e-control-session/css-2026-09-12T16-12-00-862Z/fixtures/session.pdf",
+              "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/apps/shell/tests/fixtures/testPassword4Spaces.pdf",
+              "sha256": "d5a2e3fd2aaa7a94b7c2e1bb28f64c01d34ce416654b67d45a66e57c8bf6412d",
+              "bytes": 18285
+            }
+          ]
+        },
+        {
+          "name": "api-file-callers",
+          "status": "passed",
+          "expected": "enumerated",
+          "actual": [
+            {
+              "file": "engine/web/server.mjs",
+              "kind": "GET/POST /api/file + export→writeFileAtomic"
+            },
+            {
+              "file": "engine/apps/markdown/src/renderer/control.ts",
+              "kind": "GET /api/file captureMtime"
+            },
+            {
+              "file": "engine/apps/docs/src/renderer/control.ts",
+              "kind": "GET /api/file captureMtime"
+            },
+            {
+              "file": "engine/apps/sheets/src/renderer/control.ts",
+              "kind": "GET /api/file captureMtime"
+            },
+            {
+              "file": "engine/apps/slides/src/renderer/control.ts",
+              "kind": "GET /api/file captureMtime"
+            },
+            {
+              "file": "engine/apps/pdf/src/renderer/control.ts",
+              "kind": "GET /api/file captureMtime"
+            },
+            {
+              "file": "engine/apps/markdown/src/renderer/web-bridge.ts",
+              "kind": "GET /api/file load"
+            },
+            {
+              "file": "plugin/scripts/dev.mjs",
+              "kind": "GET/POST /api/file smoke"
+            },
+            {
+              "file": "plugin/packages/tab-genoffice/src/tabs/control-mode.tsx",
+              "kind": "export then clear dirty on mtimeMs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "baseline",
+      "ok": true,
+      "defects": [
+        {
+          "id": "registered-before-loaded",
+          "confirmed": true,
+          "detail": {
+            "earlyRead": {
+              "ok": true,
+              "execution": {
+                "output": "## Document state\nThe document is currently blank.",
+                "mutated": false,
+                "summary": "读取文档结构"
+              }
+            },
+            "earlyWrite": {
+              "ok": true,
+              "execution": {
+                "output": "Inserted 1 block(s). Block indexes may have changed; call get_document_context before further index-based edits.",
+                "mutated": true,
+                "summary": "已插入 1 个块"
+              }
+            },
+            "beforeLoad": "EARLY_AGENT_INSERT",
+            "afterLoad": "ORIGINAL\n\noriginal body",
+            "lostAcknowledgedEdit": true
+          }
+        },
+        {
+          "id": "agent-global-baseline",
+          "confirmed": true,
+          "detail": {
+            "staleEdit": {
+              "ok": true,
+              "execution": {
+                "output": "Replaced blocks 0-0 with 1 block(s). Block indexes may have changed; call get_document_context before further index-based edits.",
+                "mutated": true,
+                "summary": "已改写 1 个块"
+              }
+            },
+            "content": "AGENT_A_INTENDED_ORIGINAL_HEADING\nORIGINAL\n\noriginal body"
+          }
+        },
+        {
+          "id": "save-ack-clears-later-edits",
+          "confirmed": true,
+          "detail": {
+            "editDuringSave": {
+              "ok": true,
+              "execution": {
+                "output": "Inserted 1 block(s). Block indexes may have changed; call get_document_context before further index-based edits.",
+                "mutated": true,
+                "summary": "已插入 1 个块"
+              }
+            },
+            "saveResult": {
+              "ok": true,
+              "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/web/.e2e-control-session/css-2026-09-12T16-12-00-862Z/ready.md",
+              "name": "ready.md",
+              "mtimeMs": 1789229523244.0305
+            },
+            "dirtyBeforeAck": [
+              "未保存"
+            ],
+            "dirtyAfterAck": [],
+            "disk": "BEFORE\\_SAVE\n\n# AGENT\\_A\\_INTENDED\\_ORIGINAL\\_HEADING\n\n# ORIGINAL\n\noriginal body\n",
+            "view": "AFTER_EXPORT_NEW_EDIT\n\nBEFORE_SAVE\n\nAGENT_A_INTENDED_ORIGINAL_HEADING\nORIGINAL\n\noriginal body"
+          }
+        },
+        {
+          "id": "failed-load-can-overwrite-original",
+          "confirmed": true,
+          "detail": {
+            "failedTool": {
+              "ok": true,
+              "execution": {
+                "output": "Inserted 1 block(s). Block indexes may have changed; call get_document_context before further index-based edits.",
+                "mutated": true,
+                "summary": "已插入 1 个块"
+              }
+            },
+            "failedSave": {
+              "ok": true,
+              "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/web/.e2e-control-session/css-2026-09-12T16-12-00-862Z/failed-load.md",
+              "name": "failed-load.md",
+              "mtimeMs": 1789229524730.6584
+            },
+            "view": "AGENT_ADDITION_ON_FAILED_LOAD",
+            "disk": "AGENT\\_ADDITION\\_ON\\_FAILED\\_LOAD\n"
+          }
+        },
+        {
+          "id": "two-visible-executors-flip-flop",
+          "confirmed": true,
+          "detail": {
+            "counts": [
+              4,
+              3
+            ],
+            "visible": [
+              "visible",
+              "visible"
+            ]
+          }
+        },
+        {
+          "id": "external-modification-within-100ms",
+          "confirmed": true,
+          "detail": {
+            "result": {
+              "ok": true
+            },
+            "after": "agent stale overwrite"
+          }
+        },
+        {
+          "id": "concurrent-save-with-same-baseline",
+          "confirmed": true,
+          "detail": {
+            "result": [
+              {
+                "ok": true
+              },
+              {
+                "ok": true
+              }
+            ],
+            "after": "agent B"
+          }
+        }
+      ],
+      "missing": []
+    }
+  ]
+}

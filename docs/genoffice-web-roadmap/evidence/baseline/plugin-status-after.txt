@@ -1,0 +1,95 @@
+ M .gitignore
+ M README.md
+ M contracts/README.md
+ M env/README.md
+ M env/boot.sh
+ M env/profiles/go/cordis.patch.yml
+ M env/profiles/go/package.json
+ M env/profiles/go/pnpm-workspace.yaml
+ M env/setup.sh
+ M packages/tab-genoffice/cordis.patch.yml
+ D packages/tab-genoffice/deepseek-ai-dsh-tab-genoffice-0.2.0.tgz
+ M packages/tab-genoffice/dsh-plugin.json
+ M packages/tab-genoffice/dsh.plugin.json
+ M packages/tab-genoffice/lib/client.js
+ M packages/tab-genoffice/lib/client.js.map
+ M packages/tab-genoffice/lib/index.js
+ M packages/tab-genoffice/lib/standard/host.js
+ D packages/tab-genoffice/lib/style.css
+ M packages/tab-genoffice/lib/types/client/index.d.ts
+ M packages/tab-genoffice/lib/types/client/index.d.ts.map
+ M packages/tab-genoffice/lib/types/standard/client.d.ts.map
+ M packages/tab-genoffice/lib/types/standard/coordinates.d.ts
+ M packages/tab-genoffice/lib/types/standard/coordinates.d.ts.map
+ M packages/tab-genoffice/lib/types/standard/cordis-client-adapter.d.ts
+ M packages/tab-genoffice/lib/types/standard/cordis-client-adapter.d.ts.map
+ M packages/tab-genoffice/lib/types/tabs/coexist.d.ts
+ M packages/tab-genoffice/lib/types/tabs/coexist.d.ts.map
+ M packages/tab-genoffice/lib/types/tabs/docx-control-viewer.d.ts
+ M packages/tab-genoffice/lib/types/tabs/docx-control-viewer.d.ts.map
+ M packages/tab-genoffice/lib/types/tabs/file-tab.d.ts
+ M packages/tab-genoffice/lib/types/tabs/file-tab.d.ts.map
+ M packages/tab-genoffice/lib/types/tabs/genoffice.d.ts
+ M packages/tab-genoffice/lib/types/tabs/genoffice.d.ts.map
+ M packages/tab-genoffice/lib/types/tabs/icon.d.ts
+ M packages/tab-genoffice/lib/types/tabs/icon.d.ts.map
+ M packages/tab-genoffice/lib/types/tabs/locales.d.ts
+ M packages/tab-genoffice/lib/types/tabs/locales.d.ts.map
+ M packages/tab-genoffice/package.json
+ D packages/tab-genoffice/src/client/index.js
+ M packages/tab-genoffice/src/client/index.ts
+ D packages/tab-genoffice/src/host/assets.js
+ D packages/tab-genoffice/src/host/capability.js
+ D packages/tab-genoffice/src/host/errors.js
+ D packages/tab-genoffice/src/host/lookup.js
+ D packages/tab-genoffice/src/host/prompt.js
+ D packages/tab-genoffice/src/host/sync.js
+ D packages/tab-genoffice/src/host/tool-schema.js
+ D packages/tab-genoffice/src/host/tools.js
+ D packages/tab-genoffice/src/index.js
+ M packages/tab-genoffice/src/standard/client.ts
+ M packages/tab-genoffice/src/standard/coordinates.ts
+ M packages/tab-genoffice/src/standard/cordis-client-adapter.ts
+ D packages/tab-genoffice/src/tabs/coexist.js
+ M packages/tab-genoffice/src/tabs/coexist.ts
+ D packages/tab-genoffice/src/tabs/control-mode.js
+ D packages/tab-genoffice/src/tabs/doc-registry.js
+ D packages/tab-genoffice/src/tabs/docx-control-viewer.js
+ M packages/tab-genoffice/src/tabs/docx-control-viewer.tsx
+ M packages/tab-genoffice/src/tabs/file-tab.ts
+ D packages/tab-genoffice/src/tabs/genoffice.js
+ M packages/tab-genoffice/src/tabs/genoffice.tsx
+ D packages/tab-genoffice/src/tabs/icon.js
+ M packages/tab-genoffice/src/tabs/icon.tsx
+ D packages/tab-genoffice/src/tabs/locales.js
+ M packages/tab-genoffice/src/tabs/locales.ts
+ D packages/tab-genoffice/src/tabs/relay.js
+ M packages/tab-genoffice/tests/click-preview.spec.tsx
+ M packages/tab-genoffice/tests/file-tab.spec.ts
+ M packages/tab-genoffice/tests/genoffice.spec.tsx
+ M packages/tab-genoffice/tests/integration.spec.tsx
+ M packages/tab-genoffice/tests/standard-facet.spec.ts
+ M packages/tab-genoffice/tsdown.config.ts
+ M pnpm-lock.yaml
+ M pnpm-workspace.yaml
+ M standards/README.md
+ M standards/contributions/0001-host-service-contracts.md
+ M standards/contributions/0002-client-facet-field-report.md
+ M standards/host-descriptor.json
+ M standards/registry/README.md
+ M standards/registry/sidebar-tab.json
+ M standards/registry/sidebar-tab.md
+?? .claude/
+?? docs/control-session-safety/
+?? docs/genoffice-web-roadmap/
+?? docs/official-upstream-sync/
+?? docs/plugin-tool-alignment/
+?? docs/web-feature-completion/
+?? docs/web-runtime-efficiency/
+?? packages/tab-genoffice/lib/host-nCpJWtrk.js
+?? packages/tab-genoffice/lib/types/standard/sidebar.d.ts
+?? packages/tab-genoffice/lib/types/standard/sidebar.d.ts.map
+?? packages/tab-genoffice/lib/types/tabs/file-address.d.ts
+?? packages/tab-genoffice/lib/types/tabs/file-address.d.ts.map
+?? packages/tab-genoffice/src/standard/sidebar.ts
+?? packages/tab-genoffice/src/tabs/file-address.ts

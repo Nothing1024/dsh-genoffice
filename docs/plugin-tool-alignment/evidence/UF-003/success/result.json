@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "package": "plugin-tool-alignment",
+  "uf": "UF-003",
+  "branch": "success",
+  "run_id": "pta-2026-09-12T17-17-59-551Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "247e3f5c488afb25915e9ee97fe0fd22e27648da"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "table-chart-apply",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "schema-row-col",
+          "status": "passed",
+          "expected": "row/col/paragraphs",
+          "actual": {
+            "hasRowCol": true,
+            "stillOld": false
+          }
+        },
+        {
+          "name": "schema-structure-kind",
+          "status": "passed",
+          "expected": "kind/index",
+          "actual": true
+        },
+        {
+          "name": "schema-chart-flat-fields",
+          "status": "passed",
+          "expected": "no data wrapper",
+          "actual": true
+        },
+        {
+          "name": "open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "7b3fecbdd83285ed36b299ba59420fb7f9ba57ba445b191c68e985a41f77afb2",
+            "path": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T17-17-59-551Z/schema.pptx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+            "error": null,
+            "occupied": true,
+            "owner": "c4915f5e-4c5d-44ff-98e4-3a804a972cc1"
+          }
+        },
+        {
+          "name": "add-table-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Inserted a 2×2 table on page 1, element id=tbl_2, filled 4 cell(s) with text.",
+              "mutated": true,
+              "summary": "第 1 页插入表格"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "add-chart-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Inserted a bar chart on page 1, element id=chart_9.\nNOTE: dataSource is \"sample\" — you MUST tell the user these figures are illustrative placeholders, not real data, and offer to research real numbers with web_search.",
+              "mutated": true,
+              "summary": "第 1 页插入图表"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "edit-table-cell-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "tableId": "tbl_2",
+            "edited": {
+              "status": 200,
+              "ok": true,
+              "execution": {
+                "output": "Replaced the text of cell (0,0) in table tbl_2 on page 1.",
+                "mutated": true,
+                "summary": "第 1 页改表格单元格"
+              },
+              "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+            }
+          }
+        },
+        {
+          "name": "structure-kind-accepted",
+          "status": "passed",
+          "expected": "kind accepted",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Applied insert-row (index=1) to table tbl_2 on page 1. The table id may have been updated to tbl_4.",
+              "mutated": true,
+              "summary": "第 1 页表格增行"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "edit-table-style-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Updated the style of table tbl_4 on page 1.",
+              "mutated": true,
+              "summary": "第 1 页表格样式更新"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "edit-chart-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "chartId": "chart_9",
+            "chartEdit": {
+              "status": 200,
+              "ok": true,
+              "execution": {
+                "output": "Updated chart chart_9 on page 1.\nNOTE: dataSource is \"sample\" — you MUST tell the user these figures are illustrative placeholders, not real data, and offer to research real numbers with web_search.",
+                "mutated": true,
+                "summary": "第 1 页图表编辑"
+              },
+              "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+            }
+          }
+        },
+        {
+          "name": "save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T17-17-59-551Z/schema.pptx",
+            "name": "schema.pptx",
+            "mtimeMs": 1789233483118.0264
+          }
+        },
+        {
+          "name": "reopen-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "7b3fecbdd83285ed36b299ba59420fb7f9ba57ba445b191c68e985a41f77afb2",
+            "path": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T17-17-59-551Z/schema.pptx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "eab24dfb9e3abcc5d2b17b538cc45bc319c531cc2aae980580a67e1b36e7e647",
+            "error": null,
+            "occupied": true,
+            "owner": "c4915f5e-4c5d-44ff-98e4-3a804a972cc1"
+          }
+        },
+        {
+          "name": "reopen-keeps-edit",
+          "status": "passed",
+          "expected": "AlignedCell",
+          "actual": "Canvas 1280×720px\ne_2 | shape | pos(80,80) size 1120×560 font 53pt | text#7E9BB8 stroke#D4A94E\n日志验证\n示例演示文稿 · 商务深蓝风格封面\nSample Presentation  |  Powered by GenOffice + DSH\n---\ne_b342e7cc | table | pos(192,310) size 896×154\nAlignedCell\tQty\nA\t1\n\t\n---\ne_3b8ed1a9 | chart | pos(243,137) size 794×446 | (no text)\n(chart colors not available)"
+        }
+      ]
+    }
+  ]
+}

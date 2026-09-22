@@ -2,16 +2,17 @@
  * Client half of the GenOffice tab artifact — official client-bundle entry.
  *
  * 主体在 src/standard/client.ts（标准 client facet：file-browser tab、
- * control-mode FileViewers、全局 SSE；betterSidebar 缺席时按 BR-003 跳过
- * 注册不崩）。本文件只是 cordis 胶水；RFC 0002 定案后 manifest 直接声明
- * facet 产物，本入口保持不变服务官方装载。
+ * control-mode resource tabs、全局 SSE；官方 Sidebar 缺席时按 BR-003 跳过
+ * 注册不崩）。本文件只是 cordis 胶水。
  */
 import type { Context as ClientContext } from '@deepseek-ai/cordis';
-/** Locale is required; betterSidebar is acquired lazily so its absence
- *  skips registration instead of leaving this fiber PENDING (BR-003). */
+/** Locale is required. Sidebar services are peeked / nested-injected so
+ *  their absence skips registration instead of leaving this fiber PENDING
+ *  (BR-003). Never list them here — Cordis would hold the fiber. */
 export declare const inject: string[];
 /**
- * Register the GenOffice tab and claimed FileViewers when better-sidebar is present.
+ * Register the GenOffice page and claimed Office resource tabs when the
+ * official right Sidebar is present.
  * @param ctx - client root context.
  */
 export declare function apply(ctx: ClientContext): void;

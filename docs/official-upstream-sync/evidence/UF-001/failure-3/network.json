@@ -1,0 +1,30 @@
+{
+  "events": [
+    {
+      "status": 200,
+      "ok": true,
+      "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/save-during.md",
+      "name": "save-during.md",
+      "mtimeMs": 1789240092055.7861
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "ops[0] insertContent: Inserted 1 block(s).\nBlock indexes may have changed; call get_document_context before further index-based edits.",
+        "mutated": true,
+        "summary": "插入内容",
+        "revision": "bfb028b26da545e7f74694a4963bc422449f73f66a994454d29f278aa82407c2"
+      },
+      "revision": "bfb028b26da545e7f74694a4963bc422449f73f66a994454d29f278aa82407c2"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/save-during.md",
+      "name": "save-during.md",
+      "mtimeMs": 1789240092072.1423
+    }
+  ],
+  "count": 3
+}

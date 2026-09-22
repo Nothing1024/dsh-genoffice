@@ -1,0 +1,5 @@
+npm --prefix ../engine run typecheck
+cwd=/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine
+exit=0
+duration_s=126.38
+note=pre-merge baseline on dirty original tree (session-safety + test env). All workspaces tsc --noEmit passed.

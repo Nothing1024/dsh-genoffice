@@ -1,0 +1,53 @@
+# official-upstream-sync Task 3 — Phase 0 回归验证
+time: 2026-09-12T18:33:55.970617+00:00
+cwd: /tmp/genoffice-official-sync-engine
+node: /Users/nothing/.nvm/versions/node/v22.23.2/bin/node v22.23.2
+
+## Git identity
+- 未写入 git config（user.name/user.email 仍为空）
+- 仅本次 commit 使用仓库已有作者 Nothing <nothing@NothingdeMacBook-Pro.local>
+- 未 push；官方上游不考虑 push；原仓 fork/eat-official-engine 未改 HEAD
+
+## Isolated merge
+- worktree: /tmp/genoffice-official-sync-engine
+- branch: official-sync-de139a0
+- HEAD: a8f8f029cabe8ba1b272dba3b1a0d553faadc58f
+- parents/latest: 7d85481557da2ba4c35a373bfdd58d303a2a5c10 fix: adapt web bridges and types after official de139a06 merge
+- log:
+a8f8f029cabe8ba1b272dba3b1a0d553faadc58f fix: adapt web bridges and types after official de139a06 merge
+7d85481557da2ba4c35a373bfdd58d303a2a5c10 Merge commit 'de139a061537bea40f0cc81ef8f09a95f77ac52a' into official-sync-de139a0
+
+
+## Ancestry
+- de139a061537bea40f0cc81ef8f09a95f77ac52a is-ancestor isolated HEAD: True
+- 247e3f5c488afb25915e9ee97fe0fd22e27648da is-ancestor isolated HEAD: True
+- de139a06 is-ancestor original engine HEAD: False (expected false; original not merged)
+
+## Original engine isolation
+- original HEAD: 247e3f5c488afb25915e9ee97fe0fd22e27648da
+- original branch: fork/eat-official-engine
+- original status (first lines):
+## fork/eat-official-engine...origin/fork/eat-official-engine
+ M apps/docs/src/renderer/App.tsx
+ M apps/docs/src/renderer/control.ts
+ M apps/docs/tests/protect-dialog.test.ts
+ M apps/docs/vitest.config.ts
+ M apps/markdown/src/renderer/App.tsx
+ M apps/markdown/src/renderer/control.ts
+ M apps/markdown/src/renderer/web-bridge.ts
+- isolated status:
+## official-sync-de139a0
+ M package-lock.json
+
+
+## Commands
+1. git -C /tmp/genoffice-official-sync-engine merge-base --is-ancestor de139a061537bea40f0cc81ef8f09a95f77ac52a HEAD → exit 0
+2. git -C /tmp/genoffice-official-sync-engine merge-base --is-ancestor 247e3f5c488afb25915e9ee97fe0fd22e27648da HEAD → exit 0
+3. ENGINE_ROOT=/tmp/genoffice-official-sync-engine node web/e2e-official-sync.mjs --case markdown --out docs/official-upstream-sync/evidence
+   - run 1: ous-2026-09-12T18-16-52-059Z passed (8 assertions)
+   - run 2: ous-2026-09-12T18-33-40-308Z passed (8 assertions)
+4. npm --prefix /tmp/genoffice-official-sync-engine run typecheck → exit 0 (ous-typecheck5)
+
+## Typecheck adaptations committed as a8f8f02
+Web bridges/types after official DesktopApi/HomeApi/PdfApi/MarkdownApi/SlidesApi growth.
+HTML/OCR/create_document remain explicit unsupported stubs (web-feature-completion).

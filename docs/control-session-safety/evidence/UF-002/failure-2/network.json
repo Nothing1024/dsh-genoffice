@@ -1,0 +1,12 @@
+{
+  "events": [
+    {
+      "url": "/api/control/notify",
+      "response": {
+        "ok": false,
+        "error": "stale-owner"
+      }
+    }
+  ],
+  "count": 1
+}

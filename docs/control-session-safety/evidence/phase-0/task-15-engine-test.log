@@ -1,0 +1,1849 @@
+=== npm --prefix ../engine run test ===
+started=2026-09-12T16:55:48Z
+
+> genoffice@0.1.0 test
+> npm run test -w @genoffice/i18n && npm run test -w @genoffice/electron-utils && npm run test -w @genoffice/font-metrics && npm run test -w @genoffice/docx-engine && npm run test -w @genoffice/pdf2docx && npm run test -w @genoffice/file-parse && npm run test -w @genoffice/pptx-engine && npm run test -w @genoffice/pptx-render && npm run test -w @genoffice/ai-search && npm run test -w @genoffice/agent-core && npm run test -w @genoffice/ai-provider && npm run test -w @genoffice/project-store && npm run test -w @genoffice/docs && npm run test -w @genoffice/sheets && npm run test -w @genoffice/shell && npm run test -w @genoffice/slides && npm run test -w @genoffice/pdf && npm run test -w @genoffice/markdown
+
+
+> @genoffice/i18n@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/i18n[39m
+
+ [32m✓[39m tests/i18n.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m17 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 00:55:49
+[2m   Duration [22m 316ms[2m (transform 65ms, setup 0ms, import 84ms, tests 16ms, environment 0ms)[22m
+
+
+> @genoffice/electron-utils@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/electron-utils[39m
+
+ [32m✓[39m tests/safe-external-url.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/remote-image.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 81[2mms[22m[39m
+ [32m✓[39m tests/context-menu.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/safe-remote-url.test.ts [2m([22m[2m45 tests[22m[2m)[22m[32m 85[2mms[22m[39m
+ [32m✓[39m tests/dialog-memory.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m tests/default-save-dir.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m tests/app-menu.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m99 passed[39m[22m[90m (99)[39m
+[2m   Start at [22m 00:55:50
+[2m   Duration [22m 605ms[2m (transform 1.25s, setup 0ms, import 1.63s, tests 263ms, environment 2ms)[22m
+
+
+> @genoffice/font-metrics@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/font-metrics[39m
+
+ [32m✓[39m tests/advance.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 150[2mms[22m[39m
+ [32m✓[39m tests/metrics.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 153[2mms[22m[39m
+ [32m✓[39m tests/font-covering.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 399[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 00:55:52
+[2m   Duration [22m 806ms[2m (transform 315ms, setup 0ms, import 418ms, tests 702ms, environment 0ms)[22m
+
+
+> @genoffice/docx-engine@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/docx-engine[39m
+
+ [32m✓[39m tests/ink.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 682[2mms[22m[39m
+ [32m✓[39m tests/roundtrip.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 702[2mms[22m[39m
+ [32m✓[39m tests/revisions.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 719[2mms[22m[39m
+ [32m✓[39m tests/hf-variants.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 746[2mms[22m[39m
+ [32m✓[39m tests/hf-images.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 815[2mms[22m[39m
+ [32m✓[39m tests/insert-and-layout.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 814[2mms[22m[39m
+ [32m✓[39m tests/watermark-theme-sources.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 826[2mms[22m[39m
+ [32m✓[39m tests/image-wrap.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 837[2mms[22m[39m
+ [32m✓[39m tests/bugfix-regressions.test.ts [2m([22m[2m34 tests[22m[2m)[22m[33m 856[2mms[22m[39m
+ [32m✓[39m tests/sections.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 858[2mms[22m[39m
+ [32m✓[39m tests/header-footer-rich.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 979[2mms[22m[39m
+ [32m✓[39m tests/word-basics.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 1026[2mms[22m[39m
+     [33m[2m✓[22m[39m round-trips after setting a password: the correct password verifies, a wrong one does not [33m 497[2mms[22m[39m
+ [32m✓[39m tests/write-protection.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 1244[2mms[22m[39m
+     [33m[2m✓[22m[39m round-trips: saved credentials verify the right password and land in settings.xml [33m 751[2mms[22m[39m
+ [32m✓[39m tests/table-display.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 469[2mms[22m[39m
+ [32m✓[39m tests/raw-rpr.test.ts [2m([22m[2m19 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[33m 473[2mms[22m[39m
+ [32m✓[39m tests/smartart-ole.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 463[2mms[22m[39m
+ [32m✓[39m tests/rfonts-dual-slot.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 495[2mms[22m[39m
+ [32m✓[39m tests/sdt.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 499[2mms[22m[39m
+ [32m✓[39m tests/verify16-p1p2.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 587[2mms[22m[39m
+ [32m✓[39m tests/comments.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 618[2mms[22m[39m
+ [32m✓[39m tests/math.test.ts [2m([22m[2m36 tests[22m[2m)[22m[33m 516[2mms[22m[39m
+ [32m✓[39m tests/resource-cleanup.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 686[2mms[22m[39m
+ [32m✓[39m tests/notes.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 587[2mms[22m[39m
+ [32m✓[39m tests/table-edit.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 504[2mms[22m[39m
+ [32m✓[39m tests/character-styles.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 582[2mms[22m[39m
+ [32m✓[39m tests/chart-insert.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 430[2mms[22m[39m
+ [32m✓[39m tests/metafile-render.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 314[2mms[22m[39m
+ [32m✓[39m tests/wordart-vml.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 359[2mms[22m[39m
+ [32m✓[39m tests/shape-display.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 458[2mms[22m[39m
+ [32m✓[39m tests/bookmarks-crossref.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 469[2mms[22m[39m
+ [32m✓[39m tests/decorated-paragraphs.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 401[2mms[22m[39m
+ [32m✓[39m tests/parse.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 413[2mms[22m[39m
+ [32m✓[39m tests/table-style.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 399[2mms[22m[39m
+ [32m✓[39m tests/field-display.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 534[2mms[22m[39m
+ [32m✓[39m tests/rtl-runs.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 315[2mms[22m[39m
+ [32m✓[39m tests/chart-edit.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 397[2mms[22m[39m
+ [32m✓[39m tests/formatting.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 434[2mms[22m[39m
+ [32m✓[39m tests/numbering-defs.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 531[2mms[22m[39m
+[90mstderr[2m | tests/hostile-input.test.ts[2m > [22m[2mmalformed XML degrades instead of failing the document[2m > [22m[2mdegrades an unparseable styles.xml to an empty style table
+[22m[39mstyles.xml unparseable, styles degraded to empty: Error: Maximum nested tags exceeded
+    at OrderedObjParser.parseXml (file:///Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/node_modules/[4mfast-xml-parser[24m/src/xmlparser/OrderedObjParser.js:558:21)
+    at XMLParser.parse (file:///Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/node_modules/[4mfast-xml-parser[24m/src/xmlparser/XMLParser.js:36:48)
+    at parseStyles [90m(/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/docx-engine/[39msrc/parse.ts:5758:24[90m)[39m
+    at parseDocx [90m(/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/docx-engine/[39msrc/parse.ts:197:35[90m)[39m
+    at [90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/docx-engine/[39mtests/hostile-input.test.ts:93:17
+    at file:///Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/node_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:1903:20
+
+ [32m✓[39m tests/hostile-input.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 4126[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects an archive with too many parts [33m 3592[2mms[22m[39m
+ [32m✓[39m tests/vml-textbox.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 338[2mms[22m[39m
+ [32m✓[39m tests/docprops.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 257[2mms[22m[39m
+[90mstderr[2m | tests/emf-image.test.ts[2m > [22m[2mparseDocx with emf media[2m > [22m[2mkeeps the empty-frame degrade when conversion fails
+[22m[39mmetafileToDataUrl: converter returned null (image/emf, 22 bytes)
+
+ [32m✓[39m tests/emf-image.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 263[2mms[22m[39m
+ [32m✓[39m tests/ruby.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 217[2mms[22m[39m
+ [32m✓[39m tests/layout-fidelity.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 236[2mms[22m[39m
+ [32m✓[39m tests/symbol-fonts.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 221[2mms[22m[39m
+ [32m✓[39m tests/dropcap.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 239[2mms[22m[39m
+ [32m✓[39m tests/textbox-edit.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 313[2mms[22m[39m
+ [32m✓[39m tests/bidi.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 271[2mms[22m[39m
+ [32m✓[39m tests/wrap-topbottom-band.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 298[2mms[22m[39m
+ [32m✓[39m tests/text-patch.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 280[2mms[22m[39m
+ [32m✓[39m tests/out-of-run-breaks.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 278[2mms[22m[39m
+ [32m✓[39m tests/page-anchored-boxes.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 296[2mms[22m[39m
+ [32m✓[39m tests/nested-table-edit.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 329[2mms[22m[39m
+ [32m✓[39m tests/image-edit.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 275[2mms[22m[39m
+ [32m✓[39m tests/inline-image-mixed.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 225[2mms[22m[39m
+ [32m✓[39m tests/header-footer-textbox.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 247[2mms[22m[39m
+ [32m✓[39m tests/ppr-format-fidelity.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 253[2mms[22m[39m
+ [32m✓[39m tests/tabs.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 248[2mms[22m[39m
+ [32m✓[39m tests/zip-local-names.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 193[2mms[22m[39m
+ [32m✓[39m tests/protected-text-edit.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 180[2mms[22m[39m
+ [32m✓[39m tests/cell-anchored-boxes.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 234[2mms[22m[39m
+ [32m✓[39m tests/positioned-frame.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 264[2mms[22m[39m
+ [32m✓[39m tests/anchored-textbox.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 239[2mms[22m[39m
+ [32m✓[39m tests/autospace.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 330[2mms[22m[39m
+ [32m✓[39m tests/main-part-path.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 271[2mms[22m[39m
+ [32m✓[39m tests/line-shape.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 165[2mms[22m[39m
+ [32m✓[39m tests/linked-image.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 214[2mms[22m[39m
+ [32m✓[39m tests/part-namespaces.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 197[2mms[22m[39m
+ [32m✓[39m tests/scan-multiple-body.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+[90mstderr[2m | tests/metafile.test.ts[2m > [22m[2mmetafileToDataUrl[2m > [22m[2mreturns null for garbage bytes instead of throwing
+[22m[39mmetafileToDataUrl: converter returned null (image/emf, 8 bytes)
+
+[90mstderr[2m | tests/metafile.test.ts[2m > [22m[2mmetafileToDataUrl[2m > [22m[2mreturns null for garbage bytes instead of throwing
+[22m[39mmetafileToDataUrl: converter returned null (image/wmf, 8 bytes)
+
+[90mstderr[2m | tests/metafile.test.ts[2m > [22m[2mmetafileToDataUrl[2m > [22m[2mreturns null for garbage bytes instead of throwing
+[22m[39mmetafileToDataUrl: converter returned null (image/x-emf, 0 bytes)
+
+[90mstderr[2m | tests/metafile.test.ts[2m > [22m[2mmetafileToDataUrl[2m > [22m[2mdegrades to null for a valid EMF when no canvas API exists
+[22m[39mmetafileToDataUrl: converter returned null (image/emf, 108 bytes)
+
+ [32m✓[39m tests/metafile.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/mce-namespace.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/schema-order.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m tests/blank-template.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 133[2mms[22m[39m
+ [32m✓[39m tests/table-revisions.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 129[2mms[22m[39m
+ [32m✓[39m tests/entity-decoding.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 119[2mms[22m[39m
+ [32m✓[39m tests/cjk-layout.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 105[2mms[22m[39m
+ [32m✓[39m tests/deep-nested-table.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 11385[2mms[22m[39m
+     [33m[2m✓[22m[39m caps the modeled depth but keeps every paragraph of a 2000-level table [33m 11371[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m77 passed[39m[22m[90m (77)[39m
+[2m      Tests [22m [1m[32m786 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (787)[39m
+[2m   Start at [22m 00:55:53
+[2m   Duration [22m 13.16s[2m (transform 13.06s, setup 0ms, import 48.52s, tests 46.47s, environment 29ms)[22m
+
+
+> @genoffice/pdf2docx@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/pdf2docx[39m
+
+ [32m✓[39m tests/rebuild-xlsx.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 168[2mms[22m[39m
+ [32m✓[39m tests/form.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m tests/png.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 296[2mms[22m[39m
+ [32m✓[39m tests/stream.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 137[2mms[22m[39m
+ [32m✓[39m tests/alpha.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 429[2mms[22m[39m
+     [33m[2m✓[22m[39m a JPEG with an SMask becomes a PNG that keeps transparent pixels [33m 413[2mms[22m[39m
+ [32m✓[39m tests/vector.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m tests/zones.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+ [32m✓[39m tests/rtl.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m tests/columns.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 226[2mms[22m[39m
+ [32m✓[39m tests/table.test.ts [2m([22m[2m61 tests[22m[2m)[22m[32m 105[2mms[22m[39m
+ [32m✓[39m tests/panels.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m tests/canvas.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m tests/shapes.test.ts [2m([22m[2m39 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m tests/lists.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 110[2mms[22m[39m
+ [32m✓[39m tests/fontname.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m tests/blocks.test.ts [2m([22m[2m36 tests[22m[2m)[22m[32m 65[2mms[22m[39m
+ [32m✓[39m tests/spans.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+ [32m✓[39m tests/cards.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 686[2mms[22m[39m
+     [33m[2m✓[22m[39m emits ONE anchored text box carrying plate fill, size and both members [33m 506[2mms[22m[39m
+ [32m✓[39m tests/canvas-rebuild.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 770[2mms[22m[39m
+     [33m[2m✓[22m[39m emits text blocks as page-anchored framePr paragraphs with measured coordinates [33m 501[2mms[22m[39m
+ [32m✓[39m tests/silent-empty.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 1457[2mms[22m[39m
+     [33m[2m✓[22m[39m degrades + warns instead of shipping a silently empty page [33m 393[2mms[22m[39m
+ [32m✓[39m tests/styling.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m tests/footnotes.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [32m✓[39m tests/fit.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m tests/floats.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 75[2mms[22m[39m
+ [32m✓[39m tests/toc.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 90[2mms[22m[39m
+ [32m✓[39m tests/tiles.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m tests/chars.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m tests/script.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m tests/rebuild-pptx.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 943[2mms[22m[39m
+ [32m✓[39m tests/geometry.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m tests/furniture.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+ [32m✓[39m tests/spacing.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m tests/pdfium.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m tests/words.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m tests/lines.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m tests/fontmap.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m tests/frames.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m tests/decor.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m tests/jpeg-sniff.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/integration-p4.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 1719[2mms[22m[39m
+     [33m[2m✓[22m[39m maps highlight fills, underlines and strikethroughs onto runs [33m 1253[2mms[22m[39m
+ [32m✓[39m tests/rebuild.test.ts [2m([22m[2m66 tests[22m[2m)[22m[33m 2478[2mms[22m[39m
+     [33m[2m✓[22m[39m emits paragraphs with runs, styles and CJK eastAsia font slot [33m 565[2mms[22m[39m
+ [32m✓[39m tests/background.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 2748[2mms[22m[39m
+     [33m[2m✓[22m[39m a full-page wallpaper image becomes bgRender and leaves the image stream [33m 942[2mms[22m[39m
+     [33m[2m✓[22m[39m end-to-end: wallpaper PDF converts with a behindDoc page background [33m 981[2mms[22m[39m
+ [32m✓[39m tests/integration.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 12933[2mms[22m[39m
+     [33m[2m✓[22m[39m converts a two-paragraph text PDF with correct word spacing and paragraph splits [33m 1252[2mms[22m[39m
+     [33m[2m✓[22m[39m detects scanned pages and falls back to a full-page render [33m 494[2mms[22m[39m
+     [33m[2m✓[22m[39m shrinks wide-format scans to Word's 22in page ceiling instead of cropping [33m 777[2mms[22m[39m
+     [33m[2m✓[22m[39m zh: lines of one paragraph join WITHOUT inserted spaces [33m 1586[2mms[22m[39m
+     [33m[2m✓[22m[39m zh/en mixed: scripts split into separate runs, no spaces invented [33m 1442[2mms[22m[39m
+     [33m[2m✓[22m[39m ja: kana + kanji text survives intact [33m 1489[2mms[22m[39m
+     [33m[2m✓[22m[39m ko: hangul keeps its real inter-word spaces [33m 1315[2mms[22m[39m
+     [33m[2m✓[22m[39m ar: converts to logical-order text with bidi paragraph and rtl runs [33m 1350[2mms[22m[39m
+     [33m[2m✓[22m[39m ar: digit runs inside RTL text keep LTR order [33m 1394[2mms[22m[39m
+     [33m[2m✓[22m[39m he: hebrew line comes out in logical order [33m 1413[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m43 passed[39m[22m[90m (43)[39m
+[2m      Tests [22m [1m[32m616 passed[39m[22m[90m (616)[39m
+[2m   Start at [22m 00:56:07
+[2m   Duration [22m 16.24s[2m (transform 18.92s, setup 0ms, import 32.46s, tests 26.29s, environment 15ms)[22m
+
+
+> @genoffice/file-parse@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/file-parse[39m
+
+ [32m✓[39m tests/text-formats.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m tests/office-formats.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 133[2mms[22m[39m
+ [32m✓[39m tests/pdf.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 451[2mms[22m[39m
+     [33m[2m✓[22m[39m extracts page text via pdfjs [33m 441[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m29 passed[39m[22m[90m (29)[39m
+[2m   Start at [22m 00:56:24
+[2m   Duration [22m 1.78s[2m (transform 2.32s, setup 0ms, import 3.18s, tests 605ms, environment 0ms)[22m
+
+
+> @genoffice/pptx-engine@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/pptx-engine[39m
+
+ [32m✓[39m tests/run-hyperlink.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 2624[2mms[22m[39m
+     [33m[2m✓[22m[39m url link set in-session survives save → reopen with resolved target [33m 1126[2mms[22m[39m
+     [33m[2m✓[22m[39m slide jump gets the hlinksldjump action and resolves back to slide:N [33m 685[2mms[22m[39m
+     [33m[2m✓[22m[39m prunes obsolete run hyperlink relationships on replace and clear [33m 505[2mms[22m[39m
+ [32m✓[39m tests/master-edit.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 2696[2mms[22m[39m
+     [33m[2m✓[22m[39m enumeration: master first, layouts after; both part kinds parse into elements [33m 597[2mms[22m[39m
+     [33m[2m✓[22m[39m edit master title placeholder text: dirty element regenerated, other elements pass through byte-for-byte, persists after savePptx [33m 926[2mms[22m[39m
+     [33m[2m✓[22m[39m edit layout placeholder geometry: slide placeholders without explicit xfrm inherit the new geometry, still there after save and reopen [33m 629[2mms[22m[39m
+     [33m[2m✓[22m[39m edit master placeholder text color (run-level patch): part parses with the new color after save and reopen [33m 538[2mms[22m[39m
+ [32m✓[39m tests/table-merge.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 2734[2mms[22m[39m
+     [33m[2m✓[22m[39m merge right: gridSpan + hMerge + text merged into the anchor cell [33m 732[2mms[22m[39m
+     [33m[2m✓[22m[39m merge down + save/reopen preserves rowSpan/vMerge [33m 936[2mms[22m[39m
+     [33m[2m✓[22m[39m consecutive merge-right extends gridSpan [33m 348[2mms[22m[39m
+     [33m[2m✓[22m[39m split: clears spans and continuation markers [33m 409[2mms[22m[39m
+     [33m[2m✓[22m[39m invalid targets rejected: merging on a continuation cell / splitting a plain cell [33m 301[2mms[22m[39m
+ [32m✓[39m tests/phase5-patch.test.ts [2m([22m[2m29 tests[22m[2m)[22m[33m 2797[2mms[22m[39m
+     [33m[2m✓[22m[39m stroke color+width round-trips through save → reopen [33m 761[2mms[22m[39m
+     [33m[2m✓[22m[39m stroke dash round-trips through save → reopen [33m 513[2mms[22m[39m
+ [32m✓[39m tests/slide-size.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 2823[2mms[22m[39m
+     [33m[2m✓[22m[39m when shrinking, layout/master elements scale proportionally and center, part bytes written back [33m 1362[2mms[22m[39m
+     [33m[2m✓[22m[39m when enlarging, master elements rescale in sync with the slides [33m 903[2mms[22m[39m
+ [32m✓[39m tests/layout.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 3012[2mms[22m[39m
+     [33m[2m✓[22m[39m returns a non-empty layout list, each entry with path / name / layoutType [33m 527[2mms[22m[39m
+     [33m[2m✓[22m[39m layout paths sorted by number ascending [33m 520[2mms[22m[39m
+     [33m[2m✓[22m[39m new slide rels point to the chosen layout (correct after save+reopen) [33m 767[2mms[22m[39m
+     [33m[2m✓[22m[39m when the chosen layout has placeholders, the new slide contains matching ph elements [33m 623[2mms[22m[39m
+     [33m[2m✓[22m[39m roundtrip: original slide bytes unchanged before/after the insertion [33m 568[2mms[22m[39m
+ [32m✓[39m tests/patch.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 3028[2mms[22m[39m
+     [33m[2m✓[22m[39m no dirty → slide XML byte-identical (fidelity preserved) [33m 593[2mms[22m[39m
+     [33m[2m✓[22m[39m patchSlideXml with no dirty == originalXml [33m 530[2mms[22m[39m
+     [33m[2m✓[22m[39m full save roundtrip after edit: file opens again with new text [33m 308[2mms[22m[39m
+     [33m[2m✓[22m[39m table: sizes cells with text and leaves a persisted marker on empty cells [33m 505[2mms[22m[39m
+ [32m✓[39m tests/insert.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 3394[2mms[22m[39m
+     [33m[2m✓[22m[39m added textbox survives save → reopen with text and geometry [33m 1143[2mms[22m[39m
+     [33m[2m✓[22m[39m added shape round-trips preset geometry and solid fill [33m 624[2mms[22m[39m
+     [33m[2m✓[22m[39m run fontFamily writes both latin and ea slots and round-trips [33m 570[2mms[22m[39m
+     [33m[2m✓[22m[39m delete element persists through save → reopen [33m 545[2mms[22m[39m
+ [32m✓[39m tests/animation.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 3598[2mms[22m[39m
+     [33m[2m✓[22m[39m elementSpid extracts the cNvPr id of each element [33m 516[2mms[22m[39m
+     [33m[2m✓[22m[39m round-trips a mixed animation list through save/reopen [33m 919[2mms[22m[39m
+     [33m[2m✓[22m[39m replaces existing timing instead of stacking, and can clear [33m 546[2mms[22m[39m
+     [33m[2m✓[22m[39m coexists with a slide transition (transition before timing) [33m 539[2mms[22m[39m
+     [33m[2m✓[22m[39m round-trips every new effect kind through save/reopen [33m 486[2mms[22m[39m
+     [33m[2m✓[22m[39m round-trips motion paths (line + bezier circle) through save/reopen [33m 577[2mms[22m[39m
+ [32m✓[39m tests/save-streaming.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 3679[2mms[22m[39m
+     [33m[2m✓[22m[39m writes a package that reopens with the same slides as the in-memory save [33m 1763[2mms[22m[39m
+     [33m[2m✓[22m[39m carries unsaved edits into the streamed file [33m 579[2mms[22m[39m
+     [33m[2m✓[22m[39m commitSaved: two consecutive edit+save cycles keep both edits [33m 595[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects instead of throwing past the caller when the target is unwritable [33m 467[2mms[22m[39m
+ [32m✓[39m tests/duplicate-slide.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 4147[2mms[22m[39m
+     [33m[2m✓[22m[39m inserts a copy right after the source and survives save → reopen [33m 1237[2mms[22m[39m
+     [33m[2m✓[22m[39m carries the source page pending edits into the copy [33m 661[2mms[22m[39m
+     [33m[2m✓[22m[39m clearText makes a layout-preserving blank page [33m 621[2mms[22m[39m
+     [33m[2m✓[22m[39m two duplicates get distinct part paths and sldIds [33m 711[2mms[22m[39m
+     [33m[2m✓[22m[39m inserts an element-free slide after the source and survives save → reopen [33m 621[2mms[22m[39m
+ [32m✓[39m tests/sections.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 5315[2mms[22m[39m
+     [33m[2m✓[22m[39m getSections returns [] for legacy documents without sections [33m 509[2mms[22m[39m
+     [33m[2m✓[22m[39m setSections → savePptx → openPptx round-trip is consistent and does not touch Content_Types/rels [33m 911[2mms[22m[39m
+     [33m[2m✓[22m[39m renameSection: rename takes effect and round-trips [33m 551[2mms[22m[39m
+     [33m[2m✓[22m[39m moveSection: whole section moves up, sldIdLst / deck.slides / section indices stay in sync, round-trip holds [33m 556[2mms[22m[39m
+     [33m[2m✓[22m[39m moveSlide: moving a slide down in a sectionless document keeps sldIdLst / deck.slides in sync and round-trips [33m 531[2mms[22m[39m
+     [33m[2m✓[22m[39m moveSlide: moving across sections assigns the slide to the target section, sections stay contiguous [33m 637[2mms[22m[39m
+     [33m[2m✓[22m[39m moveSlide: moving all slides out of a section leaves it empty [33m 326[2mms[22m[39m
+     [33m[2m✓[22m[39m setSections([]) clears sections and leaves no empty extLst in presentation.xml [33m 320[2mms[22m[39m
+ [32m✓[39m tests/speaker-notes.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 2087[2mms[22m[39m
+     [33m[2m✓[22m[39m real pptx fixture → write notes → save+reopen correct [33m 947[2mms[22m[39m
+     [33m[2m✓[22m[39m iron rule: slides without written notes gain no notesSlide, existing notesSlide bytes unchanged [33m 651[2mms[22m[39m
+ [32m✓[39m tests/reparse-deck.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 2236[2mms[22m[39m
+     [33m[2m✓[22m[39m matches the openPptx(savePptx()) roundtrip [33m 1256[2mms[22m[39m
+     [33m[2m✓[22m[39m apply-theme sequence: commitSaved bakes edits, surgery lands, reparse resolves new colors [33m 975[2mms[22m[39m
+ [32m✓[39m tests/hidden-slide.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2013[2mms[22m[39m
+     [33m[2m✓[22m[39m defaults to visible [33m 571[2mms[22m[39m
+     [33m[2m✓[22m[39m hides a slide, survives save/reopen, and can be un-hidden [33m 1177[2mms[22m[39m
+ [32m✓[39m tests/table-row-anchor.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 2279[2mms[22m[39m
+     [33m[2m✓[22m[39m row height written to a:tr h, outer frame cy kept in sync [33m 559[2mms[22m[39m
+     [33m[2m✓[22m[39m redistributes gridCol widths and tr heights so XML sums match the frame [33m 445[2mms[22m[39m
+     [33m[2m✓[22m[39m proportions survive save → reopen [33m 885[2mms[22m[39m
+     [33m[2m✓[22m[39m tcPr anchor written / replaced [33m 331[2mms[22m[39m
+ [32m✓[39m tests/notes-comments.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 2101[2mms[22m[39m
+     [33m[2m✓[22m[39m works on a real pptx fixture [33m 931[2mms[22m[39m
+     [33m[2m✓[22m[39m comments on different slides go to different parts [33m 597[2mms[22m[39m
+ [32m✓[39m tests/group.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 2635[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects group with < 2 elements [33m 483[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects group with passthrough elements [33m 399[2mms[22m[39m
+     [33m[2m✓[22m[39m groups 2 editable elements, saves and reopens correctly [33m 829[2mms[22m[39m
+     [33m[2m✓[22m[39m ungroupElement lifts children to top level [33m 434[2mms[22m[39m
+     [33m[2m✓[22m[39m roundtrip: no group edits → slide bytes unchanged (fidelity) [33m 426[2mms[22m[39m
+ [32m✓[39m tests/picture-crop.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 1946[2mms[22m[39m
+     [33m[2m✓[22m[39m roundtrip: no picture edits → slides byte-identical (fidelity) [33m 730[2mms[22m[39m
+     [33m[2m✓[22m[39m editPictureSrcRect sets srcRect and marks dirtySrcRect [33m 464[2mms[22m[39m
+     [33m[2m✓[22m[39m editPictureSrcRect with null removes srcRect [33m 334[2mms[22m[39m
+     [33m[2m✓[22m[39m returns false for non-existent or non-picture element [33m 372[2mms[22m[39m
+ [32m✓[39m tests/parse.test.ts [2m([22m[2m55 tests[22m[2m)[22m[33m 2886[2mms[22m[39m
+     [33m[2m✓[22m[39m parses 01_standard_business.pptx without throwing [33m 501[2mms[22m[39m
+     [33m[2m✓[22m[39m extracts text from standard business deck [33m 316[2mms[22m[39m
+     [33m[2m✓[22m[39m backfills placeholder geometry from layout/master (fixes Phase 1 xfrm=0,0) [33m 339[2mms[22m[39m
+     [33m[2m✓[22m[39m 01_standard_business.pptx: reassembleSlideXml == originalXml (no edits) [33m 324[2mms[22m[39m
+     [33m[2m✓[22m[39m 01_standard_business.pptx: savePptx with no dirty produces byte-identical slide parts [33m 442[2mms[22m[39m
+     [33m[2m✓[22m[39m body-family placeholders inherit bodyStyle spcBef 20%, title family is explicit 0 [33m 390[2mms[22m[39m
+ [32m✓[39m tests/flip-writeback.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1862[2mms[22m[39m
+     [33m[2m✓[22m[39m flipH/flipV land on a:xfrm and survive save → reopen [33m 1138[2mms[22m[39m
+     [33m[2m✓[22m[39m a single flip is not the same as a 180° rotation [33m 716[2mms[22m[39m
+ [32m✓[39m tests/copy-slide-across-decks.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 6545[2mms[22m[39m
+     [33m[2m✓[22m[39m carries a slide into another deck and survives save → reopen [33m 1345[2mms[22m[39m
+     [33m[2m✓[22m[39m points the pasted slide at a layout that exists in the destination [33m 379[2mms[22m[39m
+     [33m[2m✓[22m[39m copies referenced media under a fresh name without clobbering the target [33m 386[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps rIds stable so the pasted slide XML needs no rewriting [33m 359[2mms[22m[39m
+     [33m[2m✓[22m[39m pastes at the front when afterIndex is -1 [33m 706[2mms[22m[39m
+     [33m[2m✓[22m[39m keep-source-formatting imports the source layout chain and registers its master [33m 728[2mms[22m[39m
+     [33m[2m✓[22m[39m keep-source-formatting reuses an identical existing master instead of importing [33m 484[2mms[22m[39m
+     [33m[2m✓[22m[39m pasting the same foreign chain twice imports its master only once [33m 537[2mms[22m[39m
+     [33m[2m✓[22m[39m keep-source-formatting falls back to the destination theme without a chain [33m 461[2mms[22m[39m
+     [33m[2m✓[22m[39m pasting twice produces two independent slides [33m 940[2mms[22m[39m
+ [32m✓[39m tests/transform-patch.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1801[2mms[22m[39m
+     [33m[2m✓[22m[39m save → reopen round-trips new geometry [33m 1077[2mms[22m[39m
+     [33m[2m✓[22m[39m text dirty + transform dirty compose on the same element [33m 717[2mms[22m[39m
+ [32m✓[39m tests/connector-parse.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 1408[2mms[22m[39m
+     [33m[2m✓[22m[39m pptx containing cxnSp reassembles to byte-identical slide XML [33m 514[2mms[22m[39m
+     [33m[2m✓[22m[39m reparses after savePptx: connector elements neither lost nor distorted [33m 809[2mms[22m[39m
+ [32m✓[39m tests/slide-layout-switch.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1421[2mms[22m[39m
+     [33m[2m✓[22m[39m switch layout: rels point to the new layout, effective after save and reopen [33m 987[2mms[22m[39m
+     [33m[2m✓[22m[39m reset layout: explicit placeholder xfrm removed, geometry falls back to layout inheritance [33m 429[2mms[22m[39m
+ [32m✓[39m tests/connector-connection.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 514[2mms[22m[39m
+ [32m✓[39m tests/insert-grid-table.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 762[2mms[22m[39m
+ [32m✓[39m tests/builtin-layouts.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 891[2mms[22m[39m
+ [32m✓[39m tests/sptree-gap.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 552[2mms[22m[39m
+     [33m[2m✓[22m[39m AlternateContent becomes an element anchored to its full bytes; rebuild without edits == original bytes [33m 388[2mms[22m[39m
+ [32m✓[39m tests/line-insert.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 568[2mms[22m[39m
+ [32m✓[39m tests/background-promote.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 958[2mms[22m[39m
+     [33m[2m✓[22m[39m promotes stacked full-page solid rects (transparent 1px border) into <p:bg> [33m 532[2mms[22m[39m
+ [32m✓[39m tests/fill-patch.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 1263[2mms[22m[39m
+     [33m[2m✓[22m[39m dirtyFill round-trips through save → reopen [33m 1223[2mms[22m[39m
+ [32m✓[39m tests/resource-cleanup.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1343[2mms[22m[39m
+ [32m✓[39m tests/animation-paragraph.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 1247[2mms[22m[39m
+     [33m[2m✓[22m[39m round-trips through save/reopen, mixed with whole-shape animations [33m 1210[2mms[22m[39m
+ [32m✓[39m tests/group-child-edit.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 1348[2mms[22m[39m
+     [33m[2m✓[22m[39m child transform edit survives roundtrip [33m 1289[2mms[22m[39m
+ [32m✓[39m tests/merge-slide.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1443[2mms[22m[39m
+     [33m[2m✓[22m[39m merges a single-slide pptx into an existing deck, slide count grows and content is kept [33m 791[2mms[22m[39m
+     [33m[2m✓[22m[39m merging a slide with an image: media bytes moved in, rIds do not clash [33m 352[2mms[22m[39m
+ [32m✓[39m tests/replace-slide-sequence.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1500[2mms[22m[39m
+     [33m[2m✓[22m[39m replace a middle slide in place: slide count unchanged, new slide in position, old slide gone [33m 600[2mms[22m[39m
+     [33m[2m✓[22m[39m replacing the last slide (atIndex=last) also works [33m 383[2mms[22m[39m
+     [33m[2m✓[22m[39m replacing the first slide keeps order and content correct after save and reopen [33m 511[2mms[22m[39m
+ [32m✓[39m tests/sym-font-run.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m tests/picture-svg-blip.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [32m✓[39m tests/connector-decorations.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 94[2mms[22m[39m
+ [32m✓[39m tests/blank.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 360[2mms[22m[39m
+ [32m✓[39m tests/clipboard-table-transition.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 9668[2mms[22m[39m
+     [33m[2m✓[22m[39m pastes a textbox onto the same slide with shifted offset [33m 1179[2mms[22m[39m
+     [33m[2m✓[22m[39m pastes a picture onto another slide (rels surgery, media shared) [33m 630[2mms[22m[39m
+     [33m[2m✓[22m[39m inserts a styled table that parses and round-trips [33m 524[2mms[22m[39m
+     [33m[2m✓[22m[39m writes cell paragraphs, keeps style, survives save/reopen [33m 589[2mms[22m[39m
+     [33m[2m✓[22m[39m inserts and deletes rows/cols, frame ext follows, round-trips [33m 783[2mms[22m[39m
+     [33m[2m✓[22m[39m setTableColWidth updates gridCol, model and frame width in place [33m 798[2mms[22m[39m
+     [33m[2m✓[22m[39m rtl table: growing a column shifts the origin left (visual-right edge anchored) [33m 354[2mms[22m[39m
+     [33m[2m✓[22m[39m removes the slide from deck and package, round-trips [33m 567[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses to delete the last remaining slide [33m 371[2mms[22m[39m
+     [33m[2m✓[22m[39m moves element to front/back and persists order [33m 541[2mms[22m[39m
+     [33m[2m✓[22m[39m sets, reads back, replaces and clears a transition across save/reopen [33m 967[2mms[22m[39m
+     [33m[2m✓[22m[39m writes morph as AlternateContent(p159:morph) with a fade fallback [33m 816[2mms[22m[39m
+     [33m[2m✓[22m[39m replaces morph with a plain transition (no AlternateContent left) and clears it [33m 339[2mms[22m[39m
+     [33m[2m✓[22m[39m coexists with shape animations (morph transition before timing) [33m 646[2mms[22m[39m
+ [32m✓[39m tests/diagram-fallback.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 200[2mms[22m[39m
+ [32m✓[39m tests/media-preserve.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 324[2mms[22m[39m
+ [32m✓[39m tests/find-replace.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 94[2mms[22m[39m
+ [32m✓[39m tests/table-edit.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 59[2mms[22m[39m
+ [32m✓[39m tests/media-smartart-ole.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 284[2mms[22m[39m
+ [32m✓[39m tests/paragraph-format.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 123[2mms[22m[39m
+ [32m✓[39m tests/run-format-fidelity.test.ts [2m([22m[2m36 tests[22m[2m)[22m[32m 173[2mms[22m[39m
+ [32m✓[39m tests/chart.test.ts [2m([22m[2m53 tests[22m[2m)[22m[32m 268[2mms[22m[39m
+ [32m✓[39m tests/rebuild-fidelity.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 86[2mms[22m[39m
+ [32m✓[39m tests/table-style.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m tests/align.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m tests/animation-incremental.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m tests/default-text-style.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 54[2mms[22m[39m
+ [32m✓[39m tests/custgeom.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 78[2mms[22m[39m
+ [32m✓[39m tests/pic-blip-effects.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 82[2mms[22m[39m
+ [32m✓[39m tests/theme-fmtscheme.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+ [32m✓[39m tests/grpfill.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m tests/chartex.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m tests/wordart-effects.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m tests/dgm-hier.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m tests/bg-fill-inherit.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m tests/field-run-order.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m tests/format-brush.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/connector-follow.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m tests/scene3d-parse.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/color-preset.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/picture-opacity.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/autofit-writeback.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/insert-extended.test.ts [2m([22m[2m41 tests[22m[2m)[22m[33m 15206[2mms[22m[39m
+     [33m[2m✓[22m[39m bar chart round-trips categories/series and renders as chart element [33m 1202[2mms[22m[39m
+     [33m[2m✓[22m[39m pie and doughnut charts parse back with their kinds [33m 676[2mms[22m[39m
+     [33m[2m✓[22m[39m two charts on one slide get distinct parts [33m 356[2mms[22m[39m
+     [33m[2m✓[22m[39m scatter chart round-trips: numeric categories go into c:xVal, series values into c:yVal, dual value axes [33m 524[2mms[22m[39m
+     [33m[2m✓[22m[39m scatter with non-numeric categories falls back to 1..n x values [33m 605[2mms[22m[39m
+     [33m[2m✓[22m[39m radar chart round-trips: category vertices + radarStyle standard [33m 580[2mms[22m[39m
+     [33m[2m✓[22m[39m style toggles take effect; later type-only edits keep legend/gridlines/data labels/colors [33m 992[2mms[22m[39m
+     [33m[2m✓[22m[39m percentStacked and horizontal bar direction are preserved through rebuilds (edits do not degrade) [33m 1053[2mms[22m[39m
+     [33m[2m✓[22m[39m chart title parse round-trip; style-only edits keep the title; switchRowCol swaps rows/columns [33m 1339[2mms[22m[39m
+     [33m[2m✓[22m[39m markChartEditable: a foreign chart becomes editable after marking, saves round-trip [33m 1183[2mms[22m[39m
+     [33m[2m✓[22m[39m legendPos none turns the legend off; passing an empty axis title clears it [33m 1096[2mms[22m[39m
+     [33m[2m✓[22m[39m process layout becomes an editable group with one shape per item [33m 729[2mms[22m[39m
+     [33m[2m✓[22m[39m hierarchy layout adds connector bars between levels [33m 304[2mms[22m[39m
+     [33m[2m✓[22m[39m an unsupported chart degrades to a passthrough element and survives an unrelated edit + save byte-for-byte [33m 376[2mms[22m[39m
+     [33m[2m✓[22m[39m pie3D inserts, edits keep the 3-D type, and an explicit switch to 2-D works [33m 375[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m71 passed[39m[22m[90m (71)[39m
+[2m      Tests [22m [1m[32m724 passed[39m[22m[90m (724)[39m
+[2m   Start at [22m 00:56:27
+[2m   Duration [22m 16.97s[2m (transform 12.64s, setup 0ms, import 41.96s, tests 111.17s, environment 27ms)[22m
+
+
+> @genoffice/pptx-render@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/pptx-render[39m
+
+ [32m✓[39m tests/pattern-fills.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/coords.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/fill.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/scene3d.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m tests/preset-geometry.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 145[2mms[22m[39m
+ [32m✓[39m tests/build-chart.test.ts [2m([22m[2m49 tests[22m[2m)[22m[32m 109[2mms[22m[39m
+ [32m✓[39m tests/text-layout.test.ts [2m([22m[2m51 tests[22m[2m)[22m[32m 217[2mms[22m[39m
+ [32m✓[39m tests/passthrough-preview.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/connector-geometry.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 410[2mms[22m[39m
+ [32m✓[39m tests/build-slide.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 2442[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m      Tests [22m [1m[32m211 passed[39m[22m[90m (211)[39m
+[2m   Start at [22m 00:56:45
+[2m   Duration [22m 4.06s[2m (transform 4.45s, setup 0ms, import 5.88s, tests 3.39s, environment 3ms)[22m
+
+
+> @genoffice/ai-search@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/ai-search[39m
+
+ [32m✓[39m tests/gsk.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m tests/search.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/genoffice-auth.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 757[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m47 passed[39m[22m[90m (47)[39m
+[2m   Start at [22m 00:56:50
+[2m   Duration [22m 1.22s[2m (transform 465ms, setup 0ms, import 591ms, tests 799ms, environment 0ms)[22m
+
+
+> @genoffice/agent-core@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/agent-core[39m
+
+ [32m✓[39m tests/sanitize-payload.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/electron-transport.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m tests/loop.test.ts [2m([22m[2m39 tests[22m[2m)[22m[32m 241[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m60 passed[39m[22m[90m (60)[39m
+[2m   Start at [22m 00:56:52
+[2m   Duration [22m 718ms[2m (transform 459ms, setup 0ms, import 582ms, tests 296ms, environment 0ms)[22m
+
+
+> @genoffice/ai-provider@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/ai-provider[39m
+
+ [32m✓[39m tests/network-error.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/providers.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+[90mstderr[2m | tests/fetch.test.ts[2m > [22m[2maiFetch[2m > [22m[2mretries over the rescue fetch when the primary fails
+[22m[39m[ai-provider] fetch failed, retrying via rescue fetch: Error: fetch failed
+
+[90mstderr[2m | tests/fetch.test.ts[2m > [22m[2maiFetch[2m > [22m[2mthrows the primary error when the rescue fetch also fails
+[22m[39m[ai-provider] fetch failed, retrying via rescue fetch: Error: primary down
+
+ [32m✓[39m tests/fetch.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 68[2mms[22m[39m
+ [32m✓[39m tests/registry.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/images.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 51[2mms[22m[39m
+ [32m✓[39m tests/watchdog.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32m✓[39m tests/chat.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 68[2mms[22m[39m
+ [32m✓[39m tests/stream.test.ts [2m([22m[2m54 tests[22m[2m)[22m[32m 131[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[32m111 passed[39m[22m[90m (111)[39m
+[2m   Start at [22m 00:56:53
+[2m   Duration [22m 890ms[2m (transform 1.93s, setup 0ms, import 2.32s, tests 422ms, environment 2ms)[22m
+
+
+> @genoffice/project-store@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/packages/project-store[39m
+
+ [32m✓[39m tests/store.test.ts [2m([22m[2m59 tests[22m[2m)[22m[32m 252[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m59 passed[39m[22m[90m (59)[39m
+[2m   Start at [22m 00:56:55
+[2m   Duration [22m 639ms[2m (transform 112ms, setup 0ms, import 149ms, tests 252ms, environment 0ms)[22m
+
+
+> @genoffice/docs@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/apps/docs[39m
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2msubmitting untouched state yields an all-undefined diff (even when passwords exist)
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2msubmitting untouched state yields an all-undefined diff (even when passwords exist)
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2msubmitting untouched state yields an all-undefined diff (even when passwords exist)
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mclearing the open-password field of an encrypted document requests removal
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mclearing the open-password field of an encrypted document requests removal
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mclearing the open-password field of an encrypted document requests removal
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mclearing the open-password field of an encrypted document requests removal
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mclearing the open-password field of an encrypted document requests removal
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mmismatched confirmation blocks the submit
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mmismatched confirmation blocks the submit
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mmismatched confirmation blocks the submit
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mmismatched confirmation blocks the submit
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mmismatched confirmation blocks the submit
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2msetting a modify password produces verifiable writeProtection credentials
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2msetting a modify password produces verifiable writeProtection credentials
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2msetting a modify password produces verifiable writeProtection credentials
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2msetting a modify password produces verifiable writeProtection credentials
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/context-menu.test.ts[2m > [22m[2mEditorContextMenu[2m > [22m[2mdisables selection-dependent items when nothing is selected
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/context-menu.test.ts[2m > [22m[2mEditorContextMenu[2m > [22m[2menables everything and routes New Comment / Font… when text is selected
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/agent-docs.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 1649[2mms[22m[39m
+[90mstderr[2m | tests/context-menu.test.ts[2m > [22m[2mEditorContextMenu[2m > [22m[2msends the selected text to the AI panel for Synonyms
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/style-gallery-overflow.test.ts[2m > [22m[2mstyle gallery overflow[2m > [22m[2mshows no expander while every card fits
+[22m[39mThe current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/textbox-edit.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1981[2mms[22m[39m
+     [33m[2m✓[22m[39m mounts a rich sub-editor inside each rendered box [33m 778[2mms[22m[39m
+[90mstderr[2m | tests/context-menu.test.ts[2m > [22m[2mEditorContextMenu[2m > [22m[2mmarks AI-backed items (Synonyms/Translate) with the copilot badge
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/style-gallery-overflow.test.ts[2m > [22m[2mstyle gallery overflow[2m > [22m[2mshows no expander while every card fits
+[22m[39mThe current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/ai-track-revisions.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 2310[2mms[22m[39m
+     [33m[2m✓[22m[39m insert_content in tracking mode marks new text as ins (author "AI Assistant") [33m 832[2mms[22m[39m
+ [32m✓[39m tests/ai-formula.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 2372[2mms[22m[39m
+     [33m[2m✓[22m[39m <formula> inside insert_content generates a native formula block that reparses after save [33m 1027[2mms[22m[39m
+[90mstderr[2m | tests/style-gallery-overflow.test.ts[2m > [22m[2mstyle gallery overflow[2m > [22m[2mshows the expander when cards wrap out of view and hides it when they fit again
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/context-menu.test.ts[2m > [22m[2mFontDialog[2m > [22m[2mapplies font marks to the selection on OK
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/style-gallery-overflow.test.ts[2m > [22m[2mstyle gallery overflow[2m > [22m[2mshows the expander when cards wrap out of view and hides it when they fit again
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/context-menu.test.ts[2m > [22m[2mParagraphDialog[2m > [22m[2mapplies alignment and spacing to the paragraph on OK
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/style-gallery-overflow.test.ts[2m > [22m[2mstyle gallery overflow[2m > [22m[2mshows the expander when cards wrap out of view and hides it when they fit again
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/context-menu.test.ts[2m > [22m[2mParagraphDialog[2m > [22m[2mresolves visual left/right against the paragraph direction (LTR)
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/image-wrap.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 2681[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps an untouched image byte-identical [33m 529[2mms[22m[39m
+     [33m[2m✓[22m[39m position preset (margin align) round-trips and stays clean on reopen [33m 385[2mms[22m[39m
+     [33m[2m✓[22m[39m rotation + flip round-trip through a:xfrm and clear cleanly [33m 312[2mms[22m[39m
+[90mstderr[2m | tests/style-gallery-overflow.test.ts[2m > [22m[2mstyle gallery overflow[2m > [22m[2mexpander opens a grid with every style, and picking one applies it and closes
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/context-menu.test.ts[2m > [22m[2mParagraphDialog[2m > [22m[2mshows the start side as Right in RTL and stores visual left explicitly
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/context-menu.test.ts[2m > [22m[2mParagraphDialog[2m > [22m[2mclears the align attr when re-selecting the start side in RTL
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/ai-rich-generation.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 3056[2mms[22m[39m
+     [33m[2m✓[22m[39m table/code block/blockquote/list fully generated then reparsed with correct structure [33m 1357[2mms[22m[39m
+     [33m[2m✓[22m[39m read_blocks serializes tables/code blocks/blockquotes back to restricted HTML [33m 499[2mms[22m[39m
+     [33m[2m✓[22m[39m reopen then save without edits = identical bytes (signature round-trip holds) [33m 405[2mms[22m[39m
+     [33m[2m✓[22m[39m reopened table is a native node; editing cell text uses a targeted patch and other cells stay untouched [33m 404[2mms[22m[39m
+     [33m[2m✓[22m[39m generates a real TOC field; blank template ships TOC1-9 styles; round-trip bytes stable [33m 316[2mms[22m[39m
+ [32m✓[39m tests/context-menu.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 1910[2mms[22m[39m
+     [33m[2m✓[22m[39m disables selection-dependent items when nothing is selected [33m 644[2mms[22m[39m
+ [32m✓[39m tests/commands.test.ts [2m([22m[2m39 tests[22m[2m)[22m[33m 2869[2mms[22m[39m
+     [33m[2m✓[22m[39m sets color on all headings via nodeType, keeping bold and size (fields mask) [33m 450[2mms[22m[39m
+[90mstderr[2m | tests/style-gallery-overflow.test.ts[2m > [22m[2mstyle gallery overflow[2m > [22m[2mexpander opens a grid with every style, and picking one applies it and closes
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/style-gallery-overflow.test.ts[2m > [22m[2mstyle gallery overflow[2m > [22m[2mexpander opens a grid with every style, and picking one applies it and closes
+[22m[39mThe current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/style-gallery-overflow.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2051[2mms[22m[39m
+     [33m[2m✓[22m[39m shows no expander while every card fits [33m 1034[2mms[22m[39m
+     [33m[2m✓[22m[39m shows the expander when cards wrap out of view and hides it when they fit again [33m 447[2mms[22m[39m
+     [33m[2m✓[22m[39m expander opens a grid with every style, and picking one applies it and closes [33m 567[2mms[22m[39m
+ [32m✓[39m tests/native-table.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 3284[2mms[22m[39m
+     [33m[2m✓[22m[39m converts imported tables to schema-native editable nodes [33m 610[2mms[22m[39m
+     [33m[2m✓[22m[39m constrains after the resize plugin commits, via the activeHandle mouseup path [33m 600[2mms[22m[39m
+[90mstdout[2m | tests/pagination-parity.test.ts[2m > [22m[2mpagination parity (F2: line-level pagination + page-break constraints)[2m > [22m[2mgenerates the F2 pagination parity report
+[22m[39m
+Report written to: /Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/.task/pagination-parity-report.md
+
+F2 vs LO parity: 66.7% (62/93 page-start blocks matched), identical page counts 17/27 docs
+F2 vs Word parity: 90.4% (66/73 page-start blocks matched), identical page counts 24/25 docs
+
+ [32m✓[39m tests/pagination-parity.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 4381[2mms[22m[39m
+     [33m[2m✓[22m[39m generates the F2 pagination parity report [33m 4370[2mms[22m[39m
+ [32m✓[39m tests/shape-insert.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 2745[2mms[22m[39m
+     [33m[2m✓[22m[39m shape rect: insert→save→Word structure assertions [33m 897[2mms[22m[39m
+ [32m✓[39m tests/revisions.test.ts [2m([22m[2m43 tests[22m[2m)[22m[33m 4053[2mms[22m[39m
+     [33m[2m✓[22m[39m finds contiguous revision ranges with kind and author [33m 331[2mms[22m[39m
+     [33m[2m✓[22m[39m saves/reopens image deletion and table/page-break insertion revisions [33m 349[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+[90mstderr[2m | tests/render-isolation.test.ts[2m > [22m[2mshallowEqual / useShallowStable[2m > [22m[2mkeeps the previous reference while values are equal
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/render-isolation.test.ts[2m > [22m[2museStableCallbacks[2m > [22m[2mreturns stable identities that dispatch into the latest closure
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/chart-edit.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1126[2mms[22m[39m
+     [33m[2m✓[22m[39m renders an SVG preview and a data grid for the chart block [33m 621[2mms[22m[39m
+ [32m✓[39m tests/line-factor-live.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 1151[2mms[22m[39m
+     [33m[2m✓[22m[39m typing CJK into a paragraph created empty switches its factor to the CJK var [33m 443[2mms[22m[39m
+ [32m✓[39m tests/cover-pages.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 1386[2mms[22m[39m
+     [33m[2m✓[22m[39m inserts at document start and keeps original content after it [33m 516[2mms[22m[39m
+     [33m[2m✓[22m[39m every preset round-trips through the editor schema without loss [33m 776[2mms[22m[39m
+ [32m✓[39m tests/raw-ppr.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1234[2mms[22m[39m
+     [33m[2m✓[22m[39m typing in a paragraph keeps its exotic pPr byte-identical [33m 903[2mms[22m[39m
+[90mstderr[2m | tests/render-isolation.test.ts[2m > [22m[2mRibbon render isolation[2m > [22m[2mskips re-render when formatState and callbacks are unchanged
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/render-isolation.test.ts[2m > [22m[2mCommentsPanel anchor scan[2m > [22m[2mshows anchor text collected in a single DOM pass
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/render-isolation.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 1245[2mms[22m[39m
+     [33m[2m✓[22m[39m computes once per doc reference and recomputes on a new doc [33m 398[2mms[22m[39m
+     [33m[2m✓[22m[39m skips re-render when formatState and callbacks are unchanged [33m 402[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/ai-chart-tools.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 1114[2mms[22m[39m
+     [33m[2m✓[22m[39m inserts a gen chart block with normalized values [33m 546[2mms[22m[39m
+ [32m✓[39m tests/para-paste-roundtrip.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 1172[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps a negative left indent [33m 433[2mms[22m[39m
+ [32m✓[39m tests/textbox-insert.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 1355[2mms[22m[39m
+     [33m[2m✓[22m[39m genXml textbox node saves as kind:xml with the XML containing the wps:wsp structure [33m 785[2mms[22m[39m
+ [32m✓[39m tests/cell-insert.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1147[2mms[22m[39m
+     [33m[2m✓[22m[39m setNode docListItem succeeds in a cell and saves w:numPr into the tc [33m 935[2mms[22m[39m
+ [32m✓[39m tests/ai-tool-echo-guard.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 1486[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects html containing a literal tool_response tag [33m 910[2mms[22m[39m
+ [32m✓[39m tests/numbering.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 1488[2mms[22m[39m
+     [33m[2m✓[22m[39m renders data-marker on list items in the editor [33m 654[2mms[22m[39m
+ [32m✓[39m tests/nested-table-edit.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1669[2mms[22m[39m
+     [33m[2m✓[22m[39m untouched round-trip is byte-identical [33m 867[2mms[22m[39m
+     [33m[2m✓[22m[39m nested-cell text edits use the surgical patch, outer bytes untouched [32m 300[2mms[22m[39m
+     [33m[2m✓[22m[39m outer structural change (formatting) no longer drops nested tables on regeneration [33m 496[2mms[22m[39m
+ [32m✓[39m tests/wordart-insert.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 1967[2mms[22m[39m
+     [33m[2m✓[22m[39m WordArt insert → saveBlocks contains kind:xml with wps:wsp [33m 1135[2mms[22m[39m
+     [33m[2m✓[22m[39m WordArt insert → save → reparse keeps the text readable [33m 402[2mms[22m[39m
+     [33m[2m✓[22m[39m saving WordArt with an empty text box does not corrupt the document structure [33m 366[2mms[22m[39m
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2msetting a modify password produces verifiable writeProtection credentials
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/list-enter-continuation.test.ts[2m > [22m[2mEnter continues a list[2m > [22m[2mEnter in an empty item leaves the list
+[22m[39m[tiptap warn]: Invalid content. Passed value: {
+  type: [32m'doc'[39m,
+  content: [ { type: [32m'docListItem'[39m, attrs: [36m[Object][39m, content: [36m[Array][39m } ]
+} Error: RangeError: Empty text nodes are not allowed
+    at new TextNode (file:///Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/node_modules/[4mprosemirror-model[24m/dist/index.js:1554:19)
+    at Schema.text (file:///Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/node_modules/[4mprosemirror-model[24m/dist/index.js:2484:16)
+    at Node.fromJSON (file:///Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/node_modules/[4mprosemirror-model[24m/dist/index.js:1538:27)
+    at Schema.nodeFromJSON (file:///Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/node_modules/[4mprosemirror-model[24m/dist/index.js:2458:42)
+    at Array.map (<anonymous>)
+    at Fragment.fromJSON (file:///Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/node_modules/[4mprosemirror-model[24m/dist/index.js:324:41)
+    at Node.fromJSON (file:///Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/node_modules/[4mprosemirror-model[24m/dist/index.js:1540:32)
+    at Schema.nodeFromJSON (file:///Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/node_modules/[4mprosemirror-model[24m/dist/index.js:2458:42)
+    at Array.map (<anonymous>)
+    at Fragment.fromJSON (file:///Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/node_modules/[4mprosemirror-model[24m/dist/index.js:324:41)
+
+ [32m✓[39m tests/list-enter-continuation.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 2438[2mms[22m[39m
+     [33m[2m✓[22m[39m bullet: a non-empty item splits into a sibling item [33m 764[2mms[22m[39m
+     [33m[2m✓[22m[39m a continued item saves with its own w:numPr [33m 1059[2mms[22m[39m
+ [32m✓[39m tests/chart-insert.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 2250[2mms[22m[39m
+     [33m[2m✓[22m[39m genChart node saves as a real chart part and survives reparse [33m 1843[2mms[22m[39m
+     [33m[2m✓[22m[39m in-place data edits (chartDisplay attr) flow into the saved part [33m 398[2mms[22m[39m
+ [32m✓[39m tests/move-mode.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2537[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps native table cells editable while the table remains a top-level movable node [33m 1508[2mms[22m[39m
+     [33m[2m✓[22m[39m uses a dedicated textbox handle while inner drags remain text selection [33m 612[2mms[22m[39m
+     [33m[2m✓[22m[39m persists a moved table/textbox atom in the new document order [33m 411[2mms[22m[39m
+ [32m✓[39m tests/ai-deleted-revision-context.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 2804[2mms[22m[39m
+     [33m[2m✓[22m[39m block list tags deleted blocks, hides deleted text and excludes it from stats [33m 1137[2mms[22m[39m
+     [33m[2m✓[22m[39m read_blocks omits deleted revision text [33m 314[2mms[22m[39m
+ [32m✓[39m tests/autospace-live.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 2221[2mms[22m[39m
+     [33m[2m✓[22m[39m pads each CJK-Latin/digit boundary, skipping space/punctuation seams [33m 1480[2mms[22m[39m
+     [33m[2m✓[22m[39m follows live edits [33m 352[2mms[22m[39m
+ [32m✓[39m tests/bookmarks-crossref.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2479[2mms[22m[39m
+     [33m[2m✓[22m[39m renders data-bookmarks and keeps an untouched doc byte-identical [33m 1891[2mms[22m[39m
+     [33m[2m✓[22m[39m adding a bookmark regenerates the paragraph with bookmarkStart [33m 363[2mms[22m[39m
+ [32m✓[39m tests/equation-insert.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2965[2mms[22m[39m
+     [33m[2m✓[22m[39m inserts a display equation that renders native MathML in the editor [33m 1878[2mms[22m[39m
+     [33m[2m✓[22m[39m saves the inserted equation and reparses it as a formula block [33m 323[2mms[22m[39m
+     [33m[2m✓[22m[39m every builtin gallery equation converts without error [33m 756[2mms[22m[39m
+ [32m✓[39m tests/table-style.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 2114[2mms[22m[39m
+     [33m[2m✓[22m[39m renders style-derived header fill and stays byte-identical untouched [33m 1941[2mms[22m[39m
+ [32m✓[39m tests/direction.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 3016[2mms[22m[39m
+     [33m[2m✓[22m[39m sets bidi on every paragraph-like block in the selection [33m 1568[2mms[22m[39m
+ [32m✓[39m tests/protected-text-edit.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 2160[2mms[22m[39m
+     [33m[2m✓[22m[39m double-click edits visible text and round-trips through targeted XML patches [33m 1902[2mms[22m[39m
+ [32m✓[39m tests/toc-auto-update.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1759[2mms[22m[39m
+     [33m[2m✓[22m[39m saves the refreshed page number of a generated TOC line [33m 1336[2mms[22m[39m
+ [32m✓[39m tests/set-format-then-type.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1730[2mms[22m[39m
+     [33m[2m✓[22m[39m font → size → type keeps both on the stored mark and in the saved file [33m 1499[2mms[22m[39m
+ [32m✓[39m tests/indent.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 1276[2mms[22m[39m
+     [33m[2m✓[22m[39m steps a plain paragraph by half-inch stops and back to null [33m 830[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/note-refs.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 618[2mms[22m[39m
+     [33m[2m✓[22m[39m renders both atoms in the editor schema without dropping them [33m 592[2mms[22m[39m
+ [32m✓[39m tests/font-paste-roundtrip.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 1179[2mms[22m[39m
+     [33m[2m✓[22m[39m mixed run keeps both slots [33m 790[2mms[22m[39m
+ [32m✓[39m tests/note-format.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 664[2mms[22m[39m
+     [33m[2m✓[22m[39m in-text reference marks render roman for endnotes [33m 635[2mms[22m[39m
+ [32m✓[39m tests/list-indent-live.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 1220[2mms[22m[39m
+     [33m[2m✓[22m[39m toggling a list on a blank doc applies the numbering indent immediately and it survives save → reopen [33m 1195[2mms[22m[39m
+[90mstderr[2m | tests/ui-guards.test.ts[2m > [22m[2mFindPanel[2m > [22m[2mhides the replace row when the editor is read-only
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/caps-display.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1140[2mms[22m[39m
+     [33m[2m✓[22m[39m parses w:caps/w:smallCaps into run.caps; w:caps wins when both are set [33m 785[2mms[22m[39m
+[90mstderr[2m | tests/ui-guards.test.ts[2m > [22m[2mFindPanel[2m > [22m[2mshows the replace row on an editable document
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/paragraph-strut-size.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 938[2mms[22m[39m
+     [33m[2m✓[22m[39m all runs explicit: the paragraph carries the max run size [33m 612[2mms[22m[39m
+[90mstderr[2m | tests/ui-guards.test.ts[2m > [22m[2mFindPanel[2m > [22m[2mdebounces the scan while typing
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/ui-guards.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1244[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps offsets aligned after a length-changing lowercase char [33m 587[2mms[22m[39m
+ [32m✓[39m tests/comment-ops.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 1168[2mms[22m[39m
+     [33m[2m✓[22m[39m marks the selected text with the comment id [33m 617[2mms[22m[39m
+ [32m✓[39m tests/comments.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 1213[2mms[22m[39m
+     [33m[2m✓[22m[39m renders the covered run as a comment mark and round-trips untouched as original [33m 881[2mms[22m[39m
+ [32m✓[39m tests/character-styles.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1292[2mms[22m[39m
+     [33m[2m✓[22m[39m renders rStyle runs as data-style spans [33m 833[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/table-rich-render.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 549[2mms[22m[39m
+ [32m✓[39m tests/inactive-selection.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1011[2mms[22m[39m
+     [33m[2m✓[22m[39m decorates the selected range while shown, clears on hide [33m 701[2mms[22m[39m
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2msetting a modify password produces verifiable writeProtection credentials
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2menabling a comments restriction without password enforces mode only
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2menabling a comments restriction without password enforces mode only
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2menabling a comments restriction without password enforces mode only
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2menabling a comments restriction without password enforces mode only
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2menabling a comments restriction without password enforces mode only
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mremoving a password-protected restriction requires the correct password
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mremoving a password-protected restriction requires the correct password
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mremoving a password-protected restriction requires the correct password
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mremoving a password-protected restriction requires the correct password
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mremoving a password-protected restriction requires the correct password
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mremoving a password-protected restriction requires the correct password
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mremoving a password-protected restriction requires the correct password
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/ai-panel-collapse.test.ts[2m > [22m[2mAiPanel collapse[2m > [22m[2mkeeps the draft input across a collapse/expand cycle
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/ai-panel-collapse.test.ts[2m > [22m[2mAiPanel collapse[2m > [22m[2mexpands back through the rail button
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/ai-panel-collapse.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1210[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps the draft input across a collapse/expand cycle [33m 1084[2mms[22m[39m
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mremoving a password-protected restriction requires the correct password
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mremoving a password-protected restriction requires the correct password
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mchanging only the mode of an unlocked restriction keeps the existing hash
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mchanging only the mode of an unlocked restriction keeps the existing hash
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mchanging only the mode of an unlocked restriction keeps the existing hash
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mchanging only the mode of an unlocked restriction keeps the existing hash
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mchanging only the mode of an unlocked restriction keeps the existing hash
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mchanging only the mode of an unlocked restriction keeps the existing hash
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mtoggling privacy reports only the privacy change
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mtoggling privacy reports only the privacy change
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mtoggling privacy reports only the privacy change
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/protect-dialog.test.ts[2m > [22m[2mProtectDialog[2m > [22m[2mtoggling privacy reports only the privacy change
+[22m[39mThe current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/protect-dialog.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 32596[2mms[22m[39m
+     [33m[2m✓[22m[39m setting a modify password produces verifiable writeProtection credentials [33m 30619[2mms[22m[39m
+     [33m[2m✓[22m[39m removing a password-protected restriction requires the correct password [33m 750[2mms[22m[39m
+     [33m[2m✓[22m[39m changing only the mode of an unlocked restriction keeps the existing hash [33m 501[2mms[22m[39m
+ [32m✓[39m tests/pagination.test.ts [2m([22m[2m146 tests[22m[2m)[22m[33m 632[2mms[22m[39m
+ [32m✓[39m tests/kr-font-metrics.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 448[2mms[22m[39m
+     [33m[2m✓[22m[39m U+FF0D/FF0F/FF3C/FF3F/FF5E map to 1.0em glyphs [33m 386[2mms[22m[39m
+ [32m✓[39m tests/pagination-gaps.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 525[2mms[22m[39m
+ [32m✓[39m tests/hf-page-mark.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 464[2mms[22m[39m
+[90mstderr[2m | tests/page-note-areas.test.ts[2m > [22m[2mPageEndnotes — canvas endnote area (Word parity)[2m > [22m[2mrenders no heading, roman superscript markers, and the entry text
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/page-note-areas.test.ts[2m > [22m[2mPageEndnotes — canvas endnote area (Word parity)[2m > [22m[2manchors at the measured flow end when a top is provided
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/page-note-areas.test.ts[2m > [22m[2mPageEndnotes — canvas endnote area (Word parity)[2m > [22m[2mfalls back to flow stacking before the first measure (no anchor class)
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/page-note-areas.test.ts[2m > [22m[2mPageEndnotes — canvas endnote area (Word parity)[2m > [22m[2mforwards edit/delete to the handlers
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/font-check.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 242[2mms[22m[39m
+[90mstderr[2m | tests/page-note-areas.test.ts[2m > [22m[2mPageFootnotes — end-of-document footnote list[2m > [22m[2mskips entries already shown in page gaps but keeps full-list numbering
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/page-note-areas.test.ts[2m > [22m[2mPageFootnotes — end-of-document footnote list[2m > [22m[2mrenders nothing when every entry lives in a page gap
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/page-note-areas.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 379[2mms[22m[39m
+ [32m✓[39m tests/sdt-toc.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 784[2mms[22m[39m
+ [32m✓[39m tests/caret-marks.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 958[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps the pending format across arrow navigation out of and back into an empty paragraph [33m 815[2mms[22m[39m
+ [32m✓[39m tests/text-style-resolve.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 877[2mms[22m[39m
+     [33m[2m✓[22m[39m resolves the paragraph style size at the caret [33m 654[2mms[22m[39m
+ [32m✓[39m tests/table-overflow-clamp.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 385[2mms[22m[39m
+ [32m✓[39m tests/toc-headings.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 996[2mms[22m[39m
+     [33m[2m✓[22m[39m collects H1-H3 headings with levels in document order [33m 867[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/line-metrics.test.ts [2m([22m[2m112 tests[22m[2m)[22m[32m 256[2mms[22m[39m
+ [32m✓[39m tests/protected-autospace.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 285[2mms[22m[39m
+ [32m✓[39m tests/hf-table-cell-paras.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 404[2mms[22m[39m
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2minitDocsAutoUpdater[2m > [22m[2minstalls immediately when the user confirms the downloaded update
+[22m[39m[docs-updater] downloaded: 0.2.0
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2minitDocsAutoUpdater[2m > [22m[2mdoes not re-prompt for a version the user dismissed
+[22m[39m[docs-updater] downloaded: 0.2.0
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2minitDocsAutoUpdater[2m > [22m[2mdoes not re-prompt for a version the user dismissed
+[22m[39m[docs-updater] downloaded: 0.3.0
+
+ [32m✓[39m tests/updater.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 244[2mms[22m[39m
+ [32m✓[39m tests/markdown-paste.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 156[2mms[22m[39m
+ [32m✓[39m tests/shape-gallery.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [32m✓[39m tests/save-until-persisted.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m tests/doc-theme-css.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 64[2mms[22m[39m
+ [32m✓[39m tests/files-skill.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m tests/atomic-write.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+ [32m✓[39m tests/convert-regressions.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 111[2mms[22m[39m
+ [32m✓[39m tests/float-spill.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m tests/doc-dirty.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 104[2mms[22m[39m
+ [32m✓[39m tests/para-border-merge.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m tests/compare.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m tests/ink.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 104[2mms[22m[39m
+ [32m✓[39m tests/shape-svg.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m tests/external-change.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m tests/font-classify.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m tests/print-range.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m tests/shape-draw.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m tests/symbol-fonts.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m tests/word-count.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/tamil-font-metrics.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m tests/ai-continuation.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/open-file.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m tests/page-margins.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m tests/pagination-preview-prune.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/picture-dialogs.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/wrap-band-live.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/docx-encryption.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 54280[2mms[22m[39m
+     [33m[2m✓[22m[39m is true for an ECMA-376 encrypted docx [33m 2830[2mms[22m[39m
+     [33m[2m✓[22m[39m round-trips byte-exact with the right password [33m 8558[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects a wrong password with reason wrong-password [33m 15079[2mms[22m[39m
+     [33m[2m✓[22m[39m decrypts a real Office agile-encrypted docx byte-exact (multi-segment) [33m 6881[2mms[22m[39m
+     [33m[2m✓[22m[39m decrypts a real Office standard-encrypted docx byte-exact [33m 1246[2mms[22m[39m
+     [33m[2m✓[22m[39m encrypts and decrypts recovery with the disk password after desired new or none [33m 19610[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m95 passed[39m[22m[90m (95)[39m
+[2m      Tests [22m [1m[32m1031 passed[39m[22m[90m (1031)[39m
+[2m   Start at [22m 00:56:57
+[2m   Duration [22m 57.64s[2m (transform 33.76s, setup 2.67s, import 163.23s, tests 191.98s, environment 356.33s)[22m
+
+
+> @genoffice/sheets@0.1.0 test
+> npm run native:test && npm run native:build && vitest run
+
+
+> @genoffice/sheets@0.1.0 native:test
+> cargo test --manifest-path native/xlsx-engine/Cargo.toml --config native/xlsx-engine/.cargo/config.toml
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.22s
+     Running unittests src/lib.rs (native/xlsx-engine/target/debug/deps/xlsx_sidecar-e7f3164e86614290)
+
+running 91 tests
+test recalc::tests::caps_read_volume ... ok
+test shared_formulas::tests::escaped_quotes_stay_verbatim ... ok
+test shared_formulas::tests::leaves_strings_quoted_sheets_and_functions_alone ... ok
+test shared_formulas::tests::numbers_and_names_pass_through ... ok
+test shared_formulas::tests::out_of_bounds_shift_fails ... ok
+test shared_formulas::tests::shifts_relative_refs_and_keeps_absolute_parts ... ok
+test shared_formulas::tests::registry_expands_followers_from_the_master ... ok
+test shared_formulas::tests::shifts_whole_column_and_row_ranges ... ok
+test shared_formulas::tests::spec_example_followers ... ok
+test tests::builtin_palette_matches_calibration ... ok
+test archive::tests::scans_decoded_text_across_entity_references ... ok
+test archive::tests::extracts_requested_entries_and_reports_manifest ... ok
+test archive::tests::rejects_edits_on_missing_or_conflicting_entries ... ok
+test archive::tests::saves_with_raw_copy_replacement_removal_and_addition ... ok
+test tests::captures_array_formula_refs_on_master_cells ... ok
+test tests::assigns_implicit_addresses_without_r ... ok
+test tests::ignores_worksheets_without_sparkline_ext ... ok
+test tests::applies_system_short_date_to_builtin_date_formats ... ok
+test tests::custom_table_style_resolves_dxf_bands ... ok
+test recalc::tests::recalculates_after_edits ... ok
+test recalc::tests::reuses_the_resident_model_and_applies_edits_incrementally ... ok
+test recalc::tests::rejects_unknown_sheets ... ok
+test tests::expands_shared_formulas_into_followers ... ok
+test recalc::tests::an_errored_request_does_not_poison_the_cache ... ok
+test recalc::tests::purge_drops_the_resident_model ... ok
+test tests::normalizes_worksheet_paths_with_forward_slashes ... ok
+test tests::empty_shared_string_value_keeps_sheet_readable ... ok
+test tests::omits_empty_sparklines_field_from_metadata_json ... ok
+test convert::tests::converts_a_calamine_readable_workbook_into_minimal_xlsx ... ok
+test tests::keeps_tables_with_x14_alt_text_ext ... ok
+test tests::parses_excel_addresses ... ok
+test tests::parses_multiple_sparkline_cells_and_skips_empty_groups ... ok
+test tests::light_table_style_carries_border_color ... ok
+test tests::keeps_value_less_cells_whose_style_paints_borders_or_fill ... ok
+test recalc::tests::rebuilds_when_an_edit_is_reverted ... ok
+test tests::parses_sparkline_group_types_and_colors ... ok
+test tests::reads_cdata_wrapped_sparkline_refs ... ok
+test tests::malformed_dimension_ref_is_ignored ... ok
+test tests::parses_workbook_pr_date1904 ... ok
+test tests::rejects_oversized_ranges ... ok
+test tests::opens_backslash_and_case_drifted_package ... ok
+test tests::parses_workbook_view_active_tab ... ok
+test tests::medium_full_color_styles_fill_both_row_bands ... ok
+test tests::ole_placeholder_carries_prog_id ... ok
+test tests::nameless_table_style_gets_no_palette ... ok
+test tests::serializes_sparklines_in_expected_shape ... ok
+test tests::phonetic_runs_stay_out_of_shared_strings ... ok
+test tests::pivot_disabled_grand_totals_serialize_false ... ok
+test tests::pivot_style_light_resolves_band_fill ... ok
+test tests::prefixed_table_part_is_parsed ... ok
+test tests::strips_future_function_markers_outside_strings ... ok
+test recalc::tests::rebuilds_when_the_file_changes_on_disk ... ok
+test tests::tint_matches_excel_shades ... ok
+test tests::parses_one_cell_anchor_ext_and_line_style ... ok
+test visuals::tests::expands_group_chart_children_with_their_part_path ... ok
+test visuals::tests::collects_axis_titles ... ok
+test visuals::tests::expands_group_children_through_child_space ... ok
+test tests::parses_chart_semantics_and_textbox_paragraphs ... ok
+test tests::resolves_alternate_content_style_entries ... ok
+test tests::reports_row_heights_without_custom_height_flag ... ok
+test tests::stale_single_row_dimension_is_remeasured ... ok
+test visuals::tests::numbers_unnamed_series_like_excel ... ok
+test visuals::tests::outline_solid_fill_is_not_the_shape_fill ... ok
+test tests::stale_single_cell_dimension_is_remeasured ... ok
+test visuals::tests::parses_absolute_anchor_as_offsets_from_origin ... ok
+test visuals::tests::maps_data_labels_from_plot_or_series ... ok
+test tests::reports_row_and_column_default_styles ... ok
+test visuals::tests::maps_legend_positions_and_defaults ... ok
+test visuals::tests::maps_data_label_position_and_format ... ok
+test visuals::tests::reads_cell_linked_chart_titles_from_the_str_cache ... ok
+test visuals::tests::reads_gap_width_and_hole_size ... ok
+test visuals::tests::reads_category_formats_from_num_cache_and_axis ... ok
+test visuals::tests::reads_gridlines_only_when_a_value_axis_exists ... ok
+test tests::rich_run_bool_props_honor_val_zero ... ok
+test visuals::tests::reads_grouping_from_first_grouped_plot ... ok
+test visuals::tests::reads_point_colors_from_srgb_and_scheme_fills ... ok
+test tests::stale_small_dimension_is_remeasured ... ok
+test visuals::tests::reads_value_axis_bounds ... ok
+test visuals::tests::reads_series_and_point_explosions ... ok
+test visuals::tests::rotated_shape_reports_true_frame_extent ... ok
+test tests::zero_default_sizes_normalize_to_none ... ok
+test visuals::tests::resolves_style_fill_ref_theme_gradient ... ok
+test visuals::tests::theme_attribute_wins_over_rgb_cache ... ok
+test tests::resolves_locale_reserved_builtin_number_formats ... ok
+test visuals::tests::sole_named_series_still_becomes_auto_title ... ok
+test visuals::tests::sole_unnamed_series_keeps_placeholder_title ... ok
+test visuals::tests::serializes_category_formats_with_expected_json_names ... ok
+test visuals::tests::serializes_new_fields_with_expected_json_names ... ok
+test visuals::tests::value_axis_prefers_the_left_axis ... ok
+test recalc::tests::caps_resident_models ... ok
+test tests::truncates_oversized_sparkline_groups ... ok
+
+test result: ok. 91 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running unittests src/main.rs (native/xlsx-engine/target/debug/deps/xlsx_sidecar-0016baa50919e263)
+
+running 1 test
+test tests::save_archive_keeps_the_source_resident_model_warm ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+   Doc-tests xlsx_sidecar
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> @genoffice/sheets@0.1.0 native:build
+> cargo build --release --manifest-path native/xlsx-engine/Cargo.toml --config native/xlsx-engine/.cargo/config.toml
+
+    Finished `release` profile [optimized] target(s) in 0.21s
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/apps/sheets[39m
+
+ [32m✓[39m tests/aggregate.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 432[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps exact counts after distinct tracking overflows [33m 358[2mms[22m[39m
+ [32m✓[39m tests/save-edits-staging.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 911[2mms[22m[39m
+     [33m[2m✓[22m[39m chunks edit sets above the inline cap [33m 391[2mms[22m[39m
+     [33m[2m✓[22m[39m aborts the transfer when a chunk upload fails [33m 454[2mms[22m[39m
+ [32m✓[39m tests/xlsx-pivot-expand.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 668[2mms[22m[39m
+ [32m✓[39m tests/xlsx-structure.test.ts [2m([22m[2m65 tests[22m[2m)[22m[33m 1175[2mms[22m[39m
+ [32m✓[39m tests/xlsx-pivot-add.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 939[2mms[22m[39m
+ [32m✓[39m tests/xlsx-drawing-add.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 992[2mms[22m[39m
+ [32m✓[39m tests/xlsx-table-add.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 491[2mms[22m[39m
+ [32m✓[39m tests/csv-import.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 846[2mms[22m[39m
+     [33m[2m✓[22m[39m falls back to the legacy charset Excel actually writes [33m 349[2mms[22m[39m
+     [33m[2m✓[22m[39m uses the preferred charset to break GBK/Shift_JIS ties [33m 326[2mms[22m[39m
+ [32m✓[39m tests/xlsx-streaming-save.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 669[2mms[22m[39m
+ [32m✓[39m tests/formula-cached-values.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 642[2mms[22m[39m
+     [33m[2m✓[22m[39m updates <v> and keeps <f> for a numeric result [33m 333[2mms[22m[39m
+ [32m✓[39m tests/xlsx-sheets.test.ts [2m([22m[2m31 tests[22m[2m)[22m[33m 1383[2mms[22m[39m
+     [33m[2m✓[22m[39m writes state="hidden", reorders tabs, and drops calcChain on reorder [33m 343[2mms[22m[39m
+ [32m✓[39m tests/xlsx-preservation.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 386[2mms[22m[39m
+ [32m✓[39m tests/xlsx-sidecar.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 309[2mms[22m[39m
+ [32m✓[39m tests/temp-files.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m tests/xlsx-recalc.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 276[2mms[22m[39m
+ [32m✓[39m tests/xlsx-notes.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 238[2mms[22m[39m
+ [32m✓[39m tests/xlsx-filter.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 310[2mms[22m[39m
+ [32m✓[39m tests/pivot-chart.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 141[2mms[22m[39m
+ [32m✓[39m tests/xlsx-sparkline.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 371[2mms[22m[39m
+     [33m[2m✓[22m[39m writes the ext through the preservation pipeline [33m 347[2mms[22m[39m
+ [32m✓[39m tests/xlsx-producer-compat.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 397[2mms[22m[39m
+ [32m✓[39m tests/workbook-dsl.test.ts [2m([22m[2m27 tests[22m[2m)[22m[33m 417[2mms[22m[39m
+ [32m✓[39m tests/short-date.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 154[2mms[22m[39m
+ [32m✓[39m tests/xlsx-chart.test.ts [2m([22m[2m74 tests[22m[2m)[22m[32m 136[2mms[22m[39m
+ [32m✓[39m tests/lazy-plan.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 116[2mms[22m[39m
+ [32m✓[39m tests/pivot-engine.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 116[2mms[22m[39m
+ [32m✓[39m tests/xlsx-plan-oversized.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 91[2mms[22m[39m
+ [32m✓[39m tests/fill-range.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 204[2mms[22m[39m
+ [32m✓[39m tests/xlsx-drawing-add.options.test.ts [2m([22m[2m39 tests[22m[2m)[22m[32m 90[2mms[22m[39m
+ [32m✓[39m tests/numfmt-dialog.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 109[2mms[22m[39m
+ [32m✓[39m tests/edit-journal.test.ts [2m([22m[2m69 tests[22m[2m)[22m[32m 145[2mms[22m[39m
+ [32m✓[39m tests/xlsx-borders.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 160[2mms[22m[39m
+ [32m✓[39m tests/workbook-transactions.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 202[2mms[22m[39m
+ [32m✓[39m tests/bulk-range-ops.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 194[2mms[22m[39m
+ [32m✓[39m tests/sort-range.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m tests/pivot-slicer.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+ [32m✓[39m tests/xlsx-atomic-sync.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m tests/univer-locales.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+(node:45531) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/aggregate-range.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 88[2mms[22m[39m
+ [32m✓[39m tests/undo-carry.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 94[2mms[22m[39m
+ [32m✓[39m tests/insert-function-catalog.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m tests/formula-audit.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m tests/image-skill.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m tests/pivot-filters.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 84[2mms[22m[39m
+ [32m✓[39m tests/xlsx-page-setup.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 94[2mms[22m[39m
+ [32m✓[39m tests/formula-cost.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 140[2mms[22m[39m
+(node:45520) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:45784) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:45688) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/chart-state-edit.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 146[2mms[22m[39m
+ [32m✓[39m tests/pivot-formula.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m tests/xlsx-drawing-edit.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+ [32m✓[39m tests/view-transform.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m tests/shape-gallery.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/pivot-roundtrip.e2e.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 13670[2mms[22m[39m
+     [33m[2m✓[22m[39m survives a headless convert with the pivot parts intact [33m 13666[2mms[22m[39m
+ [32m✓[39m tests/xlsx-drawing-add.chart-types.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m tests/pivot-grouping.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m tests/xlsx-cf.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m tests/numfmt-fix.test.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m tests/visual-schema.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m tests/visual-add-edit.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m tests/save-recovery-mode.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 166[2mms[22m[39m
+ [32m✓[39m tests/workbook-search.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 75[2mms[22m[39m
+ [32m✓[39m tests/univer-range-loading.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 286[2mms[22m[39m
+ [32m✓[39m tests/workbook-skill-tools.test.ts [2m([22m[2m72 tests[22m[2m)[22m[33m 1018[2mms[22m[39m
+     [33m[2m✓[22m[39m after writing a formula, reads back the computed value asynchronously (write → verify) [33m 307[2mms[22m[39m
+     [33m[2m✓[22m[39m reads back formulas per target sheet, labeling addresses when sheets mix [33m 303[2mms[22m[39m
+     [33m[2m✓[22m[39m warns explicitly when read-back finds a formula error value [33m 302[2mms[22m[39m
+(node:45954) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/chart-recommend.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+(node:45960) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/save-edits-transfer.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m tests/formula-lexer-fix.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m tests/formula-cached-fallback.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m tests/sheet-rename-fix.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m tests/plan-operations-formula-guard.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 58[2mms[22m[39m
+ [32m✓[39m tests/selection-format.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+ [32m✓[39m tests/xlsx-alignment-carry.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m tests/formula-closure.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m tests/recovery-policy.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/consolidate.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m tests/lazy-gate.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+ [32m✓[39m tests/save-request-schema.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m tests/rate-function.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m tests/xlsx-dv.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+(node:46129) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/xlsx-defined-names.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m tests/calc-options.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+(node:46182) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/chart-category-ticks.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+(node:46211) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/xlsx-protection.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m tests/format-cells.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m tests/ifs-empty-set.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m tests/trace-arrows.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+(node:46222) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/univer-data-validation.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m tests/numfmt-overflow.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m tests/xlsx-hyperlinks.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m tests/themes.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/cell-function.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+(node:46234) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/response-verify.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m tests/formula-shift.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m tests/pivot-timeline.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/cell-warning.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/protected-ranges.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m tests/number-format.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m tests/save-as-toolbar.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m tests/formula-cached-collect.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m tests/symbol-dialog.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/ribbon-commands.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m tests/privacy-policy.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+(node:46339) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/row-height-import.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+ [32m✓[39m tests/xlsx-freeze.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m tests/page-break-preview.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m tests/selection-wrap-fix.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m tests/dedupe.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m tests/goto.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 78[2mms[22m[39m
+ [32m✓[39m tests/xlsx-theme.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m tests/close-guard.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+(node:46377) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46388) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/advanced-filter.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 56[2mms[22m[39m
+(node:46376) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/bulk-fill-undo.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m tests/create-names-from-selection.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m tests/flash-fill.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m tests/autofit-multi-row.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/save-error-localization.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m tests/cf-colorscale-clamp.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+(node:46517) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/multiline-cells.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m tests/future-functions.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+(node:46536) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46568) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/formula-null-result.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+(node:46592) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46591) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46641) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/headings-toggle.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 33[2mms[22m[39m
+(node:46614) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/zoom-to-selection.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m tests/text-rotation-import.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/numfmt-1904.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+(node:46677) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/pivot-band-rows.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/filtered-copy.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/array-formulas.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+(node:46758) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46805) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/column-width-mdw.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+(node:46793) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:46816) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ [32m✓[39m tests/cf-paint-once.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/clipboard-tsv.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/cf-blank-coercion.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/defined-names-order.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/xlsx-save-edits.test.ts [2m([22m[2m34 tests[22m[2m)[22m[33m 36481[2mms[22m[39m
+     [33m[2m✓[22m[39m applies 100k inserts and 100k overwrites in one save each [33m 34983[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m130 passed[39m[22m[90m (130)[39m
+[2m      Tests [22m [1m[32m1479 passed[39m[22m[90m (1479)[39m
+[2m   Start at [22m 00:57:58
+[2m   Duration [22m 39.77s[2m (transform 43.60s, setup 0ms, import 390.51s, tests 68.69s, environment 58ms)[22m
+
+
+> @genoffice/shell@0.7.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/apps/shell[39m
+
+ [32m✓[39m tests/privacy-doc.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/update-feed-utils.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/error-dialog.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 181[2mms[22m[39m
+ [32m✓[39m tests/star-prompt.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m tests/app-settings.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2minitAutoUpdater[2m > [22m[2mopens the update window with the available state when an update is found
+[22m[39m[updater] update available: 0.2.0
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2minitAutoUpdater[2m > [22m[2mstarts the download and pushes progress when the user clicks download
+[22m[39m[updater] update available: 0.2.0
+[updater] downloaded: 0.2.0
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2minitAutoUpdater[2m > [22m[2msurfaces a failed download as the error phase
+[22m[39m[updater] update available: 0.2.0
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2minitAutoUpdater[2m > [22m[2msurfaces a failed download as the error phase
+[22m[39m[updater] download failed: offline
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2minitAutoUpdater[2m > [22m[2mcloses the window and installs on restart when the user confirms
+[22m[39m[updater] update available: 0.2.0
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2minitAutoUpdater[2m > [22m[2mdoes not re-prompt for a version the user dismissed this session
+[22m[39m[updater] update available: 0.2.0
+[updater] update available: 0.3.0
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2minitAutoUpdater[2m > [22m[2mswallows background check failures
+[22m[39m[updater] check failed: offline
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2minitAutoUpdater[2m > [22m[2mapplyUpdateChannel switches the feed and re-checks immediately
+[22m[39m[updater] channel switched: beta
+[updater] channel switched: stable
+[updater] check failed: offline
+[updater] check failed: offline
+
+ [32m✓[39m tests/strings.test.ts [2m([22m[2m59 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mopens the feed-derived installer matching channel base URL and arm64 arch
+[22m[39m[updater] update available: 0.2.0
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mopens the feed-derived installer matching channel base URL and arm64 arch
+[22m[39m[updater] download failed: team id changed
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mopens the feed-derived installer matching channel base URL and arm64 arch
+[22m[39m[updater] download failed: team id changed
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mpicks the arch-less dmg for x64 installs
+[22m[39m[updater] update available: 0.2.0
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mpicks the arch-less dmg for x64 installs
+[22m[39m[updater] download failed: team id changed
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mpicks the arch-less dmg for x64 installs
+[22m[39m[updater] download failed: team id changed
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mrebuilds absolute metadata URLs against the trusted feed base
+[22m[39m[updater] update available: 0.2.0
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mrebuilds absolute metadata URLs against the trusted feed base
+[22m[39m[updater] download failed: team id changed
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mrebuilds absolute metadata URLs against the trusted feed base
+[22m[39m[updater] download failed: team id changed
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mrejects a non-HTTPS baked feed URL
+[22m[39m[updater] update available: 0.2.0
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mrejects a non-HTTPS baked feed URL
+[22m[39m[updater] download failed: team id changed
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mrejects a non-HTTPS baked feed URL
+[22m[39m[updater] download failed: team id changed
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mfalls back to the generic download page when the feed base cannot be read
+[22m[39m[updater] update available: 0.2.0
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mfalls back to the generic download page when the feed base cannot be read
+[22m[39m[updater] download failed: team id changed
+
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2mmanual download fallback[2m > [22m[2mfalls back to the generic download page when the feed base cannot be read
+[22m[39m[updater] download failed: team id changed
+
+ [32m✓[39m tests/analytics.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 99[2mms[22m[39m
+[90mstdout[2m | tests/updater.test.ts[2m > [22m[2minitAutoUpdater (fake update preview)[2m > [22m[2mcloses the window on later and install without touching electron-updater
+[22m[39m[updater] [fake] install requested
+
+ [32m✓[39m tests/updater.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 289[2mms[22m[39m
+ [32m✓[39m tests/home-counts.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/cloud-projects.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m tests/update-channel.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/preload-analytics.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m tests/tab-manager.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 65[2mms[22m[39m
+ [32m✓[39m tests/onboarding.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 156[2mms[22m[39m
+ [32m✓[39m tests/settings-analytics.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 142[2mms[22m[39m
+ [32m✓[39m tests/pdf-password-retry.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 374[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m16 passed[39m[22m[90m (16)[39m
+[2m      Tests [22m [1m[32m207 passed[39m[22m[90m (207)[39m
+[2m   Start at [22m 00:58:38
+[2m   Duration [22m 4.20s[2m (transform 7.37s, setup 0ms, import 9.67s, tests 1.49s, environment 2.23s)[22m
+
+
+> @genoffice/slides@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/apps/slides[39m
+
+ [32m✓[39m tests/page-spec.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 269[2mms[22m[39m
+ [32m✓[39m tests/ink.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 320[2mms[22m[39m
+ [32m✓[39m tests/history.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 236[2mms[22m[39m
+ [32m✓[39m tests/op-docs.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 172[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/web-generate-deck-local.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 725[2mms[22m[39m
+     [33m[2m✓[22m[39m lands ≥3 text pages locally and unlocks scratch-build afterwards [33m 720[2mms[22m[39m
+ [32m✓[39m tests/font-size-step.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 1197[2mms[22m[39m
+     [33m[2m✓[22m[39m grows along the ladder: 45pt → 48 → 54 (not ×1.2) [33m 898[2mms[22m[39m
+ [32m✓[39m tests/durable-identity.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 1213[2mms[22m[39m
+ [32m✓[39m tests/web-html-to-pptx.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1344[2mms[22m[39m
+     [33m[2m✓[22m[39m replace assembles several markers into one deck [33m 795[2mms[22m[39m
+     [33m[2m✓[22m[39m replace_at swaps one page in place [33m 406[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+[90mstderr[2m | tests/ai-panel-collapse.test.ts[2m > [22m[2mAiPanel collapse (slides)[2m > [22m[2mkeeps the draft input across a collapse/expand cycle
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+[90mstderr[2m | tests/ai-panel-collapse.test.ts[2m > [22m[2mAiPanel collapse (slides)[2m > [22m[2mexpands back through the rail button
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/ai-panel-collapse.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 307[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/edit-ops.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 1693[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/web-land-pages.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 1562[2mms[22m[39m
+     [33m[2m✓[22m[39m lands 3 host-authored pages and unlocks scratch-build afterwards [33m 717[2mms[22m[39m
+     [33m[2m✓[22m[39m replace_at swaps page 0 in place [33m 462[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/edit-flow.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 3279[2mms[22m[39m
+     [33m[2m✓[22m[39m opens and builds RenderSlides at fit width [33m 673[2mms[22m[39m
+     [33m[2m✓[22m[39m edit text (as IPC editText does) rebuilds RenderSlide and marks dirty [33m 467[2mms[22m[39m
+     [33m[2m✓[22m[39m edit transform (as IPC editTransform does) reflects new geometry [33m 440[2mms[22m[39m
+     [33m[2m✓[22m[39m run-level edit preserves per-run formatting (bold run + plain run) [33m 927[2mms[22m[39m
+     [33m[2m✓[22m[39m no-edit save stays byte-identical (fidelity through the app path) [33m 470[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/system-fonts.test.ts [2m([22m[2m7 tests[22m[2m | [22m[33m2 skipped[39m[2m)[22m[33m 5447[2mms[22m[39m
+     [33m[2m✓[22m[39m missing Japanese fonts substitute to Hiragino (same family for metrics and rendering) [33m 805[2mms[22m[39m
+     [33m[2m✓[22m[39m missing Korean/Traditional-Chinese fonts substitute to same-script fonts, not Arial/Simplified Chinese [33m 4039[2mms[22m[39m
+     [33m[2m✓[22m[39m bold picks the matching face inside the ttc [33m 484[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/insert-gallery.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 190[2mms[22m[39m
+ [32m✓[39m tests/theme.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 404[2mms[22m[39m
+ [32m✓[39m tests/print-html.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/cutout.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/layout-tools.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 118[2mms[22m[39m
+ [32m✓[39m tests/slide-script.test.ts [2m([22m[2m34 tests[22m[2m)[22m[32m 225[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/image-loader.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/generate-deck.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 113[2mms[22m[39m
+ [32m✓[39m tests/data-source-gate.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 54[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/ai-picture-tools.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m tests/edit-fidelity.test.ts [2m([22m[2m51 tests[22m[2m)[22m[33m 6206[2mms[22m[39m
+     [33m[2m✓[22m[39m shows PPT letter spacing in the editor DOM to match canvas [33m 801[2mms[22m[39m
+     [33m[2m✓[22m[39m preserves multilingual text order across layout fragments [33m 442[2mms[22m[39m
+     [33m[2m✓[22m[39m eaVert per-character column layout → DOM → extraction: runs merge back intact, paragraph structure preserved [33m 314[2mms[22m[39m
+ [32m✓[39m tests/apply-ops-tool.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+ [32m✓[39m tests/slide-progress.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m tests/animation-play.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m tests/tiff-decode.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m tests/fill-inset-tile.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m tests/stage-refit-follow.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 4318[2mms[22m[39m
+     [33m[2m✓[22m[39m hides bleed-only scrollbars until the nominal slide overflows [33m 957[2mms[22m[39m
+     [33m[2m✓[22m[39m re-fits on container resize after a reading-view round trip [33m 730[2mms[22m[39m
+     [33m[2m✓[22m[39m clamps a manual zoom back to fit when the container shrinks [33m 694[2mms[22m[39m
+     [33m[2m✓[22m[39m leaves a manual zoom smaller than fit alone on container resize [33m 655[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps a zoom above the 1.5 fit cap while it still fits the container [33m 638[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps a manual zoom when scrollbars appear without a real container resize [33m 635[2mms[22m[39m
+ [32m✓[39m tests/table-tools.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+ [32m✓[39m tests/read-colors.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 72[2mms[22m[39m
+ [32m✓[39m tests/edit-selection.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m tests/wheel-page-flip.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m tests/snap.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m tests/scratch-block.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m tests/ruler-ticks.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+ [32m✓[39m tests/keyboard-actions.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m tests/regenerate-slide.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+ [32m✓[39m tests/custom-show-rehearse.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m tests/draw-shape.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m tests/outline-json.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m tests/mp4-audio-sniff.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/slide-qc.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m tests/files-skill.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m tests/local-page-gen.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m tests/cover-crop.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/context-tabs.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/color-input.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m tests/media-mime.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/cfb-sniff.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/text-highlight.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/canvas-pixel-ratio.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m tests/context-menu-background.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/undo-routing.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m tests/canvas-text-hit.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m56 passed[39m[22m[90m (56)[39m
+[2m      Tests [22m [1m[32m516 passed[39m[22m[2m | [22m[33m2 skipped[39m[90m (518)[39m
+[2m   Start at [22m 00:58:44
+[2m   Duration [22m 17.94s[2m (transform 31.60s, setup 1.10s, import 64.41s, tests 30.45s, environment 127.31s)[22m
+
+
+> @genoffice/pdf@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/apps/pdf[39m
+
+ [32m✓[39m tests/color-presets.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 74[2mms[22m[39m
+ [32m✓[39m tests/annotations.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 73[2mms[22m[39m
+ [32m✓[39m tests/print.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 133[2mms[22m[39m
+ [32m✓[39m tests/annot-delete-note.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 262[2mms[22m[39m
+ [32m✓[39m tests/annot-delete.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 354[2mms[22m[39m
+ [32m✓[39m tests/page-operation-atomic-write.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m tests/font-locate.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 666[2mms[22m[39m
+     [33m[2m✓[22m[39m resolves a ttc face by PostScript name into a standalone covering sfnt [33m 571[2mms[22m[39m
+ [32m✓[39m tests/i18n-strings.test.ts [2m([22m[2m58 tests[22m[2m)[22m[33m 872[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m tests/text-insert-stacked.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 840[2mms[22m[39m
+     [33m[2m✓[22m[39m verifies clean past the depth where pdfium stops extracting them [33m 832[2mms[22m[39m
+ [32m✓[39m tests/ai-tools.test.ts [2m([22m[2m58 tests[22m[2m)[22m[33m 897[2mms[22m[39m
+     [33m[2m✓[22m[39m queues a new text block at explicit coordinates with defaults [33m 625[2mms[22m[39m
+ [32m✓[39m tests/auto-rename.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 162[2mms[22m[39m
+ [32m✓[39m tests/pdf-thumb.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 168[2mms[22m[39m
+ [32m✓[39m tests/text-insert-fallback.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1689[2mms[22m[39m
+     [33m[2m✓[22m[39m resolves a face through the installed-font index instead of failing the insert [33m 850[2mms[22m[39m
+     [33m[2m✓[22m[39m covers CJK inserts through a CJK-capable installed face [32m 300[2mms[22m[39m
+     [33m[2m✓[22m[39m reports the reason when no installed face covers the text [33m 427[2mms[22m[39m
+ [32m✓[39m tests/save-pdf.test.ts [2m([22m[2m46 tests[22m[2m)[22m[33m 1197[2mms[22m[39m
+     [33m[2m✓[22m[39m persists the AcroForm field association on visual signature annotations [33m 348[2mms[22m[39m
+ [32m✓[39m tests/text-wrap.test.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m tests/note-edit-save.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 92[2mms[22m[39m
+ [32m✓[39m tests/note-reply-save.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 95[2mms[22m[39m
+ [32m✓[39m tests/text-block.test.ts [2m([22m[2m34 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m tests/stamps.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m tests/view-state.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 82[2mms[22m[39m
+ [32m✓[39m tests/signature-store.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [32m✓[39m tests/cutout.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m tests/blank-pdf.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 69[2mms[22m[39m
+ [32m✓[39m tests/search.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m tests/form-layer.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m tests/text-splice.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+ [32m✓[39m tests/note-threads.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m tests/static-form-fill.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m tests/text-edit.test.ts [2m([22m[2m57 tests[22m[2m)[22m[33m 5042[2mms[22m[39m
+     [33m[2m✓[22m[39m adds searchable text without replacing existing page content [33m 2163[2mms[22m[39m
+     [33m[2m✓[22m[39m never inherits a zero fill alpha into the rebuilt run [33m 404[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps a CJK document font by resolving the installed face (未来→放心 scenario) [33m 330[2mms[22m[39m
+     [33m[2m✓[22m[39m skips an edit whose replacement no available font can draw [33m 441[2mms[22m[39m
+ [32m✓[39m tests/color-runs.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m tests/form-catalog.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m tests/autosave.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m tests/key-nav.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m tests/image-bake.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m tests/doc-font.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m tests/web-font-buffer.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/font-cmap.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/note-margin-layout.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/spread.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/signature-field.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/generated-output.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/open-path.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m42 passed[39m[22m[90m (42)[39m
+[2m      Tests [22m [1m[32m547 passed[39m[22m[90m (547)[39m
+[2m   Start at [22m 00:59:03
+[2m   Duration [22m 10.53s[2m (transform 8.72s, setup 0ms, import 18.75s, tests 13.47s, environment 90.88s)[22m
+
+
+> @genoffice/markdown@0.1.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/apps/markdown[39m
+
+ [32m✓[39m tests/doc-text.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m tests/conversion-lifecycle.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m tests/asset-lifecycle.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 263[2mms[22m[39m
+ [32m✓[39m tests/close-asset-cleanup.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 270[2mms[22m[39m
+[90mstderr[2m | tests/teardown.test.ts[2m > [22m[2mCodeBlockView teardown[2m > [22m[2mclears copy feedback timeout when its node view unmounts
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/teardown.test.ts[2m > [22m[2mCodeBlockView teardown[2m > [22m[2mclears copy feedback timeout when its node view unmounts
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/teardown.test.ts[2m > [22m[2mCodeBlockView teardown[2m > [22m[2mclears copy feedback timeout when its node view unmounts
+[22m[39mThe current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/teardown.test.ts[2m > [22m[2mAiPanel teardown[2m > [22m[2mcancels an in-flight IPC stream when the panel/tab unmounts
+[22m[39mThe current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+[90mstderr[2m | tests/teardown.test.ts[2m > [22m[2mAiPanel teardown[2m > [22m[2mcancels an in-flight IPC stream when the panel/tab unmounts
+[22m[39mThe current testing environment is not configured to support act(...)
+
+ [32m✓[39m tests/teardown.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 162[2mms[22m[39m
+ [32m✓[39m tests/markdown-nodes.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 197[2mms[22m[39m
+ [32m✓[39m tests/slash-and-image.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 884[2mms[22m[39m
+     [33m[2m✓[22m[39m code block from a list item lifts out of the list instead of silently failing [33m 597[2mms[22m[39m
+ [32m✓[39m tests/ai-tools.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 645[2mms[22m[39m
+ [32m✓[39m tests/docx-export.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 922[2mms[22m[39m
+     [33m[2m✓[22m[39m headings, paragraphs and inline marks survive into the docx [33m 353[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m      Tests [22m [1m[32m120 passed[39m[22m[90m (120)[39m
+[2m   Start at [22m 00:59:14
+[2m   Duration [22m 4.90s[2m (transform 5.05s, setup 376ms, import 8.26s, tests 3.40s, environment 14.32s)[22m
+
+ENGINE_TEST:0
+ended=2026-09-12T16:59:19Z

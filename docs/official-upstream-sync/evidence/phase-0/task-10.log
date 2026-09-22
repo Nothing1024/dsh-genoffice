@@ -1,0 +1,19 @@
+official-upstream-sync Task 10
+date: 2026-09-12T19:07:56Z
+cwd: /tmp/genoffice-official-sync-engine
+HEAD: (pending commit after UTF-8 load guard)
+node: /usr/local/Cellar/node/26.8.2/bin/node v26.8.2
+
+commands:
+  ENGINE_ROOT=/tmp/genoffice-official-sync-engine node web/e2e-official-sync.mjs --all
+    --out plugin/docs/official-upstream-sync/evidence
+    run_id=ous-2026-09-12T19-07-56-943Z exit 0
+    cases: markdown, docs-context, browser-provider, land-pages, five-family all passed
+    UF-001 success + failure-1/2/3 passed
+    UF-002 success + failure-1/2 passed
+    UF-003 success + failure-1/2 passed
+
+notes:
+  Invalid binary .md (JPEG magic) now fails UTF-8 fatal decode in the web
+  bridge, readiness=error, export refuses, original bytes kept.
+  --all now throws if any 5.2 archived branch is failed.

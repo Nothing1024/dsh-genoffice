@@ -1,0 +1,33 @@
+{
+  "action": "gate",
+  "package": "web-feature-completion",
+  "passed": true,
+  "errors": [],
+  "validations": [
+    {
+      "package": "control-session-safety",
+      "passed": true,
+      "exit_code": 0,
+      "output": "\n== validate_package: /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/control-session-safety ==\n[PASS] spec.md 存在（791 行）\n[PASS] tasks.csv 表头正确（8 列）\n[PASS] tasks.csv 序号 1..15 连续, 共 15 条任务\n[PASS] 所有详情锚点在 spec.md 中有对应 Task 标题\n[PASS] 前置依赖引用有效、无循环、方向与 Phase 顺序一致\n[PASS] 每个 Phase 最后一条任务均为回归验证\n[PASS] tasks.csv 状态列取值全部合法\n[PASS] 真实场景任务位于最后 Phase 且在回归收尾之前\n[PASS] 无 handoff.md（按需生成, 允许缺省）\n[PASS] §0 人话摘要在位（8 行正文）\n[PASS] BR/UF/INV/EVD 引用闭环（定义 19 个）\n[PASS] §3.3 定位清单 待勘察/ASM 占比 0%（0/19）\n[PASS] 任务验证命令 待勘察/ASM 占比 0%（0/30）\n[PASS] 全部 4 个 UF 均有步骤级流程脚本\n[PASS] 全部 4 个流程脚本均含入口接线清单\n[PASS] 存在真实场景测试章节, 且有任务覆盖执行\n[PASS] 5.2 环境准备完整（启动命令 + 访问入口）\n[PASS] 5.2 执行矩阵引用了 52 条具体 evidence 路径\n[PASS] 真实场景任务已完成, 5.2 引用证据齐全（52 条路径）\n[PASS] 无残留模板占位符\n[PASS] --repo 核验: §3.3 全部 19 条 rg anchor 命中\n[PASS] evidence/ 目录存在\n\n结果: 0 FAIL / 0 WARN / 22 PASS\n"
+    },
+    {
+      "package": "plugin-tool-alignment",
+      "passed": true,
+      "exit_code": 0,
+      "output": "\n== validate_package: /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/plugin-tool-alignment ==\n[PASS] spec.md 存在（596 行）\n[PASS] tasks.csv 表头正确（8 列）\n[PASS] tasks.csv 序号 1..10 连续, 共 10 条任务\n[PASS] 所有详情锚点在 spec.md 中有对应 Task 标题\n[PASS] 前置依赖引用有效、无循环、方向与 Phase 顺序一致\n[PASS] 每个 Phase 最后一条任务均为回归验证\n[PASS] tasks.csv 状态列取值全部合法\n[PASS] 真实场景任务位于最后 Phase 且在回归收尾之前\n[PASS] 无 handoff.md（按需生成, 允许缺省）\n[PASS] §0 人话摘要在位（7 行正文）\n[PASS] BR/UF/INV/EVD 引用闭环（定义 19 个）\n[PASS] §3.3 定位清单 待勘察/ASM 占比 0%（0/13）\n[PASS] 任务验证命令 待勘察/ASM 占比 0%（0/20）\n[PASS] 全部 4 个 UF 均有步骤级流程脚本\n[PASS] 全部 4 个流程脚本均含入口接线清单\n[PASS] 存在真实场景测试章节, 且有任务覆盖执行\n[PASS] 5.2 环境准备完整（启动命令 + 访问入口）\n[PASS] 5.2 执行矩阵引用了 48 条具体 evidence 路径\n[PASS] 真实场景任务已完成, 5.2 引用证据齐全（48 条路径）\n[PASS] 无残留模板占位符\n[PASS] --repo 核验: §3.3 全部 13 条 rg anchor 命中\n[PASS] evidence/ 目录存在\n\n结果: 0 FAIL / 0 WARN / 22 PASS\n"
+    },
+    {
+      "package": "official-upstream-sync",
+      "passed": true,
+      "exit_code": 0,
+      "output": "\n== validate_package: /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/official-upstream-sync ==\n[PASS] spec.md 存在（629 行）\n[PASS] tasks.csv 表头正确（8 列）\n[PASS] tasks.csv 序号 1..11 连续, 共 11 条任务\n[PASS] 所有详情锚点在 spec.md 中有对应 Task 标题\n[PASS] 前置依赖引用有效、无循环、方向与 Phase 顺序一致\n[PASS] 每个 Phase 最后一条任务均为回归验证\n[PASS] tasks.csv 状态列取值全部合法\n[PASS] 真实场景任务位于最后 Phase 且在回归收尾之前\n[PASS] 无 handoff.md（按需生成, 允许缺省）\n[PASS] §0 人话摘要在位（7 行正文）\n[PASS] BR/UF/INV/EVD 引用闭环（定义 18 个）\n[PASS] §3.3 定位清单 待勘察/ASM 占比 0%（0/14）\n[PASS] 任务验证命令 待勘察/ASM 占比 0%（0/22）\n[PASS] 全部 3 个 UF 均有步骤级流程脚本\n[PASS] 全部 3 个流程脚本均含入口接线清单\n[PASS] 存在真实场景测试章节, 且有任务覆盖执行\n[PASS] 5.2 环境准备完整（启动命令 + 访问入口）\n[PASS] 5.2 执行矩阵引用了 40 条具体 evidence 路径\n[PASS] 真实场景任务已完成, 5.2 引用证据齐全（40 条路径）\n[PASS] 无残留模板占位符\n[PASS] --repo 核验: §3.3 全部 14 条 rg anchor 命中\n[PASS] evidence/ 目录存在\n\n结果: 0 FAIL / 0 WARN / 22 PASS\n"
+    },
+    {
+      "package": "web-feature-completion",
+      "passed": true,
+      "exit_code": 0,
+      "output": "\n== validate_package: /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion ==\n[PASS] spec.md 存在（958 行）\n[PASS] tasks.csv 表头正确（8 列）\n[PASS] tasks.csv 序号 1..21 连续, 共 21 条任务\n[PASS] 所有详情锚点在 spec.md 中有对应 Task 标题\n[PASS] 前置依赖引用有效、无循环、方向与 Phase 顺序一致\n[PASS] 每个 Phase 最后一条任务均为回归验证\n[PASS] tasks.csv 状态列取值全部合法\n[PASS] 真实场景任务位于最后 Phase 且在回归收尾之前\n[PASS] 无 handoff.md（按需生成, 允许缺省）\n[PASS] §0 人话摘要在位（7 行正文）\n[PASS] BR/UF/INV/EVD 引用闭环（定义 25 个）\n[PASS] §3.3 定位清单 待勘察/ASM 占比 0%（0/16）\n[PASS] 任务验证命令 待勘察/ASM 占比 0%（0/42）\n[PASS] 全部 6 个 UF 均有步骤级流程脚本\n[PASS] 全部 6 个流程脚本均含入口接线清单\n[PASS] 存在真实场景测试章节, 且有任务覆盖执行\n[PASS] 5.2 环境准备完整（启动命令 + 访问入口）\n[PASS] 5.2 执行矩阵引用了 72 条具体 evidence 路径\n[PASS] 真实场景任务已完成, 5.2 引用证据齐全（72 条路径）\n[PASS] 无残留模板占位符\n[PASS] --repo 核验: §3.3 全部 16 条 rg anchor 命中\n[PASS] evidence/ 目录存在\n\n结果: 0 FAIL / 0 WARN / 22 PASS\n"
+    }
+  ],
+  "note": "闸门只核验状态、结构和证据记录；执行者仍须核对真实场景语义、源码版本及证据时效。不会执行 CSV 命令或修改状态。"
+}

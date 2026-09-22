@@ -1,4 +1,4 @@
-import { a as HOST_OPTIONAL, c as SYSTEM_PROMPT, d as lookupSkills, f as lookupSystemPrompt, i as runFacet, l as TOOL_REGISTRY, n as coordKey, o as HOST_REQUIRED, p as lookupWebServer, r as createActivation, s as SKILL_REGISTRY, t as host_default, u as WEB_SERVER } from "./host-BbLMRrIh.js";
+import { a as HOST_OPTIONAL, c as SYSTEM_PROMPT, d as lookupSkills, f as lookupSystemPrompt, i as runFacet, l as TOOL_REGISTRY, n as coordKey, o as HOST_REQUIRED, p as lookupWebServer, r as createActivation, s as SKILL_REGISTRY, t as host_default, u as WEB_SERVER } from "./host-DoxdaiC0.js";
 //#region src/standard/cordis-acquire.ts
 /**
 * 构造一个 ServiceAcquire：
@@ -6,8 +6,13 @@ import { a as HOST_OPTIONAL, c as SYSTEM_PROMPT, d as lookupSkills, f as lookupS
 * - 未到位 → ctx.inject 等服务出现，出现后在子 ctx 的 effect 里挂载；
 * - 部署里永远不出现 → mount 一次都不跑（声明过的降级路径）。
 * acquire 返回的取消函数可提前卸载；与 fiber 卸载互为幂等。
+*
+* `lookup` may receive the injected child so a bag of services can be
+* assembled without reading undeclared properties on the parent fiber.
 */
-function acquireFromCordis(ctx, lookup, serviceName, label = `dsh-tab-genoffice: acquire ${serviceName}`) {
+function acquireFromCordis(ctx, lookup, serviceName, label) {
+	const names = typeof serviceName === "string" ? [serviceName] : [...serviceName];
+	const resolvedLabel = label ?? `dsh-tab-genoffice: acquire ${names.join(",")}`;
 	return (mount) => {
 		let cancelled = false;
 		let unmount;
@@ -23,11 +28,12 @@ function acquireFromCordis(ctx, lookup, serviceName, label = `dsh-tab-genoffice:
 			};
 		};
 		const existing = lookup();
-		if (existing !== void 0) ctx.effect(() => runMount(existing), label);
-		else ctx.inject([serviceName], (child) => {
-			const service = child[serviceName];
+		if (existing !== void 0) ctx.effect(() => runMount(existing), resolvedLabel);
+		else ctx.inject(names, (child) => {
+			const service = lookup(child) ?? (names.length === 1 ? child[names[0]] : void 0);
+			if (service === void 0) return;
 			const effect = child.effect;
-			if (typeof effect === "function") effect.call(child, () => runMount(service), label);
+			if (typeof effect === "function") effect.call(child, () => runMount(service), resolvedLabel);
 			else runMount(service);
 		});
 		return () => {

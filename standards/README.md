@@ -13,7 +13,7 @@ node standards/validate.mjs --update-baseline   # 评审后固化 adapter 基线
 |---|---|
 | `validate.mjs` | 自包含检查器，六环节：manifest 校验 → facet 入口装载检查（entry 存在/无私有 import/品牌默认导出）→ 纯函数协商（v0.15 报告）→ manifest fixtures → 协商 fixtures（五结局）→ adapter 审计 |
 | `dsh-plugin.schema.json` / `host-descriptor.schema.json` | 上游 schema 本地快照（仅参考；本仓权威校验在 validate.mjs） |
-| `host-descriptor.json` | profile `go` 的部署描述（:3080，DSH 0.1.2-rc.1），含 `apiVersions` 与五条 capabilities |
+| `host-descriptor.json` | profile `go` 的部署描述（:3082，DSH 0.1.6-alpha.2），含 `apiVersions` 与五条 capabilities |
 | `adapter-baseline.json` | packages/*/src 的上游 import 基线（新增触点须评审） |
 | `fixtures/` | `valid/` 与 `invalid/`：manifest 样本，每条「必须」配一个违反它的样本；`facet/`：装载检查样本；`negotiation/`：五结局四件套（manifest × descriptor × registry × expected-report） |
 | `registry/` | 六条 x- 契约的本地注册表镜像（JSON 供协商器加载 + md 语义卡片），含 sensitivity 档位与 [permissions.md](./registry/permissions.md) |
@@ -45,12 +45,12 @@ manifest 本体在 `packages/tab-genoffice/dsh-plugin.json`（标准文件名带
 | `x-nothing1024.dsh.skills/v1alpha1` | SkillRegistry | host | optional | low |
 | `x-nothing1024.dsh.web-server/v1alpha1` | WebServer | host | optional | medium |
 | `x-nothing1024.dsh.locale/v1alpha1` | Locale | client | （RFC 0002 定案后进 manifest） | low |
-| `x-nothing1024.better-sidebar/v1alpha1` | SidebarTab | client（host 侧 optional 声明） | optional | low |
+| `x-nothing1024.dsh.sidebar-right/v1alpha1` | SidebarRight | client | （RFC 0002 定案后进 manifest） | low |
 
 permissions（契约之外的环境能力）：`x-nothing1024.net.loopback-fetch`、`x-nothing1024.process.spawn`，语义与降级见 [registry/permissions.md](./registry/permissions.md)。
 
 ## 已知缺口（对应上游延期 RFC）
 
 - **RFC 0002（client facet）**：client 半身已写成 branded facet（`src/standard/client.ts`）经适配器在官方 client bundle 内执行；v0.15 里 `client` 是保留 facet 名**不可声明**，manifest 只覆盖 host 半身。定案后 manifest 加 `facets.client` 三行即可，主体零改动（田野报告见 contributions/0002）。
-- **RFC 0005（views 贡献点）**：better-sidebar 页签属于第三方 UI 槽位，不在 v0.16 草案的 `contributes.views` location 枚举里，暂以契约坐标声明。
+- **RFC 0005（views 贡献点）**：官方右侧 Sidebar 的页/资源类型属于 client UI 槽位，暂以契约坐标声明，不进 host manifest。
 - **外部进程依赖**：GenOffice relay（:8787）与 `../engine` 引擎是部署级依赖，超出插件-宿主契约范围，由 `scripts/dev.mjs` 与侧栏「启动 relay」降级路径兜底；网络/子进程触达已以 permissions 显式化。

@@ -1,0 +1,77 @@
+{
+  "run_id": "css-2026-09-12T16-30-52-429Z",
+  "port": 18787,
+  "base": "http://127.0.0.1:18787",
+  "node": "/usr/local/Cellar/node/26.8.2/bin/node",
+  "nodeVersion": "v26.8.2",
+  "fixtures": [
+    {
+      "app": "markdown",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T16-30-52-429Z/fixtures/session.md",
+      "sha256": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+      "bytes": 26
+    },
+    {
+      "app": "docs",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T16-30-52-429Z/fixtures/session.docx",
+      "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/fixtures/generated/simple.docx",
+      "sha256": "03da2cafb3d9ce4022dbce432ca61a807114989f6cb31f9f8a60e821075dd0b5",
+      "bytes": 2166
+    },
+    {
+      "app": "sheets",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T16-30-52-429Z/fixtures/session.xlsx",
+      "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/apps/sheets/fixtures/generated/compatibility-basic.xlsx",
+      "sha256": "a03352ad8570ee0a565ab2ca32bb0e424f5b526ae24694217315db8f6765fa02",
+      "bytes": 2769
+    },
+    {
+      "app": "slides",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T16-30-52-429Z/fixtures/session.pptx",
+      "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/fixtures/generated/sample.pptx",
+      "sha256": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+      "bytes": 5741
+    },
+    {
+      "app": "pdf",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T16-30-52-429Z/fixtures/session.pdf",
+      "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/apps/shell/tests/fixtures/testPassword4Spaces.pdf",
+      "sha256": "d5a2e3fd2aaa7a94b7c2e1bb28f64c01d34ce416654b67d45a66e57c8bf6412d",
+      "bytes": 18285
+    }
+  ],
+  "results": [
+    {
+      "name": "sheets-state",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "sheets-open-ready",
+          "status": "passed",
+          "expected": "ready/registered",
+          "actual": {
+            "ok": true,
+            "docId": "21d4d56271d62a1753b9173fd0ccc99ed3c8abcee4295f919668b5c7ef675fa6",
+            "path": "/tmp/genoffice-control-session/css-2026-09-12T16-30-52-429Z/fixtures/session.xlsx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "a03352ad8570ee0a565ab2ca32bb0e424f5b526ae24694217315db8f6765fa02",
+            "error": null,
+            "occupied": true,
+            "owner": "4f88c18c-c8e0-4fa8-86f2-e05678b87f64"
+          }
+        },
+        {
+          "name": "sheets-context",
+          "status": "passed",
+          "expected": "context/revision",
+          "actual": {
+            "ok": true,
+            "context": "Active sheet: Sheet1 (id=sheet-1, data extent about 1048576 rows × 16384 columns)\nMode: imported real xlsx file (some regions may still be streaming in)\nActive sheet data area: A1:XFD1048576 (answer data-size questions directly from this — do not tally block by block with read_range)\nCurrent selection: A1\nCurrently loaded viewport: A1:AH160 (not the worksheet data extent)\nNo known non-empty cell information yet; read on demand with read_range/read_cells.",
+            "revision": "a03352ad8570ee0a565ab2ca32bb0e424f5b526ae24694217315db8f6765fa02"
+          }
+        }
+      ]
+    }
+  ]
+}

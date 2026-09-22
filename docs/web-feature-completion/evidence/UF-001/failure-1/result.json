@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-001",
+  "branch": "failure-1",
+  "run_id": "07347820-9ea9-433e-b36b-dca0c7cfc5e5",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "capability-service-unconfigured",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "service-unconfigured",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "available": false,
+            "reason": "html-docx-disabled"
+          }
+        },
+        {
+          "name": "no-desktop-redirect",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "available": false,
+            "reason": "html-docx-disabled"
+          }
+        }
+      ]
+    }
+  ]
+}

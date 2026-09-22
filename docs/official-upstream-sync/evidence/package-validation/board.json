@@ -1,0 +1,13 @@
+{
+  "total": 11,
+  "done": 0,
+  "doing": 0,
+  "blocked": [],
+  "ready": [
+    {
+      "seq": "1",
+      "name": "锁定前置修复并建立隔离合并基线",
+      "verify": "git -C ../engine rev-parse HEAD；git -C ../engine merge-tree --write-tree HEAD de139a061537bea40f0cc81ef8f09a95f77ac52a → 保存实际冲突；npm --prefix ../engine run typecheck → 保存基线"
+    }
+  ]
+}

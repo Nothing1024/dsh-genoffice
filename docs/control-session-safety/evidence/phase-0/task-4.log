@@ -1,0 +1,5 @@
+# control-session-safety Task 4
+node ../engine/web/e2e-control-session.mjs --case revision → exit 0
+assertions: context-has-revision, stale-rejected, reread-succeeds passed
+Shared runtime now returns context.revision; expectedRevision rejects stale replace_blocks without mutating; UI/tool mutations bump revision.
+See evidence/phase-0/task-4/summary.json

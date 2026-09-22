@@ -9,7 +9,7 @@ export type CapabilityStatus =
 
 export type CapabilityHandover = 'dsh:web_search' | 'dsh:pending'
 
-export type CapabilityApp = 'docs' | 'markdown' | 'sheets' | 'slides' | 'pdf'
+export type CapabilityApp = 'docs' | 'markdown' | 'sheets' | 'slides' | 'pdf' | 'html'
 
 export type CapabilityKey = `${CapabilityApp}:${string}`
 
@@ -25,7 +25,12 @@ export const CAPABILITY: Record<CapabilityKey, CapabilityEntry> = {
   'docs:read_blocks': { status: 'available', netEgress: false, evidence: 'docs/tools.ts:420-687 编辑器内实现，不经桥接' },
   'docs:insert_content': { status: 'available', netEgress: false, evidence: 'docs/tools.ts:420-687 编辑器内实现，不经桥接' },
   'docs:replace_blocks': { status: 'available', netEgress: false, evidence: 'docs/tools.ts:420-687 编辑器内实现，不经桥接' },
-  'docs:apply_commands': { status: 'available', netEgress: false, evidence: 'docs/tools.ts:420-687 编辑器内实现，不经桥接' },
+  'docs:apply_commands': { status: 'available', netEgress: false, evidence: 'docs/tools.ts apply_commands alias → apply_ops' },
+  'docs:read_comments': { status: 'available', netEgress: false, evidence: 'docs/tools.ts read_comments via App comments store' },
+  'docs:reply_comment': { status: 'available', netEgress: false, evidence: 'docs/tools.ts reply_comment via App comments store' },
+  'docs:resolve_comment': { status: 'available', netEgress: false, evidence: 'docs/tools.ts resolve_comment via App comments store' },
+  'docs:set_header_footer': { status: 'available', netEgress: false, evidence: 'docs/tools.ts set_header_footer via App hf access' },
+  'docs:read_revisions': { status: 'available', netEgress: false, evidence: 'docs/tools.ts read_revisions via editor track' },
   'docs:web_search': { status: 'relay-fetch', netEgress: true, handover: 'dsh:web_search', evidence: 'docs/web-bridge.ts:719-757 → relay /api/search/* 与 /api/fetch-image' },
   'docs:image_search': { status: 'relay-fetch', netEgress: true, handover: 'dsh:pending', evidence: 'docs/web-bridge.ts:719-757 → relay /api/search/* 与 /api/fetch-image' },
   'docs:insert_image': { status: 'available', netEgress: false, evidence: 'Task 6: loopback asset channel; upstream insert_image accepts http URL' },
@@ -36,6 +41,7 @@ export const CAPABILITY: Record<CapabilityKey, CapabilityEntry> = {
   'markdown:read_blocks': { status: 'available', netEgress: false, evidence: 'markdown/tools.ts:189-302 编辑器内实现' },
   'markdown:insert_content': { status: 'available', netEgress: false, evidence: 'markdown/tools.ts:189-302 编辑器内实现' },
   'markdown:replace_blocks': { status: 'available', netEgress: false, evidence: 'markdown/tools.ts:189-302 编辑器内实现' },
+  'markdown:apply_ops': { status: 'available', netEgress: false, evidence: 'markdown/tools.ts apply_ops official batch; insert_content/replace_blocks aliased' },
   'markdown:save': { status: 'available', netEgress: false, evidence: 'relay POST /api/control/<app>/<docId>/export（server.mjs:558-601 原子写回）' },
   'sheets:get_workbook_context': { status: 'available', netEgress: false, evidence: 'sheets/tools.ts:365-601 走 Univer，不经桥接' },
   'sheets:read_range': { status: 'available', netEgress: false, evidence: 'sheets/tools.ts:365-601 走 Univer，不经桥接' },
@@ -62,7 +68,8 @@ export const CAPABILITY: Record<CapabilityKey, CapabilityEntry> = {
   'slides:image_search': { status: 'relay-fetch', netEgress: true, handover: 'dsh:pending', evidence: 'web-bridge.ts:606-627 → relay /api/search/*' },
   'slides:generate_image': { status: 'available', netEgress: false, handover: 'dsh:pending', evidence: 'web-bridge.ts generateImage → relay POST /api/generate-image → gsk img (browser netEgress false)' },
   'slides:analyze_media': { status: 'available', netEgress: false, evidence: 'web-bridge.ts analyzeMedia → relay POST /api/analyze-media → gsk media-analyze (browser netEgress false)' },
-  'slides:insert_web_image': { status: 'available', netEgress: true, evidence: 'web-bridge.ts insertImageUrl → fetch + addPicture' },
+  'slides:insert_web_image': { status: 'available', netEgress: false, evidence: 'host pptx_insert_image reads a local imagePath and hands the iframe a data:image URL; insert_web_image decodes it without a network fetch' },
+  'slides:create': { status: 'available', netEgress: false, evidence: 'host pptx_create posts /api/pptx/create; relay writes the blank 13.333×7.5in deck (one undecorated slide) and refuses to overwrite' },
   'slides:crop_image': { status: 'available', netEgress: false, evidence: 'web-bridge.ts editPictureSrcRect → pptx-engine editPictureSrcRect' },
   'slides:set_picture_opacity': { status: 'available', netEgress: false, evidence: 'web-bridge.ts editPictureOpacity → pptx-engine setPictureOpacity' },
   'slides:replace_image': { status: 'available', netEgress: true, evidence: 'web-bridge.ts replacePictureUrl / replacePictureBytes → pptx-engine replacePictureBytes' },
@@ -110,7 +117,13 @@ export const CAPABILITY: Record<CapabilityKey, CapabilityEntry> = {
   'pdf:delete_page': { status: 'available', netEgress: false, evidence: 'pdf/tools.ts:461-1325 + web-pdf-save.ts:414-463' },
   'pdf:get_outline': { status: 'available', netEgress: false, evidence: 'pdf/tools.ts:461-1325 + web-pdf-save.ts:414-463' },
   'pdf:save': { status: 'available', netEgress: false, evidence: 'relay POST /api/control/<app>/<docId>/export（server.mjs:558-601 原子写回）' },
+  'html:get_outline': { status: 'available', netEgress: false, evidence: 'html/src/renderer/ai/tools.ts AGENT_TOOLS get_outline + control.ts executeTool' },
+  'html:read_source': { status: 'available', netEgress: false, evidence: 'html/src/renderer/ai/tools.ts AGENT_TOOLS read_source + control.ts executeTool' },
+  'html:apply_ops': { status: 'available', netEgress: false, evidence: 'html/src/renderer/ai/tools.ts AGENT_TOOLS apply_ops + control.ts executeTool' },
+  'html:save': { status: 'available', netEgress: false, evidence: 'relay POST /api/control/html/<docId>/export' },
+  'html:export_docx': { status: 'available', netEgress: false, evidence: 'host html_export_docx → GET /api/html/docx/ready then job; dest only after PK zip' },
 }
+
 
 export function isExposed(entry: CapabilityEntry): boolean {
   return (entry.status === 'available' || entry.status === 'partial' || entry.status === 'guarded')

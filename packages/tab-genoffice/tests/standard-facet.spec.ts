@@ -46,7 +46,6 @@ import { ASSET_PREFIX } from '../src/host/assets.ts'
 import { SYNC_ROUTE } from '../src/host/sync.ts'
 import { RELAY_LAUNCH_ROUTE } from '../src/host/relay-launch.ts'
 import { CLAIMED_EXTS } from '../src/tabs/coexist.ts'
-import { BROWSER_TAB_ID, FILE_TAB_ID } from '../src/tabs/file-tab.ts'
 import { NS } from '../src/tabs/locales.ts'
 
 const X: ContractCoordinate = { apiVersion: 'x-test.demo/v1alpha1', kind: 'Demo' }
@@ -271,25 +270,30 @@ describe('client facet', () => {
         return () => { dicts.delete(ns) }
       },
     }
-    const tabs: Array<{ id: string }> = []
-    const viewers: Array<{ id: string; exts: string[] }> = []
+    const types: Array<{ id: string; kind: string; patterns?: readonly string[] }> = []
+    const bodies: Array<{ key: string }> = []
     const sidebarService = {
-      registerTab(tab: { id: string }) {
-        tabs.push(tab)
-        return () => {
-          const at = tabs.indexOf(tab)
-          if (at >= 0) tabs.splice(at, 1)
-        }
+      sidebarRight: { openResource: vi.fn(), openTab: vi.fn(), close: vi.fn() },
+      sidebarRightTabs: {
+        register(def: { id: string; kind: string; patterns?: readonly string[] }) {
+          types.push(def)
+          return () => {
+            const at = types.indexOf(def)
+            if (at >= 0) types.splice(at, 1)
+          }
+        },
       },
-      registerFileViewer(viewer: { id: string; exts: string[] }) {
-        viewers.push(viewer)
-        return () => {
-          const at = viewers.indexOf(viewer)
-          if (at >= 0) viewers.splice(at, 1)
-        }
+      slots: {
+        inject(_name: string, register: () => () => void) { return register() },
+        register(options: { key: string }) {
+          const entry = { key: options.key }
+          bodies.push(entry)
+          return () => {
+            const at = bodies.indexOf(entry)
+            if (at >= 0) bodies.splice(at, 1)
+          }
+        },
       },
-      openTab: vi.fn(),
-      getSnapshot: () => ({ sessionId: 's-1' }),
     }
     const sidebar: SidebarAcquireHandle<unknown> = {
       acquire: (mount) => {
@@ -303,23 +307,30 @@ describe('client facet', () => {
       declared: [...CLIENT_REQUIRED, ...CLIENT_OPTIONAL],
       contracts,
     })
-    return { controller, dicts, tabs, viewers }
+    return { controller, dicts, types, bodies }
   }
 
-  it('registers dictionaries, both tabs and one viewer per claimed ext', () => {
+  it('registers dictionaries, a guide page, and an office resource type', () => {
     const b = bench()
     runFacet(clientFacet, b.controller.activation)
     expect(b.dicts.has(NS)).toBe(true)
-    expect(b.tabs.map((t) => t.id)).toEqual([BROWSER_TAB_ID, FILE_TAB_ID])
-    expect(b.viewers.map((v) => v.id)).toEqual(CLAIMED_EXTS.map((ext) => `dsh-genoffice:viewer-${ext}`))
+    expect(b.types.map((t) => t.id)).toEqual([
+      '@deepseek-ai/dsh-tab-genoffice',
+      '@deepseek-ai/dsh-tab-genoffice/file',
+    ])
+    expect(b.types[1]?.patterns).toEqual(CLAIMED_EXTS.map((ext) => `*.${ext}`))
+    expect(b.bodies.map((row) => row.key)).toEqual([
+      '@deepseek-ai/dsh-tab-genoffice',
+      '@deepseek-ai/dsh-tab-genoffice/file',
+    ])
   })
 
   it('sidebar absent → dictionaries only, no UI registrations (BR-003)', () => {
     const b = bench({ sidebar: false })
     runFacet(clientFacet, b.controller.activation)
     expect(b.dicts.has(NS)).toBe(true)
-    expect(b.tabs).toEqual([])
-    expect(b.viewers).toEqual([])
+    expect(b.types).toEqual([])
+    expect(b.bodies).toEqual([])
   })
 
   it('dispose unregisters everything', async () => {
@@ -327,7 +338,7 @@ describe('client facet', () => {
     runFacet(clientFacet, b.controller.activation)
     await b.controller.dispose()
     expect(b.dicts.size).toBe(0)
-    expect(b.tabs).toEqual([])
-    expect(b.viewers).toEqual([])
+    expect(b.types).toEqual([])
+    expect(b.bodies).toEqual([])
   })
 })

@@ -1,0 +1,19 @@
+# plugin-tool-alignment Task 1
+started=2026-09-12T17:02:58Z
+plugin=$(git rev-parse HEAD) = 5d5ee6d18fa87c40d587a2cc5dd429821946f90b
+engine=247e3f5c488afb25915e9ee97fe0fd22e27648da
+isolated relay PORT chosen by freePort(19787)
+DSH host: not started (no user profile). Official claim() replayed from SDK 0.1.5-rc.2.
+
+=== node scripts/e2e-plugin-alignment.mjs --baseline ===
+exit 0
+defects reproduced:
+- FileTab uses parsed.path (relative note.docx); relay /api/control/open returns invalid path
+- official claim(kind=genoffice-file) refuses session md
+- edit_table_cell still declares cellId/text + 网页版不可用
+- executeLandPages still callRelayRetry 3x
+
+=== npm run typecheck ===
+PLUGIN_TSC:0 (recorded during control-session-safety Task 15)
+
+ASM-001: isolated official claim + relay is the reachable host; full DSH :3080 not launched.

@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "package": "plugin-tool-alignment",
+  "uf": "UF-003",
+  "branch": "success",
+  "run_id": "pta-2026-09-12T19-03-47-109Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "ffd185d2ec02480a5a7f5b1f17d9220053fcbf6c"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "table-chart-apply",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "schema-row-col",
+          "status": "passed",
+          "expected": "row/col/paragraphs",
+          "actual": {
+            "hasRowCol": true,
+            "stillOld": false
+          }
+        },
+        {
+          "name": "schema-structure-kind",
+          "status": "passed",
+          "expected": "kind/index",
+          "actual": true
+        },
+        {
+          "name": "schema-chart-flat-fields",
+          "status": "passed",
+          "expected": "no data wrapper",
+          "actual": true
+        },
+        {
+          "name": "open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "fbd891d4674daae3c8368f89c433dc85a0e02eeee06eeedc6eb355a12c7824c1",
+            "path": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T19-03-47-109Z/schema.pptx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+            "error": null,
+            "occupied": true,
+            "owner": "73ff78b0-bac4-417e-ac7c-b9801d3385d0"
+          }
+        },
+        {
+          "name": "add-table-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Applied 1 op(s): addTable @0. New element ids: tbl_2.\n<layout-audit>⚠️ Found issue(s) on 1 page(s):\npage 1:\n- Out of bounds: tbl_2(table) 320px past the right edge\n→ Fix issues your edit caused before replying: execute_slide_script on the affected page (it reads live geometry) or another apply_ops with setTransform; at most 2 fix rounds. Issues that already existed and that you did not touch are for your judgment only — do not report them to the user, and never quote element ids in the reply.\n</layout-audit>\nCreated table element id=tbl_2",
+              "mutated": true,
+              "summary": "插入表格"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "add-chart-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Applied 1 op(s): addChart @0. New element ids: chart_7.\nNOTE: dataSource is \"sample\" — you MUST tell the user these figures are illustrative placeholders, not real data, and offer to research real numbers with web_search.\n<layout-audit>⚠️ Found issue(s) on 1 page(s):\npage 1:\n- Out of bounds: tbl_6(table) 320px past the right edge, 213px past the bottom edge\n- Out of bounds: chart_7(chart) 27px past the bottom edge\n- Overlap: sp_5\"日志验证 示例演示文稿 · 商务深蓝…\" and chart_7(chart) intersect by 1067×373px\n→ Fix issues your edit caused before replying: execute_slide_script on the affected page (it reads live geometry) or another apply_ops with setTransform; at most 2 fix rounds. Issues that already existed and that you did not touch are for your judgment only — do not report them to the user, and never quote element ids in the reply.\n</layout-audit>\nCreated chart element id=chart_7",
+              "mutated": true,
+              "summary": "插入图表"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "edit-table-cell-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "tableId": "tbl_2",
+            "edited": {
+              "status": 200,
+              "ok": true,
+              "execution": {
+                "output": "Applied 1 op(s): setTableCell @0/tbl_2.\n<layout-audit>⚠️ Found issue(s) on 1 page(s):\npage 1:\n- Out of bounds: tbl_2(table) 320px past the right edge\n→ Fix issues your edit caused before replying: execute_slide_script on the affected page (it reads live geometry) or another apply_ops with setTransform; at most 2 fix rounds. Issues that already existed and that you did not touch are for your judgment only — do not report them to the user, and never quote element ids in the reply.\n</layout-audit>",
+                "mutated": true,
+                "summary": "编辑表格"
+              },
+              "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+            }
+          }
+        },
+        {
+          "name": "structure-kind-accepted",
+          "status": "passed",
+          "expected": "kind accepted",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Applied 1 op(s): tableStructure @0/tbl_2.\n<layout-audit>⚠️ Found issue(s) on 1 page(s):\npage 1:\n- Out of bounds: tbl_4(table) 320px past the right edge, 213px past the bottom edge\n→ Fix issues your edit caused before replying: execute_slide_script on the affected page (it reads live geometry) or another apply_ops with setTransform; at most 2 fix rounds. Issues that already existed and that you did not touch are for your judgment only — do not report them to the user, and never quote element ids in the reply.\n</layout-audit>\nTable tbl_2 updated to e_07197160",
+              "mutated": true,
+              "summary": "表格结构"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "edit-table-style-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Applied 1 op(s): setTableStyle @0/e_07197160.\n<layout-audit>⚠️ Found issue(s) on 1 page(s):\npage 1:\n- Out of bounds: tbl_4(table) 320px past the right edge, 213px past the bottom edge\n→ Fix issues your edit caused before replying: execute_slide_script on the affected page (it reads live geometry) or another apply_ops with setTransform; at most 2 fix rounds. Issues that already existed and that you did not touch are for your judgment only — do not report them to the user, and never quote element ids in the reply.\n</layout-audit>",
+              "mutated": true,
+              "summary": "表格样式"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "edit-chart-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "chartId": "chart_7",
+            "chartEdit": {
+              "status": 200,
+              "ok": true,
+              "execution": {
+                "output": "Updated chart chart_7 on page 1.\nNOTE: dataSource is \"sample\" — you MUST tell the user these figures are illustrative placeholders, not real data, and offer to research real numbers with web_search.",
+                "mutated": true,
+                "summary": "第 1 页图表编辑"
+              },
+              "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+            }
+          }
+        },
+        {
+          "name": "save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T19-03-47-109Z/schema.pptx",
+            "name": "schema.pptx",
+            "mtimeMs": 1789239831827.447
+          }
+        },
+        {
+          "name": "reopen-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "fbd891d4674daae3c8368f89c433dc85a0e02eeee06eeedc6eb355a12c7824c1",
+            "path": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T19-03-47-109Z/schema.pptx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "5d6d78d5fa5dc2073f6d14d3bcdd8d25b67f653f34d522ceedcdfce836986655",
+            "error": null,
+            "occupied": true,
+            "owner": "73ff78b0-bac4-417e-ac7c-b9801d3385d0"
+          }
+        },
+        {
+          "name": "reopen-keeps-edit",
+          "status": "passed",
+          "expected": "AlignedCell",
+          "actual": "Canvas 1280×720px (1 px = 7143.75 EMU)\ne_2 | shape | pos(80,80) size 1120×560 font 53pt | text#7E9BB8 stroke#D4A94E\n日志验证\n示例演示文稿 · 商务深蓝风格封面\nSample Presentation  |  Powered by GenOffice + DSH\n---\ne_07197160 | table | pos(107,213) size 1493×720\nAlignedCell\tQty\nA\t1\n\t\n---\ne_4305c06a | chart | pos(107,267) size 1067×480 | (no text)\n(chart colors not available)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+ M apps/docs/src/renderer/App.tsx
+ M apps/docs/src/renderer/control.ts
+ M apps/docs/tests/protect-dialog.test.ts
+ M apps/docs/vitest.config.ts
+ M apps/markdown/src/renderer/App.tsx
+ M apps/markdown/src/renderer/control.ts
+ M apps/markdown/src/renderer/web-bridge.ts
+ M apps/markdown/vitest.config.ts
+ M apps/pdf/src/renderer/App.tsx
+ M apps/pdf/src/renderer/control.ts
+ M apps/sheets/src/renderer/App.tsx
+ M apps/sheets/src/renderer/control.ts
+ M apps/sheets/tests/xlsx-save-edits.test.ts
+ M apps/slides/src/renderer/App.tsx
+ M apps/slides/src/renderer/control.ts
+ M apps/slides/vitest.config.ts
+ M packages/electron-utils/tests/remote-image.test.ts
+ M web/server.mjs
+ M web/write-atomic.mjs
+ M web/write-atomic.test.mjs
+?? fixtures/generated/simple.pdf
+?? test-setup/
+?? web/e2e-control-session.mjs

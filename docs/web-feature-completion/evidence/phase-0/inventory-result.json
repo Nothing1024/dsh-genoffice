@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "EVD-007",
+  "branch": "inventory",
+  "status": "passed",
+  "cases": [
+    {
+      "id": "inventory",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "inventory-nonempty",
+          "status": "passed",
+          "expected": ">=20",
+          "actual": 56
+        },
+        {
+          "name": "columns",
+          "status": "passed",
+          "expected": [
+            "app",
+            "entry",
+            "bridge",
+            "implementation_task",
+            "uf",
+            "positive_case",
+            "negative_case",
+            "dependency",
+            "status"
+          ],
+          "actual": [
+            "app",
+            "entry",
+            "bridge",
+            "implementation_task",
+            "uf",
+            "positive_case",
+            "negative_case",
+            "dependency",
+            "status"
+          ]
+        },
+        {
+          "name": "tasks-2-19",
+          "status": "passed",
+          "expected": "2-19",
+          "actual": [
+            2,
+            3,
+            4,
+            5,
+            7,
+            8,
+            9,
+            10,
+            11,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ]
+        },
+        {
+          "name": "ufs",
+          "status": "passed",
+          "expected": "UF-001..006",
+          "actual": [
+            "UF-001",
+            "UF-006",
+            "UF-005",
+            "UF-002",
+            "UF-004",
+            "UF-003"
+          ]
+        },
+        {
+          "name": "stubs-owned",
+          "status": "passed",
+          "expected": "owned stubs",
+          "actual": 6
+        },
+        {
+          "name": "html-future-not-claimed-available",
+          "status": "passed",
+          "expected": "html task>18 not available",
+          "actual": [
+            "web-build-route:available:17",
+            "edit-save:available:17",
+            "html-to-docx:available:18"
+          ]
+        },
+        {
+          "name": "ocr-inventory-matches-bridge",
+          "status": "passed",
+          "expected": "ocr inventory matches bridge",
+          "actual": {
+            "ocrClaimed": true,
+            "ocrWebNull": false
+          }
+        },
+        {
+          "name": "isolated-head",
+          "status": "passed",
+          "expected": "sha",
+          "actual": "207a7752b3571b4d201bf409297999d6ffd8a9c5"
+        },
+        {
+          "name": "html-present-web-build",
+          "status": "passed",
+          "expected": "web:build+/html/",
+          "actual": {
+            "htmlPresent": true,
+            "htmlWebBuild": true,
+            "htmlRouted": true
+          }
+        },
+        {
+          "name": "inventory-hash",
+          "status": "passed",
+          "expected": "sha256",
+          "actual": "2128f19ab2e26b9b4bfee28751b7854f4be039d06fa6102d8667c349f99ba5e7"
+        }
+      ]
+    }
+  ],
+  "deps": {
+    "isolatedHead": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+    "officialAncestor": true,
+    "htmlPresent": true,
+    "htmlWebBuild": true,
+    "htmlRouted": true,
+    "sidecarTree": true,
+    "ocrWebNull": false,
+    "playwright": true,
+    "sheetsRoutesXlsx": true,
+    "sheetsNoSpawn": true
+  },
+  "inventory_rows": 56
+}

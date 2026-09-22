@@ -1,0 +1,9 @@
+# plugin-tool-alignment Task 8
+2026-09-12T17:18:10+00:00
+contract-fields.spec.ts: legacy cellId/text rejected; kind/index; chart dataSource; apply_ops 9525/dry_run/50; no callRelayRetry
+live --case contract: legacy cellId fail, row/col keep ContractCell, addRow invalid, unknown op vocabulary
+npm run typecheck → 0
+npm test → 154 passed
+npm run build → 0
+npm run standard:check → 全部通过
+node scripts/e2e-plugin-alignment.mjs --case contract → 0

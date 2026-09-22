@@ -1,0 +1,447 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-002",
+  "branch": "success",
+  "run_id": "46f1c3c0-e460-4bd3-87c2-e698fa4014e7",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "sheets-media-read-insert-move",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": "ready"
+        },
+        {
+          "name": "features-image",
+          "status": "passed",
+          "expected": "image @ A10",
+          "actual": "Feature state of sheet Data (id=sheet-1):\nStatus: visible, unprotected\nPivot tables: 1 (output region read-only; recompute from source data with refresh_pivot):\n- E3:H7: rows[Region] cols[Product] values[Sum of Sales] source=Data!A1:C7 (recomputable)\nAutoFilter: none\nConditional formatting: none\nData validation: none\nDefined names: none\nShapes/images: 1 (charts are listed in get_workbook_context):\n- image @ A10 (came with the file, not modifiable by the AI)"
+        },
+        {
+          "name": "features-pivot",
+          "status": "passed",
+          "expected": "pivot E3:H7",
+          "actual": "Feature state of sheet Data (id=sheet-1):\nStatus: visible, unprotected\nPivot tables: 1 (output region read-only; recompute from source data with refresh_pivot):\n- E3:H7: rows[Region] cols[Product] values[Sum of Sales] source=Data!A1:C7 (recomputable)\nAutoFilter: none\nConditional formatting: none\nData validation: none\nDefined names: none\nShapes/images: 1 (charts are listed in get_workbook_context):\n- image @ A10 (came with the file, not modifiable by the AI)"
+        },
+        {
+          "name": "read-media-png",
+          "status": "passed",
+          "expected": "image/png",
+          "actual": {
+            "media": {
+              "mediaType": "image/png",
+              "base64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
+            },
+            "mediaError": null
+          }
+        },
+        {
+          "name": "read-pivot",
+          "status": "passed",
+          "expected": "E3:H7 Data!A1:C7",
+          "actual": {
+            "pivotDef": {
+              "outputRef": "E3:H7",
+              "firstDataRow": 2,
+              "firstDataCol": 1,
+              "fields": [
+                {
+                  "name": "Region",
+                  "sharedItems": [
+                    "East",
+                    "West"
+                  ]
+                },
+                {
+                  "name": "Product",
+                  "sharedItems": [
+                    "A",
+                    "B"
+                  ]
+                },
+                {
+                  "name": "Sales",
+                  "sharedItems": []
+                }
+              ],
+              "fieldItems": [
+                [
+                  {
+                    "x": 0,
+                    "hidden": false
+                  },
+                  {
+                    "x": 1,
+                    "hidden": false
+                  }
+                ],
+                [
+                  {
+                    "x": 0,
+                    "hidden": false
+                  },
+                  {
+                    "x": 1,
+                    "hidden": false
+                  }
+                ],
+                []
+              ],
+              "rowFields": [
+                0
+              ],
+              "colFields": [
+                1
+              ],
+              "rowLines": [
+                {
+                  "t": "data",
+                  "members": [
+                    0
+                  ],
+                  "depth": 1,
+                  "dataField": 0
+                },
+                {
+                  "t": "data",
+                  "members": [
+                    1
+                  ],
+                  "depth": 1,
+                  "dataField": 0
+                },
+                {
+                  "t": "grand",
+                  "members": [
+                    0
+                  ],
+                  "depth": 0,
+                  "dataField": 0
+                }
+              ],
+              "colLines": [
+                {
+                  "t": "data",
+                  "members": [
+                    0
+                  ],
+                  "depth": 1,
+                  "dataField": 0
+                },
+                {
+                  "t": "data",
+                  "members": [
+                    1
+                  ],
+                  "depth": 1,
+                  "dataField": 0
+                },
+                {
+                  "t": "grand",
+                  "members": [
+                    0
+                  ],
+                  "depth": 0,
+                  "dataField": 0
+                }
+              ],
+              "dataFields": [
+                {
+                  "name": "Sum of Sales",
+                  "field": 2,
+                  "subtotal": "sum"
+                }
+              ],
+              "pageFields": [],
+              "filters": [],
+              "sourceSheet": "Data",
+              "sourceRef": "A1:C7",
+              "unsupported": []
+            },
+            "pivotError": null
+          }
+        },
+        {
+          "name": "read-local-image",
+          "status": "passed",
+          "expected": "png",
+          "actual": "image/png"
+        },
+        {
+          "name": "add-image-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Auto-applied 1 change(s) (undo via the side panel [Undo] button or ⌘Z): Insert image insert-logo.png at H20",
+              "mutated": true,
+              "summary": "insert logo image"
+            },
+            "revision": "053b23744ab1e909a639c60c712c1985f53b13735b467dfa592f870cdaa1f1fe"
+          }
+        },
+        {
+          "name": "disk-unchanged-until-save",
+          "status": "passed",
+          "expected": "053b23744ab1e909a639c60c712c1985f53b13735b467dfa592f870cdaa1f1fe",
+          "actual": "053b23744ab1e909a639c60c712c1985f53b13735b467dfa592f870cdaa1f1fe"
+        },
+        {
+          "name": "insert-save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-media/sheets-media.xlsx",
+            "name": "sheets-media.xlsx",
+            "mtimeMs": 1789250583988.0107
+          }
+        },
+        {
+          "name": "insert-media-added",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "mediaCount": 2,
+            "picCount": 2,
+            "fromRows": [
+              9,
+              19
+            ],
+            "pivotRef": true,
+            "cacheSource": true
+          }
+        },
+        {
+          "name": "reopen-after-insert",
+          "status": "passed",
+          "expected": "ready",
+          "actual": "ready"
+        },
+        {
+          "name": "move-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "moved": {
+              "canceled": false,
+              "file": {
+                "sessionId": "6ff0822b-9866-48b4-b823-fe4d68a7a2a7",
+                "name": "sheets-media.xlsx",
+                "sha256": "4f71ca4b29995afa3869ee5a4904a74b8edadf5c1f376e11780ba61db0ac6a6a",
+                "activeTab": 0,
+                "entryCount": 15,
+                "sheets": [
+                  {
+                    "id": "sheet-1",
+                    "name": "Data",
+                    "rowCount": 100,
+                    "columnCount": 26,
+                    "columnWidths": [],
+                    "defaultRowHeight": null,
+                    "defaultColumnWidth": null,
+                    "freeze": null,
+                    "hidden": false,
+                    "tabColor": null,
+                    "showGridLines": true,
+                    "tables": [],
+                    "comments": [],
+                    "pivotRanges": [
+                      {
+                        "startRow": 2,
+                        "endRow": 6,
+                        "startColumn": 4,
+                        "endColumn": 7
+                      }
+                    ],
+                    "pivotTables": [
+                      {
+                        "path": "xl/pivotTables/pivotTable1.xml",
+                        "cachePath": "xl/pivotCache/pivotCacheDefinition1.xml",
+                        "outputRef": "E3:H7",
+                        "firstDataRow": 2,
+                        "firstDataCol": 1
+                      }
+                    ],
+                    "sparklines": [],
+                    "cellImages": []
+                  },
+                  {
+                    "id": "sheet-2",
+                    "name": "Locked",
+                    "rowCount": 100,
+                    "columnCount": 26,
+                    "columnWidths": [],
+                    "defaultRowHeight": null,
+                    "defaultColumnWidth": null,
+                    "freeze": null,
+                    "hidden": false,
+                    "tabColor": null,
+                    "showGridLines": true,
+                    "tables": [],
+                    "comments": [],
+                    "pivotRanges": [],
+                    "pivotTables": [],
+                    "sparklines": [],
+                    "cellImages": []
+                  }
+                ],
+                "styles": [
+                  {
+                    "bold": false,
+                    "italic": false,
+                    "underline": false,
+                    "strikethrough": false,
+                    "wrapText": false,
+                    "diagonalUp": false,
+                    "diagonalDown": false,
+                    "numberFormat": "General"
+                  }
+                ],
+                "dxfStyles": [],
+                "visuals": [
+                  {
+                    "id": "visual-1",
+                    "sheetId": "sheet-1",
+                    "kind": "image",
+                    "anchor": {
+                      "fromRow": 30,
+                      "fromColumn": 0,
+                      "fromRowOffset": 0,
+                      "fromColumnOffset": 0,
+                      "toRow": 38,
+                      "toColumn": 3,
+                      "toRowOffset": 0,
+                      "toColumnOffset": 0,
+                      "explicitTo": true
+                    },
+                    "mediaPath": "xl/media/image1.png",
+                    "mediaType": "image/png",
+                    "name": "Logo",
+                    "drawingPath": "xl/drawings/drawing1.xml",
+                    "drawingIndex": 0
+                  },
+                  {
+                    "id": "visual-2",
+                    "sheetId": "sheet-1",
+                    "kind": "image",
+                    "anchor": {
+                      "fromRow": 19,
+                      "fromColumn": 7,
+                      "fromRowOffset": 0,
+                      "fromColumnOffset": 0,
+                      "toRow": 21,
+                      "toColumn": 9,
+                      "toRowOffset": 0,
+                      "toColumnOffset": 0,
+                      "explicitTo": true
+                    },
+                    "mediaPath": "xl/media/image2.png",
+                    "mediaType": "image/png",
+                    "name": "Picture 3",
+                    "drawingPath": "xl/drawings/drawing1.xml",
+                    "drawingIndex": 1
+                  }
+                ],
+                "definedNames": [],
+                "readOnly": false
+              },
+              "touchedEntries": [
+                "xl/drawings/drawing1.xml"
+              ]
+            },
+            "moveError": null
+          }
+        },
+        {
+          "name": "move-save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-media/sheets-media.xlsx",
+            "name": "sheets-media.xlsx",
+            "mtimeMs": 1789250585020.5867
+          }
+        },
+        {
+          "name": "moved-anchor-persisted",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "mediaCount": 2,
+            "picCount": 2,
+            "fromRows": [
+              30,
+              19
+            ],
+            "pivotRef": true,
+            "cacheSource": true
+          }
+        },
+        {
+          "name": "reopen-after-move",
+          "status": "passed",
+          "expected": "ready",
+          "actual": "ready"
+        },
+        {
+          "name": "reopen-features-image",
+          "status": "passed",
+          "expected": "image still listed",
+          "actual": "Feature state of sheet Data (id=sheet-1):\nStatus: visible, unprotected\nPivot tables: 1 (output region read-only; recompute from source data with refresh_pivot):\n- E3:H7: rows[Region] cols[Product] values[Sum of Sales] source=Data!A1:C7 (recomputable)\nAutoFilter: none\nConditional formatting: none\nData validation: none\nDefined names: none\nShapes/images: 2 (charts are listed in get_workbook_context):\n- image @ A31 (came with the file, not modifiable by the AI)\n- image @ H20 (came with the file, not modifiable by the AI)"
+        },
+        {
+          "name": "reopen-features-pivot",
+          "status": "passed",
+          "expected": "pivot kept",
+          "actual": "Feature state of sheet Data (id=sheet-1):\nStatus: visible, unprotected\nPivot tables: 1 (output region read-only; recompute from source data with refresh_pivot):\n- E3:H7: rows[Region] cols[Product] values[Sum of Sales] source=Data!A1:C7 (recomputable)\nAutoFilter: none\nConditional formatting: none\nData validation: none\nDefined names: none\nShapes/images: 2 (charts are listed in get_workbook_context):\n- image @ A31 (came with the file, not modifiable by the AI)\n- image @ H20 (came with the file, not modifiable by the AI)"
+        },
+        {
+          "name": "reopen-visual-count",
+          "status": "passed",
+          "expected": ">=2",
+          "actual": {
+            "visuals": [
+              {
+                "id": "visual-1",
+                "kind": "image",
+                "fromRow": 30,
+                "fromColumn": 0
+              },
+              {
+                "id": "visual-2",
+                "kind": "image",
+                "fromRow": 19,
+                "fromColumn": 7
+              }
+            ],
+            "pivots": [
+              {
+                "path": "xl/pivotTables/pivotTable1.xml",
+                "cachePath": "xl/pivotCache/pivotCacheDefinition1.xml",
+                "outputRef": "E3:H7",
+                "firstDataRow": 2,
+                "firstDataCol": 1
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,184 @@
+=== npm run typecheck ===
+
+> dsh-genoffice@0.1.0 typecheck
+> npm run typecheck --workspaces --if-present
+
+
+> @deepseek-ai/dsh-tab-genoffice@0.2.0 typecheck
+> tsc -p tsconfig.json
+
+PLUGIN_TSC:0
+=== npm test ===
+
+> dsh-genoffice@0.1.0 test
+> npm run test --workspaces --if-present
+
+
+> @deepseek-ai/dsh-tab-genoffice@0.2.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/packages/tab-genoffice[39m
+
+ [32m✓[39m tests/relay-launch.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/prompt.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/relay.spec.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m tests/skill.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m tests/file-tab.spec.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m tests/errors.spec.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 102[2mms[22m[39m
+ [32m✓[39m tests/save-tools.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 197[2mms[22m[39m
+ [32m✓[39m tests/present-call.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 281[2mms[22m[39m
+ [32m✓[39m tests/assets.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m tests/host-land-pages.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 314[2mms[22m[39m
+ [32m✓[39m tests/capability.spec.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 207[2mms[22m[39m
+ [32m✓[39m tests/standard-facet.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 147[2mms[22m[39m
+ [32m✓[39m tests/genoffice.spec.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 679[2mms[22m[39m
+ [32m✓[39m tests/open-tools.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 927[2mms[22m[39m
+     [33m[2m✓[22m[39m polls until relay reports the executor registered [33m 505[2mms[22m[39m
+ [32m✓[39m tests/click-preview.spec.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m tests/integration.spec.tsx [2m([22m[2m24 tests[22m[2m)[22m[33m 1127[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m16 passed[39m[22m[90m (16)[39m
+[2m      Tests [22m [1m[32m141 passed[39m[22m[90m (141)[39m
+[2m   Start at [22m 00:43:39
+[2m   Duration [22m 4.30s[2m (transform 4.16s, setup 760ms, import 7.06s, tests 4.18s, environment 23.62s)[22m
+
+PLUGIN_TEST:0
+=== npm run build ===
+
+> dsh-genoffice@0.1.0 build
+> npm run build --workspaces --if-present
+
+
+> @deepseek-ai/dsh-tab-genoffice@0.2.0 build
+> tsc -p tsconfig.build.json && tsdown
+
+[34mℹ[39m [34mtsdown v0.22.14[39m powered by [38;2;255;126;23mrolldown v1.2.4[39m
+[34mℹ[39m config file: [4m/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/packages/tab-genoffice/tsdown.config.ts[24m 
+[34mℹ[39m [38;2;100;151;180m[@deepseek-ai/dsh-tab-genoffice][39m entry: [38;2;100;151;180msrc/index.ts, src/standard/host.ts[39m
+[34mℹ[39m [38;2;100;151;180m[@deepseek-ai/dsh-tab-genoffice][39m target: [38;2;100;151;180mes2022[39m
+[34mℹ[39m [38;2;100;151;180m[@deepseek-ai/dsh-tab-genoffice][39m tsconfig: [38;2;100;151;180mtsconfig.json[39m
+[34mℹ[39m [38;2;100;180;143m[@deepseek-ai/dsh-tab-genoffice/client][39m entry: [38;2;100;180;143msrc/client/index.ts[39m
+[34mℹ[39m [38;2;100;180;143m[@deepseek-ai/dsh-tab-genoffice/client][39m tsconfig: [38;2;100;180;143mtsconfig.json[39m
+
+[43m WARN [49m `external` is deprecated. Use `deps.neverBundle` instead.
+
+
+[43m WARN [49m `noExternal` is deprecated. Use `deps.alwaysBundle` instead.
+
+[34mℹ[39m Build start
+[34mℹ[39m [38;2;100;180;143m[@deepseek-ai/dsh-tab-genoffice/client][39m [33m[CJS][39m [2mlib/[22m[1mclient.js[22m      [2m 63.27 kB[22m [2m│ gzip: 17.25 kB[22m
+[34mℹ[39m [38;2;100;180;143m[@deepseek-ai/dsh-tab-genoffice/client][39m [33m[CJS][39m [2mlib/[22mclient.js.map  [2m113.22 kB[22m [2m│ gzip: 31.83 kB[22m
+[34mℹ[39m [38;2;100;180;143m[@deepseek-ai/dsh-tab-genoffice/client][39m [33m[CJS][39m 2 files, total: 176.49 kB
+[34mℹ[39m [38;2;100;151;180m[@deepseek-ai/dsh-tab-genoffice][39m [34m[ESM][39m [2mlib/[22m[1mindex.js[22m          [2m  3.04 kB[22m [2m│ gzip:  1.41 kB[22m
+[34mℹ[39m [38;2;100;151;180m[@deepseek-ai/dsh-tab-genoffice][39m [34m[ESM][39m [2mlib/[22m[1mstandard/host.js[22m  [2m  0.09 kB[22m [2m│ gzip:  0.09 kB[22m
+[34mℹ[39m [38;2;100;151;180m[@deepseek-ai/dsh-tab-genoffice][39m [34m[ESM][39m [2mlib/[22mhost-BnLTetdC.js  [2m146.66 kB[22m [2m│ gzip: 35.85 kB[22m
+[34mℹ[39m [38;2;100;151;180m[@deepseek-ai/dsh-tab-genoffice][39m [34m[ESM][39m 3 files, total: 149.79 kB
+[32m✔[39m [38;2;100;180;143m[@deepseek-ai/dsh-tab-genoffice/client][39m Build complete in [32m157ms[39m
+src/host/relay-launch.ts (6:22) [33m[UNRESOLVED_IMPORT] [0mCould not resolve 'node:child_process' in src/host/relay-launch.ts
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/host/relay-launch.ts:6:23 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m6 │[0m [38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249m{[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mp[0m[38;5;249ma[0m[38;5;249mw[0m[38;5;249mn[0m[38;5;249m [0m[38;5;249m}[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mm[0m[38;5;249m [0m'node:child_process'
+ [38;5;240m  │[0m                       ──────────┬─────────  
+ [38;5;240m  │[0m                                 ╰─────────── Module not found, treating it as an external dependency
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: The "main" field here was ignored. Main fields must be configured explicitly when using the "neutral" platform.
+[38;5;246m───╯[0m
+
+src/host/relay-launch.ts (7:38) [33m[UNRESOLVED_IMPORT] [0mCould not resolve 'node:fs' in src/host/relay-launch.ts
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/host/relay-launch.ts:7:39 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m7 │[0m [38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249m{[0m[38;5;249m [0m[38;5;249ma[0m[38;5;249mc[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249ms[0m[38;5;249ms[0m[38;5;249mS[0m[38;5;249my[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249m,[0m[38;5;249m [0m[38;5;249mc[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249ms[0m[38;5;249mt[0m[38;5;249ma[0m[38;5;249mn[0m[38;5;249mt[0m[38;5;249ms[0m[38;5;249m [0m[38;5;249m}[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mm[0m[38;5;249m [0m'node:fs'
+ [38;5;240m  │[0m                                       ────┬────  
+ [38;5;240m  │[0m                                           ╰────── Module not found, treating it as an external dependency
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: The "main" field here was ignored. Main fields must be configured explicitly when using the "neutral" platform.
+[38;5;246m───╯[0m
+
+src/host/relay-launch.ts (9:21) [33m[UNRESOLVED_IMPORT] [0mCould not resolve 'node:path' in src/host/relay-launch.ts
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/host/relay-launch.ts:9:22 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m9 │[0m [38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249m{[0m[38;5;249m [0m[38;5;249mj[0m[38;5;249mo[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249m [0m[38;5;249m}[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mm[0m[38;5;249m [0m'node:path'
+ [38;5;240m  │[0m                      ─────┬─────  
+ [38;5;240m  │[0m                           ╰─────── Module not found, treating it as an external dependency
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: The "main" field here was ignored. Main fields must be configured explicitly when using the "neutral" platform.
+[38;5;246m───╯[0m
+
+src/host/assets.ts (7:31) [33m[UNRESOLVED_IMPORT] [0mCould not resolve 'node:fs/promises' in src/host/assets.ts
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/host/assets.ts:7:32 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m7 │[0m [38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249m{[0m[38;5;249m [0m[38;5;249mr[0m[38;5;249me[0m[38;5;249ma[0m[38;5;249md[0m[38;5;249mF[0m[38;5;249mi[0m[38;5;249ml[0m[38;5;249me[0m[38;5;249m,[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mt[0m[38;5;249ma[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249m}[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mm[0m[38;5;249m [0m'node:fs/promises'
+ [38;5;240m  │[0m                                ─────────┬────────  
+ [38;5;240m  │[0m                                         ╰────────── Module not found, treating it as an external dependency
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: The "main" field here was ignored. Main fields must be configured explicitly when using the "neutral" platform.
+[38;5;246m───╯[0m
+
+src/host/assets.ts (9:24) [33m[UNRESOLVED_IMPORT] [0mCould not resolve 'node:path' in src/host/assets.ts
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/host/assets.ts:9:25 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m9 │[0m [38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249m{[0m[38;5;249m [0m[38;5;249me[0m[38;5;249mx[0m[38;5;249mt[0m[38;5;249mn[0m[38;5;249ma[0m[38;5;249mm[0m[38;5;249me[0m[38;5;249m [0m[38;5;249m}[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mm[0m[38;5;249m [0m'node:path'
+ [38;5;240m  │[0m                         ─────┬─────  
+ [38;5;240m  │[0m                              ╰─────── Module not found, treating it as an external dependency
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: The "main" field here was ignored. Main fields must be configured explicitly when using the "neutral" platform.
+[38;5;246m───╯[0m
+
+src/host/assets.ts (10:27) [33m[UNRESOLVED_IMPORT] [0mCould not resolve 'node:crypto' in src/host/assets.ts
+    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/host/assets.ts:10:28 [38;5;246m][0m
+    [38;5;246m│[0m
+ [38;5;246m10 │[0m [38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m [0m[38;5;249m{[0m[38;5;249m [0m[38;5;249mr[0m[38;5;249ma[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mo[0m[38;5;249mm[0m[38;5;249mU[0m[38;5;249mU[0m[38;5;249mI[0m[38;5;249mD[0m[38;5;249m [0m[38;5;249m}[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mm[0m[38;5;249m [0m'node:crypto'
+ [38;5;240m   │[0m                            ──────┬──────  
+ [38;5;240m   │[0m                                  ╰──────── Module not found, treating it as an external dependency
+ [38;5;240m   │[0m 
+ [38;5;240m   │[0m [38;5;115mHelp[0m: The "main" field here was ignored. Main fields must be configured explicitly when using the "neutral" platform.
+[38;5;246m────╯[0m
+
+[32m✔[39m [38;2;100;151;180m[@deepseek-ai/dsh-tab-genoffice][39m Build complete in [32m161ms[39m
+PLUGIN_BUILD:0
+=== npm run standard:check ===
+
+> dsh-genoffice@0.1.0 standard:check
+> node standards/validate.mjs
+
+
+== manifest 校验（packages/*/dsh-plugin.json） ==
+✓ tab-genoffice (io.github.nothing1024.tab-genoffice)
+
+== facet 入口装载检查（entry 存在 / 无私有 import / 品牌默认导出） ==
+✓ tab-genoffice facets.host → lib/standard/host.js
+
+== 协商（manifest × host-descriptor × registry 快照） ==
+✓ tab-genoffice: compatible
+  permissions（契约之外的敏感 scope，授权归 authorize 阶段）：x-nothing1024.net.loopback-fetch、x-nothing1024.process.spawn
+
+== manifest fixtures 自检 ==
+✓ valid/full.json
+✓ valid/minimal.json
+✓ invalid/missing-schema.json → [missing-schema]
+✓ invalid/wrong-manifest-version.json → [wrong-manifest-version]
+✓ invalid/missing-facets.json → [missing-facets]
+✓ invalid/bad-id.json → [bad-id]
+✓ invalid/unknown-field.json → [unknown-field]
+✓ invalid/provides-rejected.json → [provides-rejected]
+✓ invalid/requires-services-rejected.json → [requires-services-rejected]
+✓ invalid/reserved-facet-client.json → [reserved-facet]
+✓ invalid/duplicate-contributes-id.json → [duplicate-contributes-id]
+✓ invalid/entry-outside-root.json → [entry-outside-root]
+✓ facet/valid/entry.js
+✓ facet/invalid/not-a-facet → [not-a-facet]
+✓ facet/invalid/private-import → [private-import]
+
+== 协商 fixtures 自检（五种结局） ==
+✓ negotiation/compatible → compatible
+✓ negotiation/degraded-optional → compatible
+✓ negotiation/rejected-missing-required → rejected
+✓ negotiation/rejected-unsupported-facet → rejected
+✓ negotiation/pending-authorization → pending-authorization
+
+== adapter 审计（上游触点基线） ==
+✓ 无未评审的新增上游触点
+
+结论：全部通过
+PLUGIN_STD:0

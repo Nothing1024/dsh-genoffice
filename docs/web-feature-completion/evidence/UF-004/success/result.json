@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-004",
+  "branch": "success",
+  "run_id": "27a1da4e-edec-4616-b154-1bad00a76e3b",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "slides-presentation-master-anim-show",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": "ready"
+        },
+        {
+          "name": "menu-master",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "masterCount": 2,
+            "masterEdited": false,
+            "masterClosed": true,
+            "sourceId": "e_2",
+            "transOk": true,
+            "animOk": true,
+            "transition": "fade",
+            "animCount": 1,
+            "animEffect": "appear",
+            "started": {
+              "audience": false
+            },
+            "swapped": false,
+            "advanceOk": true
+          }
+        },
+        {
+          "name": "menu-transition",
+          "status": "passed",
+          "expected": "fade",
+          "actual": "fade"
+        },
+        {
+          "name": "menu-animation",
+          "status": "passed",
+          "expected": 1,
+          "actual": {
+            "masterCount": 2,
+            "masterEdited": false,
+            "masterClosed": true,
+            "sourceId": "e_2",
+            "transOk": true,
+            "animOk": true,
+            "transition": "fade",
+            "animCount": 1,
+            "animEffect": "appear",
+            "started": {
+              "audience": false
+            },
+            "swapped": false,
+            "advanceOk": true
+          }
+        },
+        {
+          "name": "menu-presenter",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "audience": false
+          }
+        },
+        {
+          "name": "tool-ops",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Applied 2 op(s): setTransition @0, setAnimations @0.",
+              "mutated": true,
+              "summary": "已应用 2 个操作"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "undo-redo",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "undone": true,
+            "redone": true
+          }
+        },
+        {
+          "name": "save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-slides-presentation/presentation-source.pptx",
+            "name": "presentation-source.pptx",
+            "mtimeMs": 1789250626511.7642
+          }
+        },
+        {
+          "name": "disk-changed",
+          "status": "passed",
+          "expected": "changed",
+          "actual": {
+            "beforeSha": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+            "savedSha": "2dfaa80d17c59a18d72db8997cdba1b9d60958b17ccd84ad4d39e9ae93ac4065"
+          }
+        },
+        {
+          "name": "persist-transition",
+          "status": "passed",
+          "expected": true,
+          "actual": true
+        },
+        {
+          "name": "persist-anim",
+          "status": "passed",
+          "expected": true,
+          "actual": true
+        },
+        {
+          "name": "reopen-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": "ready"
+        },
+        {
+          "name": "reopen-transition",
+          "status": "passed",
+          "expected": "wipe",
+          "actual": "wipe"
+        },
+        {
+          "name": "reopen-anim",
+          "status": "passed",
+          "expected": 1,
+          "actual": [
+            {
+              "sourceId": "sp_0",
+              "targetName": "Title",
+              "effect": "fade",
+              "trigger": "onClick",
+              "durationMs": 300,
+              "delayMs": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "package": "plugin-tool-alignment",
+  "uf": "UF-003",
+  "branch": "failure-1",
+  "run_id": "pta-2026-09-12T17-17-59-551Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "247e3f5c488afb25915e9ee97fe0fd22e27648da"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "illegal-fields",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "legacy-cellId-rejected",
+          "status": "passed",
+          "expected": "legacy rejected",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "paragraphs must be a non-empty array",
+              "isError": true,
+              "mutated": false,
+              "summary": "编辑表格"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "unknown-kind-rejected",
+          "status": "passed",
+          "expected": "addRow rejected",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Invalid kind",
+              "isError": true,
+              "mutated": false,
+              "summary": "表格结构"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        }
+      ]
+    }
+  ]
+}

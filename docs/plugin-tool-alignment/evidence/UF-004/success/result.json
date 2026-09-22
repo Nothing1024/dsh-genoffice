@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "package": "plugin-tool-alignment",
+  "uf": "UF-004",
+  "branch": "success",
+  "run_id": "pta-2026-09-12T17-17-59-551Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "247e3f5c488afb25915e9ee97fe0fd22e27648da"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "single-land-write",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "land-once-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Landed 1 host-authored page(s) (insert_mode:append). Deck now has 2 page(s).",
+              "mutated": true,
+              "summary": "land_pages 1"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "appended-text-visible",
+          "status": "passed",
+          "expected": "LandOnceKeep",
+          "actual": "The presentation has 2 pages; page 2 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage 1 (slideIndex=0):\n  - e_2 | shape | \"日志验证 / 示例演示文稿 · 商务深蓝风格封面 / Sample Presentation  | …\"\nPage 2 (slideIndex=1):\n  - e_6555738b | text | \"LandOnceKeep\"\n(Use read_slide to see"
+        },
+        {
+          "name": "save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T17-17-59-551Z/land.pptx",
+            "name": "land.pptx",
+            "mtimeMs": 1789233487383.7507
+          }
+        }
+      ]
+    }
+  ]
+}

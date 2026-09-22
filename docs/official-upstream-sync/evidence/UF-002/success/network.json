@@ -1,0 +1,82 @@
+{
+  "events": [
+    {
+      "status": 200,
+      "ok": true,
+      "docId": "22d78a73d14ecb02bce89006b9b25c2f1725cba11db6222af95a01a55f85db62",
+      "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/docs-context.docx",
+      "registered": true,
+      "readiness": "ready",
+      "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3",
+      "error": null,
+      "occupied": true,
+      "owner": "9167f853-ad97-4771-b396-ed27bc028ad0"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "context": "Document block list:\nThe document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text stats: words 2, characters (no spaces) 47, characters (with spaces) 48\nHeaders & footers ({PAGE}/{NUMPAGES} are live page-number fields; change with set_header_footer):\n- header: \"OfficialHeaderOrig\" | footer: \"OfficialFooterOrig\"\nNo selection; cursor is in block 1\n\nUnresolved comments (address with reply_comment / resolve_comment by id):\n- id 1 by Alice (block 0, anchored text \"OfficialCommentAnchor\"): OfficialThreadKeep",
+      "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "The document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text stats: words 2, characters (no spaces) 47, characters (with spaces) 48\nHeaders & footers ({PAGE}/{NUMPAGES} are live page-number fields; change with set_header_footer):\n- header: \"OfficialHeaderOrig\" | footer: \"OfficialFooterOrig\"\nNo selection; cursor is in block 1",
+        "mutated": false,
+        "summary": "读取文档结构"
+      },
+      "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "All comment threads (including resolved):\n- id 1 by Alice (block 0, anchored text \"OfficialCommentAnchor\"): OfficialThreadKeep",
+        "mutated": false,
+        "summary": "读取批注"
+      },
+      "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Replied to comment 1.",
+        "mutated": true,
+        "summary": "回复批注"
+      },
+      "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Updated the header.",
+        "mutated": false,
+        "summary": "更新页眉"
+      },
+      "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/docs-context.docx",
+      "name": "docs-context.docx",
+      "mtimeMs": 1789240079324.5745
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "docId": "22d78a73d14ecb02bce89006b9b25c2f1725cba11db6222af95a01a55f85db62",
+      "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/docs-context.docx",
+      "registered": true,
+      "readiness": "ready",
+      "revision": "b099f5b5628c01e34694a6cfffc86d4292fcb0f1f6e9148f9d11da54c80dcc09",
+      "error": null,
+      "occupied": true,
+      "owner": "9167f853-ad97-4771-b396-ed27bc028ad0"
+    }
+  ],
+  "count": 8
+}

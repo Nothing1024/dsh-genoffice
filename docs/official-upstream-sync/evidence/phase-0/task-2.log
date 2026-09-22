@@ -1,0 +1,16 @@
+# official-upstream-sync Task 2
+time=2026-09-12T17:39:33.063659+00:00
+worktree=/tmp/genoffice-official-sync-engine
+live=/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine
+merge_head=de139a061537bea40f0cc81ef8f09a95f77ac52a
+ours_head=247e3f5c488afb25915e9ee97fe0fd22e27648da
+unmerged_wt=0
+diff_check_wt=0
+diff_check_live=0
+e2e_markdown=passed run_id=ous-2026-09-12T17-39-16-358Z
+engine_root=/tmp/genoffice-official-sync-engine
+identity_name=(unset)
+identity_email=(unset)
+markdown_hooks=bumpRevision+data-readiness
+codex_stub=packages/ai-provider/src/codex-app-server.browser.ts
+no_commit=merge left uncommitted pending identity/task-3 ancestry

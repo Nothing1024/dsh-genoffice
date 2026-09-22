@@ -7,6 +7,7 @@
 export declare const zh: {
     'tab.genoffice': string;
     'tab.file': string;
+    'tab.guide': string;
 };
 /** The genoffice tab namespace key union. */
 export type GenOfficeTabKey = keyof typeof zh;
@@ -14,6 +15,7 @@ export type GenOfficeTabKey = keyof typeof zh;
 export declare const en: {
     'tab.genoffice': string;
     'tab.file': string;
+    'tab.guide': string;
 };
 /** Dictionary namespace owned by the genoffice tab artifact. */
 export declare const NS: "tabs.genoffice";

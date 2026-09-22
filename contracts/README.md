@@ -25,7 +25,7 @@
 | `ctx.tools`（`dsh-tools` defineTool，94 个控制/打开工具） | required（host 半身） | 无（核心功能） | `x-nothing1024.dsh.tools/v1alpha1` ToolRegistry——已列入 `requires` |
 | `ctx.systemPrompt`（GenOffice 引导段） | optional（host 半身） | 缺席时跳过注入，工具照常注册 | `x-nothing1024.dsh.system-prompt/v1alpha1` SystemPrompt——已列入 `requires`（optional） |
 | skills 服务（genoffice 运行时手册） | optional（host 半身） | 缺席时跳过注册，提示词段兜底 | `x-nothing1024.dsh.skills/v1alpha1` SkillRegistry——已列入 `requires`（optional） |
-| `ctx.betterSidebar`（tab / FileViewer UI） | optional（client 半身） | 缺席时跳过注册不崩（BR-003） | `x-nothing1024.better-sidebar/v1alpha1` SidebarTab——已列入 `requires`（optional） |
+| `ctx.sidebarRight` / `ctx.sidebarRightTabs`（官方右侧栏） | optional（client 半身） | 缺席时跳过注册不崩（BR-003） | `x-nothing1024.dsh.sidebar-right/v1alpha1` SidebarRight——client 坐标，不进 host manifest |
 | `ctx.locale` | required（client 半身） | — | `x-nothing1024.dsh.locale/v1alpha1` Locale——registry 已备案；client facet 归 RFC 0002，暂不进 manifest |
 | `ctx.webServer`（`/dsh-artifact/genoffice-relay`、`genoffice-sync` 路由） | optional（host 半身） | 注入 PENDING 时「启动 relay」按钮隐藏、sync 走兜底（见 `src/host/lookup.ts`） | `x-nothing1024.dsh.web-server/v1alpha1` WebServer——已列入 `requires`（optional） |
 | loopback 网络（fetch `localhost:8787`） | required | relay 挂时面板/视图显示降级横幅 | permission `x-nothing1024.net.loopback-fetch`——已列入 `permissions`（语义见 standards/registry/permissions.md） |

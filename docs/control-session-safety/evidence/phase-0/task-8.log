@@ -1,0 +1,5 @@
+# control-session-safety Task 8
+markdown-state e2e exit 0 (loading + revision + save-snapshot)
+write-atomic.test.mjs 9 passed
+npm --prefix ../engine run typecheck exit 0
+See evidence/phase-0/task-8/summary.json

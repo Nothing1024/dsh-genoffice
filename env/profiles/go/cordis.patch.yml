@@ -1,4 +1,16 @@
-# User overlay for profile `go`. Keep empty.
-# tab-genoffice and dsh-better-sidebar already ship their own bundle patches.
-# Do not re-insert those rows here (double mount).
-[]
+# User overlay for profile `go`.
+# tab-genoffice already ships its own bundle patch.
+# Do not re-insert that row here (double mount).
+#
+# Settings.yaml is the live source. Pin composition fallback so a missing
+# settings document does not start agents on deepseek-flash.
+- id: agent-default-model
+  config:
+    provider: anthropic
+    model: deepseek-flash
+
+# Official DeepSeek chat + search are disabled so they cannot bypass deepseek-flash.
+- id: llm-deepseek
+  disabled: true
+- id: web-search-deepseek
+  disabled: true

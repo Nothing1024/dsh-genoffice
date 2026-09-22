@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-006",
+  "branch": "success",
+  "run_id": "39be26ee-804c-4e1c-b599-7ee667813fa5",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "html-docx-success",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "html-to-docx-available",
+          "status": "passed",
+          "expected": "available",
+          "actual": [
+            "available"
+          ]
+        },
+        {
+          "name": "service-ready",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "ok": true,
+            "available": true,
+            "executor": "html2docx-cli"
+          }
+        },
+        {
+          "name": "html-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "08b90d32a8053d4e1b8c53ceac27190832c3d9409b176ec5e53ed8e008f9b980",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-docx/keep.html",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "11f521e37749e39916a07802cda284f6b4f30efe2a9a2f119d5150c06ef9c846",
+            "error": null,
+            "occupied": true,
+            "owner": "453bffa0-9035-4e89-b247-799224c0a762"
+          }
+        },
+        {
+          "name": "convert-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "ok": true,
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-docx/keep.docx"
+          }
+        },
+        {
+          "name": "docx-keep",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "hasXml": true,
+            "snippet": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><w:document mc:Ignorable=\"w14 w15 wp14\" xmlns:wpc=\"http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas\" xmlns:"
+          }
+        },
+        {
+          "name": "docs-reopen",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "docsReady": {
+              "status": 200,
+              "ok": true,
+              "docId": "fc5b00457a52da53eea555629cb11b61f9af52fc0626f0322c1cfec80e692f3f",
+              "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-docx/keep.docx",
+              "registered": true,
+              "readiness": "ready",
+              "revision": "905ea74902eb98b1dc45e29496948cee45b3cb5cc340a1da8f12f27348bbce60",
+              "error": null,
+              "occupied": true,
+              "owner": "e8241507-ce35-40d4-ad99-c3cfe33668a4"
+            },
+            "docsContext": {
+              "status": 200,
+              "ok": true,
+              "context": "Document block list:\nThe document has 2 blocks, listed below (index|type|content preview):\n0|h1|WfcHtmlDocx\n1|p|keep phrase\nFull-text stats: words 2, characters (no spaces) 21, characters (with spaces) 22\nHeaders & footers ({PAGE}/{NUMPAGES} are live page-number fields; change with set_header_footer):\n- header: (empty) | footer: (empty)\nNo selection; cursor is in block 1",
+              "revision": "905ea74902eb98b1dc45e29496948cee45b3cb5cc340a1da8f12f27348bbce60"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

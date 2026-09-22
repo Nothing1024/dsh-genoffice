@@ -1,0 +1,17 @@
+web-feature-completion Task 1
+date: 2026-09-12T19:30:00Z
+isolated: /tmp/genoffice-official-sync-engine HEAD=f9f14e6
+official ancestor: de139a061537bea40f0cc81ef8f09a95f77ac52a
+
+commands:
+  npm typecheck / web:build already exit 0 on isolated this session (ous-t11-*)
+  ENGINE_ROOT=/tmp/genoffice-official-sync-engine node web/e2e-web-features.mjs --case inventory
+    wfc-inventory exit 0
+    inventory 49 rows; tasks 2-19; HTML/OCR not claimed available
+    evidence/phase-0/inventory-result.json
+    evidence/phase-0/dependency-probe.json
+    evidence/phase-0/capability-inventory.csv
+
+notes:
+  Harness lives in isolated tree only (do not write original engine).
+  Plugin identity unset; WFC docs/evidence uncommitted.

@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-003",
+  "branch": "pdf-pages",
+  "status": "passed",
+  "results": {
+    "success": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-003",
+      "branch": "success",
+      "run_id": "626cb369-9078-449d-be22-a6d049700fde",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "pdf-pages-extract-size-split-crop",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "open-ready",
+              "status": "passed",
+              "expected": "ready",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "2dfcf4a1e7e1a1a1f046fd8abe9683254a6fef6d983b0f05b4bbeeb170e7d13f",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-pdf-pages/pages-source.pdf",
+                "registered": true,
+                "readiness": "ready",
+                "revision": "0befdd5df5022181d1fde3a40ae254fef1433e5552b959cfcc0892f1fc128295",
+                "error": null,
+                "occupied": true,
+                "owner": "43486bd5-5c3f-49c9-8ef7-1c43d82b32a5"
+              }
+            },
+            {
+              "name": "extract-ok",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "execution": {
+                  "output": "Extracted pages 1-2 into a new PDF saved at /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-pdf-pages/pages-source-p1-2-6.pdf and opened in a new tab. The current document was saved and keeps all its pages.",
+                  "mutated": true,
+                  "summary": "抽取第 1-2 页到新文件"
+                },
+                "revision": "0befdd5df5022181d1fde3a40ae254fef1433e5552b959cfcc0892f1fc128295"
+              }
+            },
+            {
+              "name": "extract-reopen-pages",
+              "status": "passed",
+              "expected": 2,
+              "actual": {
+                "pageCount": 2,
+                "sizes": [
+                  {
+                    "w": 612,
+                    "h": 792
+                  },
+                  {
+                    "w": 612,
+                    "h": 792
+                  }
+                ]
+              }
+            },
+            {
+              "name": "extract-does-not-rewrite-source",
+              "status": "passed",
+              "expected": "0befdd5df5022181d1fde3a40ae254fef1433e5552b959cfcc0892f1fc128295",
+              "actual": "0befdd5df5022181d1fde3a40ae254fef1433e5552b959cfcc0892f1fc128295"
+            },
+            {
+              "name": "insert-ok",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "execution": {
+                  "output": "Inserted a blank page as page 2; every page from there on moved down by one. The file was saved, rewritten on disk (cannot be undone) and reloaded; it now has 4 pages. Original page numbers have changed (pending deletions/reorders were baked in), so re-read with search_text/read_pages before any further edit.",
+                  "mutated": true,
+                  "summary": "插入空白页作为第 2 页"
+                },
+                "revision": "0befdd5df5022181d1fde3a40ae254fef1433e5552b959cfcc0892f1fc128295"
+              }
+            },
+            {
+              "name": "insert-page-count",
+              "status": "passed",
+              "expected": 4,
+              "actual": {
+                "pageCount": 4,
+                "sizes": [
+                  {
+                    "w": 612,
+                    "h": 792
+                  },
+                  {
+                    "w": 612,
+                    "h": 792
+                  },
+                  {
+                    "w": 612,
+                    "h": 792
+                  },
+                  {
+                    "w": 612,
+                    "h": 792
+                  }
+                ]
+              }
+            },
+            {
+              "name": "set-size-ok",
+              "status": "passed",
+              "expected": "A4 595x842",
+              "actual": {
+                "pageCount": 4,
+                "sizes": [
+                  {
+                    "w": 595,
+                    "h": 842
+                  },
+                  {
+                    "w": 595,
+                    "h": 842
+                  },
+                  {
+                    "w": 595,
+                    "h": 842
+                  },
+                  {
+                    "w": 595,
+                    "h": 842
+                  }
+                ]
+              }
+            },
+            {
+              "name": "crop-ok",
+              "status": "passed",
+              "expected": "smaller crop",
+              "actual": {
+                "pageCount": 4,
+                "sizes": [
+                  {
+                    "w": 476,
+                    "h": 674
+                  },
+                  {
+                    "w": 595,
+                    "h": 842
+                  },
+                  {
+                    "w": 595,
+                    "h": 842
+                  },
+                  {
+                    "w": 595,
+                    "h": 842
+                  }
+                ]
+              }
+            },
+            {
+              "name": "split-ok",
+              "status": "passed",
+              "expected": 8,
+              "actual": {
+                "pageCount": 8,
+                "sizes": [
+                  {
+                    "w": 238,
+                    "h": 674
+                  },
+                  {
+                    "w": 238,
+                    "h": 674
+                  },
+                  {
+                    "w": 298,
+                    "h": 842
+                  },
+                  {
+                    "w": 298,
+                    "h": 842
+                  },
+                  {
+                    "w": 298,
+                    "h": 842
+                  },
+                  {
+                    "w": 298,
+                    "h": 842
+                  },
+                  {
+                    "w": 298,
+                    "h": 842
+                  },
+                  {
+                    "w": 298,
+                    "h": 842
+                  }
+                ]
+              }
+            },
+            {
+              "name": "split-does-not-rewrite-source",
+              "status": "passed",
+              "expected": "609ebe060d021ec0c6c21e0066a582f855bbee017fedbe329ddcfe73e394a800",
+              "actual": "609ebe060d021ec0c6c21e0066a582f855bbee017fedbe329ddcfe73e394a800"
+            }
+          ]
+        }
+      ]
+    },
+    "failure1": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-003",
+      "branch": "failure-1",
+      "run_id": "83760632-557d-4aba-969b-258ee383f30a",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "pdf-pages-invalid-range",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "empty-pages-rejected",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "execution": {
+                  "output": "pages must be a range string like \"1-3,5\" within 1-3 (got nothing)",
+                  "isError": true,
+                  "summary": "抽取第 ? 页到新文件"
+                },
+                "revision": "0befdd5df5022181d1fde3a40ae254fef1433e5552b959cfcc0892f1fc128295"
+              }
+            },
+            {
+              "name": "oob-pages-rejected",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "execution": {
+                  "output": "pages must be a range string like \"1-3,5\" within 1-3",
+                  "isError": true,
+                  "summary": "抽取第 ? 页到新文件"
+                },
+                "revision": "0befdd5df5022181d1fde3a40ae254fef1433e5552b959cfcc0892f1fc128295"
+              }
+            },
+            {
+              "name": "invalid-range-keeps-source",
+              "status": "passed",
+              "expected": "0befdd5df5022181d1fde3a40ae254fef1433e5552b959cfcc0892f1fc128295",
+              "actual": "0befdd5df5022181d1fde3a40ae254fef1433e5552b959cfcc0892f1fc128295"
+            }
+          ]
+        }
+      ]
+    },
+    "failure2": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-003",
+      "branch": "failure-2",
+      "run_id": "51a5cd1b-64c3-4370-8b74-09a1f4faf77e",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "pdf-pages-missing-or-corrupt",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "missing-file-error",
+              "status": "passed",
+              "expected": "error",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "e141af983f9c8244d395243fdbde63c0681b5483edb374794d694e4ce48234f9",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-pdf-pages/missing-pages.pdf",
+                "registered": true,
+                "readiness": "error",
+                "revision": null,
+                "error": "load-error: ENOENT: no such file or directory, open '/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-pdf-pages/missing-pages.pdf'",
+                "occupied": true,
+                "owner": "92cf01db-8308-494b-baa3-9fc8b7591409"
+              }
+            },
+            {
+              "name": "corrupt-file-error",
+              "status": "passed",
+              "expected": "error",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "71f761d87a8b26d1f02311c9ee6a9a1b34cc0ef9c74597fbfb7315b639b09512",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-pdf-pages/corrupt-pages.pdf",
+                "registered": true,
+                "readiness": "error",
+                "revision": null,
+                "error": "load failed",
+                "occupied": true,
+                "owner": "532ab415-e9ad-4f0e-96db-d37fff17a62b"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

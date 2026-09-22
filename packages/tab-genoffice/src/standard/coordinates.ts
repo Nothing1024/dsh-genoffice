@@ -47,15 +47,15 @@ export const LOCALE: ContractCoordinate = {
   kind: 'Locale',
 }
 
-/** better-sidebar 页签与 FileViewer 槽位（client 半身 optional peer）。 */
+/** 官方右侧 Sidebar（client 半身 optional；web-app 自带）。 */
 export const SIDEBAR_TAB: ContractCoordinate = {
-  apiVersion: 'x-nothing1024.better-sidebar/v1alpha1',
-  kind: 'SidebarTab',
+  apiVersion: 'x-nothing1024.dsh.sidebar-right/v1alpha1',
+  kind: 'SidebarRight',
 }
 
-/** host facet 的 requires 镜像（required 在前）。 */
+/** host facet 的 requires 镜像（required 在前）。Sidebar 是 client 契约，不进 host manifest。 */
 export const HOST_REQUIRED: readonly ContractCoordinate[] = [TOOL_REGISTRY]
-export const HOST_OPTIONAL: readonly ContractCoordinate[] = [SYSTEM_PROMPT, SKILL_REGISTRY, WEB_SERVER, SIDEBAR_TAB]
+export const HOST_OPTIONAL: readonly ContractCoordinate[] = [SYSTEM_PROMPT, SKILL_REGISTRY, WEB_SERVER]
 
 /** client facet 的声明镜像（RFC 0002 定案后进 manifest）。 */
 export const CLIENT_REQUIRED: readonly ContractCoordinate[] = [LOCALE]
@@ -101,16 +101,18 @@ export interface SkillRegistryHandle {
   register(skill: { name: string; description: string; content: string; source: string }): () => void
 }
 
+/** 命名空间绑定后的翻译函数。 */
+export type Translate = (key: string, params?: Record<string, string>) => string
+
 /** Locale 句柄（client）：命名空间词典注册 + 绑定翻译函数。 */
 export interface LocaleHandle {
-  bind(ns: string): (key: string, params?: Record<string, string>) => string
+  bind(ns: string): Translate
   register(ns: string, dicts: Record<string, Record<string, string>>): () => void
 }
 
 /**
- * SidebarTab 句柄（client）：better-sidebar 是 optional peer 且可能晚到，
- * 与 WebServer 同为 acquire 形态。服务面类型由消费方（client facet）以
- * `dsh-better-sidebar` 的类型参数化，本文件不引 UI 依赖。
+ * SidebarRight 句柄（client）：官方右侧栏可能晚于本插件激活，
+ * 与 WebServer 同为 acquire 形态。服务面由 `./sidebar.ts` 描述。
  */
 export interface SidebarAcquireHandle<S> {
   acquire: ServiceAcquire<S>

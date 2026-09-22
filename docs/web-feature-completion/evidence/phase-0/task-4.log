@@ -1,0 +1,312 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-002",
+  "branch": "sheets-semantics",
+  "status": "passed",
+  "results": {
+    "success": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-002",
+      "branch": "success",
+      "run_id": "ed6f4ae6-d574-4372-8526-2be9fa4a5527",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "sheets-semantics-read-save",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "open-ready",
+              "status": "passed",
+              "expected": "ready",
+              "actual": "ready"
+            },
+            {
+              "name": "fixture-features-present",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "revenue": true,
+                "hidden": true,
+                "shared": true,
+                "autoFilter": true,
+                "table": true,
+                "protection": true,
+                "keepMarker": false
+              }
+            },
+            {
+              "name": "shared-relative-master",
+              "status": "passed",
+              "expected": "B2 =A2*2",
+              "actual": "B2: =A2*2\nB3: =A3*2\nC2: =$A2+B$2\nC3: =$A3+B$2\nD2: =$A$2+A2\nD3: =$A$2+A3\nE2: =A2\nF2: =B2"
+            },
+            {
+              "name": "shared-relative-follower",
+              "status": "passed",
+              "expected": "B3 =A3*2",
+              "actual": "B2: =A2*2\nB3: =A3*2\nC2: =$A2+B$2\nC3: =$A3+B$2\nD2: =$A$2+A2\nD3: =$A$2+A3\nE2: =A2\nF2: =B2"
+            },
+            {
+              "name": "shared-mixed-master",
+              "status": "passed",
+              "expected": "C2 =$A2+B$2",
+              "actual": "B2: =A2*2\nB3: =A3*2\nC2: =$A2+B$2\nC3: =$A3+B$2\nD2: =$A$2+A2\nD3: =$A$2+A3\nE2: =A2\nF2: =B2"
+            },
+            {
+              "name": "shared-mixed-follower",
+              "status": "passed",
+              "expected": "C3 =$A3+B$2",
+              "actual": "B2: =A2*2\nB3: =A3*2\nC2: =$A2+B$2\nC3: =$A3+B$2\nD2: =$A$2+A2\nD3: =$A$2+A3\nE2: =A2\nF2: =B2"
+            },
+            {
+              "name": "shared-abs-follower",
+              "status": "passed",
+              "expected": "D3 =$A$2+A3",
+              "actual": "B2: =A2*2\nB3: =A3*2\nC2: =$A2+B$2\nC3: =$A3+B$2\nD2: =$A$2+A2\nD3: =$A$2+A3\nE2: =A2\nF2: =B2"
+            },
+            {
+              "name": "shared-col-follower",
+              "status": "passed",
+              "expected": "F2 =B2",
+              "actual": "B2: =A2*2\nB3: =A3*2\nC2: =$A2+B$2\nC3: =$A3+B$2\nD2: =$A$2+A2\nD3: =$A$2+A3\nE2: =A2\nF2: =B2"
+            },
+            {
+              "name": "defined-name-revenue",
+              "status": "passed",
+              "expected": "Revenue=Data!$A$2",
+              "actual": "Feature state of sheet Data (id=sheet-1):\nStatus: visible, unprotected\nAutoFilter: G1:G3 (no column criteria)\nConditional formatting: none\nData validation: none\nDefined names: Revenue = Data!$A$2"
+            },
+            {
+              "name": "autofilter-present",
+              "status": "passed",
+              "expected": "G1:G3",
+              "actual": "Feature state of sheet Data (id=sheet-1):\nStatus: visible, unprotected\nAutoFilter: G1:G3 (no column criteria)\nConditional formatting: none\nData validation: none\nDefined names: Revenue = Data!$A$2"
+            },
+            {
+              "name": "hidden-sheet",
+              "status": "passed",
+              "expected": "hidden",
+              "actual": "Feature state of sheet Hidden (id=sheet-2):\nStatus: hidden, unprotected\nAutoFilter: none\nConditional formatting: none\nData validation: none\nDefined names: Revenue = Data!$A$2"
+            },
+            {
+              "name": "protected-sheet",
+              "status": "passed",
+              "expected": "protected",
+              "actual": "Feature state of sheet Locked (id=sheet-3):\nStatus: visible, protected\nAutoFilter: none\nConditional formatting: none\nData validation: none\nDefined names: Revenue = Data!$A$2"
+            },
+            {
+              "name": "unrelated-edit-ok",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "execution": {
+                  "output": "Auto-applied 1 change(s) (undo via the side panel [Undo] button or ⌘Z): Z1: (empty) → WfcSemanticsKeep",
+                  "mutated": true,
+                  "summary": "write unrelated keep cell"
+                },
+                "revision": "bfd47dc7d5b926614ecb27afc0ba57e33cba03c0a06f57bb3976729b2e18d2c1"
+              }
+            },
+            {
+              "name": "disk-unchanged-until-save",
+              "status": "passed",
+              "expected": "bfd47dc7d5b926614ecb27afc0ba57e33cba03c0a06f57bb3976729b2e18d2c1",
+              "actual": {
+                "afterEditSha": "bfd47dc7d5b926614ecb27afc0ba57e33cba03c0a06f57bb3976729b2e18d2c1",
+                "afterProtectSha": "bfd47dc7d5b926614ecb27afc0ba57e33cba03c0a06f57bb3976729b2e18d2c1"
+              }
+            },
+            {
+              "name": "save-ok",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-semantics/sheets-semantics.xlsx",
+                "name": "sheets-semantics.xlsx",
+                "mtimeMs": 1789250577083.4976
+              }
+            },
+            {
+              "name": "disk-changed-after-save",
+              "status": "passed",
+              "expected": "changed",
+              "actual": {
+                "beforeSha": "bfd47dc7d5b926614ecb27afc0ba57e33cba03c0a06f57bb3976729b2e18d2c1",
+                "savedSha": "c6918a2e6c93e6c459fd7321165b6d0d266aa7514dfe5c6cd07c6fa3b1c7c750"
+              }
+            },
+            {
+              "name": "reopen-ready",
+              "status": "passed",
+              "expected": "ready",
+              "actual": "ready"
+            },
+            {
+              "name": "reopen-keep-edit",
+              "status": "passed",
+              "expected": "WfcSemanticsKeep",
+              "actual": "B2: =A2*2\nB3: =A3*2\nC2: =$A2+B$2\nC3: =$A3+B$2\nD2: =$A$2+A2\nD3: =$A$2+A3\nE2: =A2\nF2: =B2\nZ1: WfcSemanticsKeep"
+            },
+            {
+              "name": "reopen-shared-follower",
+              "status": "passed",
+              "expected": "B3 =A3*2",
+              "actual": "B2: =A2*2\nB3: =A3*2\nC2: =$A2+B$2\nC3: =$A3+B$2\nD2: =$A$2+A2\nD3: =$A$2+A3\nE2: =A2\nF2: =B2\nZ1: WfcSemanticsKeep"
+            },
+            {
+              "name": "reopen-name",
+              "status": "passed",
+              "expected": "Revenue",
+              "actual": "Feature state of sheet Data (id=sheet-1):\nStatus: visible, unprotected\nAutoFilter: G1:G3 (no column criteria)\nConditional formatting: none\nData validation: none\nDefined names: Revenue = Data!$A$2"
+            },
+            {
+              "name": "reopen-filter",
+              "status": "passed",
+              "expected": "G1:G3",
+              "actual": "Feature state of sheet Data (id=sheet-1):\nStatus: visible, unprotected\nAutoFilter: G1:G3 (no column criteria)\nConditional formatting: none\nData validation: none\nDefined names: Revenue = Data!$A$2"
+            },
+            {
+              "name": "reopen-hidden",
+              "status": "passed",
+              "expected": "hidden",
+              "actual": "Feature state of sheet Hidden (id=sheet-2):\nStatus: hidden, unprotected\nAutoFilter: none\nConditional formatting: none\nData validation: none\nDefined names: Revenue = Data!$A$2"
+            },
+            {
+              "name": "reopen-protected",
+              "status": "passed",
+              "expected": "protected",
+              "actual": "Feature state of sheet Locked (id=sheet-3):\nStatus: visible, protected\nAutoFilter: none\nConditional formatting: none\nData validation: none\nDefined names: Revenue = Data!$A$2"
+            },
+            {
+              "name": "reopen-ooxml-features",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "revenue": true,
+                "hidden": true,
+                "shared": true,
+                "autoFilter": true,
+                "table": true,
+                "protection": true,
+                "keepMarker": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "failure1": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-002",
+      "branch": "failure-1",
+      "run_id": "18eb5db8-64a1-46cf-bdaf-90919faecef1",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "sheets-semantics-protected-write",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "unprotect-password-rejected",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "protectFailed": true,
+                "protectMsg": "该工作表有密码保护——不支持移除其保护。"
+              }
+            },
+            {
+              "name": "unprotect-does-not-write-disk",
+              "status": "passed",
+              "expected": "bfd47dc7d5b926614ecb27afc0ba57e33cba03c0a06f57bb3976729b2e18d2c1",
+              "actual": "bfd47dc7d5b926614ecb27afc0ba57e33cba03c0a06f57bb3976729b2e18d2c1"
+            },
+            {
+              "name": "locked-write-does-not-write-disk",
+              "status": "passed",
+              "expected": "bfd47dc7d5b926614ecb27afc0ba57e33cba03c0a06f57bb3976729b2e18d2c1",
+              "actual": "bfd47dc7d5b926614ecb27afc0ba57e33cba03c0a06f57bb3976729b2e18d2c1"
+            }
+          ]
+        }
+      ]
+    },
+    "failure2": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-002",
+      "branch": "failure-2",
+      "run_id": "1beb9f6a-9aac-446c-ae8b-f127c0333175",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "sheets-semantics-missing-or-corrupt",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "missing-file-error",
+              "status": "passed",
+              "expected": "error",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "78655262a0b99ad82d8c6a3ba406d324cabdb5eec92caf488478e1292b6e204c",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-semantics/missing-semantics.xlsx",
+                "registered": true,
+                "readiness": "error",
+                "revision": null,
+                "error": "load-error: ENOENT: no such file or directory, open '/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-semantics/missing-semantics.xlsx'",
+                "occupied": true,
+                "owner": "0a3895fe-2778-41e3-9e51-e082a22d584c"
+              }
+            },
+            {
+              "name": "corrupt-file-error",
+              "status": "passed",
+              "expected": "error",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "88d802d924e1efb7682bc747cbd011086fc86445c092f36b256560aec9cd5a43",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-semantics/corrupt-semantics.xlsx",
+                "registered": true,
+                "readiness": "error",
+                "revision": null,
+                "error": "Can't find end of central directory : is this a zip file ? If it is, see https://stuk.github.io/jszip/documentation/howto/read_zip.html",
+                "occupied": true,
+                "owner": "ed08399d-0ac1-45f9-88cd-68ed5514a5ac"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "formulaText": "B2: =A2*2\nB3: =A3*2\nC2: =$A2+B$2\nC3: =$A3+B$2\nD2: =$A$2+A2\nD3: =$A$2+A3\nE2: =A2\nF2: =B2",
+  "dataFeatText": "Feature state of sheet Data (id=sheet-1):\nStatus: visible, unprotected\nAutoFilter: G1:G3 (no column criteria)\nConditional formatting: none\nData validation: none\nDefined names: Revenue = Data!$A$2",
+  "hiddenFeatText": "Feature state of sheet Hidden (id=sheet-2):\nStatus: hidden, unprotected\nAutoFilter: none\nConditional formatting: none\nData validation: none\nDefined names: Revenue = Data!$A$2",
+  "lockedFeatText": "Feature state of sheet Locked (id=sheet-3):\nStatus: visible, protected\nAutoFilter: none\nConditional formatting: none\nData validation: none\nDefined names: Revenue = Data!$A$2"
+}

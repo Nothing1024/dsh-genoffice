@@ -1,6 +1,6 @@
 /**
- * GenOffice tab / viewer icons. The registerTab `icon` field takes
- * `(size) => ReactNode`; the panel no longer uses a tabIcon static.
+ * GenOffice tab / viewer icons. Official guide entries take a component
+ * `(props: { size?: number }) => ReactNode`.
  */
 import type { ReactNode } from 'react'
 
@@ -16,8 +16,8 @@ export const TAB_ICON_PROPS = {
   strokeLinejoin: 'round' as const,
 }
 
-/** GenOffice document glyph. `size` is accepted for the TabDescriptor icon callback. */
-export function GenOfficeIcon(_props: { size?: number }): ReactNode {
+/** GenOffice document glyph. `size` is accepted for the guide-entry icon. */
+export function GenOfficeIcon(_props: { size?: number; className?: string }): ReactNode {
   return (
     <svg {...TAB_ICON_PROPS}>
       <path d="M4 2h5l3 3v9H4z" />

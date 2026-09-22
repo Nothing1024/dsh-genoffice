@@ -1,0 +1,53 @@
+{
+  "events": [
+    {
+      "status": 200,
+      "ok": true,
+      "docId": "ca69cf9b9827ac9f7f3c65654919fe052f083868ed7d97e875be8e289ef0cd22",
+      "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/markdown-loop.md",
+      "registered": true,
+      "readiness": "ready",
+      "revision": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+      "error": null,
+      "occupied": true,
+      "owner": "4009d9c7-7f22-424d-91c1-984eeb813e44"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "context": "## Document state\n2 top-level blocks:\n\n0 | h1 | ORIGINAL\n1 | paragraph | original body",
+      "revision": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "ops[0] insertContent: Inserted 1 block(s).\nBlock indexes may have changed; call get_document_context before further index-based edits.",
+        "mutated": true,
+        "summary": "插入内容",
+        "revision": "68e69ded756f92b31d21df90b73d71878cf5116e8183c6b918dfb068d0b1c2c2"
+      },
+      "revision": "68e69ded756f92b31d21df90b73d71878cf5116e8183c6b918dfb068d0b1c2c2"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/markdown-loop.md",
+      "name": "markdown-loop.md",
+      "mtimeMs": 1789240077986.0457
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "docId": "ca69cf9b9827ac9f7f3c65654919fe052f083868ed7d97e875be8e289ef0cd22",
+      "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/markdown-loop.md",
+      "registered": true,
+      "readiness": "ready",
+      "revision": "cf14119e57d6f6b3c510e7e0c42b3cbcc99f296012882ceabba629c076d6b405",
+      "error": null,
+      "occupied": true,
+      "owner": "4009d9c7-7f22-424d-91c1-984eeb813e44"
+    }
+  ],
+  "count": 5
+}

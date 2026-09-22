@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-004",
+  "branch": "failure-1",
+  "run_id": "8d2cbd9e-07aa-48a4-bc9c-e96e68376f39",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "slides-presentation-invalid-config",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "bad-transition-rejected",
+          "status": "passed",
+          "expected": false,
+          "actual": false
+        },
+        {
+          "name": "bad-anim-rejected",
+          "status": "passed",
+          "expected": false,
+          "actual": false
+        },
+        {
+          "name": "invalid-keeps-disk",
+          "status": "passed",
+          "expected": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+          "actual": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+        }
+      ]
+    }
+  ]
+}

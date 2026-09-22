@@ -1,0 +1,25 @@
+official-upstream-sync Task 7
+date: 2026-09-12T18:56:21Z
+cwd: /tmp/genoffice-official-sync-engine
+node: /usr/local/Cellar/node/26.8.2/bin/node v26.8.2
+
+commands:
+  npm run fixtures -w @genoffice/sheets
+  ENGINE_ROOT=/tmp/genoffice-official-sync-engine node web/e2e-official-sync.mjs --case five-family
+    run_id=ous-2026-09-12T18-54-14-210Z exit 0
+    markdown/docs/sheets/slides/pdf open-context-edit-save-reopen all passed
+    UF-001/success archived
+  npm run test -w @genoffice/markdown -- tests/ai-tools.test.ts
+    44 passed including legacy insert_content / replace_blocks aliases
+  npm run web:build -w @genoffice/markdown
+  ENGINE_ROOT=/tmp/genoffice-official-sync-engine node web/e2e-control-session.mjs --all
+    run_id=css-2026-09-12T18-56-21-190Z exit 0
+    inventory, markdown-loading, revision, save-snapshot, file-conflict, owner,
+    markdown-state, docs/sheets/slides/pdf-state, plugin-state all passed
+
+notes:
+  Official markdown executeTool only exposes apply_ops. Control-session and the
+  plugin still send insert_content / replace_blocks; aliases map those onto
+  insertContent / replaceBlocks so the safety adapter contract stays intact.
+  Sheets web edits use propose_operations {set_cell,sheetId,address,value}.
+  Docs web inserts use insert_content {html,afterBlockIndex}.

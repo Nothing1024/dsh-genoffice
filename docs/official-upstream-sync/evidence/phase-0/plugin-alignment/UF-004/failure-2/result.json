@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "package": "plugin-tool-alignment",
+  "uf": "UF-004",
+  "branch": "failure-2",
+  "run_id": "pta-2026-09-12T19-03-47-109Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "ffd185d2ec02480a5a7f5b1f17d9220053fcbf6c"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "abort-no-replay",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "no-host-retry-helper",
+          "status": "passed",
+          "expected": "single write + abort throw",
+          "actual": true
+        },
+        {
+          "name": "pre-write-abort-not-retried",
+          "status": "passed",
+          "expected": "aborted once",
+          "actual": "AbortError"
+        }
+      ]
+    }
+  ]
+}

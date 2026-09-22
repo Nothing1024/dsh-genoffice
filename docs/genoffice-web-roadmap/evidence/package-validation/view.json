@@ -1,0 +1,14 @@
+{
+  "package": "genoffice-web-roadmap",
+  "title": "GenOffice Master Spec · 人类可读视图",
+  "tasks": 8,
+  "completed": 0,
+  "flows": 2,
+  "consoleErrors": [],
+  "layout": {
+    "width": 1440,
+    "scrollWidth": 1440
+  },
+  "status": "passed",
+  "scope": "generated static view only; business application not started"
+}

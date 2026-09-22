@@ -1,0 +1,381 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-005",
+  "branch": "ocr",
+  "status": "passed",
+  "results": {
+    "success": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-005",
+      "branch": "success",
+      "run_id": "6e32e6a9-768d-4b1a-801b-6c02dd4c0684",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "ocr-scan-to-editor",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "ocr-ready",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "ok": true,
+                "available": true,
+                "executor": "platform-ocr-helper",
+                "helper": "/private/tmp/genoffice-official-sync-engine/packages/pdf2docx/ocr-helper/vision-ocr"
+              }
+            },
+            {
+              "name": "open-ready",
+              "status": "passed",
+              "expected": "ready",
+              "actual": "ready"
+            },
+            {
+              "name": "ocrPage-lines",
+              "status": "passed",
+              "expected": true,
+              "actual": [
+                {
+                  "text": "WFC OCR KEEP",
+                  "confidence": 0.5,
+                  "box": [
+                    0.058189664167051416,
+                    0.6688888886164239,
+                    0.7737068935197301,
+                    0.7792642124418363
+                  ],
+                  "chars": [
+                    {
+                      "text": "W",
+                      "box": [
+                        0.058189661135057386,
+                        0.6688888888888889,
+                        0.27883928571428573,
+                        0.7792642137681159
+                      ]
+                    },
+                    {
+                      "text": "F",
+                      "box": [
+                        0.058189661135057386,
+                        0.6688888888888889,
+                        0.27883928571428573,
+                        0.7792642137681159
+                      ]
+                    },
+                    {
+                      "text": "C",
+                      "box": [
+                        0.058189661135057386,
+                        0.6688888888888889,
+                        0.27883928571428573,
+                        0.7792642137681159
+                      ]
+                    },
+                    {
+                      "text": " ",
+                      "box": [
+                        0,
+                        1,
+                        0,
+                        1
+                      ]
+                    },
+                    {
+                      "text": "O",
+                      "box": [
+                        0.28767857142857145,
+                        0.6688888888888889,
+                        0.5086607142857142,
+                        0.7788888888888889
+                      ]
+                    },
+                    {
+                      "text": "C",
+                      "box": [
+                        0.28767857142857145,
+                        0.6688888888888889,
+                        0.5086607142857142,
+                        0.7788888888888889
+                      ]
+                    },
+                    {
+                      "text": "R",
+                      "box": [
+                        0.28767857142857145,
+                        0.6688888888888889,
+                        0.5086607142857142,
+                        0.7788888888888889
+                      ]
+                    },
+                    {
+                      "text": " ",
+                      "box": [
+                        0,
+                        1,
+                        0,
+                        1
+                      ]
+                    },
+                    {
+                      "text": "K",
+                      "box": [
+                        0.5175,
+                        0.6688888888888889,
+                        0.7737068965517241,
+                        0.7792642137681159
+                      ]
+                    },
+                    {
+                      "text": "E",
+                      "box": [
+                        0.5175,
+                        0.6688888888888889,
+                        0.7737068965517241,
+                        0.7792642137681159
+                      ]
+                    },
+                    {
+                      "text": "E",
+                      "box": [
+                        0.5175,
+                        0.6688888888888889,
+                        0.7737068965517241,
+                        0.7792642137681159
+                      ]
+                    },
+                    {
+                      "text": "P",
+                      "box": [
+                        0.5175,
+                        0.6688888888888889,
+                        0.7737068965517241,
+                        0.7792642137681159
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "overlay-or-api",
+              "status": "passed",
+              "expected": true,
+              "actual": "WFC OCR KEEP "
+            },
+            {
+              "name": "dest-written",
+              "status": "passed",
+              "expected": true,
+              "actual": "# OCR\n\nWFC OCR KEEP\n"
+            },
+            {
+              "name": "dest-reopen",
+              "status": "passed",
+              "expected": "ready+text",
+              "actual": {
+                "readiness": "ready",
+                "body": "自动保存\n正文\nB\nI\nab\n1\n2\n3\nOCR\n\nWFC OCR KEEP\n\nocr-out.md\n−\n+\n100%"
+              }
+            },
+            {
+              "name": "convert-image-fidelity",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "converted": {
+                  "ok": true,
+                  "savedPath": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-ocr/scan-source-4.docx",
+                  "scannedDocument": false,
+                  "warnings": []
+                },
+                "convertHasPhrase": false,
+                "convertHasImage": true
+              }
+            },
+            {
+              "name": "job-ok",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "status": "success",
+                "text": "WFC OCR KEEP"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "failure1": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-005",
+      "branch": "failure-1",
+      "run_id": "56e8d1e0-ec1a-4fad-bc94-6e3d3b601c06",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "ocr-unconfigured",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "ready-unavailable",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "ok": true,
+                "available": false,
+                "reason": "ocr-service-disabled"
+              }
+            },
+            {
+              "name": "ocrPage-null",
+              "status": "passed",
+              "expected": null,
+              "actual": null
+            },
+            {
+              "name": "unconfigured-no-post",
+              "status": "passed",
+              "expected": 0,
+              "actual": []
+            },
+            {
+              "name": "unconfigured-no-dest",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "exists": false,
+                "startedDisabled": {
+                  "status": 200,
+                  "ok": false,
+                  "available": false,
+                  "error": "ocr-service-disabled"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "failure2": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-005",
+      "branch": "failure-2",
+      "run_id": "5ae237d7-3a6b-4389-9054-ea773b3b559f",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "ocr-runtime-and-cancel",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "runtime-empty",
+              "status": "passed",
+              "expected": [],
+              "actual": []
+            },
+            {
+              "name": "runtime-no-dest",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "exists": false,
+                "failWait": {
+                  "status": "error",
+                  "ok": false,
+                  "jobId": "1a7cba0b-1977-43c7-a61f-74de962b854a",
+                  "progress": 10,
+                  "dest": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-ocr/ocr-fail.md",
+                  "error": "ocr-runtime-error",
+                  "canceled": false,
+                  "available": true,
+                  "lines": null,
+                  "text": null
+                }
+              }
+            },
+            {
+              "name": "cancel-ok",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "cancelled": {
+                  "status": "cancelled",
+                  "ok": true,
+                  "jobId": "330600d0-cca3-4017-a76b-68f30c34b300",
+                  "progress": 10,
+                  "dest": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-ocr/ocr-cancel.md",
+                  "error": "cancelled",
+                  "canceled": true,
+                  "available": true,
+                  "lines": null,
+                  "text": null
+                },
+                "cancelWait": {
+                  "status": "cancelled",
+                  "ok": false,
+                  "jobId": "330600d0-cca3-4017-a76b-68f30c34b300",
+                  "progress": 10,
+                  "dest": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-ocr/ocr-cancel.md",
+                  "error": "cancelled",
+                  "canceled": true,
+                  "available": true,
+                  "lines": null,
+                  "text": null
+                }
+              }
+            },
+            {
+              "name": "cancel-no-dest",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "exists": false,
+                "cancelWait": {
+                  "status": "cancelled",
+                  "ok": false,
+                  "jobId": "330600d0-cca3-4017-a76b-68f30c34b300",
+                  "progress": 10,
+                  "dest": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-ocr/ocr-cancel.md",
+                  "error": "cancelled",
+                  "canceled": true,
+                  "available": true,
+                  "lines": null,
+                  "text": null
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "destMd": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-ocr/ocr-out.md",
+    "converted": {
+      "ok": true,
+      "savedPath": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-ocr/scan-source-4.docx",
+      "scannedDocument": false,
+      "warnings": []
+    }
+  }
+}

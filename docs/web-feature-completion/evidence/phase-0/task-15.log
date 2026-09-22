@@ -1,0 +1,357 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-005",
+  "branch": "providers",
+  "status": "passed",
+  "results": {
+    "success": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-005",
+      "branch": "success",
+      "run_id": "c71ceb88-81af-47dd-863f-a3b23a9e1668",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "providers-configured",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "providers-ready",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "ok": true,
+                "search": {
+                  "available": true,
+                  "fixture": true
+                },
+                "imageSearch": {
+                  "available": true,
+                  "fixture": true
+                },
+                "generate": {
+                  "available": true,
+                  "fixture": true
+                },
+                "analyze": {
+                  "available": true,
+                  "fixture": true
+                },
+                "model": {
+                  "available": true,
+                  "echo": true
+                },
+                "credit": {
+                  "available": false,
+                  "reason": "credit-provider-unconfigured",
+                  "url": "https://www.genspark.ai/credit-usage"
+                }
+              }
+            },
+            {
+              "name": "markdown-image-search",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "images": [
+                  {
+                    "title": "WfcSearchKeep WfcSearchKeep",
+                    "imageUrl": "https://example.com/wfc-search.png",
+                    "sourceUrl": "https://example.com/wfc-search",
+                    "source": "fixture",
+                    "width": 64,
+                    "height": 64
+                  }
+                ],
+                "method": "fixture"
+              }
+            },
+            {
+              "name": "docs-web-search",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "results": [
+                  {
+                    "title": "WfcSearchKeep WfcSearchKeep",
+                    "url": "https://example.com/wfc-search",
+                    "snippet": "WfcSearchKeep fixture result"
+                  }
+                ],
+                "method": "fixture",
+                "answer": "WfcSearchKeep"
+              }
+            },
+            {
+              "name": "generate-dest",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "apiGen": {
+                  "status": 200,
+                  "url": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-providers/generate-out.png",
+                  "dest": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-providers/generate-out.png",
+                  "fixture": true
+                },
+                "generated": {
+                  "url": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-providers/generate-out.png",
+                  "dest": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-providers/generate-out.png",
+                  "fixture": true
+                },
+                "exists": true
+              }
+            },
+            {
+              "name": "model-echo",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "text": "WfcModelKeep ping",
+                "model": "echo"
+              }
+            },
+            {
+              "name": "model-missing-key",
+              "status": "passed",
+              "expected": true,
+              "actual": [
+                {
+                  "requestId": "e2e-missing-key",
+                  "type": "error",
+                  "error": "未配置 openai 的 API Key（面板右上角 ⚙ 设置）"
+                }
+              ]
+            },
+            {
+              "name": "analyze-text",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "text": "WFC OCR KEEP",
+                "method": "ocr-helper"
+              }
+            },
+            {
+              "name": "credit-unconfigured",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "ok": false,
+                "available": false,
+                "error": "credit-provider-unconfigured"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "failure1": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-005",
+      "branch": "failure-1",
+      "run_id": "90838092-b043-4b21-8792-9dc74d7923de",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "providers-unconfigured",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "search-unavailable",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "offReady": {
+                  "ok": true,
+                  "search": {
+                    "available": false,
+                    "reason": "search-service-disabled",
+                    "fixture": false
+                  },
+                  "imageSearch": {
+                    "available": false,
+                    "reason": "search-service-disabled",
+                    "fixture": false
+                  },
+                  "generate": {
+                    "available": false,
+                    "reason": "generate-provider-unconfigured",
+                    "fixture": false
+                  },
+                  "analyze": {
+                    "available": false,
+                    "reason": "analyze-provider-unconfigured",
+                    "fixture": false
+                  },
+                  "model": {
+                    "available": false,
+                    "reason": "model-service-disabled",
+                    "echo": true
+                  },
+                  "credit": {
+                    "available": false,
+                    "reason": "credit-provider-unconfigured",
+                    "url": "https://www.genspark.ai/credit-usage"
+                  }
+                },
+                "offImages": {
+                  "images": [],
+                  "method": "error",
+                  "error": "search-service-disabled"
+                }
+              }
+            },
+            {
+              "name": "generate-unavailable",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "offReady": {
+                  "ok": true,
+                  "search": {
+                    "available": false,
+                    "reason": "search-service-disabled",
+                    "fixture": false
+                  },
+                  "imageSearch": {
+                    "available": false,
+                    "reason": "search-service-disabled",
+                    "fixture": false
+                  },
+                  "generate": {
+                    "available": false,
+                    "reason": "generate-provider-unconfigured",
+                    "fixture": false
+                  },
+                  "analyze": {
+                    "available": false,
+                    "reason": "analyze-provider-unconfigured",
+                    "fixture": false
+                  },
+                  "model": {
+                    "available": false,
+                    "reason": "model-service-disabled",
+                    "echo": true
+                  },
+                  "credit": {
+                    "available": false,
+                    "reason": "credit-provider-unconfigured",
+                    "url": "https://www.genspark.ai/credit-usage"
+                  }
+                },
+                "offGen": {
+                  "status": 200,
+                  "error": "generate-provider-unconfigured",
+                  "available": false
+                }
+              }
+            },
+            {
+              "name": "model-unavailable",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "status": 200,
+                "ok": false,
+                "available": false,
+                "error": "model-service-disabled"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "failure2": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-005",
+      "branch": "failure-2",
+      "run_id": "b45254cc-69b0-476b-b05a-52387b474ec0",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "providers-runtime-and-recovery",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "search-runtime",
+              "status": "passed",
+              "expected": "error",
+              "actual": {
+                "status": 200,
+                "results": [],
+                "method": "error",
+                "error": "search-runtime-error"
+              }
+            },
+            {
+              "name": "generate-runtime",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "status": 200,
+                "error": "generate-runtime-error"
+              }
+            },
+            {
+              "name": "analyze-runtime",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "status": 200,
+                "error": "analyze-runtime-error"
+              }
+            },
+            {
+              "name": "model-runtime",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "status": 200,
+                "ok": false,
+                "error": "model-runtime-error"
+              }
+            },
+            {
+              "name": "search-recovery",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "status": 200,
+                "results": [
+                  {
+                    "title": "WfcSearchKeep WfcSearchKeep",
+                    "url": "https://example.com/wfc-search",
+                    "snippet": "WfcSearchKeep fixture result"
+                  }
+                ],
+                "method": "fixture",
+                "answer": "WfcSearchKeep"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

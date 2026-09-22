@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "package": "control-session-safety",
+  "uf": "UF-003",
+  "branch": "success",
+  "run_id": "css-2026-09-12T18-56-21-190Z",
+  "source_revisions": {
+    "plugin": "unknown",
+    "engine": "731237b063dd6f4375591abd2128ae4b19fa15ab"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "save-snapshot",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "save-ack-keeps-newer-dirty",
+          "status": "passed",
+          "expected": "AFTER visible + dirty",
+          "actual": {
+            "dirty": [
+              "未保存"
+            ],
+            "view": "AFTER\n\nBEFORE\n\nS\n\n\n"
+          }
+        }
+      ]
+    }
+  ]
+}

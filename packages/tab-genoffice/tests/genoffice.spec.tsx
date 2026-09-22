@@ -2,9 +2,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/react'
 import { GenOfficePanel } from '../src/tabs/genoffice.tsx'
-import { fileTabSeed } from '../src/tabs/file-tab.ts'
+import { fileAddressFor } from '../src/tabs/file-address.ts'
+import { GENOFFICE_FILE_KIND, type SidebarPaneTabProps } from '../src/standard/sidebar.ts'
 import { resetRelayStore } from '../src/tabs/relay.ts'
-import type { TabComponentProps } from 'dsh-better-sidebar'
 
 afterEach(() => {
   cleanup()
@@ -24,18 +24,59 @@ beforeEach(() => {
   vi.stubGlobal('EventSource', FakeEventSource)
 })
 
-function panel(cwd?: string, openTab: ReturnType<typeof vi.fn> = vi.fn()) {
-  const props = {
-    ctx: { betterSidebar: { openTab } } as never,
-    store: {} as never,
-    scope: { sessionId: 's', cwd },
-    tab: { id: 't', type: 'genoffice', title: 'GenOffice' },
-    visible: true,
-  } as TabComponentProps
-  return { view: render(<GenOfficePanel {...props} />), openTab }
+function panel(cwd?: string, openResource = vi.fn<(address: string, options?: { kind?: string }) => void>()) {
+  const session = cwd === undefined ? {} : { cwd }
+  const props: SidebarPaneTabProps = {
+    sessionId: 's',
+    useSessions: (select) => select({ current: 's', byId: { s: session } }),
+    useTabInfo: () => ({
+      sessionId: 's',
+      tab: {
+        id: 't',
+        title: 'GenOffice',
+        contentId: 'sidebar://genoffice',
+        kind: 'genoffice',
+        actions: { openResource, openTab: () => {}, close: () => {} },
+      },
+    }),
+  }
+  return { view: render(<GenOfficePanel {...props} />), openResource }
 }
 
 describe('GenOffice list start directory', () => {
+  it('reads cwd through a selector hook, not a no-arg snapshot', async () => {
+    const fetch = vi.fn(async (input: RequestInfo) => {
+      const path = new URL(String(input)).searchParams.get('path')
+      return {
+        ok: true,
+        json: async () => ({ ok: true, path: path || '/home', parent: '/', entries: [] }),
+      }
+    })
+    vi.stubGlobal('fetch', fetch)
+    const openResource = vi.fn<(address: string, options?: { kind?: string }) => void>()
+    const useSessions: NonNullable<SidebarPaneTabProps['useSessions']> = (selector) => {
+      if (typeof selector !== 'function') throw new TypeError('l is not a function')
+      return selector({ current: 's', byId: { s: { cwd: '/proj' } } })
+    }
+    render(<GenOfficePanel
+      sessionId="s"
+      useSessions={useSessions}
+      useTabInfo={() => ({
+        sessionId: 's',
+        tab: {
+          id: 't',
+          title: 'GenOffice',
+          contentId: 'sidebar://genoffice',
+          kind: 'genoffice',
+          actions: { openResource, openTab: () => {}, close: () => {} },
+        },
+      })}
+    />)
+    await waitFor(() => {
+      expect(fetch.mock.calls.some((c) => String(c[0]).includes('path=%2Fproj'))).toBe(true)
+    })
+  })
+
   it('fetches scope.cwd on first load', async () => {
     const fetch = vi.fn(async (input: RequestInfo) => {
       const url = String(input)
@@ -194,13 +235,16 @@ describe('opening a file from the list', () => {
       return { ok: true, json: async () => ({ ok: true }) }
     })
     vi.stubGlobal('fetch', fetch)
-    const { view, openTab } = panel('/tmp')
+    const { view, openResource } = panel('/tmp')
     await waitFor(() => { expect(view.getByText('a.docx')).toBeTruthy() })
     fireEvent.click(view.getByText('a.docx'))
-    expect(openTab).toHaveBeenCalledWith(fileTabSeed('/tmp/a.docx'), { sessionId: 's', cwd: '/tmp' })
+    expect(openResource).toHaveBeenCalledWith(
+      fileAddressFor('s', '/tmp', '/tmp/a.docx'),
+      { kind: GENOFFICE_FILE_KIND },
+    )
     expect(view.getByRole('button', { name: '主目录' })).toBeTruthy()
     expect(view.queryByRole('button', { name: '返回' })).toBeNull()
     fireEvent.click(view.getByText('notes.txt'))
-    expect(openTab).toHaveBeenCalledTimes(1)
+    expect(openResource).toHaveBeenCalledTimes(1)
   })
 })

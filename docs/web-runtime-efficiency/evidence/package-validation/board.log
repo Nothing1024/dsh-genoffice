@@ -1,0 +1,14 @@
+command: /usr/local/opt/python@3.14/bin/python3.14 /Users/nothing/.agents/skills/prd-workflow/scripts/board.py /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency --json
+{
+  "total": 14,
+  "done": 0,
+  "doing": 0,
+  "blocked": [],
+  "ready": [
+    {
+      "seq": "1",
+      "name": "固定测量协议和真实客户端基线",
+      "verify": "node ../engine/web/bench-agent-runtime.mjs --before → 完整原始基线；node ../engine/web/e2e-agent-runtime.mjs --case baseline → 记录已有能力与缺口"
+    }
+  ]
+}

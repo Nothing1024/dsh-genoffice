@@ -8,6 +8,7 @@
 export const zh = {
   'tab.genoffice': 'GenOffice',
   'tab.file': 'GenOffice 文档',
+  'tab.guide': '用 GenOffice 打开 Office 文档',
 } satisfies Record<string, string>
 
 /** The genoffice tab namespace key union. */
@@ -17,6 +18,7 @@ export type GenOfficeTabKey = keyof typeof zh
 export const en = {
   'tab.genoffice': 'GenOffice',
   'tab.file': 'GenOffice document',
+  'tab.guide': 'Open Office documents with GenOffice',
 } satisfies Record<GenOfficeTabKey, string>
 
 /** Dictionary namespace owned by the genoffice tab artifact. */

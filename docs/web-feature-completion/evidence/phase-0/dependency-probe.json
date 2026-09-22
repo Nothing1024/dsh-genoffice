@@ -1,0 +1,12 @@
+{
+  "isolatedHead": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+  "officialAncestor": true,
+  "htmlPresent": true,
+  "htmlWebBuild": true,
+  "htmlRouted": true,
+  "sidecarTree": true,
+  "ocrWebNull": false,
+  "playwright": true,
+  "sheetsRoutesXlsx": true,
+  "sheetsNoSpawn": true
+}

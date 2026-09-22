@@ -12,7 +12,7 @@ export const GENOFFICE_SKILL_NAME = 'dsh-genoffice'
 export const GENOFFICE_SKILL_DESCRIPTION = [
   '【不要主动触发】仅当用户明确写出本 skill 名称或发送 /dsh-genoffice 时再加载。',
   '用户只说做 PPT、汇报、答辩、路演时不要调用本 skill。',
-  '加载后：先 pptx_open / docx_open / xlsx_open / md_open，等到「已打开控制模式」，再用内置工具改稿。',
+  '加载后：先 pptx_open / docx_open / xlsx_open / md_open / pdf_open / html_open，等到「已打开控制模式」，再用内置工具改稿。',
 ].join('')
 
 export const GENOFFICE_SKILL_CONTENT = [
@@ -20,7 +20,7 @@ export const GENOFFICE_SKILL_CONTENT = [
   '',
   '本 skill 不自动适用于「做 PPT」类请求。只有用户点名 `dsh-genoffice` 或发送 `/dsh-genoffice` 后才按下面做。',
   '',
-  '本会话有内置 `pptx_*` / `docx_*` / `xlsx_*` / `md_*` 工具。按本 skill 工作时只走这些工具。',
+  '本会话有内置 `pptx_*` / `docx_*` / `xlsx_*` / `md_*` / `pdf_*` / `html_*` 工具。按本 skill 工作时只走这些工具。',
   '',
   '## 不要走这些路径',
   '',
@@ -30,15 +30,16 @@ export const GENOFFICE_SKILL_CONTENT = [
   '',
   '## 步骤',
   '',
-  '1. 先调用对应 `pptx_open` / `docx_open` / `xlsx_open` / `md_open`，path 为本机绝对路径。',
+  '1. 先调用对应 `pptx_open` / `docx_open` / `xlsx_open` / `md_open` / `pdf_open` / `html_open`，path 为本机绝对路径。',
   '2. 等到工具返回「已打开控制模式：<path>」，再调用其它同前缀工具。',
   '3. 读改先 `*_get_*_context`（PPT 用 `pptx_get_deck_context`）。',
-  '4. 空白 pptx 出片：用 `pptx_generate_deck`（当前会话模型写 PageSpec 再落地）或自写 PageSpec 后 `pptx_land_pages`。不要把 API key 写入 iframe。',
-  '5. 只用内置工具改 iframe 内文档。写盘只用 `*_save` 或界面「写入磁盘」。',
+  '4. 没有现成 pptx 时先 `pptx_create`（空白 13.333×7.5 英寸、无母版装饰），再 `pptx_open`。不要复制现有 pptx 当容器，底版装饰会进成稿。',
+  '5. 空白 pptx 出片：用 `pptx_generate_deck`（当前会话模型写 PageSpec 再落地）或自写 PageSpec 后 `pptx_land_pages`。本机配图用 `pptx_insert_image`（imagePath 为本机绝对路径）。不要把 API key 写入 iframe，不要自建静态图床。',
+  '6. 只用内置工具改 iframe 内文档。写盘只用 `*_save` 或界面「写入磁盘」。',
   '',
   '## 失败',
   '',
-  '若报 `executor not registered` 或「尚未在控制模式打开」，只再调用一次对应 `*_open` 并等待成功。不要改走脚本。',
+  '若报 `executor not registered` 或「尚未在控制模式打开」：先确认 DSH 页面开着（默认 http://127.0.0.1:3080），再调用一次对应 `*_open`。不要对同一次失败连续重试。不要改走脚本。',
 ].join('\n')
 
 /** cordis 形态的旧入口（标准路径在 src/standard/host.ts 经 SkillRegistry 句柄）。 */

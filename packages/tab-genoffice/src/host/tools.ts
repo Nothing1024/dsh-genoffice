@@ -10,7 +10,7 @@
  * land_pages — they must not POST iframe generate_deck / regenerate_slide.
  */
 import { defineTool } from '@deepseek-ai/dsh-tools'
-import type { AssetChannel } from './assets.ts'
+import { readLocalImageDataUrl, type AssetChannel } from './assets.ts'
 import { capabilityOf, isExposed, type CapabilityEntry } from './capability.ts'
 import { classifyControlError, type ClassifyInput } from './errors.ts'
 import { planDeckPages, planOnePageSpec, type HostLlmOnce } from './page-plan.ts'
@@ -203,7 +203,7 @@ async function callRelay(
   input: Record<string, unknown>,
   signal: AbortSignal,
   extraHeaders: Record<string, string> = {},
-): Promise<{ ok: boolean; output: string; summary: string; revision?: string }> {
+): Promise<{ ok: boolean; output: string; summary: string }> {
   const path = String(input.path ?? '')
   if (!path.startsWith('/')) fail('path 必须是目标文件的本机绝对路径', path, 'local')
   if (isInSyncWindow(path)) fail('sync window', path, 'sync')
@@ -239,15 +239,20 @@ async function callRelay(
   }
   if (!data.ok) fail(String(data.error ?? 'unknown error'), path, 'relay')
   const execution = data.execution ?? {}
-  if (execution.isError) {
-    fail(String(execution.output ?? 'executor error'), path, 'executor')
+  const output = String(execution.output ?? '')
+  // A landed deck with blank image slots is not an executor failure.
+  // executeLandPages turns that note into a warning; throwing here used to
+  // hide that the pages were already written.
+  if (execution.isError && !landedDespiteMissingImages(output)) {
+    fail(output || 'executor error', path, 'executor')
   }
-  const revision = data.revision ?? execution.revision
+  // Relay stamps `revision` on the envelope. Tool output schemas set
+  // additionalProperties:false and do not declare it, so leaking it turns a
+  // successful land/edit into "invalid output" and drops image-failure text.
   return {
     ok: true,
-    output: String(execution.output ?? ''),
+    output,
     summary: String(execution.summary ?? entry.skillName),
-    ...(revision != null ? { revision: String(revision) } : {}),
   }
 }
 
@@ -331,6 +336,61 @@ function callKindFor(entry: ControlToolEntry): 'read' | 'edit' {
   // *_save and in-iframe mutations are both edits. Only save adds
   // `locations`, which is what the turn-tail 「产物」 row actually keys on.
   return 'edit'
+}
+
+
+async function executeInsertSlideImage(
+  entry: ControlToolEntry,
+  input: Record<string, unknown>,
+  signal: AbortSignal,
+  extraHeaders: Record<string, string> = {},
+): Promise<{ ok: boolean; output: string; summary: string }> {
+  const path = String(input.path ?? '')
+  const imagePath = String(input.imagePath ?? '')
+  let url: string
+  try {
+    url = await readLocalImageDataUrl(imagePath)
+  } catch (e) {
+    fail(e instanceof Error ? e.message : String(e), path, 'local')
+  }
+  // A loopback asset URL dies in the relay's /fetch-image (it only proxies
+  // public hosts), so hand the iframe the bytes directly.
+  const { imagePath: _drop, ...rest } = input
+  return await callRelay(entry, { ...rest, url }, signal, extraHeaders)
+}
+
+async function executeCreateBlankPptx(
+  input: Record<string, unknown>,
+  signal: AbortSignal,
+): Promise<{ ok: boolean; output: string; summary: string }> {
+  const path = String(input.path ?? '')
+  if (!path.startsWith('/') || !path.toLowerCase().endsWith('.pptx')) {
+    fail('path 必须是尚不存在的 .pptx 本机绝对路径', path, 'local')
+  }
+  let resp: Response
+  try {
+    resp = await fetch(`${RELAY_BASE}/api/pptx/create`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal,
+      body: JSON.stringify({ path }),
+    })
+  } catch (e) {
+    fail(e instanceof Error ? e.message : String(e), path, 'fetch')
+  }
+  const data = (await resp.json().catch(() => ({}))) as { ok?: boolean; error?: string }
+  if (data.ok !== true) {
+    const err = typeof data.error === 'string' && data.error !== '' ? data.error : `HTTP ${resp.status}`
+    if (err === 'conflict') {
+      fail('目标 pptx 已存在，拒绝覆盖。换一个尚不存在的 path。', path, 'local')
+    }
+    fail(err, path, 'relay')
+  }
+  return {
+    ok: true,
+    output: `已新建空白 pptx：${path}。标准 13.333×7.5 英寸、1 页、无母版装饰。下一步调用 pptx_open。`,
+    summary: '新建空白演示文稿',
+  }
 }
 
 async function executeInsertImage(
@@ -462,6 +522,12 @@ function isAbortError(error: unknown): boolean {
 const LAND_UNCERTAIN =
   '落页写入回执不确定（超时或断线）。本次最多发送一次写请求，不要重试本写入。请先 pptx_get_deck_context 或 pptx_read_slide 核对实际页数后再决定是否补做。'
 
+const LAND_IMAGE_WARNING = '落页成功，但有配图失败'
+
+function landedDespiteMissingImages(output: string): boolean {
+  return /missing images|配图失败|failed to download/i.test(output)
+}
+
 async function executeLandPages(
   input: Record<string, unknown>,
   signal: AbortSignal,
@@ -474,7 +540,16 @@ async function executeLandPages(
     if (expected !== undefined) {
       await waitLanded(String(input.path ?? ''), expected, signal, firstTextNeedle(input.pages), settle, extraHeaders)
     }
-    return result
+    // Pages did land. Keep ok:true so this is a warning, not a failed land
+    // the model would retry from scratch. The note stays in output.
+    if (landedDespiteMissingImages(result.output)) {
+      return {
+        ok: true,
+        output: `${LAND_IMAGE_WARNING}。页面已写入，不要整批重落。\n${result.output}`,
+        summary: LAND_IMAGE_WARNING,
+      }
+    }
+    return { ok: result.ok, output: result.output, summary: result.summary }
   } catch (e) {
     if (signal.aborted) throw e
     if (isTimeoutError(e) || isAbortError(e)) {
@@ -589,6 +664,12 @@ export function createControlTools(opts: ControlToolsOptions = {}): ReturnType<t
           entry.name === 'pdf_replace_image'
         ) {
           return await executeInsertImage(entry, input, exec.signal, opts.assets, contractHeaders(opts, entry))
+        }
+        if (entry.name === 'pptx_insert_image') {
+          return await executeInsertSlideImage(entry, input, exec.signal, contractHeaders(opts, entry))
+        }
+        if (entry.name === 'pptx_create') {
+          return await executeCreateBlankPptx(input, exec.signal)
         }
         if (isSave) {
           const result = await saveViaRelay(entry, input, exec.signal, contractHeaders(opts, entry))
@@ -806,13 +887,13 @@ export function createOpenTools(family?: string | null): ReturnType<typeof defin
         }
         let resp: Response
         try {
-          const sessionId = exec.agent?.id
-          const body: { path: string; sessionId?: string } = { path: filePath }
-          if (typeof sessionId === 'string' && sessionId !== '') body.sessionId = sessionId
+          // Do not send exec.agent.id. It is not the sidebar session id, and
+          // the page used to drop the event when the two differed — the tab
+          // never mounted, then this wait reported executor not registered.
           resp = await fetch(`${RELAY_BASE}/api/open`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
+            body: JSON.stringify({ path: filePath }),
             signal: exec.signal,
           })
         } catch (e) {

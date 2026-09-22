@@ -1,0 +1,50 @@
+{
+  "allPassed": true,
+  "totalTasks": 79,
+  "totalAnchors": 78,
+  "csvCount": 6,
+  "packages": [
+    {
+      "package": "genoffice-web-roadmap",
+      "tasks": 8,
+      "csv": true,
+      "allPending": true,
+      "anchors": 8
+    },
+    {
+      "package": "control-session-safety",
+      "tasks": 15,
+      "csv": true,
+      "allPending": true,
+      "anchors": 19
+    },
+    {
+      "package": "plugin-tool-alignment",
+      "tasks": 10,
+      "csv": true,
+      "allPending": true,
+      "anchors": 13
+    },
+    {
+      "package": "official-upstream-sync",
+      "tasks": 11,
+      "csv": true,
+      "allPending": true,
+      "anchors": 14
+    },
+    {
+      "package": "web-feature-completion",
+      "tasks": 21,
+      "csv": true,
+      "allPending": true,
+      "anchors": 12
+    },
+    {
+      "package": "web-runtime-efficiency",
+      "tasks": 14,
+      "csv": true,
+      "allPending": true,
+      "anchors": 12
+    }
+  ]
+}

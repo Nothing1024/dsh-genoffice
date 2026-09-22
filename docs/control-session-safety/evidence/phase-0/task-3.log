@@ -1,0 +1,5 @@
+# control-session-safety Task 3
+markdown-loading rerun: exit 0 (same three assertions passed)
+npm --prefix ../engine run test -w @genoffice/markdown: 119 passed, 1 failed
+Failed: tests/teardown.test.ts AiPanel localStorage.getItem — AiPanel.tsx untouched this package; jsdom has no localStorage. Pre-existing env failure, not introduced by readiness changes.
+INV-001 non-control path unchanged.

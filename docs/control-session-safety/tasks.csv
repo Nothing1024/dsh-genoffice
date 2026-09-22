@@ -1,0 +1,16 @@
+序号,Phase,名称,详情锚点,前置任务,验证命令,状态,备注
+1,P0:依赖批次,归档基线并建立真实竞态复现入口,spec.md#task-1,无,node ../engine/web/e2e-control-session.mjs --baseline → 七项既有缺陷逐项确认或记录已变更原因；npm --prefix ../engine run typecheck → 保存基线,已完成,7 defects confirmed; harness engine/web/e2e-control-session.mjs
+2,P0:依赖批次,完成 Markdown 加载状态最小闭环,spec.md#task-2,1,node ../engine/web/e2e-control-session.mjs --case markdown-loading → 成功与两失败分支通过；npm --prefix ../engine run typecheck,已完成,readiness gate + path load-error
+3,P0:依赖批次,执行 Phase 0 回归验证,spec.md#task-3,2,node ../engine/web/e2e-control-session.mjs --case markdown-loading；npm --prefix ../engine run test -w @genoffice/markdown → 通过,已完成,markdown-loading pass; teardown localStorage pre-existing
+4,P1:依赖批次,接入独立读取版本及修改前校验,spec.md#task-4,3,node ../engine/web/e2e-control-session.mjs --case revision → 旧版本零修改、重读后成功,已完成,revision e2e passed
+5,P1:依赖批次,绑定导出快照和保存确认版本,spec.md#task-5,4,node ../engine/web/e2e-control-session.mjs --case save-snapshot → 保存中编辑和失败均保留 dirty,已完成,save-snapshot e2e passed
+6,P1:依赖批次,串行写盘并校验加载文件版本,spec.md#task-6,5,node --test ../engine/web/write-atomic.test.mjs；node ../engine/web/e2e-control-session.mjs --case file-conflict → 并发至多一项成功，外改字节保留,已完成,file-conflict + atomic tests passed
+7,P1:依赖批次,稳定执行所有权并拒绝晚到回执,spec.md#task-7,6,node ../engine/web/e2e-control-session.mjs --case owner → 双窗不互踢、旧回执不完成新请求,已完成,owner e2e passed
+8,P1:依赖批次,执行 Phase 1 回归验证,spec.md#task-8,7,node ../engine/web/e2e-control-session.mjs --case markdown-state；node --test ../engine/web/write-atomic.test.mjs；npm --prefix ../engine run typecheck → 全部通过,已完成,markdown-state + atomic + typecheck passed
+9,P2:依赖批次,推广 Docs 加载及全修改状态接线,spec.md#task-9,8,node ../engine/web/e2e-control-session.mjs --case docs-state；npm --prefix ../engine run test -w @genoffice/docs → 通过,已完成,docs-state passed; docs unit localStorage/encryption pre-existing
+10,P2:依赖批次,推广 Sheets journal 与保存状态接线,spec.md#task-10,9,node ../engine/web/e2e-control-session.mjs --case sheets-state；npm --prefix ../engine run test -w @genoffice/sheets → 通过,已完成,sheets-state + sheets unit passed
+11,P2:依赖批次,推广 Slides 事务和导出状态接线,spec.md#task-11,10,node ../engine/web/e2e-control-session.mjs --case slides-state；npm --prefix ../engine run test -w @genoffice/slides → 通过,已完成,slides-state passed; slides unit localStorage pre-existing
+12,P2:依赖批次,推广 PDF 合并重载与保存状态接线,spec.md#task-12,11,node ../engine/web/e2e-control-session.mjs --case pdf-state；npm --prefix ../engine run test -w @genoffice/pdf → 通过,已完成,pdf-state passed with unencrypted simple.pdf
+13,P2:依赖批次,接入插件打开版本及保存反馈,spec.md#task-13,12,npm run typecheck；npm test；node ../engine/web/e2e-control-session.mjs --case plugin-state → 真实插件请求/保存路径通过,已完成,plugin-state passed; waitUntilRegistered=ready
+14,P2:依赖批次,执行 spec 5.2 真实场景全套测试,spec.md#task-14,13,node ../engine/web/e2e-control-session.mjs --all → 五族全部矩阵通过，实际写盘与重开一致,已完成,--all exit 0; UF-001..004 matrix on disk
+15,P2:依赖批次,执行 Phase 2 回归验证,spec.md#task-15,14,npm --prefix ../engine run typecheck；npm --prefix ../engine run test；npm --prefix ../engine run web:build --workspaces --if-present；npm run typecheck；npm test；npm run build；npm run standard:check；python3 /Users/nothing/.agents/skills/prd-workflow/scripts/validate_package.py docs/control-session-safety --repo . → 全通过，证据齐全,已完成,engine+plugin typecheck/test/build/standard + validate 0 FAIL

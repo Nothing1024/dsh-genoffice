@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "package": "plugin-tool-alignment",
+  "uf": "UF-004",
+  "branch": "failure-1",
+  "run_id": "pta-2026-09-12T17-17-59-551Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "247e3f5c488afb25915e9ee97fe0fd22e27648da"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "timeout-no-replay",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "land_pages-single-write",
+          "status": "passed",
+          "expected": "one callRelay, no retry",
+          "actual": {
+            "stillRetries": false,
+            "singleCall": true
+          }
+        },
+        {
+          "name": "timeout-asks-reread",
+          "status": "passed",
+          "expected": "uncertain + reread",
+          "actual": true
+        }
+      ]
+    }
+  ]
+}

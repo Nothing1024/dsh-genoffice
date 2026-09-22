@@ -1,0 +1,21 @@
+official-upstream-sync Task 9
+date: 2026-09-12T19:06:30Z
+cwd: /tmp/genoffice-official-sync-engine
+node: /usr/local/Cellar/node/26.8.2/bin/node v26.8.2
+HEAD: c34ca1a4e7dfc3de33780b6a7f79b42075dc4513
+official ancestor: de139a061537bea40f0cc81ef8f09a95f77ac52a
+fork ancestor: 247e3f5c488afb25915e9ee97fe0fd22e27648da
+
+commands:
+  git --no-pager diff --stat f68df70e222d47aa08211f9a2d7748c610d1d6aa HEAD
+    1739 files changed, 346824 insertions(+), 114450 deletions(-)
+  python3 validate_package.py docs/official-upstream-sync --repo .
+    0 FAIL / 0 WARN / 22 PASS
+
+inventory: evidence/phase-0/official-increment.md
+handoff copy: ../web-feature-completion/evidence/phase-0/official-sync-handoff.md
+
+notes:
+  apps/html is present after official merge but has no web:build and is not a
+  product-available web entry. PDF ocrPage web-bridge returns null.
+  HTML/OCR/conversion/print remain web-feature-completion, not this package.

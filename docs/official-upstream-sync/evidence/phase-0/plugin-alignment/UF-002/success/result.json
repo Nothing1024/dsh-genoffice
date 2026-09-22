@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "package": "plugin-tool-alignment",
+  "uf": "UF-002",
+  "branch": "success",
+  "run_id": "pta-2026-09-12T19-03-47-109Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "ffd185d2ec02480a5a7f5b1f17d9220053fcbf6c"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "five-family-claim",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "explicit-docx",
+          "status": "passed",
+          "expected": "genoffice-file",
+          "actual": {
+            "kind": "genoffice-file",
+            "contentId": "dsh-resource://file/session/s/a.docx",
+            "title": "a.docx"
+          }
+        },
+        {
+          "name": "default-docx",
+          "status": "passed",
+          "expected": "claimed",
+          "actual": {
+            "kind": "genoffice-file",
+            "contentId": "dsh-resource://file/session/s/a.docx",
+            "title": "a.docx"
+          }
+        },
+        {
+          "name": "explicit-xlsx",
+          "status": "passed",
+          "expected": "genoffice-file",
+          "actual": {
+            "kind": "genoffice-file",
+            "contentId": "dsh-resource://file/session/s/a.xlsx",
+            "title": "a.xlsx"
+          }
+        },
+        {
+          "name": "explicit-pptx",
+          "status": "passed",
+          "expected": "genoffice-file",
+          "actual": {
+            "kind": "genoffice-file",
+            "contentId": "dsh-resource://file/session/s/a.pptx",
+            "title": "a.pptx"
+          }
+        },
+        {
+          "name": "explicit-md",
+          "status": "passed",
+          "expected": "genoffice-file",
+          "actual": {
+            "kind": "genoffice-file",
+            "contentId": "dsh-resource://file/session/s/a.md",
+            "title": "a.md"
+          }
+        },
+        {
+          "name": "explicit-pdf",
+          "status": "passed",
+          "expected": "genoffice-file",
+          "actual": {
+            "kind": "genoffice-file",
+            "contentId": "dsh-resource://file/session/s/a.pdf",
+            "title": "a.pdf"
+          }
+        },
+        {
+          "name": "same-session-opens",
+          "status": "passed",
+          "expected": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T19-03-47-109Z/claim/a.md",
+          "actual": {
+            "path": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T19-03-47-109Z/claim/a.md",
+            "sessionId": "origin"
+          }
+        },
+        {
+          "name": "patterns-stay-office-only",
+          "status": "passed",
+          "expected": "patterns CLAIMED_EXTS + canOpen CONTROL",
+          "actual": true
+        }
+      ]
+    }
+  ]
+}

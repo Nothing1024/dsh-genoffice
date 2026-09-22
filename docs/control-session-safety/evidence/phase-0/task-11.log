@@ -1,0 +1,3 @@
+# Task 11 slides-state e2e exit 0
+npm test -w @genoffice/slides: 3 failed (AiPanel/localStorage/qc) — slides-skill untouched; slides-state ready+context passed.
+See task-11/summary.json

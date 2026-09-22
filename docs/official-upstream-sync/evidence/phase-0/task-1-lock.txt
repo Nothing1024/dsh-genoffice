@@ -1,0 +1,11 @@
+time=2026-09-12T17:21:52Z
+engine_head=247e3f5c488afb25915e9ee97fe0fd22e27648da
+engine_branch=fork/eat-official-engine
+plugin_head=5d5ee6d18fa87c40d587a2cc5dd429821946f90b
+official=de139a061537bea40f0cc81ef8f09a95f77ac52a
+merge_base=f68df70e222d47aa08211f9a2d7748c610d1d6aa
+left_right=37	98
+node=/Users/nothing/.nvm/versions/node/v22.23.2/bin/node v22.23.2
+git_user_name=
+git_user_email=
+head_author=Nothing <nothing@NothingdeMacBook-Pro.local>

@@ -1,6 +1,6 @@
 # dsh-genoffice
 
-> **状态：实验性（experimental）· 维护中** · 适配 DSH `@deepseek-ai/dsh@0.1.2-rc.1`（平台包 `@deepseek-ai/dsh-*@0.1.2-rc.1`）+ `dsh-better-sidebar@0.18.0`（optional peer `^0.18.0`）。接口与契约仍在演进，随时可能变化。
+> **状态：实验性（experimental）· 维护中** · 适配 DSH `@deepseek-ai/dsh@0.1.6-alpha.2`（平台包 `@deepseek-ai/dsh-*@0.1.6-alpha.2`），UI 走官方右侧 Sidebar（`@deepseek-ai/dsh-client-ui-sidebar-right`）。接口与契约仍在演进，随时可能变化。
 
 把 [GenOffice](https://github.com/genspark-ai/genoffice)（开源 AI Office 套件）接进 DSH：侧栏文件浏览、五族文档（`docx` / `xlsx` / `pptx` / `pdf` / `md`）网页预览编辑，以及 **agent 工具驱动的文档编辑与保存**——DSH 里的 agent 可以直接调用 `docx_*` / `markdown_*` / `xlsx_*` / `pptx_*` / `pdf_*` 工具族读写真实的 Office 文件。
 
@@ -8,7 +8,7 @@
 
 | 仓 | 角色 |
 |---|---|
-| 本仓 `dsh-genoffice` | **插件半边**：DSH 侧栏插件（`packages/tab-genoffice`）+ 跨侧契约（`contracts/`）+ 启动/冒烟脚本。结合 engine 与 `dsh-better-sidebar` 做成 DSH 插件 |
+| 本仓 `dsh-genoffice` | **插件半边**：DSH 侧栏插件（`packages/tab-genoffice`）+ 跨侧契约（`contracts/`）+ 启动/冒烟脚本。结合 engine 与官方右侧 Sidebar 做成 DSH 插件 |
 | [`dsh-genoffice-engine`](https://github.com/Nothing1024/dsh-genoffice-engine) | **上游半边**：魔改 GenOffice 引擎——web 端脱离 Electron 跑通、relay（`web/server.mjs`，:8787）、控制面 API 与 agent 工具执行器 |
 
 ## 截图（真实运行）
@@ -24,7 +24,7 @@ DSH 侧栏里的 GenOffice 页签：文件浏览 + 预览编辑 + 「写入磁�
 ## 工作原理
 
 ```text
-DSH（:3080，better-sidebar 页签）
+DSH（:3082，官方右侧 Sidebar 页签）
   │  iframe 预览 / 控制模式（control=1）
   ▼
 relay（engine web/server.mjs，:8787，默认仅 loopback）
@@ -61,12 +61,12 @@ pnpm install
 pnpm run build
 pnpm test
 
-# 3. 装配并启动 DSH 调试实例（loopback :3080，profile `go`）
+# 3. 装配并启动 DSH 调试实例（loopback :3082，profile `go`）
 sh env/setup.sh
 sh env/boot.sh
 ```
 
-打开 `http://127.0.0.1:3080`，右侧抽屉「+」添加 GenOffice 页签即可浏览/预览文件。`env/boot.sh` 会导出 `DSH_GENOFFICE_ROOT`，之后侧栏在 relay 未启动时会显示「启动 relay」一键拉起（host 路由 `GET/POST /dsh-artifact/genoffice-relay`）。
+打开 `http://127.0.0.1:3082`，右侧抽屉「+」添加 GenOffice 页签即可浏览/预览文件。`env/boot.sh` 会导出 `DSH_GENOFFICE_ROOT`，之后侧栏在 relay 未启动时会显示「启动 relay」一键拉起（host 路由 `GET/POST /dsh-artifact/genoffice-relay`）。
 
 > `env/` 是仓内自带的 loopback `DSH_HOME` 配方（凭据、sessions、storages 均不进 git）。不要提交凭据。
 
@@ -84,16 +84,16 @@ sh env/boot.sh
 3. 构建引擎并启动 relay：cd engine && npm install && npm run web
    验证：curl -s http://127.0.0.1:8787/api/health 应返回 "ready":true。
 4. 构建插件：cd ../plugin && pnpm install && pnpm run build && pnpm test（测试应全绿）。
-5. 启动 DSH 调试实例：sh env/setup.sh && sh env/boot.sh（loopback :3080；若 3080 被占用，先停掉占用进程再启动）。
+5. 启动 DSH 调试实例：sh env/setup.sh && sh env/boot.sh（loopback :3082）。
 6. 冒烟验证：node scripts/dev.mjs smoke 应全部通过。
-7. 教我使用：打开 http://127.0.0.1:3080，右侧抽屉「+」添加 GenOffice 页签，演示浏览目录、
+7. 教我使用：打开 http://127.0.0.1:3082，右侧抽屉「+」添加 GenOffice 页签，演示浏览目录、
    预览一个 .md 或 .docx 文件，并解释「写入磁盘 / 从磁盘重载」按钮和 agent 工具族
    （docx_* / markdown_* / xlsx_* / pptx_* / pdf_* 与各族 *_save）分别是干什么的。
 8. 演示 agent 编辑闭环：按仓内 README「真实案例」一节，在 /tmp 新建一个测试 markdown，
    通过控制面完成 insert_content 插入内容并 export 写回，最后展示磁盘文件的变化。
 
 约束：所有服务只绑 127.0.0.1，不要用 --lan 或对外网暴露；不要修改我的 ~/.dsh 主目录；
-平台包版本以仓内钉死的为准（@deepseek-ai/dsh@0.1.2-rc.1），不要装 latest。
+平台包版本以仓内钉死的为准（@deepseek-ai/dsh@0.1.6-alpha.2），不要装 latest。
 ```
 
 ## 真实案例：agent 通过控制面编辑并保存

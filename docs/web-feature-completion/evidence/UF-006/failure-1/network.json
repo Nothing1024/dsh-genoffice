@@ -1,0 +1,16 @@
+{
+  "events": [
+    {
+      "ok": true,
+      "available": false,
+      "reason": "html-docx-disabled"
+    },
+    {
+      "status": 200,
+      "ok": false,
+      "available": false,
+      "error": "html-docx-disabled"
+    }
+  ],
+  "count": 2
+}

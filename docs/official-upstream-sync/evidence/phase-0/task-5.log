@@ -1,0 +1,20 @@
+official-upstream-sync Task 5
+date: 2026-09-12T18:46:49Z
+cwd: /tmp/genoffice-official-sync-engine
+ENGINE_ROOT: /tmp/genoffice-official-sync-engine
+node: /usr/local/Cellar/node/26.8.2/bin/node v26.8.2
+isolated HEAD: 89c5401 (before vite stub commit)
+
+commands:
+  npm run web:build --workspaces --if-present
+    ous-web-build-all exit 0
+    docs 6.70s, markdown 13.60s, pdf 5.04s, sheets 25.04s, shell 1.35s, slides 6.11s
+  ENGINE_ROOT=/tmp/genoffice-official-sync-engine node web/e2e-official-sync.mjs --case browser-provider
+    run_id=ous-2026-09-12T18-46-49-851Z exit 0
+    browser-export-present, bridges-keep-chat-stream, no ./browser/child_process, markdown ready+context
+
+notes:
+  chat.ts/stream.ts import Node-only codex-app-server. Web Vite configs now resolve that module to
+  packages/ai-provider/src/codex-app-server.browser.ts. Bridges keep chatForProvider/streamForProvider
+  from @genoffice/ai-provider and do not import ./browser as a transport.
+  HTML/OCR remain out of this package (no web:build on @genoffice/html).

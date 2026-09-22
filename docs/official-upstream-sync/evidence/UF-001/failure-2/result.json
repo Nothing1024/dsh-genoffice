@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "package": "official-upstream-sync",
+  "uf": "UF-001",
+  "branch": "failure-2",
+  "run_id": "ous-2026-09-12T19-07-56-943Z",
+  "source_revisions": {
+    "plugin": "unknown",
+    "engine": "c34ca1a4e7dfc3de33780b6a7f79b42075dc4513",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "UF-001-failure-2",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "opened",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "73ebb758f44a682e00e26c8b3d59b2c57bf3c11bc5ec525841c7a6901364b793",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/conflict.md",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "920435d1daf512c28fab4cebcf96603685ec2601b1d2f88569f608ad647ee924",
+            "error": null,
+            "occupied": true,
+            "owner": "73c806ef-7283-4b20-83cf-4d74ed795ba6"
+          }
+        },
+        {
+          "name": "conflict-or-keep-external",
+          "status": "passed",
+          "expected": "conflict",
+          "actual": {
+            "conflict": {
+              "status": 200,
+              "ok": false,
+              "error": "conflict"
+            },
+            "conflictDisk": "# EXTERNAL_WINS\n"
+          }
+        },
+        {
+          "name": "external-not-overwritten",
+          "status": "passed",
+          "expected": "EXTERNAL_WINS",
+          "actual": "# EXTERNAL_WINS\n"
+        }
+      ]
+    }
+  ]
+}

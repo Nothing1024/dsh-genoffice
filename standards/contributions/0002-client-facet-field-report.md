@@ -12,13 +12,13 @@ v0.15 把 `client` 定为保留 facet 名不可声明。我们没有等：client
 | 坐标（x- 私有） | kind | 语义 | required? |
 |---|---|---|---|
 | `x-nothing1024.dsh.locale/v1alpha1` | Locale | 词典注册 + 翻译绑定 | required |
-| `x-nothing1024.better-sidebar/v1alpha1` | SidebarTab | 页签/FileViewer 槽位（第三方 peer 提供） | optional |
+| `x-nothing1024.dsh.sidebar-right/v1alpha1` | SidebarRight | 官方右侧栏页/资源类型槽位 | optional |
 
 ## 田野发现（建议进 RFC 正文）
 
 1. **client 侧的 optional 降级与 host 侧同构。** sidebar 缺席时插件必须照常激活（无页签、能力不残缺崩溃）——我们的 BR-003 断言在 `tests/standard-facet.spec.ts`。RFC 0002 的协商报告应复用 v0.15 的 `degradedOptional`，不要为 client 另设词汇。
 2. **发现机制应统一进 manifest。** 现状是 client 入口靠 `package.json` 的 `dsh.client` 字段发现，与 manifest 的 facets 表两套账。建议 RFC 0002 直接用 `facets.client = { entry, apiVersion }`，废弃旁路发现。
-3. **client 契约的提供方可能是 peer 插件**（我们的 SidebarTab 来自 dsh-better-sidebar@0.13.0）。激活顺序不可控，因此 client SDK 也需要 acquire 形态的延迟绑定（同供稿 0001 第 2 条）——这在 UI 场景比 host 场景更常见。
+3. **client 契约的提供方可能晚于本插件激活**（官方 `sidebarRight` 由 web-app 装配）。激活顺序不可控，因此 client SDK 也需要 acquire 形态的延迟绑定（同供稿 0001 第 2 条）。
 4. **UI 槽位与 contributes.views 的边界**：第三方槽位（非官方 location 枚举）走契约坐标而非 contributes，两机制不冲突——contributes 是静态声明给宿主 UI 读，契约是运行时服务面。
 
 ## 开放问题

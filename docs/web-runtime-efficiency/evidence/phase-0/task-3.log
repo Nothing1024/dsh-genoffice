@@ -4,10 +4,10 @@
   "uf": "UF-002",
   "branch": "build-serve",
   "status": "passed",
-  "run_id": "wre-build-serve-2026-09-12T22:34:32.767Z",
+  "run_id": "wre-build-serve-2026-09-13T12:05:03.907Z",
   "source_revisions": {
-    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
-    "engine": "20803c6bb62337acec64a5bde28ef8d553f796ba",
+    "plugin": "b30e51cbc9816ed8956bb19fe618f24af805c1a3",
+    "engine": "7bde3a4b6ad87c9eba1b72ffd7cfe01987715add",
     "engine_root": "/private/tmp/genoffice-official-sync-engine"
   },
   "protocol": {
@@ -38,8 +38,8 @@
       "html": "vite build --config vite.web.config.ts"
     }
   },
-  "buildMs": 70224,
-  "serveMs": 830,
+  "buildMs": 87117,
+  "serveMs": 893,
   "serveLogs": "[genoffice-web] serving: shell, docs, markdown, pdf, sheets, slides, html\n[genoffice-web] http://localhost:18787   (health: /api/health)\n",
   "routes": {
     "shell": {
@@ -150,8 +150,8 @@
           "expected": 0,
           "actual": {
             "code": 0,
-            "ms": 70224,
-            "tail": "39 kB\n../../web-dist/assets/canvas-BRJXZk8M.png                 23.00 kB\n../../web-dist/assets/wood-D70XEBVa.png                   23.40 kB\n../../web-dist/assets/denim-DTrT_oct.png                  29.17 kB\n../../web-dist/assets/cork-BseXy6tu.png                   29.53 kB\n../../web-dist/assets/granite--1xJtYY3.png                41.09 kB\n../../web-dist/assets/Carlito-Italic-KkZUqxJW.ttf        619.05 kB\n../../web-dist/assets/Carlito-Regular-Cbe9FLjp.ttf       631.71 kB\n../../web-dist/assets/Carlito-Bold-BhbXr__n.ttf          686.24 kB\n../../web-dist/assets/Carlito-BoldItalic-0dXjwGA0.ttf    812.34 kB\n../../web-dist/assets/index-Bk7G29c9.css                 135.84 kB │ gzip:    24.51 kB\n../../web-dist/assets/index-CTX5lwqw.js                3,677.45 kB │ gzip: 1,098.83 kB\n✓ built in 6.52s\n"
+            "ms": 87117,
+            "tail": "39 kB\n../../web-dist/assets/canvas-BRJXZk8M.png                 23.00 kB\n../../web-dist/assets/wood-D70XEBVa.png                   23.40 kB\n../../web-dist/assets/denim-DTrT_oct.png                  29.17 kB\n../../web-dist/assets/cork-BseXy6tu.png                   29.53 kB\n../../web-dist/assets/granite--1xJtYY3.png                41.09 kB\n../../web-dist/assets/Carlito-Italic-KkZUqxJW.ttf        619.05 kB\n../../web-dist/assets/Carlito-Regular-Cbe9FLjp.ttf       631.71 kB\n../../web-dist/assets/Carlito-Bold-BhbXr__n.ttf          686.24 kB\n../../web-dist/assets/Carlito-BoldItalic-0dXjwGA0.ttf    812.34 kB\n../../web-dist/assets/index-Bk7G29c9.css                 135.84 kB │ gzip:    24.51 kB\n../../web-dist/assets/index-CTX5lwqw.js                3,677.45 kB │ gzip: 1,098.83 kB\n✓ built in 6.79s\n"
           }
         },
         {
@@ -165,8 +165,8 @@
           "status": "passed",
           "expected": "<20s",
           "actual": {
-            "serveMs": 830,
-            "relayStartMs": 830
+            "serveMs": 893,
+            "relayStartMs": 893
           }
         },
         {

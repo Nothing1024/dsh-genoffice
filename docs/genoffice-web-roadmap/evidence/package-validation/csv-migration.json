@@ -1,0 +1,44 @@
+[
+  {
+    "package": "genoffice-web-roadmap",
+    "csvBefore": false,
+    "csvNow": true,
+    "rows": 8,
+    "preservedStatus": true
+  },
+  {
+    "package": "control-session-safety",
+    "csvBefore": true,
+    "csvNow": true,
+    "rows": 15,
+    "preservedStatus": true
+  },
+  {
+    "package": "plugin-tool-alignment",
+    "csvBefore": false,
+    "csvNow": true,
+    "rows": 10,
+    "preservedStatus": true
+  },
+  {
+    "package": "official-upstream-sync",
+    "csvBefore": false,
+    "csvNow": true,
+    "rows": 11,
+    "preservedStatus": true
+  },
+  {
+    "package": "web-feature-completion",
+    "csvBefore": true,
+    "csvNow": true,
+    "rows": 21,
+    "preservedStatus": true
+  },
+  {
+    "package": "web-runtime-efficiency",
+    "csvBefore": true,
+    "csvNow": true,
+    "rows": 14,
+    "preservedStatus": true
+  }
+]

@@ -1,0 +1,33 @@
+official-upstream-sync Task 8
+date: 2026-09-12T19:04:21Z
+cwd_plugin: /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin
+cwd_engine: /tmp/genoffice-official-sync-engine
+node: /usr/local/Cellar/node/26.8.2/bin/node v26.8.2
+
+commands:
+  plugin npm run typecheck / test / build / standard:check
+    ous-plugin-tsc exit 0
+    ous-plugin-test 154 passed (prior turn)
+    ous-plugin-build exit 0
+    ous-plugin-std exit 0
+  ENGINE_ROOT=/tmp/genoffice-official-sync-engine node scripts/e2e-plugin-alignment.mjs --all
+    --out docs/official-upstream-sync/evidence/phase-0/plugin-alignment
+    run_id=pta-2026-09-12T19-03-47-109Z exit 0
+    cases: path, claim, ppt-schema, apply-ops, no-replay, contract, land-pages all passed
+    UF-001..UF-004 success + failure branches all passed
+  ENGINE_ROOT=/tmp/genoffice-official-sync-engine node web/e2e-official-sync.mjs --case docs-context
+    run_id=ous-2026-09-12T19-04-21-329Z exit 0
+    comments/reply/hf/revisions save+reopen passed
+
+notes:
+  Plugin CONTROL_TOOL_TABLE now declares official docs tools
+  (read_comments/reply_comment/resolve_comment/set_header_footer/read_revisions)
+  plus markdown_apply_ops. Capability keys stay 1:1 with the table.
+  Official merge dropped dedicated slides table/chart skills; isolated engine
+  keeps plugin-facing aliases:
+    get_deck_context, add_table, add_chart, edit_table_cell,
+    edit_table_structure, edit_table_style
+  add_table/add_chart skip the LLM from-scratch preflight (host insert on an
+  already-open file). edit_table_structure rejects addRow and reports
+  "updated to <id>" after remap. Docs apply_commands aliases apply_ops.
+  Plugin repo left uncommitted: no user.name/email in that repo.

@@ -1,0 +1,2 @@
+command: /usr/local/opt/python@3.14/bin/python3.14 /Users/nothing/.agents/skills/prd-workflow/scripts/render_spec.py /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/control-session-safety
+已生成: /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/control-session-safety/spec-view.html

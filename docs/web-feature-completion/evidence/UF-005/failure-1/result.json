@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-005",
+  "branch": "failure-1",
+  "run_id": "90838092-b043-4b21-8792-9dc74d7923de",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "providers-unconfigured",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "search-unavailable",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "offReady": {
+              "ok": true,
+              "search": {
+                "available": false,
+                "reason": "search-service-disabled",
+                "fixture": false
+              },
+              "imageSearch": {
+                "available": false,
+                "reason": "search-service-disabled",
+                "fixture": false
+              },
+              "generate": {
+                "available": false,
+                "reason": "generate-provider-unconfigured",
+                "fixture": false
+              },
+              "analyze": {
+                "available": false,
+                "reason": "analyze-provider-unconfigured",
+                "fixture": false
+              },
+              "model": {
+                "available": false,
+                "reason": "model-service-disabled",
+                "echo": true
+              },
+              "credit": {
+                "available": false,
+                "reason": "credit-provider-unconfigured",
+                "url": "https://www.genspark.ai/credit-usage"
+              }
+            },
+            "offImages": {
+              "images": [],
+              "method": "error",
+              "error": "search-service-disabled"
+            }
+          }
+        },
+        {
+          "name": "generate-unavailable",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "offReady": {
+              "ok": true,
+              "search": {
+                "available": false,
+                "reason": "search-service-disabled",
+                "fixture": false
+              },
+              "imageSearch": {
+                "available": false,
+                "reason": "search-service-disabled",
+                "fixture": false
+              },
+              "generate": {
+                "available": false,
+                "reason": "generate-provider-unconfigured",
+                "fixture": false
+              },
+              "analyze": {
+                "available": false,
+                "reason": "analyze-provider-unconfigured",
+                "fixture": false
+              },
+              "model": {
+                "available": false,
+                "reason": "model-service-disabled",
+                "echo": true
+              },
+              "credit": {
+                "available": false,
+                "reason": "credit-provider-unconfigured",
+                "url": "https://www.genspark.ai/credit-usage"
+              }
+            },
+            "offGen": {
+              "status": 200,
+              "error": "generate-provider-unconfigured",
+              "available": false
+            }
+          }
+        },
+        {
+          "name": "model-unavailable",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "status": 200,
+            "ok": false,
+            "available": false,
+            "error": "model-service-disabled"
+          }
+        }
+      ]
+    }
+  ]
+}

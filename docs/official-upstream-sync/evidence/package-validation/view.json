@@ -1,0 +1,14 @@
+{
+  "package": "official-upstream-sync",
+  "title": "official-upstream-sync Spec · 人类可读视图",
+  "tasks": 11,
+  "completed": 0,
+  "flows": 3,
+  "consoleErrors": [],
+  "layout": {
+    "width": 1440,
+    "scrollWidth": 1440
+  },
+  "status": "passed",
+  "scope": "generated static view only; business application not started"
+}

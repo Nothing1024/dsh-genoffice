@@ -1,0 +1,6 @@
+# plugin-tool-alignment Task 7
+2026-09-12T17:16:20+00:00
+removed callRelayRetry; executeLandPages single callRelay; timeout/abort returns 不确定 + reread, no replay
+unit: land_pages / generate_deck / regenerate_slide timeout → exactly 1 land_pages POST
+node scripts/e2e-plugin-alignment.mjs --case no-replay → 0
+npm test -w @deepseek-ai/dsh-tab-genoffice → 149 passed

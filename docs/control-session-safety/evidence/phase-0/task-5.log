@@ -1,0 +1,5 @@
+# control-session-safety Task 5
+node ../engine/web/e2e-control-session.mjs --case save-snapshot → exit 0
+assertion: save-ack-keeps-newer-dirty passed (AFTER visible + 未保存)
+saved SSE carries exportRevision; onSaved only clears dirty when exportRevision === current revision.
+See evidence/phase-0/task-5/summary.json

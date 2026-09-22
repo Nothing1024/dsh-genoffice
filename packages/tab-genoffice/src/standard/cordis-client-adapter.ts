@@ -1,11 +1,14 @@
 /**
- * client facet 的 cordis 适配器：把 dsh client runtime 的 locale 服务与
- * better-sidebar（optional peer，可能晚到）映射成标准 activation。
- * client 侧的 cordis 耦合止步于此文件与 src/client/index.ts 两行胶水。
+ * client facet 的 cordis 适配器：locale + 官方右侧 Sidebar
+ * （`sidebarRight` / `sidebarRightTabs` / `slots`，optional，可能晚到）。
+ * client 侧的 cordis 耦合止步于此文件与 src/client/index.ts。
+ *
+ * Do not read `ctx.sidebarRight` (etc.) on the parent fiber: Cordis 4
+ * throws `cannot get property "…" without inject`. Peek through
+ * `ctx.reflect.get(name, false)` or own properties on test benches.
  */
 import type { Context as ClientContext } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-client-locale/client'
-import type { BetterSidebarService } from 'dsh-better-sidebar'
 import { acquireFromCordis, type CordisLike } from './cordis-acquire.ts'
 import {
   CLIENT_OPTIONAL,
@@ -14,22 +17,63 @@ import {
   SIDEBAR_TAB,
   type LocaleHandle,
   type SidebarAcquireHandle,
+  type Translate,
 } from './coordinates.ts'
 import { coordKey, createActivation, type ActivationController } from './sdk.ts'
+import type { OfficialSidebar } from './sidebar.ts'
+
+const SIDEBAR_SERVICES = ['sidebarRight', 'sidebarRightTabs', 'slots'] as const
+
+function peekNamed(ctx: object, name: string): unknown {
+  let getter: ((n: string, strict?: boolean) => unknown) | undefined
+  try {
+    const reflect = (ctx as { reflect?: { get?: (n: string, strict?: boolean) => unknown } }).reflect
+    if (typeof reflect?.get === 'function') getter = reflect.get.bind(reflect)
+  } catch {
+    getter = undefined
+  }
+  if (getter !== undefined) {
+    try {
+      return getter(name, false)
+    } catch {
+      return undefined
+    }
+  }
+  return Object.prototype.hasOwnProperty.call(ctx, name)
+    ? (ctx as Record<string, unknown>)[name]
+    : undefined
+}
+
+function lookupOfficialSidebar(ctx: object): OfficialSidebar | undefined {
+  const sidebarRight = peekNamed(ctx, 'sidebarRight') as OfficialSidebar['sidebarRight'] | undefined
+  const sidebarRightTabs = peekNamed(ctx, 'sidebarRightTabs') as OfficialSidebar['sidebarRightTabs'] | undefined
+  const slots = peekNamed(ctx, 'slots') as OfficialSidebar['slots'] | undefined
+  if (sidebarRight === undefined || sidebarRightTabs === undefined || slots === undefined) {
+    return undefined
+  }
+  const sessionId = peekNamed(ctx, 'sessionId')
+  return {
+    sidebarRight,
+    sidebarRightTabs,
+    slots,
+    ...(typeof sessionId === 'string' ? { sessionId } : {}),
+  }
+}
 
 export function createClientActivation(ctx: ClientContext): ActivationController {
   const cordis = ctx as unknown as CordisLike
 
-  // dsh locale 服务的泛型按「已注册命名空间字面量」收窄；句柄面向标准层
-  // 用 string 命名空间，这两处收窄转换是适配器的职责边界。
   const locale: LocaleHandle = {
-    bind: (ns) => ctx.locale.bind(ns as never) as unknown as ReturnType<LocaleHandle['bind']>,
+    bind: (ns) => ctx.locale.bind(ns as never) as Translate,
     register: (ns, dicts) => ctx.locale.register(ns as never, dicts as never),
   }
 
-  /** betterSidebar 无进程内 lookup（client 运行时按 inject 供给），恒走延迟绑定。 */
-  const sidebar: SidebarAcquireHandle<BetterSidebarService> = {
-    acquire: acquireFromCordis<BetterSidebarService>(cordis, () => undefined, 'betterSidebar'),
+  const sidebar: SidebarAcquireHandle<OfficialSidebar> = {
+    acquire: acquireFromCordis<OfficialSidebar>(
+      cordis,
+      (scope) => lookupOfficialSidebar(scope ?? ctx),
+      SIDEBAR_SERVICES,
+    ),
   }
 
   return createActivation({

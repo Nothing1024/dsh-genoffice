@@ -1,0 +1,5 @@
+# control-session-safety Task 6
+node --test ../engine/web/write-atomic.test.mjs → 9 passed
+node ../engine/web/e2e-control-session.mjs --case file-conflict → exit 0
+Removed 100ms mtime slack; per-path serial queue; existing dest requires expectedRevision or expectedMtimeMs; POST /api/file without version → conflict.
+See evidence/phase-0/task-6/summary.json

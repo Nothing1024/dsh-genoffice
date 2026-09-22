@@ -1,0 +1,498 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-004",
+  "branch": "slides-structure",
+  "status": "passed",
+  "results": {
+    "success": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-004",
+      "branch": "success",
+      "run_id": "ec1b45c1-955d-483c-a949-3b8ddffbf9a6",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "slides-structure-menu-tool-undo-reopen",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "open-ready",
+              "status": "passed",
+              "expected": "ready",
+              "actual": "ready"
+            },
+            {
+              "name": "menu-add-slide",
+              "status": "passed",
+              "expected": 2,
+              "actual": 2
+            },
+            {
+              "name": "menu-find-replace",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "count": 2,
+                "hasKeep": true,
+                "hasOld": false
+              }
+            },
+            {
+              "name": "menu-layout",
+              "status": "passed",
+              "expected": true,
+              "actual": "builtin:titleSlide"
+            },
+            {
+              "name": "menu-size",
+              "status": "passed",
+              "expected": "9144000x6858000",
+              "actual": {
+                "cx": 9144000,
+                "cy": 6858000
+              }
+            },
+            {
+              "name": "menu-theme",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "themeCount": 2,
+                "themeError": null
+              }
+            },
+            {
+              "name": "menu-hidden",
+              "status": "passed",
+              "expected": true,
+              "actual": [
+                {
+                  "hidden": true,
+                  "hasKeep": true
+                },
+                {
+                  "hidden": false,
+                  "hasKeep": true
+                }
+              ]
+            },
+            {
+              "name": "menu-sections",
+              "status": "passed",
+              "expected": "WfcRenamed",
+              "actual": [
+                "WfcRenamed"
+              ]
+            },
+            {
+              "name": "menu-move",
+              "status": "passed",
+              "expected": 2,
+              "actual": 2
+            },
+            {
+              "name": "tool-read-same-text",
+              "status": "passed",
+              "expected": true,
+              "actual": "Applied 1 op(s): findReplace."
+            },
+            {
+              "name": "tool-apply-ops-replace",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "toolReplace": {
+                  "status": 200,
+                  "ok": true,
+                  "execution": {
+                    "output": "Applied 1 op(s): findReplace.",
+                    "mutated": true,
+                    "summary": "已应用 1 个操作"
+                  },
+                  "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+                },
+                "after": "Canvas 960×720px (1 px = 9525 EMU)\ne_7c75e294 | shape | pos(60,80) size 840×560 font 40pt | text#EC824A stroke#E4603E\nStructureTool\n示例演示文稿 · 商务深蓝风格封面\nSample Presentation  |  Powered by GenOffice + DSH"
+              }
+            },
+            {
+              "name": "undo-restores-keep",
+              "status": "passed",
+              "expected": true,
+              "actual": [
+                {
+                  "hidden": true,
+                  "text": false,
+                  "keep": true
+                },
+                {
+                  "hidden": false,
+                  "text": false,
+                  "keep": true
+                }
+              ]
+            },
+            {
+              "name": "redo-restores-tool",
+              "status": "passed",
+              "expected": true,
+              "actual": [
+                {
+                  "hidden": true,
+                  "text": true,
+                  "keep": false
+                },
+                {
+                  "hidden": false,
+                  "text": true,
+                  "keep": false
+                }
+              ]
+            },
+            {
+              "name": "save-ok",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-slides-structure/structure-source.pptx",
+                "name": "structure-source.pptx",
+                "mtimeMs": 1789250620547.346
+              }
+            },
+            {
+              "name": "disk-changed",
+              "status": "passed",
+              "expected": "changed",
+              "actual": {
+                "beforeSha": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+                "savedSha": "cf9cebe1dadb1a68ee344fb5c61dc8f16e93da7454dbe3d0e702f23c8f3a47a3"
+              }
+            },
+            {
+              "name": "reopen-ready",
+              "status": "passed",
+              "expected": "ready",
+              "actual": "ready"
+            },
+            {
+              "name": "persist-text",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "slideCount": 2,
+                "cx": 9144000,
+                "cy": 6858000,
+                "hasKeep": false,
+                "hasTool": true,
+                "hasOld": false,
+                "hidden": true,
+                "section": true,
+                "themeEmber": true
+              }
+            },
+            {
+              "name": "persist-size",
+              "status": "passed",
+              "expected": "4:3",
+              "actual": {
+                "savedInspect": {
+                  "slideCount": 2,
+                  "cx": 9144000,
+                  "cy": 6858000,
+                  "hasKeep": false,
+                  "hasTool": true,
+                  "hasOld": false,
+                  "hidden": true,
+                  "section": true,
+                  "themeEmber": true
+                },
+                "reopen": {
+                  "cx": 9144000,
+                  "cy": 6858000
+                }
+              }
+            },
+            {
+              "name": "persist-theme",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "slideCount": 2,
+                "cx": 9144000,
+                "cy": 6858000,
+                "hasKeep": false,
+                "hasTool": true,
+                "hasOld": false,
+                "hidden": true,
+                "section": true,
+                "themeEmber": true
+              }
+            },
+            {
+              "name": "persist-hidden",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "savedInspect": {
+                  "slideCount": 2,
+                  "cx": 9144000,
+                  "cy": 6858000,
+                  "hasKeep": false,
+                  "hasTool": true,
+                  "hasOld": false,
+                  "hidden": true,
+                  "section": true,
+                  "themeEmber": true
+                },
+                "reopen": [
+                  {
+                    "hidden": true,
+                    "hasTool": true,
+                    "hasKeep": false
+                  },
+                  {
+                    "hidden": false,
+                    "hasTool": true,
+                    "hasKeep": false
+                  }
+                ]
+              }
+            },
+            {
+              "name": "persist-section",
+              "status": "passed",
+              "expected": true,
+              "actual": [
+                {
+                  "id": "{4814388E-7F26-4B27-BC43-CC5C2B03C7AE}",
+                  "name": "WfcRenamed",
+                  "slideIndices": [
+                    0,
+                    1
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "failure1": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-004",
+      "branch": "failure-1",
+      "run_id": "5c4b8320-d535-4656-abd1-b7f935148811",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "slides-structure-invalid-object-size",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "invalid-size-rejected",
+              "status": "passed",
+              "expected": null,
+              "actual": null
+            },
+            {
+              "name": "invalid-move-rejected",
+              "status": "passed",
+              "expected": null,
+              "actual": null
+            },
+            {
+              "name": "invalid-ops-rejected",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "execution": {
+                  "output": "Nothing was applied (atomic):\n- ops[0]: op \"setSlideSize\" needs \"cx\"/\"cy\" (EMU).\nUsage: setSlideSize {cx,cy} — EMU page size, whole deck",
+                  "isError": true,
+                  "mutated": false,
+                  "summary": "批量操作"
+                },
+                "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+              }
+            },
+            {
+              "name": "invalid-keeps-size",
+              "status": "passed",
+              "expected": {
+                "cx": 9144000,
+                "cy": 5143500
+              },
+              "actual": {
+                "cx": 9144000,
+                "cy": 5143500
+              }
+            },
+            {
+              "name": "invalid-keeps-disk",
+              "status": "passed",
+              "expected": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+              "actual": {
+                "afterFailSha": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+                "afterFailInspect": {
+                  "slideCount": 1,
+                  "cx": 9144000,
+                  "cy": 5143500,
+                  "hasKeep": false,
+                  "hasTool": false,
+                  "hasOld": true,
+                  "hidden": false,
+                  "section": false,
+                  "themeEmber": false
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "failure2": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-004",
+      "branch": "failure-2",
+      "run_id": "3b1cd16b-4a33-4627-9df7-f01239a12e49",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "slides-structure-unknown-op-presenter",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "unknown-ops-rejected",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "execution": {
+                  "output": "Nothing was applied (atomic):\n- ops[0]: unknown op \"notARealOp\". Supported ops: [deleteElement, setFill, setStroke, setText, setFont, setParagraphFormat, setTransform, setConnectorEndpoints, flipElements, setPictureSrcRect, setPictureOpacity, reorderElement, groupElements, ungroupElement, setShapeGeometry, setShapeAdjust, setTextAnchor, setTextBodyProps, setEffects, setLink, setImageFill, addElement, addPicture, replacePicture, addTable, addChart, addSmartArt, addMedia, addModel3d, pasteElements, setTableCell, tableMerge, tableStructure, setTableRowHeight, setTableCellAnchor, setTableColWidth, setTableStyle, setChart, deleteSlide, duplicateSlide, addBlankSlide, addSlideWithLayout, pasteSlide, insertSlidePptx, moveSlide, setSlideLayout, setSlideSize, setBackground, setHidden, setTransition, setAdvanceTime, setAnimations, findReplace, applyHeaderFooter, setSections, addSection, renameSection, removeSection, moveSection, setNotes, addComment, deleteComment, applyTheme].",
+                  "isError": true,
+                  "mutated": false,
+                  "summary": "批量操作"
+                },
+                "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+              }
+            },
+            {
+              "name": "presenter-web-no-audience",
+              "status": "passed",
+              "expected": false,
+              "actual": {
+                "audience": false
+              }
+            },
+            {
+              "name": "presenter-does-not-write",
+              "status": "passed",
+              "expected": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+              "actual": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+            }
+          ]
+        }
+      ]
+    },
+    "menu": {
+      "addedCount": 2,
+      "replaceCount": 2,
+      "layoutId": true,
+      "layoutPath": "builtin:titleSlide",
+      "size": {
+        "cx": 9144000,
+        "cy": 6858000
+      },
+      "themeError": null,
+      "themeCount": 2,
+      "hidden": true,
+      "sectionNames": [
+        "WfcRenamed"
+      ],
+      "movedCount": 2,
+      "hasKeep": true,
+      "hasOld": false,
+      "slides": [
+        {
+          "hidden": true,
+          "hasKeep": true
+        },
+        {
+          "hidden": false,
+          "hasKeep": true
+        }
+      ],
+      "sections": [
+        {
+          "id": "{4814388E-7F26-4B27-BC43-CC5C2B03C7AE}",
+          "name": "WfcRenamed",
+          "slideIndices": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    "savedInspect": {
+      "slideCount": 2,
+      "cx": 9144000,
+      "cy": 6858000,
+      "hasKeep": false,
+      "hasTool": true,
+      "hasOld": false,
+      "hidden": true,
+      "section": true,
+      "themeEmber": true
+    },
+    "reopenState": {
+      "size": {
+        "cx": 9144000,
+        "cy": 6858000
+      },
+      "sections": [
+        {
+          "id": "{4814388E-7F26-4B27-BC43-CC5C2B03C7AE}",
+          "name": "WfcRenamed",
+          "slideIndices": [
+            0,
+            1
+          ]
+        }
+      ],
+      "slides": [
+        {
+          "hidden": true,
+          "hasTool": true,
+          "hasKeep": false
+        },
+        {
+          "hidden": false,
+          "hasTool": true,
+          "hasKeep": false
+        }
+      ]
+    }
+  }
+}

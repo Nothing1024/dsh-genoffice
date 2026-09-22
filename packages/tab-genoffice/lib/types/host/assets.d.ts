@@ -4,6 +4,7 @@ import type { ServiceAcquire, WebServerLike } from '../standard/coordinates.ts';
 export declare const ASSET_PREFIX = "/dsh-artifact/genoffice-asset";
 export declare const TOKEN_TTL_MS = 60000;
 export declare const MAX_ASSET_BYTES: number;
+export declare const IMAGE_MIME: Record<string, string>;
 export interface PublishedAsset {
     url: string;
     token: string;
@@ -26,6 +27,9 @@ export interface AssetStore {
     peek(token: string): TokenRow | undefined;
     clear(): void;
 }
+export declare function assertSafeImagePath(absPath: string): string;
+/** Read a local picture as a data URL the slides iframe can insert without fetching. */
+export declare function readLocalImageDataUrl(absPath: string): Promise<string>;
 export declare function createAssetStore(opts?: {
     ttlMs?: number;
     now?: () => number;

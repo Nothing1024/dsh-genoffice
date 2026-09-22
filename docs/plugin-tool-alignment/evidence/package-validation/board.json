@@ -1,0 +1,13 @@
+{
+  "total": 10,
+  "done": 0,
+  "doing": 0,
+  "blocked": [],
+  "ready": [
+    {
+      "seq": "1",
+      "name": "校准前置协议与真实 Sidebar 测试入口",
+      "verify": "node scripts/e2e-plugin-alignment.mjs --baseline → 已知缺陷逐项确认；npm run typecheck → 记录基线"
+    }
+  ]
+}

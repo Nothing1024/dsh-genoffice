@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-003",
+  "branch": "success",
+  "run_id": "5a390f32-680b-4a76-b909-ff433c59265d",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "pdf-convert-three-targets",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": "ready"
+        },
+        {
+          "name": "source-unchanged",
+          "status": "passed",
+          "expected": "46b1914919e4ff73a055efd76b5dab31f8e7e963437d46eea1932c35bb7eb69c",
+          "actual": "46b1914919e4ff73a055efd76b5dab31f8e7e963437d46eea1932c35bb7eb69c"
+        },
+        {
+          "name": "docx-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Converted the PDF to docx saved at /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-pdf-convert/convert-source.docx and opened in a new tab. The current PDF was saved and is unchanged.",
+              "mutated": true,
+              "summary": "PDF 转换 → docx"
+            },
+            "revision": "46b1914919e4ff73a055efd76b5dab31f8e7e963437d46eea1932c35bb7eb69c"
+          }
+        },
+        {
+          "name": "docx-has-text",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "saved": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-pdf-convert/convert-source.docx",
+            "hasText": true
+          }
+        },
+        {
+          "name": "docx-reopen",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "fe88f592b45a48b9816a4cab964521e320acec7b14b30efb7fe5074950761654",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-pdf-convert/convert-source.docx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "072b600d8b1d199d095e9f1d49653a8d62b2a76f6172b1841c9ad91b8ef96a9f",
+            "error": null,
+            "occupied": true,
+            "owner": "5fd6d386-78e4-4a31-9a6b-8813f474e5bc"
+          }
+        },
+        {
+          "name": "pptx-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Converted the PDF to pptx saved at /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-pdf-convert/convert-source.pptx and opened in a new tab. The current PDF was saved and is unchanged.",
+              "mutated": true,
+              "summary": "PDF 转换 → pptx"
+            },
+            "revision": "46b1914919e4ff73a055efd76b5dab31f8e7e963437d46eea1932c35bb7eb69c"
+          }
+        },
+        {
+          "name": "pptx-has-text",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "saved": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-pdf-convert/convert-source.pptx",
+            "hasText": true
+          }
+        },
+        {
+          "name": "pptx-reopen",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "e3558f9d30e992c8477fc5ec44b8d4af4b9137a683fda27aeb099c948f68e441",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-pdf-convert/convert-source.pptx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "e3735b492214b6ff10d6e796bcb6595efc06849aedecbeb5d205f7b2c702b269",
+            "error": null,
+            "occupied": true,
+            "owner": "f23fb5e7-867f-4ca3-96f2-7bcf7382598f"
+          }
+        },
+        {
+          "name": "xlsx-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Converted the PDF to xlsx saved at /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-pdf-convert/convert-source.xlsx and opened in a new tab. The current PDF was saved and is unchanged. Warnings: no tables detected.",
+              "mutated": true,
+              "summary": "PDF 转换 → xlsx"
+            },
+            "revision": "46b1914919e4ff73a055efd76b5dab31f8e7e963437d46eea1932c35bb7eb69c"
+          }
+        },
+        {
+          "name": "xlsx-has-text",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "saved": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-pdf-convert/convert-source.xlsx",
+            "hasText": true
+          }
+        },
+        {
+          "name": "xlsx-reopen",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "ca92786faf9f9bd786ac982f146b33679415ee3e4e94c59085efb5757b01fac3",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-pdf-convert/convert-source.xlsx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "e8e6fcc09593c8bbf33db2fcf9cd0c8dc3080d2deb1639c04e3ae5fb65088df0",
+            "error": null,
+            "occupied": true,
+            "owner": "8fd0e5e9-b387-413f-963f-28d0efe9dc1b"
+          }
+        }
+      ]
+    }
+  ]
+}

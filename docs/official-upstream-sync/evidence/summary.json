@@ -1,0 +1,838 @@
+{
+  "run_id": "ous-2026-09-12T19-07-56-943Z",
+  "port": 18787,
+  "base": "http://127.0.0.1:18787",
+  "engine": "/private/tmp/genoffice-official-sync-engine",
+  "node": "/usr/local/Cellar/node/26.8.2/bin/node",
+  "nodeVersion": "v26.8.2",
+  "results": [
+    {
+      "name": "markdown",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "ca69cf9b9827ac9f7f3c65654919fe052f083868ed7d97e875be8e289ef0cd22",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/markdown-loop.md",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+            "error": null,
+            "occupied": true,
+            "owner": "4009d9c7-7f22-424d-91c1-984eeb813e44"
+          }
+        },
+        {
+          "name": "disk-unchanged-until-save",
+          "status": "passed",
+          "expected": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+          "actual": {
+            "midSha": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+            "afterEditSha": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90"
+          }
+        },
+        {
+          "name": "context-has-original",
+          "status": "passed",
+          "expected": "original",
+          "actual": "## Document state\n2 top-level blocks:\n\n0 | h1 | ORIGINAL\n1 | paragraph | original body"
+        },
+        {
+          "name": "edit-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "ops[0] insertContent: Inserted 1 block(s).\nBlock indexes may have changed; call get_document_context before further index-based edits.",
+              "mutated": true,
+              "summary": "插入内容",
+              "revision": "68e69ded756f92b31d21df90b73d71878cf5116e8183c6b918dfb068d0b1c2c2"
+            },
+            "revision": "68e69ded756f92b31d21df90b73d71878cf5116e8183c6b918dfb068d0b1c2c2"
+          }
+        },
+        {
+          "name": "save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/markdown-loop.md",
+            "name": "markdown-loop.md",
+            "mtimeMs": 1789240077986.0457
+          }
+        },
+        {
+          "name": "disk-changed-after-save",
+          "status": "passed",
+          "expected": "OfficialSyncKeep",
+          "actual": {
+            "savedSha": "cf14119e57d6f6b3c510e7e0c42b3cbcc99f296012882ceabba629c076d6b405",
+            "disk": "# ORIGINAL\n\noriginal body\n\nOfficialSyncKeep\n"
+          }
+        },
+        {
+          "name": "reopen-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "ca69cf9b9827ac9f7f3c65654919fe052f083868ed7d97e875be8e289ef0cd22",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/markdown-loop.md",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "cf14119e57d6f6b3c510e7e0c42b3cbcc99f296012882ceabba629c076d6b405",
+            "error": null,
+            "occupied": true,
+            "owner": "4009d9c7-7f22-424d-91c1-984eeb813e44"
+          }
+        },
+        {
+          "name": "reopen-keeps-edit",
+          "status": "passed",
+          "expected": "OfficialSyncKeep",
+          "actual": "## Document state\n3 top-level blocks:\n\n0 | h1 | ORIGINAL\n1 | paragraph | original body\n2 | paragraph | OfficialSyncKeep"
+        }
+      ]
+    },
+    {
+      "name": "docs-context",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "22d78a73d14ecb02bce89006b9b25c2f1725cba11db6222af95a01a55f85db62",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/docs-context.docx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3",
+            "error": null,
+            "occupied": true,
+            "owner": "9167f853-ad97-4771-b396-ed27bc028ad0"
+          }
+        },
+        {
+          "name": "relay-context-ok",
+          "status": "passed",
+          "expected": "relay-context",
+          "actual": "Document block list:\nThe document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text stats: words 2, characters (no spaces) 47, characters (with spaces) 48\nHeaders & footers ({PAGE}/{NUMPAGES} are live page-number fields; change with set_header_footer):\n- header: \"OfficialHeaderOrig\" | footer: \"OfficialFooterOrig\"\nNo selection; cursor is in block 1\n\nUnresolved comments (address with reply_comment / resolve_comment by id):\n"
+        },
+        {
+          "name": "plugin-context-ok",
+          "status": "passed",
+          "expected": "get_document_context",
+          "actual": "The document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text stats: words 2, characters (no spaces) 47, characters (with spaces) 48\nHeaders & footers ({PAGE}/{NUMPAGES} are live page-number fields; change with set_header_footer):\n- header: \"OfficialHeaderOrig\" | footer: \"OfficialFooterOrig\"\nNo selection; cursor is in block 1"
+        },
+        {
+          "name": "two-context-entries",
+          "status": "passed",
+          "expected": "both",
+          "actual": {
+            "relay": "Document block list:\nThe document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text s",
+            "plugin": "The document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text stats: words 2, charac"
+          }
+        },
+        {
+          "name": "comments-available",
+          "status": "passed",
+          "expected": "comments",
+          "actual": "All comment threads (including resolved):\n- id 1 by Alice (block 0, anchored text \"OfficialCommentAnchor\"): OfficialThreadKeep"
+        },
+        {
+          "name": "revisions-present",
+          "status": "passed",
+          "expected": "revisions",
+          "actual": "Tracked revisions (1 pending; deleted text shows what will disappear on accept):\n- block 1 | inserted by RevAuthor on 2026-01-01: \"OfficialRevKeep\""
+        },
+        {
+          "name": "missing-thread-refused",
+          "status": "passed",
+          "expected": "recoverable",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "no comment with id missing-thread; call read_comments for the current ids",
+              "isError": true,
+              "mutated": false,
+              "summary": "回复批注"
+            },
+            "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3"
+          }
+        },
+        {
+          "name": "reply-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Replied to comment 1.",
+              "mutated": true,
+              "summary": "回复批注"
+            },
+            "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3"
+          }
+        },
+        {
+          "name": "hf-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Updated the header.",
+              "mutated": false,
+              "summary": "更新页眉"
+            },
+            "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3"
+          }
+        },
+        {
+          "name": "save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/docs-context.docx",
+            "name": "docs-context.docx",
+            "mtimeMs": 1789240079324.5745
+          }
+        },
+        {
+          "name": "reopen-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "22d78a73d14ecb02bce89006b9b25c2f1725cba11db6222af95a01a55f85db62",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/docs-context.docx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "b099f5b5628c01e34694a6cfffc86d4292fcb0f1f6e9148f9d11da54c80dcc09",
+            "error": null,
+            "occupied": true,
+            "owner": "9167f853-ad97-4771-b396-ed27bc028ad0"
+          }
+        },
+        {
+          "name": "reopen-hf",
+          "status": "passed",
+          "expected": "OfficialHfKeep",
+          "actual": {
+            "relay": "Document block list:\nThe document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text stats: words 2, characters (no spaces) 47, characters (with spaces) 48\nHeaders & footers ({PAGE}/{NUMPAGES} are live page-number fields; chan",
+            "plugin": "The document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text stats: words 2, characters (no spaces) 47, characters (with spaces) 48\nHeaders & footers ({PAGE}/{NUMPAGES} are live page-number fields; change with set_header_fo"
+          }
+        },
+        {
+          "name": "reopen-reply",
+          "status": "passed",
+          "expected": "OfficialReplyKeep",
+          "actual": "All comment threads (including resolved):\n- id 1 by Alice (block 0, anchored text \"OfficialCommentAnchor\"): OfficialThreadKeep\n- id 2 by AI Assistant (block 0, anchored text \"OfficialCommentAnchor\"): OfficialReplyKeep"
+        },
+        {
+          "name": "reopen-revision",
+          "status": "passed",
+          "expected": "OfficialRevKeep",
+          "actual": "Tracked revisions (1 pending; deleted text shows what will disappear on accept):\n- block 1 | inserted by RevAuthor on 2026-01-01: \"OfficialRevKeep\""
+        }
+      ]
+    },
+    {
+      "name": "browser-provider",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "browser-export-present",
+          "status": "passed",
+          "expected": "./browser",
+          "actual": [
+            ".",
+            "./browser",
+            "./codex-app-server"
+          ]
+        },
+        {
+          "name": "bridges-keep-chat-stream",
+          "status": "passed",
+          "expected": "chatForProvider/streamForProvider",
+          "actual": [
+            {
+              "rel": "apps/docs/src/renderer/web-bridge.ts",
+              "importsChat": true,
+              "importsBrowserModule": false,
+              "importsChildProcess": false
+            },
+            {
+              "rel": "apps/markdown/src/renderer/web-bridge.ts",
+              "importsChat": true,
+              "importsBrowserModule": false,
+              "importsChildProcess": false
+            },
+            {
+              "rel": "apps/sheets/src/renderer/web-bridge.ts",
+              "importsChat": false,
+              "importsBrowserModule": false,
+              "importsChildProcess": false
+            },
+            {
+              "rel": "apps/slides/src/renderer/web-bridge.ts",
+              "importsChat": true,
+              "importsBrowserModule": false,
+              "importsChildProcess": false
+            },
+            {
+              "rel": "apps/pdf/src/renderer/web-bridge.ts",
+              "importsChat": false,
+              "importsBrowserModule": false,
+              "importsChildProcess": false
+            }
+          ]
+        },
+        {
+          "name": "bridges-do-not-use-browser-as-transport",
+          "status": "passed",
+          "expected": "no ./browser transport / child_process",
+          "actual": [
+            {
+              "rel": "apps/docs/src/renderer/web-bridge.ts",
+              "importsChat": true,
+              "importsBrowserModule": false,
+              "importsChildProcess": false
+            },
+            {
+              "rel": "apps/markdown/src/renderer/web-bridge.ts",
+              "importsChat": true,
+              "importsBrowserModule": false,
+              "importsChildProcess": false
+            },
+            {
+              "rel": "apps/sheets/src/renderer/web-bridge.ts",
+              "importsChat": false,
+              "importsBrowserModule": false,
+              "importsChildProcess": false
+            },
+            {
+              "rel": "apps/slides/src/renderer/web-bridge.ts",
+              "importsChat": true,
+              "importsBrowserModule": false,
+              "importsChildProcess": false
+            },
+            {
+              "rel": "apps/pdf/src/renderer/web-bridge.ts",
+              "importsChat": false,
+              "importsBrowserModule": false,
+              "importsChildProcess": false
+            }
+          ]
+        },
+        {
+          "name": "browser-editor-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "ca69cf9b9827ac9f7f3c65654919fe052f083868ed7d97e875be8e289ef0cd22",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/markdown-loop.md",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+            "error": null,
+            "occupied": true,
+            "owner": "9e40c700-c7c7-45b6-98de-0d2e15cb3f8d"
+          }
+        },
+        {
+          "name": "browser-context-live",
+          "status": "passed",
+          "expected": "context",
+          "actual": "## Document state\n2 top-level blocks:\n\n0 | h1 | ORIGINAL\n1 | paragraph | original body"
+        }
+      ]
+    },
+    {
+      "name": "land-pages",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "88dcc3652c71cb4de63e9e7605e15064f1467745d6dab200dda52e709005b7ca",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/land-pages.pptx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+            "error": null,
+            "occupied": true,
+            "owner": "287ee003-790f-4d9d-95f9-6104ecf467ea"
+          }
+        },
+        {
+          "name": "land-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Landed 1 host-authored page(s) (insert_mode:append). Deck now has 2 page(s).",
+              "mutated": true,
+              "summary": "land_pages 1"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "land-appended",
+          "status": "passed",
+          "expected": "OfficialLandKeep",
+          "actual": "<deck outline>\nThe presentation has 2 pages; page 2 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage 1 (slideIndex=0):\n  - e_2 | shape | \"日志验证 / 示例演示文稿 · 商务深蓝风格封面 / Sample Presentation  | …\"\nPage 2 (slideIndex=1):\n  - e_7bac4ad3 | text | \"OfficialLandKeep\"\n(Use read_slide to see element positions/sizes/colors)\n</deck outline>"
+        },
+        {
+          "name": "illegal-rejected",
+          "status": "passed",
+          "expected": "illegal",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "land_pages requires a non-empty pages array",
+              "isError": true,
+              "mutated": false,
+              "summary": "land_pages"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "illegal-no-partial",
+          "status": "passed",
+          "expected": "kept legal page",
+          "actual": "<deck outline>\nThe presentation has 2 pages; page 2 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage 1 (slideIndex=0):\n  - e_2 | shape | \"日志验证 / 示例演示文稿 · 商务深蓝风格封面 / Sample Presentation  | …\"\nPage 2 (slideIndex=1):\n  - e_7bac4ad3 | text | \"OfficialLandKeep\"\n(Us"
+        },
+        {
+          "name": "stale-revision-rejected",
+          "status": "passed",
+          "expected": "conflict",
+          "actual": {
+            "status": 200,
+            "ok": false,
+            "error": "conflict",
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/land-pages.pptx",
+            "name": "land-pages.pptx",
+            "mtimeMs": 1789240081345.042
+          }
+        },
+        {
+          "name": "reopen-keeps-land",
+          "status": "passed",
+          "expected": "reopen",
+          "actual": "<deck outline>\nThe presentation has 2 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage 1 (slideIndex=0):\n  - e_2 | shape | \"日志验证 / 示例演示文稿 · 商务深蓝风格封面 / Sample Presentation  | …\"\nPage 2 (slideIndex=1):\n  - e_7bac4ad3 | text | \"OfficialLandKeep\"\n(Use read_slide to see element positions/sizes/colors)\n</deck outline>"
+        },
+        {
+          "name": "original-page-kept",
+          "status": "passed",
+          "expected": "original",
+          "actual": "<deck outline>\nThe presentation has 1 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user"
+        }
+      ]
+    },
+    {
+      "name": "five-family",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "markdown-open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "ca69cf9b9827ac9f7f3c65654919fe052f083868ed7d97e875be8e289ef0cd22",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/markdown-loop.md",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+            "error": null,
+            "occupied": true,
+            "owner": "ab62d8dc-7006-4db0-a88d-8323c003364d"
+          }
+        },
+        {
+          "name": "markdown-context",
+          "status": "passed",
+          "expected": "context",
+          "actual": "## Document state\n2 top-level blocks:\n\n0 | h1 | ORIGINAL\n1 | paragraph | original body"
+        },
+        {
+          "name": "markdown-edit-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "ops[0] insertContent: Inserted 1 block(s).\nBlock indexes may have changed; call get_document_context before further index-based edits.",
+              "mutated": true,
+              "summary": "插入内容",
+              "revision": "601f0969190865437ae10e1af37902c37863276ba66a29540d8207a5a2db97e9"
+            },
+            "revision": "601f0969190865437ae10e1af37902c37863276ba66a29540d8207a5a2db97e9"
+          }
+        },
+        {
+          "name": "markdown-no-autosave",
+          "status": "passed",
+          "expected": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+          "actual": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90"
+        },
+        {
+          "name": "markdown-save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/markdown-loop.md",
+            "name": "markdown-loop.md",
+            "mtimeMs": 1789240082389.552
+          }
+        },
+        {
+          "name": "markdown-reopen",
+          "status": "passed",
+          "expected": "FivemarkdownKeep",
+          "actual": {
+            "reopened": {
+              "status": 200,
+              "ok": true,
+              "docId": "ca69cf9b9827ac9f7f3c65654919fe052f083868ed7d97e875be8e289ef0cd22",
+              "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/markdown-loop.md",
+              "registered": true,
+              "readiness": "ready",
+              "revision": "1c79de5f22bee72b41d4cf39289b0e4ee0bf65918289edc2f4a5768acab7d351",
+              "error": null,
+              "occupied": true,
+              "owner": "ab62d8dc-7006-4db0-a88d-8323c003364d"
+            },
+            "reText": "## Document state\n3 top-level blocks:\n\n0 | h1 | ORIGINAL\n1 | paragraph | original body\n2 | paragraph | FivemarkdownKeep",
+            "afterSha": "1c79de5f22bee72b41d4cf39289b0e4ee0bf65918289edc2f4a5768acab7d351"
+          }
+        },
+        {
+          "name": "docs-open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "0effef912d5968bc8065cfd86521e835512d14945af7266b94b48d01e18f0e38",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/docs-loop.docx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3",
+            "error": null,
+            "occupied": true,
+            "owner": "d06ac0af-f789-4f0c-841c-b01621b4b584"
+          }
+        },
+        {
+          "name": "docs-context",
+          "status": "passed",
+          "expected": "context",
+          "actual": "Document block list:\nThe document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text stats: words 2, characters (no spaces) 47"
+        },
+        {
+          "name": "docs-edit-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Inserted 1 block(s) after block -1. Subsequent block indexes have shifted; use get_document_context if needed.",
+              "mutated": true,
+              "summary": "插入 1 个块"
+            },
+            "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3"
+          }
+        },
+        {
+          "name": "docs-no-autosave",
+          "status": "passed",
+          "expected": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3",
+          "actual": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3"
+        },
+        {
+          "name": "docs-save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/docs-loop.docx",
+            "name": "docs-loop.docx",
+            "mtimeMs": 1789240083486.9587
+          }
+        },
+        {
+          "name": "docs-reopen",
+          "status": "passed",
+          "expected": "FivedocsKeep",
+          "actual": {
+            "reopened": {
+              "status": 200,
+              "ok": true,
+              "docId": "0effef912d5968bc8065cfd86521e835512d14945af7266b94b48d01e18f0e38",
+              "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/docs-loop.docx",
+              "registered": true,
+              "readiness": "ready",
+              "revision": "ce45a6b9d7217d703c5c380ba10f4660ddf8670178afe8e7e95e9969ed173e85",
+              "error": null,
+              "occupied": true,
+              "owner": "d06ac0af-f789-4f0c-841c-b01621b4b584"
+            },
+            "reText": "Document block list:\nThe document has 3 blocks, listed below (index|type|content preview):\n0|p|FivedocsKeep\n1|p|ContextBody OfficialCommentAnchor\n2|p|OfficialRevKeep\nFull-text stats: words 2, characters (no spaces) 59, characters (with spaces) 60\nHeaders & footers ({PAGE}/{NUMPAGES} are live page-nu",
+            "afterSha": "ce45a6b9d7217d703c5c380ba10f4660ddf8670178afe8e7e95e9969ed173e85"
+          }
+        },
+        {
+          "name": "sheets-open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "2a20ed3a77eb325d1447e21f8a85669d5ff04dde469d259fc901559260cd27ac",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/sheets-loop.xlsx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552",
+            "error": null,
+            "occupied": true,
+            "owner": "d9aa9886-eed5-43b2-b79c-b7aa388cb0a4"
+          }
+        },
+        {
+          "name": "sheets-context",
+          "status": "passed",
+          "expected": "context",
+          "actual": "Active sheet: Sheet1 (id=sheet-1, data extent about 1048576 rows × 16384 columns)\nMode: imported file in LARGE-FILE STREAMING MODE — the file is too big for a full load, so the grid materializes the v"
+        },
+        {
+          "name": "sheets-edit-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Auto-applied 1 change(s) (undo via the side panel [Undo] button or ⌘Z): A1: Old → FivesheetsKeep",
+              "mutated": true,
+              "summary": "write FivesheetsKeep"
+            },
+            "revision": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552"
+          }
+        },
+        {
+          "name": "sheets-no-autosave",
+          "status": "passed",
+          "expected": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552",
+          "actual": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552"
+        },
+        {
+          "name": "sheets-save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/sheets-loop.xlsx",
+            "name": "sheets-loop.xlsx",
+            "mtimeMs": 1789240086975.4626
+          }
+        },
+        {
+          "name": "sheets-reopen",
+          "status": "passed",
+          "expected": "FivesheetsKeep",
+          "actual": {
+            "reopened": {
+              "status": 200,
+              "ok": true,
+              "docId": "2a20ed3a77eb325d1447e21f8a85669d5ff04dde469d259fc901559260cd27ac",
+              "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/sheets-loop.xlsx",
+              "registered": true,
+              "readiness": "ready",
+              "revision": "cc23922a6819410de94f6cc5c58fd2cb51e7552cff772ef3a2fa6a4e85aaf001",
+              "error": null,
+              "occupied": true,
+              "owner": "d9aa9886-eed5-43b2-b79c-b7aa388cb0a4"
+            },
+            "reText": "Active sheet: Sheet1 (id=sheet-1, data extent about 100 rows × 26 columns)\nMode: imported real xlsx file (some regions may still be streaming in)\nActive sheet data area: A1:Z100 (answer data-size questions directly from this — do not tally block by block with read_range)\nCurrent selection: A1\nCurren",
+            "afterSha": "cc23922a6819410de94f6cc5c58fd2cb51e7552cff772ef3a2fa6a4e85aaf001"
+          }
+        },
+        {
+          "name": "slides-open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "1797677e1bf5530962ff35e47a6adaa069cb75800c4b6673663fc832c5e3f582",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/slides-loop.pptx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+            "error": null,
+            "occupied": true,
+            "owner": "eb011a47-6d6f-4cb9-a7aa-f2dd8f7f2312"
+          }
+        },
+        {
+          "name": "slides-context",
+          "status": "passed",
+          "expected": "context",
+          "actual": "<deck outline>\nThe presentation has 1 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user"
+        },
+        {
+          "name": "slides-edit-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Applied 1 op(s): setText @0/e_2.",
+              "mutated": true,
+              "summary": "修改文本"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "slides-no-autosave",
+          "status": "passed",
+          "expected": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+          "actual": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+        },
+        {
+          "name": "slides-save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/slides-loop.pptx",
+            "name": "slides-loop.pptx",
+            "mtimeMs": 1789240088839.6072
+          }
+        },
+        {
+          "name": "slides-reopen",
+          "status": "passed",
+          "expected": "FiveslidesKeep",
+          "actual": {
+            "reopened": {
+              "status": 200,
+              "ok": true,
+              "docId": "1797677e1bf5530962ff35e47a6adaa069cb75800c4b6673663fc832c5e3f582",
+              "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/slides-loop.pptx",
+              "registered": true,
+              "readiness": "ready",
+              "revision": "d3e067a4cfa060f0f46e888ebd40cd8e8402390bcd73a9e142ae12ad2dbe48fe",
+              "error": null,
+              "occupied": true,
+              "owner": "eb011a47-6d6f-4cb9-a7aa-f2dd8f7f2312"
+            },
+            "reText": "<deck outline>\nThe presentation has 1 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage 1 (slideIndex=0):\n  - e_a8e54965 | shape | \"FiveslidesKeep\"",
+            "afterSha": "d3e067a4cfa060f0f46e888ebd40cd8e8402390bcd73a9e142ae12ad2dbe48fe"
+          }
+        },
+        {
+          "name": "pdf-open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "9e36fd2dbe8618b2feee3c5d5290e25ee0bc10e8c090f6d5b09fc4bc5b708f5e",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/pdf-loop.pdf",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "f4f131f993ddaae8bbb518e0866440c66315103ae3a9dfcf930831ebcc9d7b48",
+            "error": null,
+            "occupied": true,
+            "owner": "d292efcd-f9be-440d-a1a2-50862d7e985a"
+          }
+        },
+        {
+          "name": "pdf-context",
+          "status": "passed",
+          "expected": "context",
+          "actual": "Current document: \"pdf-loop.pdf\", 1 pages; the user is viewing page 1."
+        },
+        {
+          "name": "pdf-save-or-context",
+          "status": "passed",
+          "expected": "pdf",
+          "actual": {
+            "saved": {
+              "status": 200,
+              "ok": true,
+              "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/pdf-loop.pdf",
+              "name": "pdf-loop.pdf",
+              "mtimeMs": 1789240089841.0002
+            },
+            "reopened": {
+              "status": 200,
+              "ok": true,
+              "docId": "9e36fd2dbe8618b2feee3c5d5290e25ee0bc10e8c090f6d5b09fc4bc5b708f5e",
+              "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/pdf-loop.pdf",
+              "registered": true,
+              "readiness": "ready",
+              "revision": "04dfe01bca7d8a967a64cb19290ba5471570726ee5e8116a8b7675d5a9686b20",
+              "error": null,
+              "occupied": true,
+              "owner": "d292efcd-f9be-440d-a1a2-50862d7e985a"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

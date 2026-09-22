@@ -4,10 +4,10 @@
   "uf": "UF-004",
   "branch": "sdk-cli",
   "status": "passed",
-  "run_id": "wre-sdk-cli-2026-09-13T11:51:19.095Z",
+  "run_id": "wre-sdk-cli-2026-09-13T12:05:29.642Z",
   "source_revisions": {
-    "plugin": "b69e482ed4f7f665c63ef3d4dcb36eeac493dc5d",
-    "engine": "0d5e3a545e01ec574b4e54a5803b517bb2984a75",
+    "plugin": "b30e51cbc9816ed8956bb19fe618f24af805c1a3",
+    "engine": "7bde3a4b6ad87c9eba1b72ffd7cfe01987715add",
     "engine_root": "/private/tmp/genoffice-official-sync-engine"
   },
   "opened": {
@@ -21,7 +21,7 @@
     "revision": "024b825fceda1923face1f575cd2a72c620a1a32ba4f6c187504f96c65e8ac10",
     "error": null,
     "occupied": true,
-    "owner": "86df395f-9433-487e-a046-81a2b8915b25",
+    "owner": "8e13595c-44e3-4417-ba0b-4d0d6dabf8db",
     "status": 200,
     "code": 0
   },
@@ -30,7 +30,7 @@
     "command": "save",
     "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/evidence/phase-0/work-sdk-cli/md-small.md",
     "app": "markdown",
-    "mtimeMs": 1789300276735.7878,
+    "mtimeMs": 1789301126396.7825,
     "code": 0
   },
   "cancelled": {
@@ -67,7 +67,7 @@
             "revision": "024b825fceda1923face1f575cd2a72c620a1a32ba4f6c187504f96c65e8ac10",
             "error": null,
             "occupied": true,
-            "owner": "86df395f-9433-487e-a046-81a2b8915b25",
+            "owner": "8e13595c-44e3-4417-ba0b-4d0d6dabf8db",
             "status": 200,
             "code": 0
           }
@@ -109,7 +109,7 @@
             "command": "save",
             "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/evidence/phase-0/work-sdk-cli/md-small.md",
             "app": "markdown",
-            "mtimeMs": 1789300276735.7878,
+            "mtimeMs": 1789301126396.7825,
             "code": 0
           }
         },

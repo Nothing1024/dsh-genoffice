@@ -1,0 +1,61 @@
+# Master Task 1 — 执行范围与六包前置基线
+time: 2026-09-12T16:05:53Z
+cwd: /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin
+mode: prd-workflow execute via docs/genoffice-web-roadmap/handoff.md
+
+## 环境
+node: /Users/nothing/.nvm/versions/node/v22.23.2/bin/node (v22.23.2)
+npm: /Users/nothing/.nvm/versions/node/v22.23.2/bin/npm (10.9.8)
+python3: /usr/local/bin/python3 (Python 3.14.7)
+playwright chromium: /Users/nothing/Library/Caches/ms-playwright/chromium-1234/chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing
+skill: /Users/nothing/.agents/skills/prd-workflow
+独立工作区: 维持现有并列 plugin/ + engine/，不另开 worktree，不停止用户进程。
+
+## 两仓版本
+plugin HEAD: 5d5ee6d18fa87c40d587a2cc5dd429821946f90b
+engine HEAD: 247e3f5c488afb25915e9ee97fe0fd22e27648da
+engine status: 干净
+plugin status: 用户既有 Sidebar 迁移与构建产物仍 dirty（INV-001 保护，不覆盖、不回滚、不提交用户改动）
+
+## 用户未提交保护哈希（与 generation baseline 一致）
+packages/tab-genoffice/src/standard/sidebar.ts sha256=94b9f036c1a3feec053e4f6d7d51cce2df265eaf8fa51e1333bb7c35653bdd18 unchanged
+packages/tab-genoffice/src/tabs/file-address.ts sha256=7f30f4889ae6aa6915e011ae6e8d0be769a64962d870b731312db66d34ced7b6 unchanged
+
+## 锚点校准（行号仅 hint）
+README.md 两仓一产品 L7（spec L9，未漂移到符号）
+scripts/dev.mjs smoke L115（spec hint L127 → 漂移记录）
+packages/tab-genoffice/src/host/tools.ts createControlTools L455
+packages/tab-genoffice/src/standard/client.ts mountSidebar L65
+docs/genoffice-web-roadmap/master.py class Master L123（spec hint L127 → 漂移记录）
+../engine/web/server.mjs handleApi L540
+../engine/web/write-atomic.mjs writeFileAtomic L47
+../engine/apps/markdown/src/renderer/App.tsx initControlMode L192
+../engine/apps/markdown/src/renderer/web-bridge.ts bytesFromRemote L306
+../engine/apps/markdown/src/renderer/control.ts initControlMode L85
+
+## 六包 board（全部 exit 0，done=0）
+genoffice-web-roadmap ready=Task 1
+control-session-safety ready=Task 1
+plugin-tool-alignment ready=Task 1
+official-upstream-sync ready=Task 1
+web-feature-completion ready=Task 1
+web-runtime-efficiency ready=Task 1
+
+## master CLI
+python3 master.py validate → passed=true packages=6 tasks=79 errors=[]
+python3 master.py status --json → 母包/五子包 completed=0
+python3 master.py next --json → execute_task genoffice-web-roadmap Task 1（开工时）
+
+## 包写入边界
+control-session-safety: engine control/session/write-atomic + 五族 control adapter + 插件 tools.ts/control-mode.tsx 的 readiness/revision 接入
+plugin-tool-alignment: 同一 host/tools.ts 的 schema/规划器重放，必须等状态安全 gate
+official-upstream-sync: 隔离 engine 合并，保留前两包修复
+web-feature-completion: 官方同步后的完整 Web 路径
+web-runtime-efficiency: 前四包完成后的测量与优化
+master Task 7: 五包 driver 就绪后才创建 scripts/e2e-genoffice-joint.mjs（本任务未创建）
+
+## 联合回放需求登记
+UF-002 联合矩阵延后到母 Task 7；本任务只登记需求，不引用尚不存在的 driver。
+
+## 结论
+六包结构完整，下一真实依赖为 control-session-safety Task 1。基线记录完成。

@@ -1,13 +1,15 @@
 /**
  * Click-preview coexistence (BR-007 / ASM-001): claim docx/xlsx/pptx;
- * md/pdf stay on host viewers. Degrade is manual.
+ * md/pdf/html stay on host viewers. Degrade is manual.
  *
- * Sidebar 0.13 dropped builtin office viewers. Prefer those ids if another
- * plugin re-registered them, then any non-own ext match, then
- * binary-download — never this plugin's own viewer (that would recurse).
+ * Official right Sidebar has no FileViewer registry. This module still
+ * names claimed office extensions; md/pdf/html stay on host document preview.
  */
 export declare const CLAIMED_EXTS: readonly ["docx", "xlsx", "pptx"];
 export type ClaimedExt = (typeof CLAIMED_EXTS)[number];
+/** Explicit GenOffice control-open family. Default click still uses CLAIMED_EXTS. */
+export declare const CONTROL_EXTS: readonly ["docx", "xlsx", "pptx", "md", "pdf", "html"];
+export type ControlExt = (typeof CONTROL_EXTS)[number];
 /** `manual` = button to the builtin; `auto` = render builtin with a strip. */
 export type DegradeMode = 'manual' | 'auto';
 export declare const DEGRADE_MODE: DegradeMode;
@@ -31,4 +33,6 @@ export declare function isOwnViewerId(id: string): boolean;
  */
 export declare function pickDegradeViewer<T extends DegradeViewerCandidate>(viewers: readonly T[], ext: string, skipId?: string, enabled?: (id: string) => boolean): T | undefined;
 export declare function isClaimedExt(ext: string): ext is ClaimedExt;
+/** Control-open family; .htm shares the HTML editor. */
+export declare function isControlExt(ext: string): boolean;
 //# sourceMappingURL=coexist.d.ts.map

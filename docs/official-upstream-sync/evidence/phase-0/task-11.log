@@ -1,0 +1,27 @@
+official-upstream-sync Task 11
+date: 2026-09-12T19:28:00Z
+cwd_engine: /tmp/genoffice-official-sync-engine
+cwd_plugin: /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin
+node: /usr/local/Cellar/node/26.8.2/bin/node v26.8.2
+isolated HEAD: 44b477d + sidecar test drain commit
+
+commands:
+  npm --prefix /tmp/genoffice-official-sync-engine run typecheck
+    ous-t11-typecheck2 exit 0 (after executeTool: Promise<ToolExecution>)
+  npm --prefix /tmp/genoffice-official-sync-engine run test
+    ous-t11-test first run: 1 failed xlsx-sidecar-cancel (PassThrough single-chunk read on Node 26)
+    ous-sidecar-retest2: 3 passed after draining all stdin chunks
+    ous-t11-test2 exit 0
+  npm --prefix /tmp/genoffice-official-sync-engine run web:build --workspaces --if-present
+    ous-t11-webbuild exit 0
+  plugin npm run typecheck  ous-t11-plugin-tsc exit 0
+  plugin npm test           ous-t11-plugin-test exit 0
+  plugin npm run build      ous-t11-plugin-build exit 0
+  plugin npm run standard:check  ous-t11-plugin-std exit 0
+  python3 validate_package.py docs/official-upstream-sync --repo .
+    (re-run after marking Task 10/11 complete)
+
+ancestry:
+  official de139a061537bea40f0cc81ef8f09a95f77ac52a is ancestor
+  fork 247e3f5c488afb25915e9ee97fe0fd22e27648da is ancestor
+  original engine checkout still 247e3f5, not written

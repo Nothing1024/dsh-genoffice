@@ -1,0 +1,16 @@
+case=save-snapshot
+ok=true
+focus=save-ack-keeps-newer-dirty
+[
+  {
+    "name": "save-ack-keeps-newer-dirty",
+    "status": "passed",
+    "expected": "AFTER visible + dirty",
+    "actual": {
+      "dirty": [
+        "未保存"
+      ],
+      "view": "AFTER\n\nBEFORE\n\nS\n\n\n"
+    }
+  }
+]

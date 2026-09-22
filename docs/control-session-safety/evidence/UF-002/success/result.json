@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "package": "control-session-safety",
+  "uf": "UF-002",
+  "branch": "success",
+  "run_id": "css-2026-09-12T16-34-21-249Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "247e3f5c488afb25915e9ee97fe0fd22e27648da"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "revision",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "context-has-revision",
+          "status": "passed",
+          "expected": "revision",
+          "actual": {
+            "ok": true,
+            "context": "## Document state\n2 top-level blocks:\n\n0 | h1 | R\n1 | paragraph | body",
+            "revision": "2278ccb8e0aac77bdc5be14d402526ee4f59b1a37df0a02c38ce434973c1bd49"
+          }
+        },
+        {
+          "name": "stale-rejected",
+          "status": "passed",
+          "expected": "conflict + no STALE",
+          "actual": {
+            "stale": {
+              "ok": false,
+              "error": "conflict",
+              "revision": "ad1590de81c32644e12cd8f9c678dc81a7d4994c9b72a2b81dbb0a6bcc788c14"
+            },
+            "mid": "B_INSERT\n\nR\n\nbody"
+          }
+        },
+        {
+          "name": "reread-succeeds",
+          "status": "passed",
+          "expected": "ok",
+          "actual": {
+            "ok": true,
+            "execution": {
+              "output": "Inserted 1 block(s). Block indexes may have changed; call get_document_context before further index-based edits.",
+              "mutated": true,
+              "summary": "已插入 1 个块",
+              "revision": "641e01a9f86618289bd903b4bf5076b9cd2488d407ef268704c22d26b348821e"
+            },
+            "revision": "641e01a9f86618289bd903b4bf5076b9cd2488d407ef268704c22d26b348821e"
+          }
+        }
+      ]
+    }
+  ]
+}

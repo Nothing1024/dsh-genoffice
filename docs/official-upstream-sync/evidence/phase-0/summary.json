@@ -1,0 +1,108 @@
+{
+  "run_id": "ous-2026-09-12T17-39-16-358Z",
+  "port": 18787,
+  "base": "http://127.0.0.1:18787",
+  "engine": "/tmp/genoffice-official-sync-engine",
+  "node": "/Users/nothing/.nvm/versions/node/v22.23.2/bin/node",
+  "nodeVersion": "v22.23.2",
+  "results": [
+    {
+      "name": "markdown",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "b25e09eb2ebb94c370992fa4e01f6f695e26ff35340a9fe25189e5b81aec55da",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T17-39-16-358Z/markdown-loop.md",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+            "error": null,
+            "occupied": true,
+            "owner": "9946d24b-0c46-443c-9666-5b9f67b4e27f"
+          }
+        },
+        {
+          "name": "disk-unchanged-until-save",
+          "status": "passed",
+          "expected": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+          "actual": {
+            "midSha": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+            "afterEditSha": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90"
+          }
+        },
+        {
+          "name": "context-has-original",
+          "status": "passed",
+          "expected": "original",
+          "actual": "## Document state\n2 top-level blocks:\n\n0 | h1 | ORIGINAL\n1 | paragraph | original body"
+        },
+        {
+          "name": "edit-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "ops[0] insertContent: Inserted 1 block(s).\nBlock indexes may have changed; call get_document_context before further index-based edits.",
+              "mutated": true,
+              "summary": "插入内容",
+              "revision": "68e69ded756f92b31d21df90b73d71878cf5116e8183c6b918dfb068d0b1c2c2"
+            },
+            "revision": "68e69ded756f92b31d21df90b73d71878cf5116e8183c6b918dfb068d0b1c2c2"
+          }
+        },
+        {
+          "name": "save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T17-39-16-358Z/markdown-loop.md",
+            "name": "markdown-loop.md",
+            "mtimeMs": 1789234757358.5435
+          }
+        },
+        {
+          "name": "disk-changed-after-save",
+          "status": "passed",
+          "expected": "OfficialSyncKeep",
+          "actual": {
+            "savedSha": "cf14119e57d6f6b3c510e7e0c42b3cbcc99f296012882ceabba629c076d6b405",
+            "disk": "# ORIGINAL\n\noriginal body\n\nOfficialSyncKeep\n"
+          }
+        },
+        {
+          "name": "reopen-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "b25e09eb2ebb94c370992fa4e01f6f695e26ff35340a9fe25189e5b81aec55da",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T17-39-16-358Z/markdown-loop.md",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "cf14119e57d6f6b3c510e7e0c42b3cbcc99f296012882ceabba629c076d6b405",
+            "error": null,
+            "occupied": true,
+            "owner": "9946d24b-0c46-443c-9666-5b9f67b4e27f"
+          }
+        },
+        {
+          "name": "reopen-keeps-edit",
+          "status": "passed",
+          "expected": "OfficialSyncKeep",
+          "actual": "## Document state\n3 top-level blocks:\n\n0 | h1 | ORIGINAL\n1 | paragraph | original body\n2 | paragraph | OfficialSyncKeep"
+        }
+      ]
+    }
+  ]
+}

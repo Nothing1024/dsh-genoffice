@@ -1,0 +1,40 @@
+[sheets] Failed to load resource: the server responded with a status of 404 (Not Found)
+[sheets] Failed to load resource: the server responded with a status of 404 (Not Found)
+[sheets] Component UI_PLUGIN_SHEETS_MENU_ITEM_INPUT_COMPONENT already exists.
+[sheets] [control] stream open (docId=4fe4b840…)
+[sheets] [control] executor registered (/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-media/sheets-media.xlsx)
+[sheets] Failed to load resource: the server responded with a status of 404 (Not Found)
+[sheets] Failed to load resource: the server responded with a status of 404 (Not Found)
+[sheets] Component UI_PLUGIN_SHEETS_MENU_ITEM_INPUT_COMPONENT already exists.
+[sheets] [control] stream open (docId=4fe4b840…)
+[sheets] [control] executor registered (/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-media/sheets-media.xlsx)
+[sheets] workbook media unavailable (visual-1) Error: Unknown workbook session.
+    at Object.readWorkbookMedia (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:82:89110)
+    at http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:543:2805
+    at kI (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:94049)
+    at E2e (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:109512)
+    at j2 (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:109394)
+    at E2e (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:110287)
+    at j2 (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:109394)
+    at E2e (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:109492)
+    at j2 (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:109394)
+    at E2e (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:109492)
+[sheets] workbook media unavailable (visual-2) Error: Unknown workbook session.
+    at Object.readWorkbookMedia (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:82:89110)
+    at http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:543:2805
+    at kI (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:94049)
+    at E2e (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:109512)
+    at j2 (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:109394)
+    at E2e (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:110287)
+    at j2 (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:109394)
+    at E2e (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:109492)
+    at j2 (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:109394)
+    at E2e (http://127.0.0.1:18787/sheets/assets/index-B_-jqI81.js:89:109492)
+[sheets] Failed to load resource: the server responded with a status of 404 (Not Found)
+[sheets] Failed to load resource: the server responded with a status of 404 (Not Found)
+[sheets] Component UI_PLUGIN_SHEETS_MENU_ITEM_INPUT_COMPONENT already exists.
+[sheets] [control] stream open (docId=4fe4b840…)
+[sheets] [control] executor registered (/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-media/sheets-media.xlsx)
+badExt={"status":200,"ok":true,"execution":{"output":"Only PNG/JPEG/GIF images are supported (judged by extension; URLs are validated on download).","isError":true,"mutated":false,"summary":"生成变更预览"},"revision":"4f71ca4b29995afa3869ee5a4904a74b8edadf5c1f376e11780ba61db0ac6a6a"}
+badPng={"status":200,"ok":true,"execution":{"output":"Apply failed — the workbook is UNCHANGED: The image is not PNG/JPEG/GIF.. Do not tell the user the changes were made; adjust the operations and retry, or explain the failure.","isError":true,"mutated":false,"summary":"生成变更预览"},"revision":"4f71ca4b29995afa3869ee5a4904a74b8edadf5c1f376e11780ba61db0ac6a6a"}
+protect={"status":200,"ok":true,"execution":{"output":"该工作表有密码保护——不支持移除其保护。","isError":true,"mutated":false,"summary":"生成变更预览"},"revision":"4f71ca4b29995afa3869ee5a4904a74b8edadf5c1f376e11780ba61db0ac6a6a"}

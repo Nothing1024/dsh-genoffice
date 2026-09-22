@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "task": 6,
+  "branch": "phase-0-regression",
+  "status": "passed",
+  "date": "2026-09-12T20:17:06Z",
+  "cwd": "/tmp/genoffice-official-sync-engine",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "71e90fa00d5529ad42443b931191e623601b0f78",
+    "engine_root": "/tmp/genoffice-official-sync-engine"
+  },
+  "commands": [
+    {
+      "cmd": "npm run typecheck",
+      "exit": 0,
+      "log": "evidence/phase-0/task-6-typecheck.log"
+    },
+    {
+      "cmd": "npm run web:build --workspaces --if-present",
+      "exit": 0,
+      "apps": [
+        "docs",
+        "markdown",
+        "sheets",
+        "pdf",
+        "shell",
+        "slides"
+      ]
+    },
+    {
+      "cmd": "node web/e2e-web-features.mjs --case entries-sheets",
+      "exit": 0,
+      "result": {
+        "schema_version": 1,
+        "package": "web-feature-completion",
+        "uf": "EVD-007",
+        "branch": "entries-sheets",
+        "status": "passed",
+        "cases": [
+          {
+            "id": "inventory",
+            "status": "passed"
+          },
+          {
+            "id": "sheets-slice",
+            "status": "passed"
+          },
+          {
+            "id": "entry-matrix",
+            "status": "passed"
+          },
+          {
+            "id": "sheets-semantics",
+            "status": "passed"
+          },
+          {
+            "id": "sheets-media",
+            "status": "passed"
+          }
+        ],
+        "missing": []
+      }
+    }
+  ],
+  "uf_evidence": {
+    "UF-001": [
+      "evidence/UF-001/success/result.json",
+      "evidence/UF-001/failure-1/result.json",
+      "evidence/UF-001/failure-2/result.json"
+    ],
+    "UF-002": [
+      "evidence/UF-002/success/result.json",
+      "evidence/UF-002/failure-1/result.json",
+      "evidence/UF-002/failure-2/result.json"
+    ]
+  }
+}

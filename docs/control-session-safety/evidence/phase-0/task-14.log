@@ -1,0 +1,4 @@
+# control-session-safety Task 14
+node ../engine/web/e2e-control-session.mjs --all --out docs/control-session-safety/evidence
+exit 0; five-family cases + UF-001..004 matrix archived as non-empty result.json/console.log/network.json/screenshot.png
+See evidence/summary.json and evidence/UF-00{1-4}/

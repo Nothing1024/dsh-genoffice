@@ -18,7 +18,7 @@ export const ASSET_PREFIX = '/dsh-artifact/genoffice-asset'
 export const TOKEN_TTL_MS = 60_000
 export const MAX_ASSET_BYTES = 20 * 1024 * 1024
 
-const MIME: Record<string, string> = {
+export const IMAGE_MIME: Record<string, string> = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
@@ -49,7 +49,7 @@ export interface AssetStore {
   clear(): void
 }
 
-function assertSafeImagePath(absPath: string): string {
+export function assertSafeImagePath(absPath: string): string {
   if (!absPath.startsWith('/')) {
     throw new Error('imagePath 必须是本机绝对路径')
   }
@@ -60,10 +60,27 @@ function assertSafeImagePath(absPath: string): string {
     throw new Error('插图只接受本机路径，不接受公网 URL（BR-016）')
   }
   const ext = extname(absPath).toLowerCase()
-  if (MIME[ext] === undefined) {
+  if (IMAGE_MIME[ext] === undefined) {
     throw new Error('仅支持 png / jpeg / webp / gif')
   }
   return ext
+}
+
+async function assertImageFile(absPath: string): Promise<string> {
+  const ext = assertSafeImagePath(absPath)
+  const st = await stat(absPath)
+  if (!st.isFile()) throw new Error('imagePath 不是文件')
+  if (st.size > MAX_ASSET_BYTES) throw new Error('图片超过 20MB')
+  return ext
+}
+
+/** Read a local picture as a data URL the slides iframe can insert without fetching. */
+export async function readLocalImageDataUrl(absPath: string): Promise<string> {
+  const ext = await assertImageFile(absPath)
+  const mime = IMAGE_MIME[ext]
+  if (mime === undefined) throw new Error('仅支持 png / jpeg / webp / gif')
+  const bytes = await readFile(absPath)
+  return `data:${mime};base64,${bytes.toString('base64')}`
 }
 
 export function createAssetStore(opts?: { ttlMs?: number; now?: () => number }): AssetStore {
@@ -73,11 +90,7 @@ export function createAssetStore(opts?: { ttlMs?: number; now?: () => number }):
 
   return {
     async publish(absPath, bind) {
-      const ext = assertSafeImagePath(absPath)
-      const st = await stat(absPath)
-      if (!st.isFile()) throw new Error('imagePath 不是文件')
-      if (st.size > MAX_ASSET_BYTES) throw new Error('图片超过 20MB')
-      void ext
+      await assertImageFile(absPath)
       const token = randomUUID()
       tokens.set(token, { absPath, expires: now() + ttl })
       const host = bind.host === '0.0.0.0' ? '127.0.0.1' : bind.host
@@ -136,7 +149,7 @@ export async function serveAsset(
     return
   }
   const ext = extname(row.absPath).toLowerCase()
-  const type = MIME[ext]
+  const type = IMAGE_MIME[ext]
   if (type === undefined) {
     res.writeHead(404).end()
     return

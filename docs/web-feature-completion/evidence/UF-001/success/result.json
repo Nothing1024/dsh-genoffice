@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-001",
+  "branch": "success",
+  "run_id": "d5d29dc4-7895-4a8d-aa07-bd88b93e2ba1",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "capability-coverage",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "inventory-owned",
+          "status": "passed",
+          "expected": 0,
+          "actual": []
+        },
+        {
+          "name": "html-inventory-available",
+          "status": "passed",
+          "expected": "available",
+          "actual": [
+            "web-build-route:available",
+            "edit-save:available",
+            "html-to-docx:available"
+          ]
+        },
+        {
+          "name": "plugin-row-available",
+          "status": "passed",
+          "expected": "available",
+          "actual": [
+            "available"
+          ]
+        },
+        {
+          "name": "capability-has-html",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "hasApply": true
+          }
+        },
+        {
+          "name": "table-has-html",
+          "status": "passed",
+          "expected": true,
+          "actual": null
+        },
+        {
+          "name": "claimed-keeps-preview",
+          "status": "passed",
+          "expected": true,
+          "actual": null
+        },
+        {
+          "name": "previewable-html",
+          "status": "passed",
+          "expected": true,
+          "actual": null
+        },
+        {
+          "name": "html-open-and-services",
+          "status": "passed",
+          "expected": true,
+          "actual": null
+        },
+        {
+          "name": "html-route",
+          "status": "passed",
+          "expected": "200 text/html",
+          "actual": {
+            "status": 200,
+            "htmlCt": "text/html; charset=utf-8"
+          }
+        },
+        {
+          "name": "service-ready-positive",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "available": true,
+            "executor": "html2docx-cli"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "run_id": "css-2026-09-12T17-19-03-270Z",
+  "port": 18787,
+  "base": "http://127.0.0.1:18787",
+  "node": "/Users/nothing/.nvm/versions/node/v22.23.2/bin/node",
+  "nodeVersion": "v22.23.2",
+  "fixtures": [
+    {
+      "app": "markdown",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T17-19-03-270Z/fixtures/session.md",
+      "sha256": "802384604d78123a39689e8c8171d80edc2c839a3e39d8d66a03ec5404616f90",
+      "bytes": 26
+    },
+    {
+      "app": "docs",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T17-19-03-270Z/fixtures/session.docx",
+      "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/fixtures/generated/simple.docx",
+      "sha256": "03da2cafb3d9ce4022dbce432ca61a807114989f6cb31f9f8a60e821075dd0b5",
+      "bytes": 2166
+    },
+    {
+      "app": "sheets",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T17-19-03-270Z/fixtures/session.xlsx",
+      "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/apps/sheets/fixtures/generated/compatibility-basic.xlsx",
+      "sha256": "a03352ad8570ee0a565ab2ca32bb0e424f5b526ae24694217315db8f6765fa02",
+      "bytes": 2769
+    },
+    {
+      "app": "slides",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T17-19-03-270Z/fixtures/session.pptx",
+      "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/fixtures/generated/sample.pptx",
+      "sha256": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+      "bytes": 5741
+    },
+    {
+      "app": "pdf",
+      "path": "/tmp/genoffice-control-session/css-2026-09-12T17-19-03-270Z/fixtures/session.pdf",
+      "source": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/engine/fixtures/generated/simple.pdf",
+      "sha256": "f4f131f993ddaae8bbb518e0866440c66315103ae3a9dfcf930831ebcc9d7b48",
+      "bytes": 592
+    }
+  ],
+  "results": [
+    {
+      "name": "plugin-state",
+      "ok": true,
+      "assertions": [
+        {
+          "name": "plugin-wait-matches-tools.ts",
+          "status": "passed",
+          "expected": "readiness=ready",
+          "actual": {
+            "ok": true,
+            "docId": "68d8761dcb38b8d4cded5d216b2b9e8e48bdd5c0487d8ff71c4f0a9ffd567df4",
+            "path": "/tmp/genoffice-control-session/css-2026-09-12T17-19-03-270Z/plugin.md",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "26b7f45e9690cb5dbc8f76d5642cf464f31286048ddd1087eab773d4d13394fa",
+            "error": null,
+            "occupied": true,
+            "owner": "469fb74a-fed0-4c04-808d-b863b4e2fd71"
+          }
+        },
+        {
+          "name": "plugin-protocol-context",
+          "status": "passed",
+          "expected": "ok",
+          "actual": {
+            "ok": true,
+            "context": "## Document state\n2 top-level blocks:\n\n0 | h1 | PLUGIN\n1 | paragraph | ",
+            "revision": "26b7f45e9690cb5dbc8f76d5642cf464f31286048ddd1087eab773d4d13394fa"
+          }
+        },
+        {
+          "name": "plugin-protocol-save",
+          "status": "passed",
+          "expected": "export path exercised",
+          "actual": {
+            "ok": true,
+            "path": "/tmp/genoffice-control-session/css-2026-09-12T17-19-03-270Z/plugin.md",
+            "name": "plugin.md",
+            "mtimeMs": 1789233544296.9673
+          }
+        }
+      ],
+      "note": "RELAY_BASE in packages/tab-genoffice/src/host/tools.ts is hardcoded http://localhost:8787; this driver uses the isolated port with the same HTTP protocol as waitUntilRegistered/callRelay/saveViaRelay and ControlModeViewer.saveToDisk."
+    }
+  ]
+}

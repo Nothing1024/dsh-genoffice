@@ -10,7 +10,7 @@
     "mode": "compatible",
     "family": null,
     "state": "compatible",
-    "ready": false,
+    "ready": true,
     "families": {
       "docs": {
         "app": "docs",
@@ -54,7 +54,7 @@
         "aliases": [
           "pdf"
         ],
-        "ready": false,
+        "ready": true,
         "open": "pdf_open"
       },
       "html": {
@@ -63,7 +63,7 @@
           "html",
           "htm"
         ],
-        "ready": false,
+        "ready": true,
         "open": "html_open"
       }
     },
@@ -3054,7 +3054,7 @@
       "url": "/api/discovery"
     },
     "status": 200,
-    "_bytes": 50007
+    "_bytes": 50004
   },
   "familyXlsx": {
     "ok": true,

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "package": "control-session-safety",
+  "uf": "UF-004",
+  "branch": "failure-1",
+  "run_id": "css-2026-09-12T18-56-21-190Z",
+  "source_revisions": {
+    "plugin": "unknown",
+    "engine": "731237b063dd6f4375591abd2128ae4b19fa15ab"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "owner",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "first-owner-stable",
+          "status": "passed",
+          "expected": "no flip-flop",
+          "actual": {
+            "counts": [
+              1,
+              0
+            ],
+            "open": {
+              "ok": true,
+              "docId": "e35d5cd5104f4fd93465006d8ac35a7a3147275a0f2cb7cc1bdaff23bf3c611a",
+              "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/owner.md",
+              "registered": true,
+              "readiness": "ready",
+              "revision": "4a37ab729fc5153fc91008cdf08f22335ec23718aa84a6ddb596feb4ad1022cf",
+              "error": null,
+              "occupied": true,
+              "owner": "5675f679-24ee-4e02-a29e-89ed74e8396c"
+            }
+          }
+        },
+        {
+          "name": "second-window-occupied",
+          "status": "passed",
+          "expected": "occupied",
+          "actual": {
+            "ok": true,
+            "docId": "e35d5cd5104f4fd93465006d8ac35a7a3147275a0f2cb7cc1bdaff23bf3c611a",
+            "path": "/tmp/genoffice-control-session/css-2026-09-12T18-56-21-190Z/owner.md",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "4a37ab729fc5153fc91008cdf08f22335ec23718aa84a6ddb596feb4ad1022cf",
+            "error": null,
+            "occupied": true,
+            "owner": "5675f679-24ee-4e02-a29e-89ed74e8396c"
+          }
+        }
+      ]
+    }
+  ]
+}

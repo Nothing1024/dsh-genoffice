@@ -1,0 +1,4 @@
+# Task 13 plugin-state e2e exit 0
+waitUntilRegistered requires readiness=ready; callRelay returns revision; control-mode no longer clears dirty on mtimeMs.
+INV-001 sidebar/file-address untouched.
+See task-13/summary.json

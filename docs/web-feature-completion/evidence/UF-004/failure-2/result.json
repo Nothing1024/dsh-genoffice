@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-004",
+  "branch": "failure-2",
+  "run_id": "eca5be15-d3d9-4055-8b98-59185189a883",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "slides-presentation-permission",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "bad-master-rejected",
+          "status": "passed",
+          "expected": null,
+          "actual": null
+        },
+        {
+          "name": "presenter-swap-denied",
+          "status": "passed",
+          "expected": false,
+          "actual": false
+        }
+      ]
+    }
+  ]
+}

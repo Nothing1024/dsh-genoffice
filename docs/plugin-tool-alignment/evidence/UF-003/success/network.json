@@ -1,0 +1,72 @@
+{
+  "events": [
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Inserted a 2×2 table on page 1, element id=tbl_2, filled 4 cell(s) with text.",
+        "mutated": true,
+        "summary": "第 1 页插入表格"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Inserted a bar chart on page 1, element id=chart_9.\nNOTE: dataSource is \"sample\" — you MUST tell the user these figures are illustrative placeholders, not real data, and offer to research real numbers with web_search.",
+        "mutated": true,
+        "summary": "第 1 页插入图表"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Replaced the text of cell (0,0) in table tbl_2 on page 1.",
+        "mutated": true,
+        "summary": "第 1 页改表格单元格"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Applied insert-row (index=1) to table tbl_2 on page 1. The table id may have been updated to tbl_4.",
+        "mutated": true,
+        "summary": "第 1 页表格增行"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Updated the style of table tbl_4 on page 1.",
+        "mutated": true,
+        "summary": "第 1 页表格样式更新"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Updated chart chart_9 on page 1.\nNOTE: dataSource is \"sample\" — you MUST tell the user these figures are illustrative placeholders, not real data, and offer to research real numbers with web_search.",
+        "mutated": true,
+        "summary": "第 1 页图表编辑"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "path": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T17-17-59-551Z/schema.pptx",
+      "name": "schema.pptx",
+      "mtimeMs": 1789233483118.0264
+    }
+  ],
+  "count": 7
+}

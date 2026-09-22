@@ -13,8 +13,13 @@ window.__ModuleLoader__.load({
 		* - 未到位 → ctx.inject 等服务出现，出现后在子 ctx 的 effect 里挂载；
 		* - 部署里永远不出现 → mount 一次都不跑（声明过的降级路径）。
 		* acquire 返回的取消函数可提前卸载；与 fiber 卸载互为幂等。
+		*
+		* `lookup` may receive the injected child so a bag of services can be
+		* assembled without reading undeclared properties on the parent fiber.
 		*/
-		function acquireFromCordis(ctx, lookup, serviceName, label = `dsh-tab-genoffice: acquire ${serviceName}`) {
+		function acquireFromCordis(ctx, lookup, serviceName, label) {
+			const names = typeof serviceName === "string" ? [serviceName] : [...serviceName];
+			const resolvedLabel = label ?? `dsh-tab-genoffice: acquire ${names.join(",")}`;
 			return (mount) => {
 				let cancelled = false;
 				let unmount;
@@ -30,11 +35,12 @@ window.__ModuleLoader__.load({
 					};
 				};
 				const existing = lookup();
-				if (existing !== void 0) ctx.effect(() => runMount(existing), label);
-				else ctx.inject([serviceName], (child) => {
-					const service = child[serviceName];
+				if (existing !== void 0) ctx.effect(() => runMount(existing), resolvedLabel);
+				else ctx.inject(names, (child) => {
+					const service = lookup(child) ?? (names.length === 1 ? child[names[0]] : void 0);
+					if (service === void 0) return;
 					const effect = child.effect;
-					if (typeof effect === "function") effect.call(child, () => runMount(service), label);
+					if (typeof effect === "function") effect.call(child, () => runMount(service), resolvedLabel);
 					else runMount(service);
 				});
 				return () => {
@@ -50,10 +56,10 @@ window.__ModuleLoader__.load({
 			apiVersion: "x-nothing1024.dsh.locale/v1alpha1",
 			kind: "Locale"
 		};
-		/** better-sidebar 页签与 FileViewer 槽位（client 半身 optional peer）。 */
+		/** 官方右侧 Sidebar（client 半身 optional；web-app 自带）。 */
 		const SIDEBAR_TAB = {
-			apiVersion: "x-nothing1024.better-sidebar/v1alpha1",
-			kind: "SidebarTab"
+			apiVersion: "x-nothing1024.dsh.sidebar-right/v1alpha1",
+			kind: "SidebarRight"
 		};
 		/** client facet 的声明镜像（RFC 0002 定案后进 manifest）。 */
 		const CLIENT_REQUIRED = [LOCALE];
@@ -166,14 +172,46 @@ window.__ModuleLoader__.load({
 		}
 		//#endregion
 		//#region src/standard/cordis-client-adapter.ts
+		const SIDEBAR_SERVICES = [
+			"sidebarRight",
+			"sidebarRightTabs",
+			"slots"
+		];
+		function peekNamed(ctx, name) {
+			let getter;
+			try {
+				const reflect = ctx.reflect;
+				if (typeof reflect?.get === "function") getter = reflect.get.bind(reflect);
+			} catch {
+				getter = void 0;
+			}
+			if (getter !== void 0) try {
+				return getter(name, false);
+			} catch {
+				return;
+			}
+			return Object.prototype.hasOwnProperty.call(ctx, name) ? ctx[name] : void 0;
+		}
+		function lookupOfficialSidebar(ctx) {
+			const sidebarRight = peekNamed(ctx, "sidebarRight");
+			const sidebarRightTabs = peekNamed(ctx, "sidebarRightTabs");
+			const slots = peekNamed(ctx, "slots");
+			if (sidebarRight === void 0 || sidebarRightTabs === void 0 || slots === void 0) return;
+			const sessionId = peekNamed(ctx, "sessionId");
+			return {
+				sidebarRight,
+				sidebarRightTabs,
+				slots,
+				...typeof sessionId === "string" ? { sessionId } : {}
+			};
+		}
 		function createClientActivation(ctx) {
 			const cordis = ctx;
 			const locale = {
 				bind: (ns) => ctx.locale.bind(ns),
 				register: (ns, dicts) => ctx.locale.register(ns, dicts)
 			};
-			/** betterSidebar 无进程内 lookup（client 运行时按 inject 供给），恒走延迟绑定。 */
-			const sidebar = { acquire: acquireFromCordis(cordis, () => void 0, "betterSidebar") };
+			const sidebar = { acquire: acquireFromCordis(cordis, (scope) => lookupOfficialSidebar(scope ?? ctx), SIDEBAR_SERVICES) };
 			return createActivation({
 				declared: [...CLIENT_REQUIRED, ...CLIENT_OPTIONAL],
 				contracts: /* @__PURE__ */ new Map([[coordKey(LOCALE), locale], [coordKey(SIDEBAR_TAB), sidebar]]),
@@ -197,7 +235,7 @@ window.__ModuleLoader__.load({
 			strokeLinecap: "round",
 			strokeLinejoin: "round"
 		};
-		/** GenOffice document glyph. `size` is accepted for the TabDescriptor icon callback. */
+		/** GenOffice document glyph. `size` is accepted for the guide-entry icon. */
 		function GenOfficeIcon(_props) {
 			return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("svg", {
 				...TAB_ICON_PROPS,
@@ -217,13 +255,16 @@ window.__ModuleLoader__.load({
 			md: "markdown",
 			xlsx: "sheets",
 			pptx: "slides",
-			pdf: "pdf"
+			pdf: "pdf",
+			html: "html",
+			htm: "html"
 		};
 		const RELAY_THROTTLE_MS = 1500;
 		let relayOk = null;
 		/** null = 未探测/relay 不可达；false = API 活着但静态根丢失（contracts/relay-api.md health.ready）。 */
 		let relayReady = null;
 		let lastProbeAt = 0;
+		let lastHealth = null;
 		let inFlight = null;
 		const listeners$1 = /* @__PURE__ */ new Set();
 		function getRelayOk() {
@@ -248,6 +289,13 @@ window.__ModuleLoader__.load({
 			lastProbeAt = Date.now();
 			emitRelay();
 		}
+		function getAppReady(app) {
+			if (lastHealth == null) return null;
+			if (!lastHealth.up) return false;
+			if (lastHealth.apps[app]) return lastHealth.apps[app].ready;
+			if (lastHealth.roots.length > 0) return lastHealth.roots.includes(app);
+			return lastHealth.ready;
+		}
 		function extOf(path) {
 			const slash = Math.max(path.lastIndexOf("/"), path.lastIndexOf("\\"));
 			const base = slash < 0 ? path : path.slice(slash + 1);
@@ -266,27 +314,54 @@ window.__ModuleLoader__.load({
 			const extra = nonce !== void 0 && nonce !== "" ? `&_r=${encodeURIComponent(nonce)}` : "";
 			return `${RELAY_BASE}/${app}/?${control ? "control=1&" : ""}open=${target}${extra}`;
 		}
+		function emptyHealth(up, ready) {
+			return {
+				up,
+				ready,
+				live: up,
+				suiteReady: ready,
+				roots: [],
+				apps: {}
+			};
+		}
+		function interpretHealth(data) {
+			const roots = Array.isArray(data.roots) ? data.roots.filter((row) => typeof row === "string") : [];
+			const apps = {};
+			if (data.apps && typeof data.apps === "object") for (const [name, value] of Object.entries(data.apps)) {
+				if (!value || typeof value !== "object") continue;
+				apps[name] = {
+					build: value.build === true,
+					ready: value.ready === true,
+					missing: Array.isArray(value.missing) ? value.missing.map(String) : []
+				};
+			}
+			const hasApps = Object.keys(apps).length > 0;
+			const staticOk = hasApps ? Object.values(apps).some((row) => row.build) : roots.length > 0 || data.ready !== false;
+			const claimed = Array.isArray(data.claimed) ? data.claimed.map(String) : Object.keys(apps);
+			const suiteReady = hasApps ? claimed.every((name) => apps[name]?.ready === true) : data.ready !== false;
+			return {
+				ready: staticOk,
+				live: data.live === true || data.live == null,
+				suiteReady,
+				roots,
+				apps
+			};
+		}
 		/** Raw health probe (no store). Old relays without `ready` count as ready. */
 		async function checkRelay(signal) {
 			try {
 				const resp = await fetch(`${RELAY_BASE}/api/health`, signal === void 0 ? void 0 : { signal });
-				if (!resp.ok) return {
-					up: false,
-					ready: false
-				};
-				let ready = true;
+				if (!resp.ok) return emptyHealth(false, false);
 				try {
-					ready = (await resp.json()).ready !== false;
-				} catch {}
-				return {
-					up: true,
-					ready
-				};
+					return {
+						up: true,
+						...interpretHealth(await resp.json())
+					};
+				} catch {
+					return emptyHealth(true, true);
+				}
 			} catch {
-				return {
-					up: false,
-					ready: false
-				};
+				return emptyHealth(false, false);
 			}
 		}
 		/** Shared probe with throttle. `force` bypasses throttle (「重新检查」). */
@@ -296,6 +371,7 @@ window.__ModuleLoader__.load({
 			if (!force && relayOk !== null && now - lastProbeAt < RELAY_THROTTLE_MS) return relayOk;
 			lastProbeAt = now;
 			inFlight = checkRelay(signal).then((h) => {
+				lastHealth = h;
 				relayOk = h.up;
 				relayReady = h.up ? h.ready : null;
 				emitRelay();
@@ -338,58 +414,189 @@ window.__ModuleLoader__.load({
 			} catch {}
 		}
 		//#endregion
+		//#region src/tabs/file-address.ts
+		/**
+		* Local copy of the official `dsh-resource://file/…` grammar.
+		*
+		* `@deepseek-ai/dsh-util-workspace-path` is not a frozen platform module, so
+		* the client bundle cannot import it at runtime. The encoding rules match
+		* 0.1.6-alpha.2 (`:` stays literal; session vs absolute scopes).
+		*/
+		const FILE_ADDRESS_PREFIX = "dsh-resource://file/";
+		function encodeSegment(segment) {
+			return encodeURIComponent(segment).replace(/%3A/gi, ":");
+		}
+		function encodePath(path) {
+			return path.split("/").map(encodeSegment).join("/");
+		}
+		function isDriveSegment(segment) {
+			return segment !== void 0 && /^[A-Za-z]:$/.test(segment);
+		}
+		/** `dsh-resource://file/session/<sessionId>/<path>`. */
+		function sessionFileAddress(sessionId, path) {
+			const normalized = path.replace(/\\/g, "/").replace(/^(?:\.\/)+/, "");
+			return `${FILE_ADDRESS_PREFIX}session/${encodeSegment(sessionId)}/${encodePath(normalized)}`;
+		}
+		/** `dsh-resource://file/absolute/<path>` (leading `/` dropped; UNC keeps one empty segment). */
+		function absoluteFileAddress(path) {
+			const normalized = path.replace(/\\/g, "/");
+			const unc = normalized.startsWith("//");
+			const absolute = normalized.replace(/^\/+/, "");
+			return `${FILE_ADDRESS_PREFIX}absolute/${unc ? "/" : ""}${encodePath(absolute)}`;
+		}
+		function parseFileAddress(address) {
+			try {
+				if (!address.startsWith(FILE_ADDRESS_PREFIX)) return void 0;
+				const end = address.search(/[?#]/);
+				const [scope, ...rest] = address.slice(20, end === -1 ? void 0 : end).split("/");
+				if (scope === "session") {
+					const [id, ...segments] = rest;
+					if (id === void 0 || id === "" || segments.length === 0) return void 0;
+					return {
+						scope,
+						sessionId: decodeURIComponent(id),
+						path: segments.map(decodeURIComponent).join("/")
+					};
+				}
+				if (scope === "absolute") {
+					const unc = rest[0] === "" && rest.length > 1;
+					const segments = (unc ? rest.slice(1) : rest).map(decodeURIComponent);
+					if (segments.length === 0 || segments[0] === "") return void 0;
+					if (unc) return {
+						scope,
+						path: `//${segments.join("/")}`
+					};
+					return {
+						scope,
+						path: isDriveSegment(segments[0]) ? segments.join("/") : `/${segments.join("/")}`
+					};
+				}
+				return;
+			} catch {
+				return;
+			}
+		}
+		function isWindowsStylePath(value) {
+			return /^[A-Za-z]:[/\\]/.test(value) || value.startsWith("\\\\");
+		}
+		function isAbsoluteWorkspacePath(path) {
+			return path.startsWith("/") || isWindowsStylePath(path);
+		}
+		/**
+		* Session-scoped when relative or under cwd; otherwise still session-scoped with
+		* the absolute path (matches official `fileAddressFor` — never uses the
+		* `absolute` scope from a session-bound opener).
+		*/
+		function fileAddressFor(sessionId, cwd, path) {
+			const normalized = path.replace(/\\/g, "/");
+			if (!isAbsoluteWorkspacePath(normalized)) return sessionFileAddress(sessionId, normalized);
+			const root = cwd === void 0 ? "" : cwd.replace(/\\/g, "/").replace(/\/+$/, "");
+			if (root !== "" && normalized === root) return sessionFileAddress(sessionId, "");
+			if (root !== "" && normalized.startsWith(`${root}/`)) return sessionFileAddress(sessionId, normalized.slice(root.length + 1));
+			return sessionFileAddress(sessionId, normalized);
+		}
+		//#endregion
+		//#region src/tabs/coexist.ts
+		/**
+		* Click-preview coexistence (BR-007 / ASM-001): claim docx/xlsx/pptx;
+		* md/pdf/html stay on host viewers. Degrade is manual.
+		*
+		* Official right Sidebar has no FileViewer registry. This module still
+		* names claimed office extensions; md/pdf/html stay on host document preview.
+		*/
+		const CLAIMED_EXTS = [
+			"docx",
+			"xlsx",
+			"pptx"
+		];
+		/** Explicit GenOffice control-open family. Default click still uses CLAIMED_EXTS. */
+		const CONTROL_EXTS = [
+			"docx",
+			"xlsx",
+			"pptx",
+			"md",
+			"pdf",
+			"html"
+		];
+		/** Control-open family; .htm shares the HTML editor. */
+		function isControlExt(ext) {
+			return ext === "htm" || CONTROL_EXTS.includes(ext);
+		}
+		//#endregion
 		//#region src/tabs/file-tab.ts
-		/** Directory/browser tab (one instance). */
-		const BROWSER_TAB_ID = "dsh-genoffice:tab";
-		/** Control-mode document tab (one instance per path). */
-		const FILE_TAB_ID = "dsh-genoffice:file";
+		/**
+		* Per-file sidebar tabs. The browser tab is a page kind; each open document
+		* is a resource tab claimed by `*.docx|xlsx|pptx` at the extension band.
+		*/
 		function fileNameOf(path) {
 			const slash = Math.max(path.lastIndexOf("/"), path.lastIndexOf("\\"));
 			return slash < 0 ? path : path.slice(slash + 1);
 		}
-		/** Seed for `betterSidebar.openTab` — path-derived id so files sit side by side. */
-		function fileTabSeed(path) {
-			const title = fileNameOf(path);
-			return {
-				type: FILE_TAB_ID,
-				path,
-				title,
-				id: `${FILE_TAB_ID}:${path}`
-			};
+		function isClaimedPath(path) {
+			return CLAIMED_EXTS.includes(extOf(path));
 		}
 		/**
-		* Turn a relay `/api/open/stream` `file` payload into an `openTab` request.
-		* A sessionId must ride with the seed: omitting it lands the tab in whatever
-		* session is active on THIS page, so a second DSH page would also open it.
+		* Turn a relay `/api/open/stream` `file` payload into an open request.
+		* A sessionId must ride with the path: omitting it lands the tab in whatever
+		* session is active on THIS page.
 		*/
 		function fileOpenFromEvent(data) {
 			const path = typeof data.path === "string" ? data.path : "";
 			if (path === "") return void 0;
 			const sessionId = typeof data.sessionId === "string" && data.sessionId !== "" ? data.sessionId : void 0;
-			return sessionId === void 0 ? { seed: fileTabSeed(path) } : {
-				seed: fileTabSeed(path),
-				scope: { sessionId }
+			return sessionId === void 0 ? { path } : {
+				path,
+				sessionId
 			};
 		}
 		/**
 		* Decide whether THIS DSH page should mount the control iframe.
 		*
-		* better-sidebar `openTab(seed, { sessionId })` against a session that is
-		* not active on this page writes the tab into that session's store and
-		* **skips panel expand**. A second page sharing origin then persists
-		* `panelOpen: false` over the viewing page, so the iframe never mounts
-		* and relay reports `executor not registered`.
+		* Official `sidebarRight.openResource` writes into the mounted session's
+		* surface. A second page sharing origin must not open a tab for a session it
+		* is not viewing — that would skip expand on the origin page.
 		*
-		* Only the page whose active session matches opens, and it opens without
-		* scope so the active-session path expands the panel.
+		* A page whose sidebar has no mounted session id (the usual single-page
+		* case) still opens the file. Dropping that event used to leave the tab
+		* unmounted, so `*_open` timed out as `executor not registered` even though
+		* the relay had subscribers. A page that IS viewing a different session
+		* still skips, so two open chats do not steal each other's file.
 		*/
 		function fileOpenOnThisPage(data, activeSessionId) {
 			const next = fileOpenFromEvent(data);
 			if (next === void 0) return void 0;
-			if (next.scope === void 0) return next;
-			if (activeSessionId === void 0 || activeSessionId !== next.scope.sessionId) return void 0;
-			return { seed: next.seed };
+			if (next.sessionId === void 0) return next;
+			if (activeSessionId !== void 0 && activeSessionId !== next.sessionId) return void 0;
+			return {
+				path: next.path,
+				sessionId: next.sessionId
+			};
 		}
+		/**
+		* Address for the page that accepted the open.
+		*
+		* Use this page's mounted session when it has one. Otherwise use the absolute
+		* scope. Never stamp the agent id or `'unknown'` onto the address: the file
+		* tab would then look up a session that is not on screen, and the iframe
+		* would not mount.
+		*/
+		function controlOpenAddress(path, pageSessionId) {
+			if (pageSessionId !== void 0 && pageSessionId !== "") return fileAddressFor(pageSessionId, void 0, path);
+			return absoluteFileAddress(path);
+		}
+		//#endregion
+		//#region src/standard/sidebar.ts
+		/**
+		* Official right-Sidebar service face used by this plugin.
+		*
+		* Types are local so the standard layer stays free of `@deepseek-ai/*` imports
+		* (adapter-baseline + facet-entry purity). Runtime values come from
+		* `ctx.sidebarRight` / `ctx.sidebarRightTabs` / `ctx.slots` in 0.1.6-alpha.2.
+		*/
+		const GENOFFICE_KIND = "genoffice";
+		const GENOFFICE_TAB_ID = "@deepseek-ai/dsh-tab-genoffice";
+		const GENOFFICE_FILE_KIND = "genoffice-file";
+		const GENOFFICE_FILE_TAB_ID = "@deepseek-ai/dsh-tab-genoffice/file";
 		//#endregion
 		//#region \0dsh-css:/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/packages/tab-genoffice/src/tabs/genoffice.module.css.mjs
 		const css = ".p8QEMa_panel{height:100%;min-height:0;color:var(--dsw-alias-label-primary);flex-direction:column;font-size:13px;display:flex}.p8QEMa_toolbar{border-bottom:1px solid var(--dsw-alias-border-l1);flex:none;align-items:center;gap:2px;padding:6px 12px 8px;display:flex}.p8QEMa_btn{cursor:pointer;height:26px;color:var(--dsw-alias-label-secondary);font:inherit;transition:background-color .15s var(--ds-ease-in-out,ease), color .15s var(--ds-ease-in-out,ease);background:0 0;border:0;border-radius:8px;flex:none;align-items:center;gap:6px;padding:0 8px;font-size:12px;display:inline-flex}.p8QEMa_btn:hover:not(:disabled){background:var(--dsw-specific-sidebar-nav-item-hover);color:var(--dsw-alias-label-primary)}.p8QEMa_btn:disabled{color:var(--dsw-alias-label-dimmed);cursor:default}.p8QEMa_btnDirty{color:var(--dsw-alias-state-warning-primary,#b45309);box-shadow:inset 0 0 0 1px var(--dsw-alias-state-warning-primary,#d97706)}.p8QEMa_pathText{background:var(--dsw-specific-sidebar-nav-item-hover);min-width:0;color:var(--dsw-alias-label-tertiary);white-space:nowrap;text-overflow:ellipsis;border-radius:6px;flex:1;margin-left:2px;padding:3px 8px;font-size:11px;overflow:hidden}.p8QEMa_pathBar{background:var(--dsw-specific-sidebar-nav-item-hover);cursor:text;border-radius:6px;flex:1;align-items:center;gap:2px;min-width:0;min-height:26px;margin-left:2px;padding:0 4px;display:flex;overflow:hidden}.p8QEMa_crumb{color:var(--dsw-alias-label-secondary);font:inherit;cursor:pointer;white-space:nowrap;text-overflow:ellipsis;background:0 0;border:0;border-radius:6px;flex:none;max-width:10em;padding:2px 4px;font-size:11px;overflow:hidden}.p8QEMa_crumb:hover{background:var(--dsw-alias-border-l1);color:var(--dsw-alias-label-primary)}.p8QEMa_pathInput{min-width:0;color:var(--dsw-alias-label-primary);font:inherit;background:0 0;border:0;outline:none;flex:1;padding:3px 4px;font-size:11px}.p8QEMa_homeNote{color:var(--dsw-alias-label-tertiary);white-space:nowrap;flex:none;padding:0 8px;font-size:10.5px}.p8QEMa_fileName{white-space:nowrap;text-overflow:ellipsis;flex:1;min-width:0;font-size:12px;font-weight:600;overflow:hidden}.p8QEMa_hint{color:var(--dsw-alias-label-secondary);align-items:center;gap:8px;padding:10px 12px;font-size:12px;display:flex}.p8QEMa_list{flex:1;min-height:0;padding:6px;overflow-y:auto}.p8QEMa_row{cursor:default;border-radius:8px;align-items:center;gap:9px;height:30px;padding:0 8px;font-size:12.5px;display:flex}.p8QEMa_rowClickable{cursor:pointer;transition:background-color .15s var(--ds-ease-in-out,ease)}.p8QEMa_rowClickable:hover{background:var(--dsw-specific-sidebar-nav-item-hover)}.p8QEMa_rowDisabled{opacity:.55}.p8QEMa_rowIcon{width:16px;height:16px;color:var(--dsw-alias-label-tertiary);flex:none;justify-content:center;align-items:center;display:inline-flex}.p8QEMa_rowName{white-space:nowrap;text-overflow:ellipsis;flex:1;min-width:0;overflow:hidden}.p8QEMa_rowTag{color:var(--dsw-alias-label-tertiary);border:1px solid var(--dsw-alias-border-l2);border-radius:999px;flex:none;padding:1px 6px;font-size:10.5px}.p8QEMa_iframe{background:#fff;border:0;border-radius:8px;flex:1;min-height:0;margin:0 12px 12px}";
@@ -402,32 +609,32 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var genoffice_module_css_default = {
-			"iframe": "p8QEMa_iframe",
-			"pathBar": "p8QEMa_pathBar",
-			"homeNote": "p8QEMa_homeNote",
-			"hint": "p8QEMa_hint",
-			"rowIcon": "p8QEMa_rowIcon",
-			"panel": "p8QEMa_panel",
-			"rowName": "p8QEMa_rowName",
-			"pathInput": "p8QEMa_pathInput",
-			"crumb": "p8QEMa_crumb",
 			"rowDisabled": "p8QEMa_rowDisabled",
-			"toolbar": "p8QEMa_toolbar",
-			"row": "p8QEMa_row",
 			"fileName": "p8QEMa_fileName",
-			"rowClickable": "p8QEMa_rowClickable",
-			"rowTag": "p8QEMa_rowTag",
-			"pathText": "p8QEMa_pathText",
+			"panel": "p8QEMa_panel",
 			"list": "p8QEMa_list",
 			"btnDirty": "p8QEMa_btnDirty",
-			"btn": "p8QEMa_btn"
+			"row": "p8QEMa_row",
+			"hint": "p8QEMa_hint",
+			"rowTag": "p8QEMa_rowTag",
+			"pathText": "p8QEMa_pathText",
+			"iframe": "p8QEMa_iframe",
+			"rowName": "p8QEMa_rowName",
+			"toolbar": "p8QEMa_toolbar",
+			"crumb": "p8QEMa_crumb",
+			"rowIcon": "p8QEMa_rowIcon",
+			"rowClickable": "p8QEMa_rowClickable",
+			"btn": "p8QEMa_btn",
+			"pathInput": "p8QEMa_pathInput",
+			"pathBar": "p8QEMa_pathBar",
+			"homeNote": "p8QEMa_homeNote"
 		};
 		//#endregion
 		//#region src/tabs/genoffice.tsx
 		/**
 		* GenOffice tab panel: relay-backed file browser.
 		*
-		* Opening a previewable file calls `openTab` for a per-path document tab
+		* Opening a previewable file calls `openResource` for a per-path document tab
 		* instead of replacing this list. Initial list uses session cwd
 		* (empty string = missing → homedir fallback). Path bar is a breadcrumb
 		* with type-to-jump (BR-008 / BR-009).
@@ -457,10 +664,6 @@ window.__ModuleLoader__.load({
 				...ROW_ICON_PROPS$1,
 				children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M4 2h5l3 3v9H4z" }), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("path", { d: "M9 2v3h3M6.5 8.5h3M6.5 11h3" })]
 			});
-		}
-		function sessionCwd(cwd) {
-			if (cwd === void 0 || cwd === "") return void 0;
-			return cwd;
 		}
 		function crumbsOf(abs) {
 			if (!abs.startsWith("/")) return [];
@@ -559,7 +762,13 @@ window.__ModuleLoader__.load({
 			});
 		}
 		function GenOfficePanel(props) {
-			const cwd = sessionCwd(props.scope.cwd);
+			const info = props.useTabInfo();
+			const sessionId = props.sessionId ?? info.sessionId;
+			const rawCwd = props.useSessions?.((sessions) => {
+				const id = sessionId ?? sessions.current;
+				return id === void 0 ? void 0 : sessions.byId?.[id]?.cwd;
+			});
+			const cwd = rawCwd === void 0 || rawCwd === "" ? void 0 : rawCwd;
 			const [path, setPath] = (0, react.useState)("");
 			const [parent, setParent] = (0, react.useState)(void 0);
 			const [entries, setEntries] = (0, react.useState)(null);
@@ -637,7 +846,9 @@ window.__ModuleLoader__.load({
 				const ext = entry.ext ?? "";
 				if (PREVIEWABLE[ext] === void 0) return;
 				const abs = joinPath(path, entry.name);
-				props.ctx.betterSidebar.openTab(fileTabSeed(abs), props.scope);
+				const address = fileAddressFor(sessionId ?? "unknown", cwd, abs);
+				if (isClaimedPath(abs)) info.tab.actions.openResource(address, { kind: GENOFFICE_FILE_KIND });
+				else info.tab.actions.openResource(address);
 			};
 			const visibleEntries = entries === null ? null : showHidden ? entries : entries.filter((e) => !e.hidden);
 			return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
@@ -811,50 +1022,6 @@ window.__ModuleLoader__.load({
 					})
 				]
 			});
-		}
-		//#endregion
-		//#region src/tabs/coexist.ts
-		/**
-		* Click-preview coexistence (BR-007 / ASM-001): claim docx/xlsx/pptx;
-		* md/pdf stay on host viewers. Degrade is manual.
-		*
-		* Sidebar 0.13 dropped builtin office viewers. Prefer those ids if another
-		* plugin re-registered them, then any non-own ext match, then
-		* binary-download — never this plugin's own viewer (that would recurse).
-		*/
-		const CLAIMED_EXTS = [
-			"docx",
-			"xlsx",
-			"pptx"
-		];
-		/** Preferred fallback viewer ids keyed by extension. */
-		const UPSTREAM_VIEWER_ID = {
-			docx: "docx",
-			xlsx: "xlsx",
-			pptx: "pptx",
-			md: "markdown",
-			pdf: "pdf"
-		};
-		/** FileViewer ids this plugin registers (`dsh-genoffice:viewer-${ext}`). */
-		const OWN_VIEWER_PREFIX = "dsh-genoffice:viewer-";
-		function isOwnViewerId(id) {
-			return id.startsWith(OWN_VIEWER_PREFIX);
-		}
-		/**
-		* Pick a FileViewer to render when control-mode cannot (relay down).
-		* Never returns this plugin's own viewer — that would recurse into
-		* ControlModeViewer.
-		*/
-		function pickDegradeViewer(viewers, ext, skipId, enabled) {
-			const usable = (v) => v.id !== skipId && !isOwnViewerId(v.id) && (enabled === void 0 || enabled(v.id));
-			const preferredId = UPSTREAM_VIEWER_ID[ext];
-			if (preferredId !== void 0) {
-				const named = viewers.find((v) => v.id === preferredId && usable(v));
-				if (named !== void 0) return named;
-			}
-			const match = viewers.filter((v) => usable(v) && v.exts.includes(ext)).sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0))[0];
-			if (match !== void 0) return match;
-			return viewers.find((v) => v.id === "binary-download" && usable(v));
 		}
 		//#endregion
 		//#region src/tabs/doc-registry.ts
@@ -1071,10 +1238,8 @@ window.__ModuleLoader__.load({
 					})).json();
 					if (data.ok) {
 						setSaveState("saved");
-						if (typeof data.mtimeMs === "number") {
-							setDirty(false);
-							setSaveMessage(`已保存到 ${data.path ?? path}（编辑状态已保留）`);
-						} else {
+						if (typeof data.mtimeMs === "number") setSaveMessage("编辑状态已保留；磁盘已写入，未重载预览");
+						else {
 							setSaveMessage(`已保存到 ${data.path ?? path}`);
 							await remountControl();
 						}
@@ -1310,6 +1475,28 @@ window.__ModuleLoader__.load({
 					]
 				})]
 			});
+			const targetApp = PREVIEWABLE[ext];
+			if (targetApp !== void 0 && getAppReady(targetApp) === false) return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+				className: genoffice_module_css_default.panel,
+				children: [toolbar, /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+					className: genoffice_module_css_default.hint,
+					role: "status",
+					children: [
+						"目标应用 ",
+						targetApp,
+						" 尚未构建 web-dist，其他已就绪应用仍可打开。运行 `npm run web:build --workspaces --if-present` 后点「重新检查」。",
+						/* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+							type: "button",
+							className: genoffice_module_css_default.btn,
+							onClick: () => {
+								probe(true);
+							},
+							children: "重新检查"
+						}),
+						launchControls
+					]
+				})]
+			});
 			const url = previewUrlFor(path, ext, true, frameNonce);
 			return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
 				className: genoffice_module_css_default.panel,
@@ -1388,57 +1575,105 @@ window.__ModuleLoader__.load({
 			return null;
 		}
 		//#endregion
+		//#region src/tabs/resolve-session-path.ts
+		/**
+		* Restore a Sidebar file address to a disk path using the *address*
+		* session's cwd. Never uses the currently active session to steal
+		* another session's relative path (BR-001).
+		*/
+		function joinCwd(cwd, relative) {
+			const root = cwd.replace(/\\/g, "/").replace(/\/+$/, "");
+			const rest = relative.replace(/\\/g, "/").replace(/^(?:\.\/)+/, "").replace(/^\/+/, "");
+			if (rest === "") return root;
+			if (root === "") return rest;
+			return `${root}/${rest}`;
+		}
+		function resolveSessionFilePath(address, options = {}) {
+			const parsed = parseFileAddress(address);
+			if (parsed === void 0) return {
+				status: "error",
+				error: "malformed-address",
+				message: "无法解析文件地址，已阻止打开（未请求 relay）"
+			};
+			if (parsed.scope === "absolute" || isAbsoluteWorkspacePath(parsed.path)) return {
+				status: "ready",
+				path: parsed.path
+			};
+			if (options.sessionsPending || options.byId === void 0) return {
+				status: "waiting",
+				reason: "sessions-pending"
+			};
+			const session = options.byId[parsed.sessionId];
+			if (session === void 0) return {
+				status: "error",
+				error: "unknown-session",
+				message: `地址属于会话 ${parsed.sessionId}，当前会话列表中没有该会话`
+			};
+			const cwd = session.cwd;
+			if (cwd === void 0 || cwd === "") return {
+				status: "error",
+				error: "missing-cwd",
+				message: "该会话没有项目目录，无法还原相对路径"
+			};
+			return {
+				status: "ready",
+				path: joinCwd(cwd, parsed.path)
+			};
+		}
+		//#endregion
 		//#region src/tabs/docx-control-viewer.tsx
 		/**
-		* FileViewer adapter: FileViewerProps → ControlModeViewer. One component
-		* covers every claimed extension; ext is derived from the path.
+		* Control-mode body for claimed Office files on the official right Sidebar.
+		* Path comes from the tab's `dsh-resource://file/…` contentId.
 		*/
-		/** Relay-down fallback: another enabled FileViewer, never this plugin's own. */
-		function renderDegradeFallback(props) {
-			const sidebar = props.ctx.betterSidebar;
-			const builtin = pickDegradeViewer(sidebar.getFileViewers(), extOf(props.path), props.viewerId, (id) => sidebar.isViewerEnabled(id));
-			if (builtin === void 0) return (0, react.createElement)("div", { className: genoffice_module_css_default.hint }, "没有可用的后备预览");
-			return (0, react.createElement)(builtin.component, {
-				...props,
-				viewerId: builtin.id
+		function renderDegradeFallback() {
+			return /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+				className: genoffice_module_css_default.hint,
+				children: "没有可用的后备预览。启动 GenOffice relay 后可恢复控制模式。"
 			});
 		}
 		function DocxControlViewer(props) {
-			const ext = extOf(props.path);
 			return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(ControlModeViewer, {
 				path: props.path,
 				title: props.title,
-				ext,
-				renderBuiltin: () => renderDegradeFallback(props),
+				ext: extOf(props.path),
+				renderBuiltin: renderDegradeFallback,
 				...props.tabId !== void 0 ? { tabId: props.tabId } : {},
-				...props.updateTab !== void 0 ? { updateTab: props.updateTab } : {},
 				...props.onBack !== void 0 ? { onBack: props.onBack } : {}
 			});
 		}
 		/** Per-file sidebar tab: control-mode plus Back (closes the tab; UF-003). */
 		function GenOfficeFileTab(props) {
-			const path = props.tab.path ?? "";
-			const tabId = props.tab.id ?? `dsh-genoffice:file:${path}`;
-			const sidebar = props.ctx.betterSidebar;
-			const updateTab = (0, react.useCallback)((id, patch) => {
-				sidebar.updateTab(id, patch);
-			}, [sidebar]);
+			const info = props.useTabInfo();
+			const byId = props.useSessions?.((sessions) => sessions.byId);
+			const resolved = resolveSessionFilePath(info.tab.contentId, {
+				...byId !== void 0 ? { byId } : {},
+				sessionsPending: props.useSessions !== void 0 && byId === void 0
+			});
 			const onBack = (0, react.useCallback)(() => {
-				sidebar.closeTab(tabId, props.scope);
-			}, [
-				sidebar,
-				tabId,
-				props.scope
-			]);
+				info.tab.actions.close();
+			}, [info.tab.actions]);
+			if (resolved.status === "waiting") return /* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+				className: genoffice_module_css_default.hint,
+				children: "正在等待会话目录…"
+			});
+			if (resolved.status === "error") return /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("div", {
+				className: genoffice_module_css_default.panel,
+				children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("div", {
+					className: genoffice_module_css_default.hint,
+					role: "alert",
+					children: resolved.message
+				}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+					className: genoffice_module_css_default.btn,
+					type: "button",
+					onClick: onBack,
+					children: "返回"
+				})]
+			});
 			return /* @__PURE__ */ (0, react_jsx_runtime.jsx)(DocxControlViewer, {
-				ctx: props.ctx,
-				store: props.store,
-				scope: props.scope,
-				path,
-				title: props.tab.title,
-				viewerId: `${OWN_VIEWER_PREFIX}${extOf(path)}`,
-				tabId,
-				updateTab,
+				path: resolved.path,
+				title: info.tab.title,
+				tabId: info.tab.id,
 				onBack
 			});
 		}
@@ -1452,12 +1687,14 @@ window.__ModuleLoader__.load({
 		/** Simplified Chinese dictionary (the key-set source of truth). */
 		const zh = {
 			"tab.genoffice": "GenOffice",
-			"tab.file": "GenOffice 文档"
+			"tab.file": "GenOffice 文档",
+			"tab.guide": "用 GenOffice 打开 Office 文档"
 		};
 		/** English dictionary, checked complete against the zh key set. */
 		const en = {
 			"tab.genoffice": "GenOffice",
-			"tab.file": "GenOffice document"
+			"tab.file": "GenOffice document",
+			"tab.guide": "Open Office documents with GenOffice"
 		};
 		/** Dictionary namespace owned by the genoffice tab artifact. */
 		const NS = "tabs.genoffice";
@@ -1468,54 +1705,70 @@ window.__ModuleLoader__.load({
 		*
 		* v0.15 中 `client` 是保留 facet 名（归 RFC 0002），manifest 不声明本模块；
 		* 生产路径由官方 client bundle 入口（src/client/index.ts）经
-		* cordis-client-adapter 执行同一份主体。RFC 0002 定案后，把本模块的构建
-		* 产物填进 facets.client.entry 即完成切换——主体零改动。
+		* cordis-client-adapter 执行同一份主体。
 		*
-		* 依赖（CLIENT_REQUIRED / CLIENT_OPTIONAL 镜像）：
+		* 依赖：
 		* - Locale（required）：词典注册 + 翻译绑定；
-		* - SidebarTab（optional peer）：缺席时跳过全部 UI 注册不崩（BR-003）。
+		* - SidebarRight（optional）：缺席时跳过全部 UI 注册不崩（BR-003）。
 		*/
-		/** 全部 UI 注册（tabs + FileViewers + 全局 SSE）。返回合并卸载函数。 */
-		function mountSidebar(betterSidebar, t) {
+		function canOpenControlAddress(address) {
+			const parsed = parseFileAddress(address);
+			if (parsed === void 0) return false;
+			return isControlExt(extOf(parsed.path));
+		}
+		function basenameOfAddress(address) {
+			const parsed = parseFileAddress(address);
+			if (parsed === void 0) return "GenOffice";
+			const name = fileNameOf(parsed.path);
+			return name === "" ? "GenOffice" : name;
+		}
+		function registerKeyedTab(sidebar, id, component, locale) {
+			const { slots } = sidebar;
+			return slots.inject("sidebar.right.pane.tab", () => slots.register({
+				name: "sidebar.right.pane.tab",
+				key: id,
+				...locale === void 0 ? {} : { locale }
+			}, component));
+		}
+		function mountSidebar(sidebar, t, activeSessionId) {
 			const offs = [];
-			const browserTab = {
-				id: BROWSER_TAB_ID,
+			const { sidebarRight, sidebarRightTabs } = sidebar;
+			const browserType = {
+				id: GENOFFICE_TAB_ID,
+				kind: GENOFFICE_KIND,
 				title: () => t("tab.genoffice"),
-				icon: (size) => (0, react.createElement)(GenOfficeIcon, { size }),
-				order: 20,
-				single: true,
-				component: (props) => (0, react.createElement)(GenOfficePanel, props)
+				guide: [{
+					id: "genoffice",
+					order: 20,
+					title: () => t("tab.genoffice"),
+					description: () => t("tab.guide"),
+					icon: GenOfficeIcon
+				}]
 			};
-			offs.push(betterSidebar.registerTab(browserTab));
-			const fileTab = {
-				id: FILE_TAB_ID,
-				title: () => t("tab.file"),
-				icon: (size) => (0, react.createElement)(GenOfficeIcon, { size }),
-				hidden: true,
-				dedupeKey: (opened) => opened.path,
-				component: (props) => (0, react.createElement)(GenOfficeFileTab, props)
+			offs.push(sidebarRightTabs.register(browserType));
+			offs.push(registerKeyedTab(sidebar, GENOFFICE_TAB_ID, (props) => (0, react.createElement)(GenOfficePanel, props), NS));
+			const fileType = {
+				id: GENOFFICE_FILE_TAB_ID,
+				kind: GENOFFICE_FILE_KIND,
+				patterns: CLAIMED_EXTS.map((ext) => `*.${ext}`),
+				priority: "extension",
+				canOpen: canOpenControlAddress,
+				title: basenameOfAddress
 			};
-			offs.push(betterSidebar.registerTab(fileTab));
-			for (const ext of CLAIMED_EXTS) {
-				const viewer = {
-					id: `dsh-genoffice:viewer-${ext}`,
-					title: () => `GenOffice · .${ext}`,
-					icon: (size) => (0, react.createElement)(GenOfficeIcon, { size }),
-					exts: [ext],
-					priority: 10,
-					fetchStrategy: "none",
-					component: DocxControlViewer
-				};
-				offs.push(betterSidebar.registerFileViewer(viewer));
-			}
+			offs.push(sidebarRightTabs.register(fileType));
+			offs.push(registerKeyedTab(sidebar, GENOFFICE_FILE_TAB_ID, (props) => (0, react.createElement)(GenOfficeFileTab, props)));
 			const es = new EventSource(`${RELAY_BASE}/api/open/stream`);
 			es.addEventListener("file", (ev) => {
 				try {
 					const data = JSON.parse(ev.data);
-					const activeSessionId = betterSidebar.getSnapshot?.().sessionId;
-					const next = fileOpenOnThisPage(data, activeSessionId);
+					const pageSessionId = activeSessionId();
+					const next = fileOpenOnThisPage(data, pageSessionId);
 					if (next === void 0) return;
-					betterSidebar.openTab(next.seed);
+					try {
+						sidebarRight.openResource(controlOpenAddress(next.path, pageSessionId), { kind: GENOFFICE_FILE_KIND });
+					} catch (error) {
+						console.error("[genoffice] explicit control open failed", error);
+					}
 				} catch {}
 			});
 			offs.push(() => {
@@ -1535,15 +1788,17 @@ window.__ModuleLoader__.load({
 			}));
 			if (!contracts.has(SIDEBAR_TAB)) return;
 			const sidebar = contracts.get(SIDEBAR_TAB);
-			scope.add(sidebar.acquire((betterSidebar) => mountSidebar(betterSidebar, t)));
+			scope.add(sidebar.acquire((service) => mountSidebar(service, t, () => service.sessionId)));
 		});
 		//#endregion
 		//#region src/client/index.ts
-		/** Locale is required; betterSidebar is acquired lazily so its absence
-		*  skips registration instead of leaving this fiber PENDING (BR-003). */
+		/** Locale is required. Sidebar services are peeked / nested-injected so
+		*  their absence skips registration instead of leaving this fiber PENDING
+		*  (BR-003). Never list them here — Cordis would hold the fiber. */
 		const inject = ["locale"];
 		/**
-		* Register the GenOffice tab and claimed FileViewers when better-sidebar is present.
+		* Register the GenOffice page and claimed Office resource tabs when the
+		* official right Sidebar is present.
 		* @param ctx - client root context.
 		*/
 		function apply(ctx) {

@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "package": "plugin-tool-alignment",
+  "uf": "UF-001",
+  "branch": "success",
+  "run_id": "pta-2026-09-12T19-03-47-109Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "ffd185d2ec02480a5a7f5b1f17d9220053fcbf6c"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "path-restore",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "session-a-resolves-to-cwd-file",
+          "status": "passed",
+          "expected": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T19-03-47-109Z/path-a/note.docx",
+          "actual": {
+            "path": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T19-03-47-109Z/path-a/note.docx"
+          }
+        },
+        {
+          "name": "file-tab-uses-resolver",
+          "status": "passed",
+          "expected": "resolveSessionFilePath",
+          "actual": true
+        },
+        {
+          "name": "relay-serves-resolved-bytes",
+          "status": "passed",
+          "expected": "03da2cafb3d9ce4022dbce432ca61a807114989f6cb31f9f8a60e821075dd0b5",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "sha": "03da2cafb3d9ce4022dbce432ca61a807114989f6cb31f9f8a60e821075dd0b5"
+          }
+        }
+      ]
+    }
+  ]
+}

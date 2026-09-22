@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-002",
+  "branch": "failure-1",
+  "run_id": "3574a9cd-5de7-458e-86f2-57007c16754d",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "sheets-media-corrupt-or-invalid-rel",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "invalid-rel-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "6ce4002fac36e9bf9d2909e06adea2f8dfdab34245031d3732fc8bd0acba2377",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-media/invalid-rel.xlsx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "5dc85ce8edbdcfcb603688c1d3aea7295df0c4e75bef13f964a2af6aae5be6cf",
+            "error": null,
+            "occupied": true,
+            "owner": "5d44e8d5-79fc-40d7-9f4d-5592c787e0b6"
+          }
+        },
+        {
+          "name": "invalid-rel-no-fake-image",
+          "status": "passed",
+          "expected": 0,
+          "actual": 0
+        },
+        {
+          "name": "invalid-rel-disk-unchanged",
+          "status": "passed",
+          "expected": "unchanged",
+          "actual": {
+            "invalidSha": "5dc85ce8edbdcfcb603688c1d3aea7295df0c4e75bef13f964a2af6aae5be6cf",
+            "invalidCreatedSha": "5dc85ce8edbdcfcb603688c1d3aea7295df0c4e75bef13f964a2af6aae5be6cf"
+          }
+        },
+        {
+          "name": "corrupt-media-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "d0eb7247fc19ee9324e3b0161e883858922fbc4dc6067a82b3fa9f4334128578",
+            "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-media/corrupt-media.xlsx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "bc8680696ef3ddc01a827e1e0a268c91729bd63aeb774910c2db6b29aef3bbe5",
+            "error": null,
+            "occupied": true,
+            "owner": "0757d309-b59b-43c1-8937-e3c7d654c091"
+          }
+        },
+        {
+          "name": "corrupt-media-read-fails",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "ok": false,
+            "error": "Embedded image is not PNG/JPEG/GIF."
+          }
+        },
+        {
+          "name": "unknown-visual-fails",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "ok": false,
+            "error": "Unknown workbook image."
+          }
+        },
+        {
+          "name": "corrupt-media-disk-unchanged",
+          "status": "passed",
+          "expected": "bc8680696ef3ddc01a827e1e0a268c91729bd63aeb774910c2db6b29aef3bbe5",
+          "actual": "bc8680696ef3ddc01a827e1e0a268c91729bd63aeb774910c2db6b29aef3bbe5"
+        }
+      ]
+    }
+  ]
+}

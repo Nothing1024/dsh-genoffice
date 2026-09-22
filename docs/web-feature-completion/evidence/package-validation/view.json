@@ -1,0 +1,14 @@
+{
+  "package": "web-feature-completion",
+  "title": "web-feature-completion Spec · 人类可读视图",
+  "tasks": 21,
+  "completed": 0,
+  "flows": 6,
+  "consoleErrors": [],
+  "layout": {
+    "width": 1440,
+    "scrollWidth": 1440
+  },
+  "status": "passed",
+  "scope": "generated static view only; business application not started"
+}

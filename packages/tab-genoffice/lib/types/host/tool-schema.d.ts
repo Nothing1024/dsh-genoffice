@@ -20,7 +20,7 @@ export interface ControlToolEntry {
     /** upstream skill tool name (AGENT_TOOLS) forwarded to the executor */
     skillName: string;
     /** relay control-plane app segment (docx→docs, markdown→markdown, xlsx→sheets, pptx→slides, pdf→pdf) */
-    app: 'docs' | 'markdown' | 'sheets' | 'slides' | 'pdf';
+    app: 'docs' | 'markdown' | 'sheets' | 'slides' | 'pdf' | 'html';
     /** model-visible description: skill discipline + control context */
     description: string;
     /** defineTool parameter spec (skill inputSchema + the required `path`) */
@@ -29,12 +29,12 @@ export interface ControlToolEntry {
 /**
  * Tool table — the plugin-side mirror of contracts/control-api.md §4.
  * Family counts match contracts/control-api.md §4 and smoke (skill + *_save):
- * docx 11 (10+save), markdown 5 (4+save), xlsx 13 (12+save),
- * pptx 39 (38+save), pdf 21 (20+save).
+ * docx 16 (15+save), markdown 6 (5+save), xlsx 13 (12+save),
+ * pptx 39 (38+save), pdf 21 (20+save), html 5 (4+save/export).
  * Naming uses `_` instead of `:` (provider tool-name pattern ^[a-zA-Z0-9_-]+$;
  * see the contract's §4 separator note, ASM-006 revision).
  */
 export declare const CONTROL_TOOL_TABLE: ControlToolEntry[];
-/** Write-back trigger (BR-008). Only the five `*_save` rows; `save_style_template` is a skill, not disk write-back. */
+/** Write-back trigger (BR-008). Only `*_save` rows; `save_style_template` / `export_docx` are not disk write-back of the source. */
 export declare function isSaveEntry(entry: ControlToolEntry): boolean;
 //# sourceMappingURL=tool-schema.d.ts.map

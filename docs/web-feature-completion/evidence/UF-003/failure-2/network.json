@@ -1,0 +1,23 @@
+{
+  "events": [
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Conversion cancel requested. Any in-flight job will stop without writing output.",
+        "summary": "cancel convert"
+      },
+      "revision": "46b1914919e4ff73a055efd76b5dab31f8e7e963437d46eea1932c35bb7eb69c"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "The user canceled the conversion; nothing was changed.",
+        "summary": "PDF 转换 → docx"
+      },
+      "revision": "46b1914919e4ff73a055efd76b5dab31f8e7e963437d46eea1932c35bb7eb69c"
+    }
+  ],
+  "count": 2
+}

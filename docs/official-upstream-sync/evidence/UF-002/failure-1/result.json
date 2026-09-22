@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "package": "official-upstream-sync",
+  "uf": "UF-002",
+  "branch": "failure-1",
+  "run_id": "ous-2026-09-12T19-07-56-943Z",
+  "source_revisions": {
+    "plugin": "unknown",
+    "engine": "c34ca1a4e7dfc3de33780b6a7f79b42075dc4513",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "UF-002-failure-1",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "22d78a73d14ecb02bce89006b9b25c2f1725cba11db6222af95a01a55f85db62",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/docs-context.docx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3",
+            "error": null,
+            "occupied": true,
+            "owner": "9167f853-ad97-4771-b396-ed27bc028ad0"
+          }
+        },
+        {
+          "name": "relay-context-ok",
+          "status": "passed",
+          "expected": "relay-context",
+          "actual": "Document block list:\nThe document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text stats: words 2, characters (no spaces) 47, characters (with spaces) 48\nHeaders & footers ({PAGE}/{NUMPAGES} are live page-number fields; change with set_header_footer):\n- header: \"OfficialHeaderOrig\" | footer: \"OfficialFooterOrig\"\nNo selection; cursor is in block 1\n\nUnresolved comments (address with reply_comment / resolve_comment by id):\n"
+        },
+        {
+          "name": "plugin-context-ok",
+          "status": "passed",
+          "expected": "get_document_context",
+          "actual": "The document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text stats: words 2, characters (no spaces) 47, characters (with spaces) 48\nHeaders & footers ({PAGE}/{NUMPAGES} are live page-number fields; change with set_header_footer):\n- header: \"OfficialHeaderOrig\" | footer: \"OfficialFooterOrig\"\nNo selection; cursor is in block 1"
+        },
+        {
+          "name": "two-context-entries",
+          "status": "passed",
+          "expected": "both",
+          "actual": {
+            "relay": "Document block list:\nThe document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text s",
+            "plugin": "The document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text stats: words 2, charac"
+          }
+        },
+        {
+          "name": "comments-available",
+          "status": "passed",
+          "expected": "comments",
+          "actual": "All comment threads (including resolved):\n- id 1 by Alice (block 0, anchored text \"OfficialCommentAnchor\"): OfficialThreadKeep"
+        },
+        {
+          "name": "revisions-present",
+          "status": "passed",
+          "expected": "revisions",
+          "actual": "Tracked revisions (1 pending; deleted text shows what will disappear on accept):\n- block 1 | inserted by RevAuthor on 2026-01-01: \"OfficialRevKeep\""
+        },
+        {
+          "name": "missing-thread-refused",
+          "status": "passed",
+          "expected": "recoverable",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "no comment with id missing-thread; call read_comments for the current ids",
+              "isError": true,
+              "mutated": false,
+              "summary": "回复批注"
+            },
+            "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3"
+          }
+        },
+        {
+          "name": "reply-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Replied to comment 1.",
+              "mutated": true,
+              "summary": "回复批注"
+            },
+            "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3"
+          }
+        },
+        {
+          "name": "hf-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Updated the header.",
+              "mutated": false,
+              "summary": "更新页眉"
+            },
+            "revision": "537bcff98cf3a980607b26e21a3012f83c883579596c6647d8028ea696d945a3"
+          }
+        },
+        {
+          "name": "save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/docs-context.docx",
+            "name": "docs-context.docx",
+            "mtimeMs": 1789240079324.5745
+          }
+        },
+        {
+          "name": "reopen-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "22d78a73d14ecb02bce89006b9b25c2f1725cba11db6222af95a01a55f85db62",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/docs-context.docx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "b099f5b5628c01e34694a6cfffc86d4292fcb0f1f6e9148f9d11da54c80dcc09",
+            "error": null,
+            "occupied": true,
+            "owner": "9167f853-ad97-4771-b396-ed27bc028ad0"
+          }
+        },
+        {
+          "name": "reopen-hf",
+          "status": "passed",
+          "expected": "OfficialHfKeep",
+          "actual": {
+            "relay": "Document block list:\nThe document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text stats: words 2, characters (no spaces) 47, characters (with spaces) 48\nHeaders & footers ({PAGE}/{NUMPAGES} are live page-number fields; chan",
+            "plugin": "The document has 2 blocks, listed below (index|type|content preview):\n0|p|ContextBody OfficialCommentAnchor\n1|p|OfficialRevKeep\nFull-text stats: words 2, characters (no spaces) 47, characters (with spaces) 48\nHeaders & footers ({PAGE}/{NUMPAGES} are live page-number fields; change with set_header_fo"
+          }
+        },
+        {
+          "name": "reopen-reply",
+          "status": "passed",
+          "expected": "OfficialReplyKeep",
+          "actual": "All comment threads (including resolved):\n- id 1 by Alice (block 0, anchored text \"OfficialCommentAnchor\"): OfficialThreadKeep\n- id 2 by AI Assistant (block 0, anchored text \"OfficialCommentAnchor\"): OfficialReplyKeep"
+        },
+        {
+          "name": "reopen-revision",
+          "status": "passed",
+          "expected": "OfficialRevKeep",
+          "actual": "Tracked revisions (1 pending; deleted text shows what will disappear on accept):\n- block 1 | inserted by RevAuthor on 2026-01-01: \"OfficialRevKeep\""
+        }
+      ]
+    }
+  ]
+}

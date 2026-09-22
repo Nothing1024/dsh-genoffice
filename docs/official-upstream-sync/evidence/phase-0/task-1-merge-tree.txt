@@ -1,0 +1,100 @@
+c03b741e6c40bcad6439db930deeac6146adc156
+100644 26795bd8f3af68be60fe029e906ed68289b8e0ae 1	.gitignore
+100644 8909dc6e339244d116ee98f335f455246fd9d25f 2	.gitignore
+100644 aced7bcd5f15ad59eb6019a3e254786be98f9d57 3	.gitignore
+100644 cdede9d40bf2614b08de5ed98973bfd922e5d9ae 1	README.md
+100644 6e7e3e1598f0aa5ab3b054a638d936aaa0f2c95c 2	README.md
+100644 615db304f7cd78f505f4dabb81586237fad75fef 3	README.md
+100644 d3c864922e997da30331db55b5beaeadc29efa7c 1	apps/docs/src/renderer/App.tsx
+100644 4626c9e0319494c86694c67792c6fad73997ae3c 2	apps/docs/src/renderer/App.tsx
+100644 4bbdb167a674ca550953faf6232122a391c9ab62 3	apps/docs/src/renderer/App.tsx
+100644 41d5e5c932a944e7852706129742bc569dddcb0c 1	apps/markdown/src/renderer/App.tsx
+100644 267100b40e35f5dbde1b587f4f9c2a9c55a73019 2	apps/markdown/src/renderer/App.tsx
+100644 84be99039ed460ecd446ac32d1153794217e8d0a 3	apps/markdown/src/renderer/App.tsx
+100644 55b7574ccecb684b623e47b2603231aeb6b51737 1	apps/markdown/src/renderer/ai/markdown-skill.ts
+100644 d93a4b58fa09778c24a9bacf6ee0c3bb5928749d 2	apps/markdown/src/renderer/ai/markdown-skill.ts
+100644 012c2ef1bab766bd3f28676ff83d6d6383f734f3 3	apps/markdown/src/renderer/ai/markdown-skill.ts
+100644 162e7f5a11722efa360e5c50d3d2e0c768e934dc 1	apps/markdown/src/renderer/components/Ribbon.tsx
+100644 cc359a6c56bd6b5baef8d09fe0efd74eca0c4525 2	apps/markdown/src/renderer/components/Ribbon.tsx
+100644 e0a462639dbf002867acd9a299ea4cb82dd5c08c 3	apps/markdown/src/renderer/components/Ribbon.tsx
+100644 69dbb4a5c491436e1e678885e631115a61c26ea4 1	apps/pdf/src/renderer/App.tsx
+100644 67db982dce75c1398fa088fc4838e18a8e13e7f9 2	apps/pdf/src/renderer/App.tsx
+100644 3cdecf346b333aa6c6151d653220cef5cd242987 3	apps/pdf/src/renderer/App.tsx
+100644 d4ec10efa182862ccafb6fa86057b8f3f3efc566 1	apps/sheets/src/renderer/App.tsx
+100644 cf60fe573d5d3581d98ee06a7a191d0cd76782f8 2	apps/sheets/src/renderer/App.tsx
+100644 56ca1e5fb9d1eb6365fa0a85324c0b749c861570 3	apps/sheets/src/renderer/App.tsx
+100644 0d6fac5451e49ff0d105a985dbd60d26f21a251c 1	apps/sheets/src/renderer/ExcelShell.tsx
+100644 81bee88f4ffcbafd5a357c05afb56fa0230e1159 2	apps/sheets/src/renderer/ExcelShell.tsx
+100644 400368d9346c0c82ec1079bbbbf3a120e70684a7 3	apps/sheets/src/renderer/ExcelShell.tsx
+100644 f2c91ad75c1fffa4abf5501d2cdb447739048fdd 1	apps/sheets/src/renderer/edit-journal.ts
+100644 5ae5130cd28716c2dd3ef7ca045188f31ab71396 2	apps/sheets/src/renderer/edit-journal.ts
+100644 272ce105cef0239bf8736a7622fbf1639645ff1f 3	apps/sheets/src/renderer/edit-journal.ts
+100644 34901c8b8b16869965178448e227db06f874cd6d 1	apps/sheets/src/renderer/save-actions.ts
+100644 c44901be5c6ac6e412011d000dc839a348c7a590 2	apps/sheets/src/renderer/save-actions.ts
+100644 a439844c59d106dc4c126fd3669a02bc508e0653 3	apps/sheets/src/renderer/save-actions.ts
+100644 c63067a64147f10e7f90b570bcbf86d1f114483e 1	apps/slides/src/main/page-spec.ts
+100644 fd65bfc332b711c8ae114ba37fefc781e325925c 2	apps/slides/src/main/page-spec.ts
+100644 24ed0b8db4b6f8967b072cff441ebc4caf26b4e3 3	apps/slides/src/main/page-spec.ts
+100644 d29dfd3b5b5062afb4411d15f16c544c1f0e03cd 1	apps/slides/src/renderer/ai/AiPanel.tsx
+100644 8a6ff44ed86437500b76f946cb4b00554763d084 2	apps/slides/src/renderer/ai/AiPanel.tsx
+100644 8b82bde07600401a3f024bd319ebac6e36382bda 3	apps/slides/src/renderer/ai/AiPanel.tsx
+100644 b6fbe66a52bf954f7396d22e6a449a84c43f9375 1	apps/slides/src/renderer/ai/slides-skill.ts
+100644 7e11578c313b203509abf008ec6d360833ee1e30 2	apps/slides/src/renderer/ai/slides-skill.ts
+100644 997a88dd2286700d98f7f4ea1f4107439ae59d5f 3	apps/slides/src/renderer/ai/slides-skill.ts
+100644 77936a7b2bce2ddacbeb14b984a62b780e38995d 1	apps/slides/tests/page-spec.test.ts
+100644 ef37bcc18d8b4ac4f11e488a0a46ec2025bee499 2	apps/slides/tests/page-spec.test.ts
+100644 6149c5571614c833d04098cb3988c12be6ff3804 3	apps/slides/tests/page-spec.test.ts
+100644 d091c0ad162b6b37afbd829d8ef014fc3fe0097f 1	apps/slides/tests/scratch-block.test.ts
+100644 02631e7c06f70f413e4d0c7cefe8625675635295 2	apps/slides/tests/scratch-block.test.ts
+100644 40d503372dee02c94123a321ddeb3acf34908044 3	apps/slides/tests/scratch-block.test.ts
+
+Auto-merging .gitignore
+CONFLICT (content): Merge conflict in .gitignore
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+Auto-merging apps/docs/package.json
+Auto-merging apps/docs/src/renderer/App.tsx
+CONFLICT (content): Merge conflict in apps/docs/src/renderer/App.tsx
+Auto-merging apps/docs/src/renderer/components/Ribbon.tsx
+Auto-merging apps/docs/src/renderer/components/ribbon-tabs.tsx
+Auto-merging apps/markdown/package.json
+Auto-merging apps/markdown/src/renderer/App.tsx
+CONFLICT (content): Merge conflict in apps/markdown/src/renderer/App.tsx
+Auto-merging apps/markdown/src/renderer/ai/markdown-skill.ts
+CONFLICT (content): Merge conflict in apps/markdown/src/renderer/ai/markdown-skill.ts
+Auto-merging apps/markdown/src/renderer/components/Ribbon.tsx
+CONFLICT (content): Merge conflict in apps/markdown/src/renderer/components/Ribbon.tsx
+Auto-merging apps/pdf/package.json
+Auto-merging apps/pdf/src/renderer/App.tsx
+CONFLICT (content): Merge conflict in apps/pdf/src/renderer/App.tsx
+Auto-merging apps/sheets/package.json
+Auto-merging apps/sheets/src/renderer/App.tsx
+CONFLICT (content): Merge conflict in apps/sheets/src/renderer/App.tsx
+Auto-merging apps/sheets/src/renderer/ExcelShell.tsx
+CONFLICT (content): Merge conflict in apps/sheets/src/renderer/ExcelShell.tsx
+Auto-merging apps/sheets/src/renderer/edit-journal.ts
+CONFLICT (content): Merge conflict in apps/sheets/src/renderer/edit-journal.ts
+Auto-merging apps/sheets/src/renderer/save-actions.ts
+CONFLICT (content): Merge conflict in apps/sheets/src/renderer/save-actions.ts
+Auto-merging apps/sheets/src/renderer/styles.css
+Auto-merging apps/sheets/src/renderer/univer-sync.ts
+Auto-merging apps/sheets/src/shared/desktop-api.ts
+Auto-merging apps/sheets/tests/edit-journal.test.ts
+Auto-merging apps/shell/package.json
+Auto-merging apps/slides/package.json
+Auto-merging apps/slides/src/main/page-spec.ts
+CONFLICT (content): Merge conflict in apps/slides/src/main/page-spec.ts
+Auto-merging apps/slides/src/renderer/App.tsx
+Auto-merging apps/slides/src/renderer/ai/AiPanel.tsx
+CONFLICT (content): Merge conflict in apps/slides/src/renderer/ai/AiPanel.tsx
+Auto-merging apps/slides/src/renderer/ai/slides-skill.ts
+CONFLICT (content): Merge conflict in apps/slides/src/renderer/ai/slides-skill.ts
+Auto-merging apps/slides/src/renderer/components/Ribbon.tsx
+Auto-merging apps/slides/src/renderer/components/RibbonHomeTab.tsx
+Auto-merging apps/slides/src/renderer/components/ribbon-shared.tsx
+Auto-merging apps/slides/tests/page-spec.test.ts
+CONFLICT (content): Merge conflict in apps/slides/tests/page-spec.test.ts
+Auto-merging apps/slides/tests/scratch-block.test.ts
+CONFLICT (content): Merge conflict in apps/slides/tests/scratch-block.test.ts
+Auto-merging package.json
+Auto-merging packages/file-parse/package.json

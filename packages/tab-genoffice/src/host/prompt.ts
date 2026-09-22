@@ -17,6 +17,7 @@ const APP_LABEL: Record<CapabilityApp, string> = {
   sheets: 'xlsx',
   slides: 'pptx',
   pdf: 'pdf',
+  html: 'html',
 }
 
 function appOf(key: CapabilityKey): CapabilityApp {

@@ -1,0 +1,32 @@
+{
+  "events": [
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Landed 1 host-authored page(s) (insert_mode:append). Deck now has 2 page(s).",
+        "mutated": true,
+        "summary": "land_pages 1"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "<deck outline>\nThe presentation has 2 pages; page 2 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage 1 (slideIndex=0):\n  - e_2 | shape | \"日志验证 / 示例演示文稿 · 商务深蓝风格封面 / Sample Presentation  | …\"\nPage 2 (slideIndex=1):\n  - e_de4b3318 | text | \"LandOnceKeep\"\n(Use read_slide to see element positions/sizes/colors)\n</deck outline>",
+        "mutated": false,
+        "summary": "读取第 2 页"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "path": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T19-03-47-109Z/land.pptx",
+      "name": "land.pptx",
+      "mtimeMs": 1789239838093.6702
+    }
+  ],
+  "count": 3
+}

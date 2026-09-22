@@ -35,4 +35,4 @@
 | `x-nothing1024.dsh.skills/v1alpha1` | SkillRegistry | host | low |
 | `x-nothing1024.dsh.web-server/v1alpha1` | WebServer | host | medium |
 | `x-nothing1024.dsh.locale/v1alpha1` | Locale | client | low |
-| `x-nothing1024.better-sidebar/v1alpha1` | SidebarTab | client | low |
+| `x-nothing1024.dsh.sidebar-right/v1alpha1` | SidebarRight | client | low |

@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "package": "web-runtime-efficiency",
+  "uf": "EVD-005",
+  "branch": "startup-file",
+  "status": "passed",
+  "run_id": "wre-startup-2026-09-13T12:05:14.087Z",
+  "source_revisions": {
+    "plugin": "b30e51cbc9816ed8956bb19fe618f24af805c1a3",
+    "engine": "7bde3a4b6ad87c9eba1b72ffd7cfe01987715add",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "protocol": {
+    "version": 1,
+    "repeats": {
+      "markdown": 3,
+      "other": 2
+    },
+    "cold": "new browser page against a freshly started relay; first sample of that app/size",
+    "warm": "same relay process; a later page for the same fixture",
+    "sizes": {
+      "small": "hand-built keep fixture or official generated sample",
+      "medium": "markdown ~50KiB repeated paragraphs",
+      "large": "markdown ~250KiB repeated paragraphs"
+    }
+  },
+  "sample": {
+    "app": "markdown",
+    "kind": "cold",
+    "file": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-runtime-efficiency/evidence/phase-0/work-startup-file/md-small.md",
+    "ok": true,
+    "readiness": "ready",
+    "openError": null,
+    "editOk": true,
+    "saveOk": true,
+    "timings_ms": {
+      "navigate": 240,
+      "ready": 212,
+      "context": 6,
+      "edit": 17,
+      "save": 15,
+      "total": 490
+    },
+    "file_gets": 1,
+    "file_get_bytes": 221,
+    "duplicate_full_file_get": false,
+    "api_requests": 9,
+    "rss_mb": 48.59765625,
+    "contextChars": 83,
+    "screenshotBytes": 22291
+  },
+  "cases": [
+    {
+      "id": "phase-0-regression",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "phase0-no-duplicate",
+          "status": "passed",
+          "expected": "passed",
+          "actual": "passed"
+        },
+        {
+          "name": "phase0-readiness",
+          "status": "passed",
+          "expected": "passed",
+          "actual": "passed"
+        },
+        {
+          "name": "web-default-compatible",
+          "status": "passed",
+          "expected": true,
+          "actual": "npm run web:build -w @genoffice/shell && npm run web:build -w @genoffice/docs && npm run web:build -w @genoffice/markdown && node web/server.mjs"
+        },
+        {
+          "name": "web-serve-present",
+          "status": "passed",
+          "expected": "string",
+          "actual": "node web/server.mjs"
+        },
+        {
+          "name": "startup-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": "ready"
+        },
+        {
+          "name": "startup-single-get",
+          "status": "passed",
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "name": "startup-save",
+          "status": "passed",
+          "expected": true,
+          "actual": true
+        },
+        {
+          "name": "serve-start-ms",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "serveMs": 2107,
+            "relayStartMs": 897
+          }
+        }
+      ]
+    }
+  ]
+}

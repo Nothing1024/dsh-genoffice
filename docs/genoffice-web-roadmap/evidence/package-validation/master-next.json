@@ -1,0 +1,12 @@
+{
+  "action": "execute_task",
+  "package": "genoffice-web-roadmap",
+  "spec": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/genoffice-web-roadmap/spec.md",
+  "tasks": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/genoffice-web-roadmap/tasks.csv",
+  "taskId": 1,
+  "anchor": "spec.md#task-1",
+  "name": "核对执行范围和六包实际前置基线",
+  "status": "待开始",
+  "instruction": "阅读 spec 对应任务及关联合同；实现、真实验证并归档证据后，只更新 tasks.csv 对应状态，再调用 next。",
+  "note": "闸门只核验状态、结构和证据记录；执行者仍须核对真实场景语义、源码版本及证据时效。不会执行 CSV 命令或修改状态。"
+}

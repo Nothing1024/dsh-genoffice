@@ -1,0 +1,10 @@
+{
+  "events": [
+    {
+      "url": "/api/file",
+      "path": "/tmp/genoffice-plugin-alignment/pta-2026-09-12T17-17-59-551Z/path-a/note.docx",
+      "status": 200
+    }
+  ],
+  "count": 1
+}

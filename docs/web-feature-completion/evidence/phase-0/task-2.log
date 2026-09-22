@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-001",
+  "branch": "sheets-slice",
+  "status": "passed",
+  "deps": {
+    "isolatedHead": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+    "officialAncestor": true,
+    "htmlPresent": true,
+    "htmlWebBuild": true,
+    "htmlRouted": true,
+    "sidecarTree": true,
+    "ocrWebNull": false,
+    "playwright": true,
+    "sheetsRoutesXlsx": true,
+    "sheetsNoSpawn": true
+  },
+  "results": {
+    "success": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-001",
+      "branch": "success",
+      "run_id": "40110db2-3b7d-4b1d-af2b-3efbe25589fe",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "sheets-slice-home-open-save",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "home-xlsx-no-desktop-alert",
+              "status": "passed",
+              "expected": null,
+              "actual": null
+            },
+            {
+              "name": "home-new-sheet-opens-sheets",
+              "status": "passed",
+              "expected": "/sheets/",
+              "actual": "http://127.0.0.1:18787/sheets/"
+            },
+            {
+              "name": "no-spawn-in-browser-bridge",
+              "status": "passed",
+              "expected": true,
+              "actual": true
+            },
+            {
+              "name": "shell-routes-xlsx",
+              "status": "passed",
+              "expected": true,
+              "actual": true
+            },
+            {
+              "name": "open-ready",
+              "status": "passed",
+              "expected": "ready",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "360ab8807d92dfb0b8fd132276d9c276f82a9756df3bef3eeb440f60bf559d14",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-slice/home-sheets-loop.xlsx",
+                "registered": true,
+                "readiness": "ready",
+                "revision": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552",
+                "error": null,
+                "occupied": true,
+                "owner": "452dde07-4f6d-4842-8e5d-1ad3ee84aa76"
+              }
+            },
+            {
+              "name": "disk-unchanged-until-save",
+              "status": "passed",
+              "expected": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552",
+              "actual": {
+                "midSha": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552",
+                "afterEditSha": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552"
+              }
+            },
+            {
+              "name": "edit-ok",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "execution": {
+                  "output": "Auto-applied 1 change(s) (undo via the side panel [Undo] button or ⌘Z): A1: Old → WfcSheetKeep",
+                  "mutated": true,
+                  "summary": "write WfcSheetKeep"
+                },
+                "revision": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552"
+              }
+            },
+            {
+              "name": "save-ok",
+              "status": "passed",
+              "expected": true,
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-slice/home-sheets-loop.xlsx",
+                "name": "home-sheets-loop.xlsx",
+                "mtimeMs": 1789250559210.6528
+              }
+            },
+            {
+              "name": "disk-changed-after-save",
+              "status": "passed",
+              "expected": "changed",
+              "actual": {
+                "beforeSha": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552",
+                "savedSha": "09413de4b8682d8620a3a528621234682bf9d41a30acd115c0a8c985175a1ac0"
+              }
+            },
+            {
+              "name": "reopen-ready",
+              "status": "passed",
+              "expected": "ready",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "360ab8807d92dfb0b8fd132276d9c276f82a9756df3bef3eeb440f60bf559d14",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-slice/home-sheets-loop.xlsx",
+                "registered": true,
+                "readiness": "ready",
+                "revision": "09413de4b8682d8620a3a528621234682bf9d41a30acd115c0a8c985175a1ac0",
+                "error": null,
+                "occupied": true,
+                "owner": "452dde07-4f6d-4842-8e5d-1ad3ee84aa76"
+              }
+            },
+            {
+              "name": "reopen-keeps-edit",
+              "status": "passed",
+              "expected": "WfcSheetKeep",
+              "actual": {
+                "reText": "Active sheet: Sheet1 (id=sheet-1, data extent about 100 rows × 26 columns)\nMode: imported real xlsx file (some regions may still be streaming in)\nActive sheet data area: A1:Z100 (answer data-size questions directly from this — do not tally block by block with read_range)\nCurrent selection: A1\nCurrently loaded viewport: A1:Z100 (not the worksheet data extent)\nNo known non-empty cell information yet",
+                "zipHasMarker": true
+              }
+            },
+            {
+              "name": "xlsx-bytes-contain-edit",
+              "status": "passed",
+              "expected": true,
+              "actual": true
+            }
+          ]
+        }
+      ]
+    },
+    "failure1": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-001",
+      "branch": "failure-1",
+      "run_id": "53fc5737-e549-4421-a938-15cb1358d849",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "sheets-slice-new-without-save",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "new-sheet-does-not-write-fixture",
+              "status": "passed",
+              "expected": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552",
+              "actual": "1a12131ffde3435a89a7c91120916ae2ae82668086c7609bccb12648aef30552"
+            },
+            {
+              "name": "home-cancel-no-alert-overwrite",
+              "status": "passed",
+              "expected": null,
+              "actual": null
+            }
+          ]
+        }
+      ]
+    },
+    "failure2": {
+      "schema_version": 1,
+      "package": "web-feature-completion",
+      "uf": "UF-001",
+      "branch": "failure-2",
+      "run_id": "fafcc4de-08e6-4571-92cf-49197b9a41ad",
+      "source_revisions": {
+        "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+        "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+        "engine_root": "/private/tmp/genoffice-official-sync-engine"
+      },
+      "status": "passed",
+      "cases": [
+        {
+          "id": "sheets-slice-missing-or-corrupt",
+          "status": "passed",
+          "assertions": [
+            {
+              "name": "missing-file-error",
+              "status": "passed",
+              "expected": "error",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "bf62463e388bf5bff07f7ba44c8b3dedcb07200277f95d8a5ccf4fc4713cd45e",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-slice/missing-home-sheets.xlsx",
+                "registered": true,
+                "readiness": "error",
+                "revision": null,
+                "error": "load-error: ENOENT: no such file or directory, open '/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-slice/missing-home-sheets.xlsx'",
+                "occupied": true,
+                "owner": "79c41e69-925a-41c8-a31a-cd0e9aa0710f"
+              }
+            },
+            {
+              "name": "missing-not-ready",
+              "status": "passed",
+              "expected": "not-ready",
+              "actual": "error"
+            },
+            {
+              "name": "corrupt-file-error",
+              "status": "passed",
+              "expected": "error",
+              "actual": {
+                "status": 200,
+                "ok": true,
+                "docId": "2f717e5ad96748e56dce1042561d75a319d17144a4c93f460255149133e685f6",
+                "path": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-sheets-slice/corrupt-home-sheets.xlsx",
+                "registered": true,
+                "readiness": "error",
+                "revision": null,
+                "error": "Can't find end of central directory : is this a zip file ? If it is, see https://stuk.github.io/jszip/documentation/howto/read_zip.html",
+                "occupied": true,
+                "owner": "3db49caa-ab3c-4ab1-ade0-fc3ac28e43ea"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

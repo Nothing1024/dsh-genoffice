@@ -1,0 +1,3 @@
+# Task 10 sheets-state e2e exit 0
+npm test -w @genoffice/sheets exit 0
+See task-10/summary.json

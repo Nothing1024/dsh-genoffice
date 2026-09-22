@@ -30,13 +30,14 @@ beforeEach(() => {
 })
 
 describe('createOpenTools', () => {
-  it('registers pptx_open / docx_open / xlsx_open / md_open / pdf_open', () => {
+  it('registers pptx_open / docx_open / xlsx_open / md_open / pdf_open / html_open', () => {
     expect(createOpenTools().map((t) => t.name)).toEqual([
       'pptx_open',
       'docx_open',
       'xlsx_open',
       'md_open',
       'pdf_open',
+      'html_open',
     ])
   })
 
@@ -65,6 +66,7 @@ describe('createOpenTools', () => {
       'xlsx_open',
       'md_open',
       'pdf_open',
+      'html_open',
     ])
   })
 
@@ -93,10 +95,10 @@ describe('createOpenTools', () => {
     if (presented?.card === 'generic') expect(presented.kind).toBe('read')
   })
 
-  it('includes the calling agent sessionId so other DSH pages do not steal the open', async () => {
+  it('does not send the agent id as a sidebar sessionId', async () => {
     const fetch = mockOpenFetch({
       open: (body) => {
-        expect(body).toEqual({ path: '/tmp/demo.docx', sessionId: 'session-a' })
+        expect(body).toEqual({ path: '/tmp/demo.docx' })
         return { ok: true, path: '/tmp/demo.docx', subscribers: 2 }
       },
     })

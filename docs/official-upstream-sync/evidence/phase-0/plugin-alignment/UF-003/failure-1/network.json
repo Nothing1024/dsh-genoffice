@@ -1,0 +1,48 @@
+{
+  "events": [
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "cellId is not supported; pass row and col",
+        "isError": true,
+        "mutated": false,
+        "summary": "批量操作"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Applied 1 op(s): setTableCell @0/tbl_2.\n<layout-audit>⚠️ Found issue(s) on 1 page(s):\npage 1:\n- Out of bounds: tbl_2(table) 320px past the right edge\n→ Fix issues your edit caused before replying: execute_slide_script on the affected page (it reads live geometry) or another apply_ops with setTransform; at most 2 fix rounds. Issues that already existed and that you did not touch are for your judgment only — do not report them to the user, and never quote element ids in the reply.\n</layout-audit>",
+        "mutated": true,
+        "summary": "编辑表格"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "unknown kind \"addRow\". Supported: insert-row, delete-row, insert-col, delete-col",
+        "isError": true,
+        "mutated": false,
+        "summary": "批量操作"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    },
+    {
+      "status": 200,
+      "ok": true,
+      "execution": {
+        "output": "Nothing was applied (atomic):\n- ops[0]: unknown op \"paintPixels\". Supported ops: [deleteElement, setFill, setStroke, setText, setFont, setParagraphFormat, setTransform, setConnectorEndpoints, flipElements, setPictureSrcRect, setPictureOpacity, reorderElement, groupElements, ungroupElement, setShapeGeometry, setShapeAdjust, setTextAnchor, setTextBodyProps, setEffects, setLink, setImageFill, addElement, addPicture, replacePicture, addTable, addChart, addSmartArt, addMedia, addModel3d, pasteElements, setTableCell, tableMerge, tableStructure, setTableRowHeight, setTableCellAnchor, setTableColWidth, setTableStyle, setChart, deleteSlide, duplicateSlide, addBlankSlide, addSlideWithLayout, pasteSlide, insertSlidePptx, moveSlide, setSlideLayout, setSlideSize, setBackground, setHidden, setTransition, setAdvanceTime, setAnimations, findReplace, applyHeaderFooter, setSections, addSection, renameSection, removeSection, moveSection, setNotes, addComment, deleteComment, applyTheme].",
+        "isError": true,
+        "mutated": false,
+        "summary": "批量操作"
+      },
+      "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+    }
+  ],
+  "count": 4
+}

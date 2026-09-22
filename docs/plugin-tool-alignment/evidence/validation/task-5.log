@@ -1,0 +1,6 @@
+# plugin-tool-alignment Task 5
+2026-09-12T17:13:20+00:00
+schema: edit_table_cell row/col/paragraphs; edit_table_structure kind/index/before; edit_table_style top-level; edit_chart/add_chart/add_table aligned; removed false 网页版不可用 on executable table/chart tools
+live: add_table + edit_table_cell(AlignedCell) + insert-row + edit_table_style + add_chart + edit_chart + save + reopen kept AlignedCell
+node scripts/e2e-plugin-alignment.mjs --case ppt-schema → 0
+npm test -w @deepseek-ai/dsh-tab-genoffice → 146 passed

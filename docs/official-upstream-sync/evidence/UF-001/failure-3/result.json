@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "package": "official-upstream-sync",
+  "uf": "UF-001",
+  "branch": "failure-3",
+  "run_id": "ous-2026-09-12T19-07-56-943Z",
+  "source_revisions": {
+    "plugin": "unknown",
+    "engine": "c34ca1a4e7dfc3de33780b6a7f79b42075dc4513",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "UF-001-failure-3",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "save-returned",
+          "status": "passed",
+          "expected": "save",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/save-during.md",
+            "name": "save-during.md",
+            "mtimeMs": 1789240092055.7861
+          }
+        },
+        {
+          "name": "later-edit-present",
+          "status": "passed",
+          "expected": "AfterExportNew",
+          "actual": {
+            "during": {
+              "status": 200,
+              "ok": true,
+              "execution": {
+                "output": "ops[0] insertContent: Inserted 1 block(s).\nBlock indexes may have changed; call get_document_context before further index-based edits.",
+                "mutated": true,
+                "summary": "插入内容",
+                "revision": "bfb028b26da545e7f74694a4963bc422449f73f66a994454d29f278aa82407c2"
+              },
+              "revision": "bfb028b26da545e7f74694a4963bc422449f73f66a994454d29f278aa82407c2"
+            },
+            "afterSave": "## Document state\n4 top-level blocks:\n\n0 | h1 | SAVE_DURING\n1 | paragraph | \n2 | paragraph | AfterExportNew\n3 | paragraph | BeforeSave"
+          }
+        },
+        {
+          "name": "second-save",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/save-during.md",
+            "name": "save-during.md",
+            "mtimeMs": 1789240092072.1423
+          }
+        }
+      ]
+    }
+  ]
+}

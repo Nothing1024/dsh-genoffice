@@ -4,10 +4,10 @@
   "uf": "UF-003",
   "branch": "plugin-discovery",
   "status": "passed",
-  "run_id": "wre-plugin-discovery-2026-09-13T11:46:36.218Z",
+  "run_id": "wre-plugin-discovery-2026-09-13T12:05:22.102Z",
   "source_revisions": {
-    "plugin": "cb3ad1e7891da72e1364428a19b435ddd761edaa",
-    "engine": "bec9197ef0e6f82d3d35064d100659ad1e1beaab",
+    "plugin": "b30e51cbc9816ed8956bb19fe618f24af805c1a3",
+    "engine": "7bde3a4b6ad87c9eba1b72ffd7cfe01987715add",
     "engine_root": "/private/tmp/genoffice-official-sync-engine"
   },
   "compatible": {

@@ -1,0 +1,8 @@
+# plugin-tool-alignment Task 2
+2026-09-12T17:05:15.259869+00:00
+node scripts/e2e-plugin-alignment.mjs --case path → exit 0
+npm test → 146 passed
+npm run typecheck → 0
+resolver: packages/tab-genoffice/src/tabs/resolve-session-path.ts
+FileTab waits for sessions, errors without relay, joins address session cwd
+INV-001 sidebar.ts / file-address.ts untouched

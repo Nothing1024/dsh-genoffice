@@ -1,0 +1,57 @@
+app,entry,bridge,implementation_task,uf,positive_case,negative_case,dependency,status
+shell,home-new-docx,apps/shell/src/renderer/src/web-bridge.ts#newDoc,3,UF-001,create docx from home and reopen,cancel picker keeps idle,none,available
+shell,home-new-md,apps/shell/src/renderer/src/web-bridge.ts#newMarkdown,3,UF-001,create md from home and reopen,cancel picker keeps idle,none,available
+shell,home-new-xlsx,apps/shell/src/renderer/src/web-bridge.ts#newSheet,2,UF-001,create xlsx from home and save,notifyUnsupported today,none,stub
+shell,home-new-pptx,apps/shell/src/renderer/src/web-bridge.ts#newSlide,3,UF-001,create pptx from home,notifyUnsupported today,none,stub
+shell,home-new-pdf,apps/shell/src/renderer/src/web-bridge.ts#newPdf,3,UF-001,create pdf from home,notifyUnsupported today,none,stub
+shell,home-new-html,apps/shell/src/renderer/src/web-bridge.ts#newHtml,17,UF-006,create html from home and open /html/,html build missing stays 404 not docs,html-web-dist,available
+shell,open-by-ext,apps/shell/src/renderer/src/web-bridge.ts#appForExt,3,UF-001,route five families by extension,unknown ext structured refuse,none,partial
+shell,credit-usage,apps/shell/src/renderer/src/web-bridge.ts#openCreditUsage,15,UF-005,open usage when provider ready,unconfigured refuses before navigate,provider,available
+docs,open-save,apps/docs/src/renderer/web-bridge.ts,16,UF-001,open edit save reopen docx,cancel or corrupt keeps original,none,available
+docs,encrypted-open,apps/docs/src/renderer/web-bridge.ts,16,UF-001,prompt then open with password,wrong password or disabled keeps original,docs-crypto,available
+docs,print-export,apps/docs/src/renderer/web-bridge.ts#exportPdf,13,UF-005,export real PDF via web service,missing printer before submit,print-service,available
+markdown,open-save,apps/markdown/src/renderer/web-bridge.ts,16,UF-001,open edit save reopen md,invalid UTF-8 readiness=error keeps bytes,none,available
+markdown,image-search,apps/markdown/src/renderer/web-bridge.ts#imageSearch,15,UF-005,search returns images,unconfigured/runtime keep empty,search-provider,available
+docs,web-search,apps/docs/src/renderer/web-bridge.ts#webSearch,15,UF-005,web search returns results,unconfigured/runtime keep empty,search-provider,available
+docs,generate-image,apps/docs/src/renderer/web-bridge.ts#aiGenerateImage,15,UF-005,generate returns image dest,unconfigured/runtime no dest,generate-provider,available
+docs,model-stream,apps/docs/src/renderer/web-bridge.ts#aiStream,15,UF-005,configured model returns text,missing key/runtime error,model-provider,available
+slides,analyze-media,apps/slides/src/renderer/web-bridge.ts#analyzeMedia,15,UF-005,analyze returns text,unconfigured/runtime empty,analyze-provider,available
+sheets,home-open-save,apps/sheets/src/renderer/web-bridge.ts,2,UF-001,home open xlsx edit A1 save reopen,missing file structured error,none,partial
+sheets,shared-formulas,apps/sheets/src/renderer/web-xlsx.ts#parseXlsxWorkbook,4,UF-002,shared formula followers translate,empty f tags must not fake missing,sidecar-or-model,available
+sheets,defined-names,apps/sheets/src/renderer/web-xlsx.ts,4,UF-002,definedNames roundtrip,empty array today,none,available
+sheets,tables-filters-protect,apps/sheets/src/renderer/web-xlsx.ts,4,UF-002,tables/autofilter/protect persist,null/empty today,none,available
+sheets,readWorkbookMedia,apps/sheets/src/renderer/web-bridge.ts,5,UF-002,read and rewrite media,throws web unavailable,none,available
+sheets,readPivotDefinition,apps/sheets/src/renderer/web-bridge.ts,5,UF-002,read pivot cache,throws web unavailable,none,available
+sheets,readLocalImage,apps/sheets/src/renderer/web-bridge.ts,5,UF-002,insert local image persist,throws web unavailable,none,available
+sheets,chunked-save,apps/sheets/src/renderer/web-bridge.ts,2,UF-002,large save via chunks or single path,throws chunked unavailable,none,stub
+sheets,sidecar,apps/sheets/src/main/xlsx-sidecar-client.ts,4,UF-002,sidecar reads formulas/media,missing binary preflight,xlsx-sidecar,compiled-only
+sheets,exportPdf,apps/sheets/src/renderer/web-bridge.ts#exportPdf,13,UF-005,export workbook PDF,missing printer before submit,print-service,available
+slides,open-save-apply-ops,apps/slides/src/renderer/web-bridge.ts#runTxn,9,UF-004,apply_ops setText save reopen,unknown op vocabulary,none,available
+slides,land_pages,apps/slides/src/renderer/ai/slides-skill.ts,9,UF-004,land pages_spec append,illegal spec no partial page,none,available
+slides,findReplace,apps/slides/src/renderer/web-bridge.ts,9,UF-004,find replace via menu/tool,empty find rejected no mutate,none,available
+slides,setSlideLayout,apps/slides/src/renderer/web-bridge.ts,9,UF-004,change layout persist,missing layout path rejected,none,available
+slides,setSlideSize,apps/slides/src/renderer/web-bridge.ts,9,UF-004,change slide size persist,invalid size rejected no mutate,none,available
+slides,applyTheme,apps/slides/src/renderer/web-bridge.ts,9,UF-004,apply theme persist,invalid colors rejected,none,available
+slides,setSlideHidden,apps/slides/src/renderer/web-bridge.ts,9,UF-004,hide slide persist,illegal index rejected,none,available
+slides,sections,apps/slides/src/renderer/web-bridge.ts,9,UF-004,add/rename/move/remove section,illegal section id rejected,none,available
+slides,moveSlide,apps/slides/src/renderer/web-bridge.ts,9,UF-004,reorder slides persist,illegal index rejected,none,available
+slides,media-insert,apps/slides/src/renderer/web-bridge.ts#insertMedia,10,UF-004,insert media persist,illegal ext/url rejected,none,available
+slides,links,apps/slides/src/renderer/web-bridge.ts#setLink,10,UF-004,set/get hyperlink persist,missing element rejected,none,available
+slides,header-footer,apps/slides/src/renderer/web-bridge.ts,10,UF-004,apply header footer persist,invalid target rejected,none,available
+slides,export-images,apps/slides/src/renderer/web-bridge.ts#exportImages,10,UF-004,export slide images,relative dir rejected,none,available
+slides,master,apps/slides/src/renderer/web-bridge.ts#masterOpen,11,UF-004,edit master persist,missing part rejected,none,available
+slides,animations,apps/slides/src/renderer/web-bridge.ts#setAnimations,11,UF-004,set animations persist,missing element rejected,none,available
+slides,transitions,apps/slides/src/renderer/web-bridge.ts#setTransition,11,UF-004,set transition persist,invalid kind rejected,none,available
+slides,presenter,apps/slides/src/renderer/web-bridge.ts#presenterStart,11,UF-004,web slideshow start/end,no audience swap,none,available
+slides,print-export,apps/slides/src/renderer/web-bridge.ts#exportPdf,13,UF-005,export slides PDF,missing printer before submit,print-service,available
+pdf,open-save,apps/pdf/src/renderer/web-bridge.ts,7,UF-001,open annotate save reopen,missing file structured error,none,available
+pdf,page-ops,apps/pdf/src/main/save-pdf.ts#extractPagesBytes,7,UF-003,extract/insert/split/crop/size,web menu not wired,none,compiled-only
+pdf,convertOffice,apps/pdf/src/renderer/web-bridge.ts#convertOffice,8,UF-003,pdf to docx/pptx/xlsx reopen,cancel and invalid format keep source,wasm-worker,available
+pdf,ocrPage,apps/pdf/src/renderer/web-bridge.ts#ocrPage,14,UF-005,ocr text back into editor,unconfigured/cancel/runtime keep dest absent,ocr-helper,available
+html,web-build-route,apps/html/vite.web.config.ts,17,UF-006,web:build + /html/ static root,missing web-dist 404 no docs fallback,html-web-dist,available
+html,edit-save,apps/html/src/renderer/control.ts,17,UF-006,edit html save reopen via control,unreadable/binary html errors without overwrite,html-web-dist,available
+html,html-to-docx,packages/html2docx/tools/cli.ts,18,UF-006,convert html to docx and reopen in docs,invalid html / blocked resource / cancel leave dest unwritten,html2docx,available
+plugin,capability-table,packages/tab-genoffice/src/host/capability.ts,19,UF-001,capability keys match executors,undeclared stub must not be available,none,available
+docs,attachment-extract,apps/docs/src/renderer/web-bridge.ts#readAttachment,16,UF-001,extract txt and pdf attachment text,corrupt or disabled keeps original,docs-extract,available
+docs,protect-save,apps/docs/src/renderer/web-bridge.ts#setDocPassword,16,UF-001,set password and save encrypted dest,encrypt fail does not write dest,docs-crypto,available
+markdown,assets,apps/markdown/src/renderer/web-bridge.ts#saveImage,16,UF-001,save image under assets and reread,untitled or disabled writes nothing,markdown-assets,available

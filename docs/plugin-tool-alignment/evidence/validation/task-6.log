@@ -1,0 +1,6 @@
+# plugin-tool-alignment Task 6
+2026-09-12T17:15:20+00:00
+apply_ops docs: target:{slide,el} durable e_*/s_*; 1px=9525 EMU; dry_run; max 50; atomic rollback; op vocabulary
+live: dry_run setText no mutate; apply setText+setTransform EMU; unknown op atomic rollback; empty/51 rejected; save+reopen ApplyOpsKeep
+node scripts/e2e-plugin-alignment.mjs --case apply-ops → 0
+npm run typecheck → 0

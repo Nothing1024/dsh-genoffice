@@ -1,0 +1,48 @@
+web-feature-completion Task 21
+date: 2026-09-12T22:16:01Z
+cwd_engine: /tmp/genoffice-official-sync-engine
+cwd_plugin: /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin
+node: v22.23.2
+npm: 10.9.8
+isolated HEAD: fad306a45677010a4817ae2c2c17c4c071d4a0a9
+plugin HEAD: 5d5ee6d18fa87c40d587a2cc5dd429821946f90b
+
+commands:
+  npm --prefix /tmp/genoffice-official-sync-engine run typecheck
+    task-21-typecheck.log typecheck_exit=0
+  npm --prefix /tmp/genoffice-official-sync-engine run test
+    task-21-test.log test_exit=0
+  npm --prefix /tmp/genoffice-official-sync-engine run web:build --workspaces --if-present
+    task-21-webbuild.log webbuild_exit=0
+  plugin npm run typecheck  plugin_typecheck_exit=0
+  plugin npm test           plugin_test_exit=0
+  plugin npm run build      plugin_build_exit=0
+  plugin npm run standard:check  plugin_standard_exit=0
+  python3 validate_package.py docs/web-feature-completion --repo .
+    task-21-validate.log 0 FAIL
+
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "EVD-007",
+  "branch": "phase-2-regression",
+  "status": "passed",
+  "run_id": "wfc-t21-20260912T221601Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "fad306a45677010a4817ae2c2c17c4c071d4a0a9",
+    "engine_root": "/tmp/genoffice-official-sync-engine"
+  },
+  "exits": {
+    "isolated_typecheck": "0",
+    "isolated_test": "0",
+    "isolated_webbuild": "0",
+    "plugin_typecheck": "0",
+    "plugin_test": "0",
+    "plugin_build": "0",
+    "plugin_standard": "0",
+    "validate_package": "0"
+  },
+  "node": "v22.23.2",
+  "npm": "10.9.8"
+}

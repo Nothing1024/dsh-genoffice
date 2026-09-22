@@ -1,0 +1,19 @@
+# control-session-safety Task 2
+cwd: plugin root
+plugin: 5d5ee6d18fa87c40d587a2cc5dd429821946f90b
+engine: 247e3f5c488afb25915e9ee97fe0fd22e27648da + local readiness changes
+
+## 实现
+- engine/web/server.mjs: executor.readiness, notify kind=status, open 返回 readiness, context/tool/export requireReady
+- engine/apps/markdown/src/renderer/control.ts: setReadiness + status flush on hello
+- engine/apps/markdown/src/renderer/web-bridge.ts: path: 加载失败抛 load-error，不再当空文档
+- engine/apps/markdown/src/renderer/App.tsx: 控制流与加载分离；ready/error 上报 revision/loadError
+- npm run web:build -w @genoffice/markdown
+
+## 验证
+node ../engine/web/e2e-control-session.mjs --case markdown-loading
+exit 0
+- loading-edit-blocked: not-ready/loading
+- ready-edit-allowed: mutated
+- load-fail-preserves-bytes: not-ready/error, disk 仍为 # ORIGINAL_BYTES
+npm run typecheck -w @genoffice/markdown → exit 0

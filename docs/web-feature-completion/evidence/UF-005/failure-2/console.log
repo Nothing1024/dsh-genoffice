@@ -1,0 +1,7 @@
+[markdown] [control] stream open (docId=e2607b7a…)
+[markdown] [control] executor registered (/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-providers/providers.md)
+[docs] [control] stream open (docId=7fa54145…)
+[docs] [control] executor registered (/private/tmp/genoffice-official-sync-engine/fixtures/generated/simple.docx)
+[slides] [control] stream open (docId=e41fa81f…)
+[slides] [control] executor registered (/private/tmp/genoffice-official-sync-engine/fixtures/generated/sample.pptx)
+fail={"failSearch":{"status":200,"results":[],"method":"error","error":"search-runtime-error"},"failGen":{"status":200,"error":"generate-runtime-error"},"failAnalyze":{"status":200,"error":"analyze-runtime-error"},"failModel":{"status":200,"ok":false,"error":"model-runtime-error"},"recovered":{"status":200,"results":[{"title":"WfcSearchKeep WfcSearchKeep","url":"https://example.com/wfc-search","snippet":"WfcSearchKeep fixture result"}],"method":"fixture","answer":"WfcSearchKeep"}}

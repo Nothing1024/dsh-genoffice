@@ -1,0 +1,9 @@
+# plugin-tool-alignment Task 10
+2026-09-12T17:19:10+00:00
+npm run typecheck → 0
+npm test -w @deepseek-ai/dsh-tab-genoffice → 154 passed
+npm run build → 0
+npm run standard:check → 全部通过
+node ../engine/web/e2e-control-session.mjs --case plugin-state → 0
+python3 validate_package.py docs/plugin-tool-alignment --repo . → 0 FAIL / 22 PASS
+spec locator canOpen: canOpenControlAddress (was claimedExtOf)

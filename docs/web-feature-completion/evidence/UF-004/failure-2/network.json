@@ -1,0 +1,12 @@
+{
+  "events": [
+    {
+      "badTransition": false,
+      "badMaster": null,
+      "badAnim": false,
+      "swap": false,
+      "slideCount": 1
+    }
+  ],
+  "count": 1
+}

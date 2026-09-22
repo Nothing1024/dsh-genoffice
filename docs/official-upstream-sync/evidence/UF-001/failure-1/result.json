@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "package": "official-upstream-sync",
+  "uf": "UF-001",
+  "branch": "failure-1",
+  "run_id": "ous-2026-09-12T19-07-56-943Z",
+  "source_revisions": {
+    "plugin": "unknown",
+    "engine": "c34ca1a4e7dfc3de33780b6a7f79b42075dc4513",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "UF-001-failure-1",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "invalid-open-not-ready-or-error",
+          "status": "passed",
+          "expected": "error",
+          "actual": {
+            "opened": {
+              "status": 200,
+              "ok": true,
+              "docId": "e43efb8747f762d789c95c3a4d3bf497269f629ea5d4968c51a341898c7afa52",
+              "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/invalid-open.md",
+              "registered": true,
+              "readiness": "error",
+              "revision": null,
+              "error": "load-error: markdown is not valid UTF-8",
+              "occupied": true,
+              "owner": "1055c0a4-6882-482e-aeef-1c1c00ab9020"
+            },
+            "edited": {
+              "status": 200,
+              "ok": false,
+              "error": "not-ready",
+              "readiness": "error",
+              "loadError": "load-error: markdown is not valid UTF-8"
+            }
+          }
+        },
+        {
+          "name": "invalid-bytes-not-blanked",
+          "status": "passed",
+          "expected": "kept",
+          "actual": {
+            "before": "ffd8ff",
+            "after": "ffd8ff",
+            "saved": {
+              "status": 200,
+              "ok": false,
+              "error": "not-ready",
+              "readiness": "error",
+              "loadError": "load-error: markdown is not valid UTF-8"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

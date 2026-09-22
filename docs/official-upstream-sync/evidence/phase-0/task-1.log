@@ -1,0 +1,49 @@
+official-upstream-sync Task 1
+time=2026-09-12T17:21:52Z
+cwd=/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin
+
+engine_head=247e3f5c488afb25915e9ee97fe0fd22e27648da
+engine_branch=fork/eat-official-engine
+plugin_head=5d5ee6d18fa87c40d587a2cc5dd429821946f90b
+official=de139a061537bea40f0cc81ef8f09a95f77ac52a
+merge_base=f68df70e222d47aa08211f9a2d7748c610d1d6aa
+left_right=37	98
+node=/Users/nothing/.nvm/versions/node/v22.23.2/bin/node v22.23.2
+git_user_name=
+git_user_email=
+head_author=Nothing <nothing@NothingdeMacBook-Pro.local>
+
+isolation_worktree=/tmp/genoffice-official-sync-engine
+isolation_branch=official-sync-de139a0
+baseline_dir=/tmp/genoffice-official-sync-baseline
+dirty_overlay=/tmp/genoffice-official-sync-baseline/dirty-overlay
+original_engine_left_untouched=yes
+
+merge-tree HEAD de139a061537bea40f0cc81ef8f09a95f77ac52a
+exit=1
+conflict_count=16
+conflicts=
+.gitignore
+README.md
+apps/docs/src/renderer/App.tsx
+apps/markdown/src/renderer/App.tsx
+apps/markdown/src/renderer/ai/markdown-skill.ts
+apps/markdown/src/renderer/components/Ribbon.tsx
+apps/pdf/src/renderer/App.tsx
+apps/sheets/src/renderer/App.tsx
+apps/sheets/src/renderer/ExcelShell.tsx
+apps/sheets/src/renderer/edit-journal.ts
+apps/sheets/src/renderer/save-actions.ts
+apps/slides/src/main/page-spec.ts
+apps/slides/src/renderer/ai/AiPanel.tsx
+apps/slides/src/renderer/ai/slides-skill.ts
+apps/slides/tests/page-spec.test.ts
+apps/slides/tests/scratch-block.test.ts
+
+note: 16 is the same count as the spec survey; auto-merged control/bridge/package.json files still require review in Task 2. Uncommitted session-safety files are not in HEAD, so they were snapshotted into dirty-overlay and will be overlaid after conflict resolution. Original workspace merge was not started.
+
+typecheck: npm --prefix ../engine run typecheck started against the dirty original tree as the pre-merge baseline (see task-1-typecheck.log when the run finishes).
+
+typecheck_baseline_exit=0
+typecheck_log=evidence/phase-0/task-1-typecheck.log
+completed_at=2026-09-12T17:23:48Z

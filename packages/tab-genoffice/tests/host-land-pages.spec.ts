@@ -307,3 +307,109 @@ describe('error mapping', () => {
     expect(plan.message).toMatch(/pptx_land_pages/)
   })
 })
+
+describe('land_pages write is not replayed', () => {
+  function timeoutLandFetch() {
+    return vi.fn(async (_input: RequestInfo, init?: RequestInit) => {
+      const body = JSON.parse(String(init?.body ?? '{}')) as { call?: { name?: string } }
+      if (body.call?.name === 'land_pages') throw new Error('timeout waiting for land_pages')
+      return {
+        ok: true,
+        json: async () => ({
+          ok: true,
+          execution: { output: contextOutput(1, true), isError: false, mutated: false, summary: 'context' },
+        }),
+      }
+    })
+  }
+
+  function landWrites(fetch: ReturnType<typeof vi.fn>): number {
+    return fetch.mock.calls.filter((c) => String(c[1]?.body ?? '').includes('"land_pages"')).length
+  }
+
+  it('does not replay land_pages when the write receipt times out', async () => {
+    const fetch = timeoutLandFetch()
+    vi.stubGlobal('fetch', fetch)
+    const tool = tools().find((t) => t.name === 'pptx_land_pages')
+    const result = await tool!.execute(
+      { path: '/tmp/demo.pptx', pages: [PAGE], insert_mode: 'replace' },
+      exec,
+    )
+    expect(result).toMatchObject({ ok: false })
+    expect(String((result as { output: string }).output)).toMatch(/不确定/)
+    expect(landWrites(fetch)).toBe(1)
+  })
+
+  it('generate_deck pages_spec timeout still posts land_pages once', async () => {
+    const fetch = timeoutLandFetch()
+    vi.stubGlobal('fetch', fetch)
+    const tool = tools({
+      planLlm: async () => {
+        throw new Error('LLM must not run when pages_spec is present')
+      },
+    }).find((t) => t.name === 'pptx_generate_deck')
+    const result = await tool!.execute({ path: '/tmp/demo.pptx', pages_spec: [PAGE] }, exec)
+    expect(result).toMatchObject({ ok: false })
+    expect(String((result as { output: string }).output)).toMatch(/不确定/)
+    expect(landWrites(fetch)).toBe(1)
+    expect(fetch.mock.calls.some((c) => String(c[1]?.body ?? '').includes('"generate_deck"'))).toBe(false)
+  })
+
+  it('regenerate_slide timeout still posts land_pages once', async () => {
+    const fetch = timeoutLandFetch()
+    vi.stubGlobal('fetch', fetch)
+    const tool = tools({
+      planLlm: async () => JSON.stringify(PAGE),
+    }).find((t) => t.name === 'pptx_regenerate_slide')
+    const result = await tool!.execute({ path: '/tmp/demo.pptx', slideIndex: 0, brief: '重做封面' }, exec)
+    expect(result).toMatchObject({ ok: false })
+    expect(String((result as { output: string }).output)).toMatch(/不确定/)
+    expect(landWrites(fetch)).toBe(1)
+    expect(fetch.mock.calls.some((c) => String(c[1]?.body ?? '').includes('"regenerate_slide"'))).toBe(false)
+  })
+})
+
+describe('pptx_land_pages image failure', () => {
+  it('returns ok:false with the missing-image note and drops relay revision', async () => {
+    const note = '\n⚠️ Missing images: page 1 (https://example.test/a.png) failed to download/convert; those image slots are blank on the page.'
+    const fetch = vi.fn(async (_input: RequestInfo, init?: RequestInit) => {
+      const body = JSON.parse(String(init?.body ?? '{}')) as { call?: { name?: string } }
+      if (body.call?.name === 'get_deck_context') {
+        return {
+          ok: true,
+          json: async () => ({
+            ok: true,
+            revision: 'rev-should-not-leak',
+            execution: { output: contextOutput(1, true), isError: false, summary: 'context' },
+          }),
+        }
+      }
+      return {
+        ok: true,
+        json: async () => ({
+          ok: true,
+          revision: 'rev-should-not-leak',
+          execution: {
+            output: `Landed 1 host-authored page(s) (insert_mode:replace). Deck now has 1 page(s).${note}`,
+            isError: true,
+            mutated: true,
+            summary: 'land_pages 1 (missing images)',
+            revision: 'rev-should-not-leak',
+          },
+        }),
+      }
+    })
+    vi.stubGlobal('fetch', fetch)
+    const tool = tools().find((t) => t.name === 'pptx_land_pages')
+    const result = await tool!.execute(
+      { path: '/tmp/demo.pptx', pages: [PAGE], insert_mode: 'replace' },
+      exec,
+    )
+    expect(result).toEqual({
+      ok: true,
+      output: `落页成功，但有配图失败。页面已写入，不要整批重落。\nLanded 1 host-authored page(s) (insert_mode:replace). Deck now has 1 page(s).${note}`,
+      summary: '落页成功，但有配图失败',
+    })
+    expect(result).not.toHaveProperty('revision')
+  })
+})

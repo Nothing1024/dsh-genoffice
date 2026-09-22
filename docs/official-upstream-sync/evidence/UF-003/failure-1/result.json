@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "package": "official-upstream-sync",
+  "uf": "UF-003",
+  "branch": "failure-1",
+  "run_id": "ous-2026-09-12T19-07-56-943Z",
+  "source_revisions": {
+    "plugin": "unknown",
+    "engine": "c34ca1a4e7dfc3de33780b6a7f79b42075dc4513",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "UF-003-failure-1",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "open-ready",
+          "status": "passed",
+          "expected": "ready",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "docId": "88dcc3652c71cb4de63e9e7605e15064f1467745d6dab200dda52e709005b7ca",
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/land-pages.pptx",
+            "registered": true,
+            "readiness": "ready",
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96",
+            "error": null,
+            "occupied": true,
+            "owner": "287ee003-790f-4d9d-95f9-6104ecf467ea"
+          }
+        },
+        {
+          "name": "land-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "Landed 1 host-authored page(s) (insert_mode:append). Deck now has 2 page(s).",
+              "mutated": true,
+              "summary": "land_pages 1"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "land-appended",
+          "status": "passed",
+          "expected": "OfficialLandKeep",
+          "actual": "<deck outline>\nThe presentation has 2 pages; page 2 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage 1 (slideIndex=0):\n  - e_2 | shape | \"日志验证 / 示例演示文稿 · 商务深蓝风格封面 / Sample Presentation  | …\"\nPage 2 (slideIndex=1):\n  - e_7bac4ad3 | text | \"OfficialLandKeep\"\n(Use read_slide to see element positions/sizes/colors)\n</deck outline>"
+        },
+        {
+          "name": "illegal-rejected",
+          "status": "passed",
+          "expected": "illegal",
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "land_pages requires a non-empty pages array",
+              "isError": true,
+              "mutated": false,
+              "summary": "land_pages"
+            },
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "illegal-no-partial",
+          "status": "passed",
+          "expected": "kept legal page",
+          "actual": "<deck outline>\nThe presentation has 2 pages; page 2 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage 1 (slideIndex=0):\n  - e_2 | shape | \"日志验证 / 示例演示文稿 · 商务深蓝风格封面 / Sample Presentation  | …\"\nPage 2 (slideIndex=1):\n  - e_7bac4ad3 | text | \"OfficialLandKeep\"\n(Us"
+        },
+        {
+          "name": "stale-revision-rejected",
+          "status": "passed",
+          "expected": "conflict",
+          "actual": {
+            "status": 200,
+            "ok": false,
+            "error": "conflict",
+            "revision": "e94821fca1b60141e466b8a4a0f39a8e0176621615e3b8783ebb63468c802f96"
+          }
+        },
+        {
+          "name": "save-ok",
+          "status": "passed",
+          "expected": true,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "path": "/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/land-pages.pptx",
+            "name": "land-pages.pptx",
+            "mtimeMs": 1789240081345.042
+          }
+        },
+        {
+          "name": "reopen-keeps-land",
+          "status": "passed",
+          "expected": "reopen",
+          "actual": "<deck outline>\nThe presentation has 2 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user's \"page N\" refers to this outline)\nPage 1 (slideIndex=0):\n  - e_2 | shape | \"日志验证 / 示例演示文稿 · 商务深蓝风格封面 / Sample Presentation  | …\"\nPage 2 (slideIndex=1):\n  - e_7bac4ad3 | text | \"OfficialLandKeep\"\n(Use read_slide to see element positions/sizes/colors)\n</deck outline>"
+        },
+        {
+          "name": "original-page-kept",
+          "status": "passed",
+          "expected": "original",
+          "actual": "<deck outline>\nThe presentation has 1 pages; page 1 is currently shown. Canvas 1280×720px.\n(Page order is the current actual order and may differ from generation time or earlier conversation; the user"
+        }
+      ]
+    }
+  ]
+}

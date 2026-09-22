@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "package": "web-feature-completion",
+  "uf": "UF-003",
+  "branch": "failure-1",
+  "run_id": "1ed0ba41-1e8c-407c-853c-9be685e76fa1",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "207a7752b3571b4d201bf409297999d6ffd8a9c5",
+    "engine_root": "/private/tmp/genoffice-official-sync-engine"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "pdf-convert-invalid-format",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "invalid-format-rejected",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "format must be docx, pptx, or xlsx",
+              "isError": true,
+              "summary": "PDF 转换 → rtf"
+            },
+            "revision": "46b1914919e4ff73a055efd76b5dab31f8e7e963437d46eea1932c35bb7eb69c"
+          }
+        },
+        {
+          "name": "empty-format-rejected",
+          "status": "passed",
+          "expected": false,
+          "actual": {
+            "status": 200,
+            "ok": true,
+            "execution": {
+              "output": "format must be docx, pptx, or xlsx",
+              "isError": true,
+              "summary": "PDF 转换"
+            },
+            "revision": "46b1914919e4ff73a055efd76b5dab31f8e7e963437d46eea1932c35bb7eb69c"
+          }
+        },
+        {
+          "name": "invalid-keeps-source",
+          "status": "passed",
+          "expected": "46b1914919e4ff73a055efd76b5dab31f8e7e963437d46eea1932c35bb7eb69c",
+          "actual": "46b1914919e4ff73a055efd76b5dab31f8e7e963437d46eea1932c35bb7eb69c"
+        }
+      ]
+    }
+  ]
+}

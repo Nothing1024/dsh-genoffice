@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "package": "plugin-tool-alignment",
+  "uf": "UF-002",
+  "branch": "failure-2",
+  "run_id": "pta-2026-09-12T17-17-59-551Z",
+  "source_revisions": {
+    "plugin": "5d5ee6d18fa87c40d587a2cc5dd429821946f90b",
+    "engine": "247e3f5c488afb25915e9ee97fe0fd22e27648da"
+  },
+  "status": "passed",
+  "cases": [
+    {
+      "id": "cross-session-open",
+      "status": "passed",
+      "assertions": [
+        {
+          "name": "cross-session-skipped",
+          "status": "passed",
+          "expected": "undefined",
+          "actual": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+command: /usr/local/opt/python@3.14/bin/python3.14 /Users/nothing/.agents/skills/prd-workflow/scripts/board.py /Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/control-session-safety --json
+{
+  "total": 15,
+  "done": 0,
+  "doing": 0,
+  "blocked": [],
+  "ready": [
+    {
+      "seq": "1",
+      "name": "归档基线并建立真实竞态复现入口",
+      "verify": "node ../engine/web/e2e-control-session.mjs --baseline → 七项既有缺陷逐项确认或记录已变更原因；npm --prefix ../engine run typecheck → 保存基线"
+    }
+  ]
+}

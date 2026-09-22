@@ -21,7 +21,7 @@ export interface ControlToolEntry {
   /** upstream skill tool name (AGENT_TOOLS) forwarded to the executor */
   skillName: string
   /** relay control-plane app segment (docx→docs, markdown→markdown, xlsx→sheets, pptx→slides, pdf→pdf) */
-  app: 'docs' | 'markdown' | 'sheets' | 'slides' | 'pdf'
+  app: 'docs' | 'markdown' | 'sheets' | 'slides' | 'pdf' | 'html'
   /** model-visible description: skill discipline + control context */
   description: string
   /** defineTool parameter spec (skill inputSchema + the required `path`) */
@@ -57,11 +57,14 @@ const SLIDES_CONTROL_NOTE =
 const PDF_CONTROL_NOTE =
   '该工具操作 GenOffice 网页版中已打开的 pdf 文档（控制模式）。所有标注/编辑先改 iframe 内状态，只有 pdf_save 或 tab「写入磁盘」才会写回原文件。页码 1 起。'
 
+const HTML_CONTROL_NOTE =
+  '该工具操作 GenOffice 网页版中已打开的 HTML 文档（控制模式）。编辑先改 iframe 内源码，只有 html_save 或 tab「写入磁盘」才会写回原文件。转 Word 前先查 genoffice_services / html_export_docx 可用性，不要引导安装桌面版。'
+
 /**
  * Tool table — the plugin-side mirror of contracts/control-api.md §4.
  * Family counts match contracts/control-api.md §4 and smoke (skill + *_save):
- * docx 11 (10+save), markdown 5 (4+save), xlsx 13 (12+save),
- * pptx 39 (38+save), pdf 21 (20+save).
+ * docx 16 (15+save), markdown 6 (5+save), xlsx 13 (12+save),
+ * pptx 39 (38+save), pdf 21 (20+save), html 5 (4+save/export).
  * Naming uses `_` instead of `:` (provider tool-name pattern ^[a-zA-Z0-9_-]+$;
  * see the contract's §4 separator note, ASM-006 revision).
  */
@@ -271,6 +274,63 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
       '将当前文档内容显式写回原文件（原子写回）。编辑工具只修改网页内状态，只有本工具（或 GenOffice tab 的「写入磁盘」按钮）会真正写盘。',
     parameters: SAVE_PARAMS,
   },
+  {
+    name: 'docx_read_comments',
+    skillName: 'read_comments',
+    app: 'docs',
+    description:
+      DOCS_CONTROL_NOTE +
+      '读取当前文档评论线程（id、作者、正文、锚点）。回复或解决前先调用本工具获取有效 id。',
+    parameters: { path: PATH_PARAM },
+  },
+  {
+    name: 'docx_reply_comment',
+    skillName: 'reply_comment',
+    app: 'docs',
+    description:
+      DOCS_CONTROL_NOTE +
+      '向已有评论线程追加一条回复。parentId 必须是 read_comments 返回的线程 id。',
+    parameters: {
+      path: PATH_PARAM,
+      parentId: { type: 'string', required: true, description: '目标评论线程 id' },
+      text: { type: 'string', required: true, description: '回复正文' },
+    },
+  },
+  {
+    name: 'docx_resolve_comment',
+    skillName: 'resolve_comment',
+    app: 'docs',
+    description:
+      DOCS_CONTROL_NOTE +
+      '将评论线程标记为已解决。id 必须是 read_comments 返回的线程或回复 id。',
+    parameters: {
+      path: PATH_PARAM,
+      id: { type: 'string', required: true, description: '评论或回复 id' },
+    },
+  },
+  {
+    name: 'docx_set_header_footer',
+    skillName: 'set_header_footer',
+    app: 'docs',
+    description:
+      DOCS_CONTROL_NOTE +
+      '设置页眉或页脚文本。kind=header|footer；view=default|first|even。',
+    parameters: {
+      path: PATH_PARAM,
+      kind: { type: 'string', required: true, description: 'header 或 footer' },
+      text: { type: 'string', required: true, description: '页眉/页脚文本，最多 2000 字' },
+      view: { type: 'string', description: 'default / first / even，默认 default' },
+    },
+  },
+  {
+    name: 'docx_read_revisions',
+    skillName: 'read_revisions',
+    app: 'docs',
+    description:
+      DOCS_CONTROL_NOTE +
+      '读取当前文档修订/跟踪更改摘要，不修改文档。',
+    parameters: { path: PATH_PARAM },
+  },
   // ── markdown (app: markdown) ─────────────────────────────────────
   {
     name: 'markdown_get_document_context',
@@ -330,6 +390,23 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
       MARKDOWN_CONTROL_NOTE +
       '将当前文档内容显式写回原文件（原子写回）。编辑工具只修改网页内状态，只有本工具（或 GenOffice tab 的「写入磁盘」按钮）会真正写盘。',
     parameters: SAVE_PARAMS,
+  },
+  {
+    name: 'markdown_apply_ops',
+    skillName: 'apply_ops',
+    app: 'markdown',
+    description:
+      MARKDOWN_CONTROL_NOTE +
+      '按官方 apply_ops 批量执行 insertContent/replaceBlocks 等操作。索引写入前如有用户编辑需先 get_document_context。',
+    parameters: {
+      path: PATH_PARAM,
+      ops: {
+        type: 'array',
+        required: true,
+        description: '官方 MdOp 数组，例如 {op:"insertContent",after:-1,markdown:"…"}',
+        items: { type: 'object', additionalProperties: true },
+      },
+    },
   },
   // ── xlsx (app: sheets) ──────────────────────────────────────────────
   {
@@ -695,19 +772,30 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     },
   },
   {
-    // UNREGISTERED (bridge-missing) — 上游放开后需先修键（xPx→x 等）再暴露
-    name: 'pptx_insert_web_image',
+    name: 'pptx_insert_image',
     skillName: 'insert_web_image',
     app: 'slides',
-    description: SLIDES_CONTROL_NOTE + '把网络图片插入当前页（返回更新页 + 新元素 id）。',
+    description:
+      SLIDES_CONTROL_NOTE +
+      '把本机图片插入指定页。imagePath 必须是本机绝对路径（png/jpeg/webp/gif）；宿主把它发到 loopback 再插入，不要传 http(s) URL，也不要自建静态服务。x/y/w/h 为画布像素（1280×720）。',
     parameters: {
       path: PATH_PARAM,
-      slideIndex: { type: 'integer', required: true },
-      url: { type: 'string', required: true, description: '图片直链' },
-      xPx: { type: 'number' },
-      yPx: { type: 'number' },
-      wPx: { type: 'number' },
-      hPx: { type: 'number' },
+      slideIndex: { type: 'integer', required: true, description: '页码，0 起' },
+      imagePath: { type: 'string', required: true, description: '本机图片绝对路径（png/jpeg/webp/gif）' },
+      x: { type: 'number', required: true, description: '左边距，画布像素' },
+      y: { type: 'number', required: true, description: '上边距，画布像素' },
+      w: { type: 'number', required: true, description: '框宽，画布像素' },
+      h: { type: 'number', required: true, description: '框高，画布像素' },
+    },
+  },
+  {
+    name: 'pptx_create',
+    skillName: 'create',
+    app: 'slides',
+    description:
+      '新建一张空白 pptx（标准 13.333×7.5 英寸、1 页、无母版装饰）并写入 path。已存在的文件会拒绝覆盖。写完后必须再调用 pptx_open。不要复制现有 pptx 当容器：底版的版式装饰会进成稿。',
+    parameters: {
+      path: PATH_PARAM,
     },
   },
   {
@@ -793,7 +881,7 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     app: 'slides',
     description:
       SLIDES_CONTROL_NOTE +
-      '按 brief 由当前会话模型写一页 PageSpec，再 land_pages replace_at（其他页不动）。也可直接传 page_spec 跳过规划。不要把 brief 交给 iframe 打 LLM。先 read_slide；需要图时把真实 http(s) URL 放进 image_urls。',
+      '按 brief 由当前会话模型写一页 PageSpec，再 land_pages replace_at（其他页不动）。也可直接传 page_spec 跳过规划。不要把 brief 交给 iframe 打 LLM。先 read_slide；需要图时把真实 http(s) URL 放进 image_urls。超时或断线只回报结果不确定并请先读稿核实，不会自动重放写入。',
     parameters: {
       path: PATH_PARAM,
       slideIndex: { type: 'integer', required: true, description: '要重做的页（0 起）' },
@@ -836,7 +924,7 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     app: 'slides',
     description:
       SLIDES_CONTROL_NOTE +
-      '把宿主写好的 PageSpec[] 落入当前稿（iframe 只落地，不打 LLM）。pages 每页须有 elements[]，元素含 type/x/y/w/h；画布 1280×720。insert_mode 缺省 replace；replace_at/insert_at 需 pages.length===1 且整数 at_index。落地不写盘。',
+      '把宿主写好的 PageSpec[] 落入当前稿（iframe 只落地，不打 LLM）。pages 每页须有 elements[]，元素含 type/x/y/w/h；画布 1280×720。insert_mode 缺省 replace；replace_at/insert_at 需 pages.length===1 且整数 at_index。落地不写盘。超时或断线只回报结果不确定并请先读稿核实，不会自动重放写入。',
     parameters: {
       path: PATH_PARAM,
       pages: {
@@ -860,7 +948,7 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     app: 'slides',
     description:
       SLIDES_CONTROL_NOTE +
-      '用当前 DSH 会话模型写 PageSpec[]，再 land_pages 落地（不转发 iframe generate_deck，不配 iframe key）。推荐 topic + approx_pages；也可直接传 pages_spec。空白稿出片后解锁 add_text_box / add_shape。落地不写盘。',
+      '用当前 DSH 会话模型写 PageSpec[]，再 land_pages 落地（不转发 iframe generate_deck，不配 iframe key）。推荐 topic + approx_pages；也可直接传 pages_spec。空白稿出片后解锁 add_text_box / add_shape。落地不写盘。超时或断线只回报结果不确定并请先读稿核实，不会自动重放写入。',
     parameters: {
       path: PATH_PARAM,
       topic: { type: 'string', description: '演示主题/需求（与 approx_pages 搭配时由宿主规划，不必手写 pages）' },
@@ -972,15 +1060,45 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     },
   },
   {
-    // UNREGISTERED (bridge-missing) — 上游放开后需先补齐缺参再暴露
     name: 'pptx_add_chart',
     skillName: 'add_chart',
     app: 'slides',
-    description: SLIDES_CONTROL_NOTE + '添加图表（网页版不可用，返回错误）。',
+    description:
+      SLIDES_CONTROL_NOTE +
+      '插入原生图表。kind=bar/barStacked/line/area/pie/doughnut。categories 为分类；series 为 {name, values}；dataSource=user/document/search/sample（必填，sample 须向用户声明为示意）。省略 x/y/w/h 时居中。',
     parameters: {
       path: PATH_PARAM,
       slideIndex: { type: 'integer', required: true },
-      kind: { type: 'string', required: true },
+      kind: {
+        type: 'string',
+        required: true,
+        enum: ['bar', 'barStacked', 'line', 'area', 'pie', 'doughnut'],
+      },
+      title: { type: 'string', description: '图表标题（可选）' },
+      categories: { type: 'array', required: true, items: { type: 'string' }, description: '分类标签' },
+      series: {
+        type: 'array',
+        required: true,
+        description: '数据系列',
+        items: {
+          type: 'object',
+          additionalProperties: true,
+          properties: {
+            name: { type: 'string' },
+            values: { type: 'array', items: { type: 'number' } },
+          },
+        },
+      },
+      dataSource: {
+        type: 'string',
+        required: true,
+        enum: ['user', 'document', 'search', 'sample'],
+        description: '数值来源',
+      },
+      x: { type: 'number' },
+      y: { type: 'number' },
+      w: { type: 'number' },
+      h: { type: 'number' },
     },
   },
   {
@@ -1012,65 +1130,115 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     },
   },
   {
-    // UNREGISTERED (bridge-missing) — 上游放开后需先补齐缺参再暴露
     name: 'pptx_add_table',
     skillName: 'add_table',
     app: 'slides',
-    description: SLIDES_CONTROL_NOTE + '添加表格（网页版不可用，返回错误）。',
+    description:
+      SLIDES_CONTROL_NOTE +
+      '插入原生表格。rows/cols 含表头；cells 为按行文本（可选，缺省为空）。省略 x/y/w/h 时居中。插入后用返回的 element id 调用 edit_table_cell/structure/style。',
     parameters: {
       path: PATH_PARAM,
       slideIndex: { type: 'integer', required: true },
-      rows: { type: 'integer', required: true },
-      cols: { type: 'integer', required: true },
+      rows: { type: 'integer', required: true, description: '行数（含表头）' },
+      cols: { type: 'integer', required: true, description: '列数' },
+      cells: {
+        type: 'array',
+        description: '单元格文本，按行，如 [["Name","Qty"],["A","1"]]',
+        items: { type: 'array', items: { type: 'string' } },
+      },
+      x: { type: 'number' },
+      y: { type: 'number' },
+      w: { type: 'number' },
+      h: { type: 'number' },
     },
   },
   {
     name: 'pptx_edit_table_cell',
     skillName: 'edit_table_cell',
     app: 'slides',
-    description: SLIDES_CONTROL_NOTE + '编辑表格单元格文本（网页版不可用，返回错误）。',
+    description: SLIDES_CONTROL_NOTE + '整格替换表格单元格文本。sourceId 为表格元素 id；row/col 从 0 起；paragraphs 为富文本段落数组。',
     parameters: {
       path: PATH_PARAM,
       slideIndex: { type: 'integer', required: true },
-      sourceId: { type: 'string', required: true },
-      cellId: { type: 'string', required: true },
-      text: { type: 'string', required: true },
+      sourceId: { type: 'string', required: true, description: '表格元素 id' },
+      row: { type: 'integer', required: true, description: '行号（0 起）' },
+      col: { type: 'integer', required: true, description: '列号（0 起）' },
+      paragraphs: {
+        type: 'array',
+        required: true,
+        description: '替换后的单元格段落',
+        items: { type: 'object', additionalProperties: true },
+      },
     },
   },
   {
     name: 'pptx_edit_table_structure',
     skillName: 'edit_table_structure',
     app: 'slides',
-    description: SLIDES_CONTROL_NOTE + '表格行列增删（网页版不可用，返回错误）。',
+    description: SLIDES_CONTROL_NOTE + '增删表格行列。kind=insert-row/delete-row/insert-col/delete-col；index 为 0 起行列号；insert 默认插在其后，before=true 插在其前。',
     parameters: {
       path: PATH_PARAM,
       slideIndex: { type: 'integer', required: true },
-      sourceId: { type: 'string', required: true },
-      action: { type: 'string', required: true, enum: ['addRow', 'addCol', 'delRow', 'delCol'] },
+      sourceId: { type: 'string', required: true, description: '表格元素 id' },
+      kind: {
+        type: 'string',
+        required: true,
+        enum: ['insert-row', 'delete-row', 'insert-col', 'delete-col'],
+      },
+      index: { type: 'integer', required: true, description: '行/列号（0 起）' },
+      before: { type: 'boolean', description: 'insert 时为 true 则插在 index 之前' },
     },
   },
   {
     name: 'pptx_edit_table_style',
     skillName: 'edit_table_style',
     app: 'slides',
-    description: SLIDES_CONTROL_NOTE + '编辑表格样式（网页版不可用，返回错误）。',
+    description: SLIDES_CONTROL_NOTE + '修改表格样式。styleName 预设优先：none/lightGrid/zebraBlue/zebraGray/headerDarkBlue/headerOrange/noBorder/fullBorder。也可单独设表头行、隔行、底纹和边框。',
     parameters: {
       path: PATH_PARAM,
       slideIndex: { type: 'integer', required: true },
-      sourceId: { type: 'string', required: true },
-      style: { type: 'object', required: true, additionalProperties: true },
+      sourceId: { type: 'string', required: true, description: '表格元素 id' },
+      styleName: { type: 'string', description: '预设样式名，优先级最高' },
+      firstRow: { type: 'boolean', description: '强调首行表头' },
+      bandRow: { type: 'boolean', description: '隔行变色' },
+      shadingColor: { type: 'string', description: '底纹 #RRGGBB，none 清除' },
+      borderColor: { type: 'string', description: '边框 #RRGGBB' },
+      borderWidthPt: { type: 'number', description: '边框宽度 pt' },
+      borderPreset: { type: 'string', enum: ['all', 'none'] },
     },
   },
   {
     name: 'pptx_edit_chart',
     skillName: 'edit_chart',
     app: 'slides',
-    description: SLIDES_CONTROL_NOTE + '编辑图表数据（网页版不可用，返回错误）。',
+    description: SLIDES_CONTROL_NOTE + '修改图表类型/数据/配色。kind=bar/barStacked/line/area/pie/doughnut。传 series 时必须带 dataSource。',
     parameters: {
       path: PATH_PARAM,
       slideIndex: { type: 'integer', required: true },
-      sourceId: { type: 'string', required: true },
-      data: { type: 'object', required: true, additionalProperties: true },
+      sourceId: { type: 'string', required: true, description: '图表元素 id' },
+      kind: {
+        type: 'string',
+        enum: ['bar', 'barStacked', 'line', 'area', 'pie', 'doughnut'],
+      },
+      categories: { type: 'array', items: { type: 'string' }, description: '分类标签' },
+      series: {
+        type: 'array',
+        description: '数据系列',
+        items: {
+          type: 'object',
+          additionalProperties: true,
+          properties: {
+            name: { type: 'string' },
+            values: { type: 'array', items: { type: 'number' } },
+          },
+        },
+      },
+      dataSource: {
+        type: 'string',
+        enum: ['user', 'document', 'search', 'sample'],
+        description: '传 series 时必填的数值来源',
+      },
+      colorScheme: { type: 'string', description: '配色方案' },
     },
   },
   {
@@ -1113,8 +1281,11 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
     app: 'slides',
     description:
       SLIDES_CONTROL_NOTE +
-      '以一笔事务应用一组官方原子编辑 op（默认 atomic：失败全回滚）。dry_run=true 只校验不改稿。多页/大量元素批处理用这个；单页排版优先 execute_slide_script，单个编辑优先专用工具。' +
-      '网页版走 applyTxn → runTxn（空或超过 50 个 op 拒绝；per_op 失败跳过）。',
+      '以一笔事务应用官方原子编辑 op（默认 isolation=atomic：任一失败全回滚，文档不半改）。dry_run=true 只校验计划、不改稿。最多 50 个 op；空数组或超过 50 直接拒绝。' +
+      '寻址：每个 op 带 target:{slide, el?}。slide 为 0 起页码或耐久 id s_<n>；el 为 read_slide/outline 的元素 id（e_* 耐久）。组合子元素：target.el=子 id 且加 group:"<group id>"。' +
+      '几何单位是文档空间 EMU：1px=9525 EMU（read_slide 报 px，先乘 9525）。字号为 pt。不要把像素坐标直接当 EMU。' +
+      '常用 op：setText {paragraphs:[{runs:[{text}]}]} · setFont {font:{…}} · setFill {fill:"#RRGGBB"|"none"} · setStroke {stroke:{color,widthEmu}|null} · setTransform {box:{x,y,cx,cy},rotDeg?} · addElement {kind,offset} · setTableCell {row,col,paragraphs} · moveSlide {to} · findReplace {find,replace}（走 apply_ops，不要调单独的查找对话框）。' +
+      '未知 op 名会返回完整词表；失败 op 的错误带一行 Usage 签名。先 dry_run 再正式提交。单页排版优先 execute_slide_script，单个编辑优先专用工具。网页版 applyTxn→runTxn；per_op 失败跳过。',
     parameters: {
       path: PATH_PARAM,
       ops: {
@@ -1413,9 +1584,77 @@ export const CONTROL_TOOL_TABLE: ControlToolEntry[] = [
       '将当前文档（含标注与文本改写）显式写回原文件（原子写回，tmp+rename）。编辑工具只修改网页内状态，只有本工具（或 tab「写入磁盘」按钮）会真正写盘。',
     parameters: SAVE_PARAMS,
   },
+  // ── html (app: html) ─────────────────────────────────────────────
+  {
+    name: 'html_get_outline',
+    skillName: 'get_outline',
+    app: 'html',
+    description:
+      HTML_CONTROL_NOTE +
+      '读取 HTML 结构大纲：每行给出行号范围、sid、标签和文本预览。大文档可用 from_sid / depth 收窄。',
+    parameters: {
+      path: PATH_PARAM,
+      depth: { type: 'integer', description: '展开深度，默认 3' },
+      from_sid: { type: 'integer', description: '只看该元素及其子树' },
+    },
+  },
+  {
+    name: 'html_read_source',
+    skillName: 'read_source',
+    app: 'html',
+    description:
+      HTML_CONTROL_NOTE +
+      '按行号或 sid 读取带行号的 HTML 源码片段。长结果分页，page 从 0 起。',
+    parameters: {
+      path: PATH_PARAM,
+      start_line: { type: 'integer' },
+      end_line: { type: 'integer' },
+      sid: { type: 'integer' },
+      page: { type: 'integer' },
+    },
+  },
+  {
+    name: 'html_apply_ops',
+    skillName: 'apply_ops',
+    app: 'html',
+    description:
+      HTML_CONTROL_NOTE +
+      '按官方 apply_ops 批量改 HTML，整批校验后全成或全败。ops 含 str_replace / replace_element / set_inner_html / set_text / insert_html / remove / move / set_attr / set_style。',
+    parameters: {
+      path: PATH_PARAM,
+      ops: {
+        type: 'array',
+        required: true,
+        description: '官方 HtmlOp 数组',
+        items: { type: 'object', additionalProperties: true },
+      },
+      summary: { type: 'string', description: '给用户看的一句摘要' },
+    },
+  },
+  {
+    name: 'html_save',
+    skillName: 'save',
+    app: 'html',
+    description:
+      HTML_CONTROL_NOTE +
+      '将当前 HTML 显式写回原文件（原子写回）。编辑工具只改网页内状态，只有本工具或 tab「写入磁盘」会真正写盘。',
+    parameters: SAVE_PARAMS,
+  },
+  {
+    name: 'html_export_docx',
+    skillName: 'export_docx',
+    app: 'html',
+    description:
+      HTML_CONTROL_NOTE +
+      '把当前 HTML 转为 Word 并写 dest。先查 /api/html/docx/ready；不可用时只报告 reason，不要求安装桌面版。非法 HTML、外链或取消不会写出 dest。',
+    parameters: {
+      path: PATH_PARAM,
+      dest: { type: 'string', description: '目标 docx 绝对路径；省略则与源同目录同名 .docx' },
+    },
+  },
 ]
 
-/** Write-back trigger (BR-008). Only the five `*_save` rows; `save_style_template` is a skill, not disk write-back. */
+/** Write-back trigger (BR-008). Only `*_save` rows; `save_style_template` / `export_docx` are not disk write-back of the source. */
 export function isSaveEntry(entry: ControlToolEntry): boolean {
   return entry.skillName === 'save'
 }

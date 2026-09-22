@@ -1,0 +1,6 @@
+[control] stream open (docId=e43efb87…)
+[control] executor registered (/tmp/genoffice-official-sync/ous-2026-09-12T19-07-56-943Z/invalid-open.md)
+[markdown] load failed: Error: load-error: markdown is not valid UTF-8
+    at ej (http://127.0.0.1:18787/markdown/assets/index-CanjeZUz.js:5:2816)
+    at Object.readFile (http://127.0.0.1:18787/markdown/assets/index-CanjeZUz.js:5:6869)
+    at async http://127.0.0.1:18787/markdown/assets/index-CanjeZUz.js:679:3385

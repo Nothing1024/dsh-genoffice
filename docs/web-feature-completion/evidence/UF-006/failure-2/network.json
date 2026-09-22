@@ -1,0 +1,47 @@
+{
+  "events": [
+    {
+      "status": "error",
+      "ok": false,
+      "jobId": "8dc48a17-32c1-4b13-b776-e599ca601273",
+      "progress": 10,
+      "dest": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-docx/fail.docx",
+      "error": "html-docx-fail",
+      "canceled": false,
+      "available": true
+    },
+    {
+      "status": 200,
+      "ok": false,
+      "error": "invalid-html",
+      "available": true
+    },
+    {
+      "status": 200,
+      "ok": false,
+      "error": "blocked-external-resource",
+      "available": true
+    },
+    {
+      "status": "cancelled",
+      "ok": false,
+      "jobId": "35582713-f8c4-4408-a5b3-4044581e1bba",
+      "progress": 10,
+      "dest": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-docx/cancel.docx",
+      "error": "cancelled",
+      "canceled": true,
+      "available": true
+    },
+    {
+      "status": "success",
+      "ok": true,
+      "jobId": "cb915b7c-3ea9-4257-99d3-5d23d0cbc791",
+      "progress": 100,
+      "dest": "/Users/nothing/workspace/dsh/plugin/dsh-genoffice/plugin/docs/web-feature-completion/evidence/phase-0/work-html-docx/keep.docx",
+      "error": null,
+      "canceled": false,
+      "available": true
+    }
+  ],
+  "count": 5
+}

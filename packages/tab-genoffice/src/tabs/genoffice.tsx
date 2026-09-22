@@ -1,17 +1,19 @@
 /**
  * GenOffice tab panel: relay-backed file browser.
  *
- * Opening a previewable file calls `openTab` for a per-path document tab
+ * Opening a previewable file calls `openResource` for a per-path document tab
  * instead of replacing this list. Initial list uses session cwd
  * (empty string = missing → homedir fallback). Path bar is a breadcrumb
  * with type-to-jump (BR-008 / BR-009).
  */
 import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent, ReactNode } from 'react'
-import type { TabComponentProps } from 'dsh-better-sidebar'
+import type { SidebarPaneTabProps } from '../standard/sidebar.ts'
 import { TAB_ICON_PROPS } from './icon.tsx'
 import { PREVIEWABLE, RELAY_BASE, getRelayOk, getRelayReady, launchRelay, noteRelayOk, probeRelay, probeRelayLaunch, subscribeRelay } from './relay.ts'
-import { fileTabSeed } from './file-tab.ts'
+import { isClaimedPath } from './file-tab.ts'
+import { fileAddressFor } from './file-address.ts'
+import { GENOFFICE_FILE_KIND } from '../standard/sidebar.ts'
 import css from './genoffice.module.css'
 
 interface DirEntry {
@@ -62,11 +64,6 @@ function FileIcon(): ReactNode {
       <path d="M9 2v3h3M6.5 8.5h3M6.5 11h3" />
     </svg>
   )
-}
-
-function sessionCwd(cwd: string | undefined): string | undefined {
-  if (cwd === undefined || cwd === '') return undefined
-  return cwd
 }
 
 interface Crumb {
@@ -180,8 +177,14 @@ function PathBar(props: {
   )
 }
 
-export function GenOfficePanel(props: TabComponentProps): ReactNode {
-  const cwd = sessionCwd(props.scope.cwd)
+export function GenOfficePanel(props: SidebarPaneTabProps): ReactNode {
+  const info = props.useTabInfo()
+  const sessionId = props.sessionId ?? info.sessionId
+  const rawCwd = props.useSessions?.((sessions) => {
+    const id = sessionId ?? sessions.current
+    return id === undefined ? undefined : sessions.byId?.[id]?.cwd
+  })
+  const cwd = rawCwd === undefined || rawCwd === '' ? undefined : rawCwd
   const [path, setPath] = useState<string>('')
   const [parent, setParent] = useState<string | undefined>(undefined)
   const [entries, setEntries] = useState<DirEntry[] | null>(null)
@@ -272,7 +275,13 @@ export function GenOfficePanel(props: TabComponentProps): ReactNode {
     const ext = entry.ext ?? ''
     if (PREVIEWABLE[ext] === undefined) return
     const abs = joinPath(path, entry.name)
-    props.ctx.betterSidebar.openTab(fileTabSeed(abs), props.scope)
+    const sid = sessionId ?? 'unknown'
+    const address = fileAddressFor(sid, cwd, abs)
+    if (isClaimedPath(abs)) {
+      info.tab.actions.openResource(address, { kind: GENOFFICE_FILE_KIND })
+    } else {
+      info.tab.actions.openResource(address)
+    }
   }
 
   const visibleEntries = entries === null ? null : showHidden ? entries : entries.filter((e) => !e.hidden)
