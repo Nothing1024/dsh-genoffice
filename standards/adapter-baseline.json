@@ -6,7 +6,6 @@
       "@deepseek-ai/dsh-client-locale/client",
       "@deepseek-ai/dsh-host-webserver",
       "@deepseek-ai/dsh-llm",
-      "@deepseek-ai/dsh-llm/message",
       "@deepseek-ai/dsh-llm/types",
       "@deepseek-ai/dsh-system-prompt",
       "@deepseek-ai/dsh-tools"

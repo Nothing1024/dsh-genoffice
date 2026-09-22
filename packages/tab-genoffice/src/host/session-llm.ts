@@ -7,7 +7,6 @@
  */
 import type { Context } from '@deepseek-ai/cordis'
 import { BlockAssembler } from '@deepseek-ai/dsh-llm'
-import { createUserMessage } from '@deepseek-ai/dsh-llm/message'
 import type { GenerateOptions, StreamChunk } from '@deepseek-ai/dsh-llm/types'
 import type { HostLlmOnce } from './page-plan.ts'
 import { lookupLlm } from './lookup.ts'
@@ -85,11 +84,13 @@ export function sessionPlanLlm(agentValue: unknown): HostLlmOnce {
       provider: route.provider,
       model: route.model,
       system,
+      // One-shot planning input. 0.1.7 removed the catch-all `plugin` message
+      // source; a hand-built call uses an identity-free user message instead.
       messages: [
-        createUserMessage({
+        {
+          role: 'user',
           content: [{ type: 'text', text: user }],
-          source: { kind: 'plugin', plugin: 'dsh-tab-genoffice', form: 'notice', summary: 'host page plan' },
-        }),
+        },
       ],
       signal,
     }

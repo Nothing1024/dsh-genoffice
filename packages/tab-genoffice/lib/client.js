@@ -420,7 +420,7 @@ window.__ModuleLoader__.load({
 		*
 		* `@deepseek-ai/dsh-util-workspace-path` is not a frozen platform module, so
 		* the client bundle cannot import it at runtime. The encoding rules match
-		* 0.1.6-alpha.2 (`:` stays literal; session vs absolute scopes).
+		* 0.1.7-alpha.1 (`:` stays literal; session vs absolute scopes).
 		*/
 		const FILE_ADDRESS_PREFIX = "dsh-resource://file/";
 		function encodeSegment(segment) {
@@ -591,7 +591,7 @@ window.__ModuleLoader__.load({
 		*
 		* Types are local so the standard layer stays free of `@deepseek-ai/*` imports
 		* (adapter-baseline + facet-entry purity). Runtime values come from
-		* `ctx.sidebarRight` / `ctx.sidebarRightTabs` / `ctx.slots` in 0.1.6-alpha.2.
+		* `ctx.sidebarRight` / `ctx.sidebarRightTabs` / `ctx.slots` in 0.1.7-alpha.1.
 		*/
 		const GENOFFICE_KIND = "genoffice";
 		const GENOFFICE_TAB_ID = "@deepseek-ai/dsh-tab-genoffice";
@@ -609,25 +609,25 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var genoffice_module_css_default = {
-			"rowDisabled": "p8QEMa_rowDisabled",
-			"fileName": "p8QEMa_fileName",
-			"panel": "p8QEMa_panel",
-			"list": "p8QEMa_list",
-			"btnDirty": "p8QEMa_btnDirty",
 			"row": "p8QEMa_row",
-			"hint": "p8QEMa_hint",
-			"rowTag": "p8QEMa_rowTag",
-			"pathText": "p8QEMa_pathText",
-			"iframe": "p8QEMa_iframe",
-			"rowName": "p8QEMa_rowName",
-			"toolbar": "p8QEMa_toolbar",
 			"crumb": "p8QEMa_crumb",
-			"rowIcon": "p8QEMa_rowIcon",
+			"toolbar": "p8QEMa_toolbar",
+			"btnDirty": "p8QEMa_btnDirty",
+			"panel": "p8QEMa_panel",
+			"pathText": "p8QEMa_pathText",
+			"fileName": "p8QEMa_fileName",
+			"hint": "p8QEMa_hint",
 			"rowClickable": "p8QEMa_rowClickable",
-			"btn": "p8QEMa_btn",
-			"pathInput": "p8QEMa_pathInput",
 			"pathBar": "p8QEMa_pathBar",
-			"homeNote": "p8QEMa_homeNote"
+			"btn": "p8QEMa_btn",
+			"list": "p8QEMa_list",
+			"rowDisabled": "p8QEMa_rowDisabled",
+			"rowIcon": "p8QEMa_rowIcon",
+			"rowTag": "p8QEMa_rowTag",
+			"homeNote": "p8QEMa_homeNote",
+			"iframe": "p8QEMa_iframe",
+			"pathInput": "p8QEMa_pathInput",
+			"rowName": "p8QEMa_rowName"
 		};
 		//#endregion
 		//#region src/tabs/genoffice.tsx

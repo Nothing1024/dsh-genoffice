@@ -1,4 +1,4 @@
-import { a as HOST_OPTIONAL, c as SYSTEM_PROMPT, d as lookupSkills, f as lookupSystemPrompt, i as runFacet, l as TOOL_REGISTRY, n as coordKey, o as HOST_REQUIRED, p as lookupWebServer, r as createActivation, s as SKILL_REGISTRY, t as host_default, u as WEB_SERVER } from "./host-DoxdaiC0.js";
+import { a as HOST_OPTIONAL, c as SYSTEM_PROMPT, d as lookupSkills, f as lookupSystemPrompt, i as runFacet, l as TOOL_REGISTRY, n as coordKey, o as HOST_REQUIRED, p as lookupWebServer, r as createActivation, s as SKILL_REGISTRY, t as host_default, u as WEB_SERVER } from "./host-D223-2t3.js";
 //#region src/standard/cordis-acquire.ts
 /**
 * 构造一个 ServiceAcquire：

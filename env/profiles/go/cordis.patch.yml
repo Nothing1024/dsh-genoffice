@@ -6,7 +6,7 @@
 # settings document does not start agents on deepseek-flash.
 - id: agent-default-model
   config:
-    provider: anthropic
+    provider: deepseek
     model: deepseek-flash
 
 # Official DeepSeek chat + search are disabled so they cannot bypass deepseek-flash.
@@ -14,3 +14,61 @@
   disabled: true
 - id: web-search-deepseek
   disabled: true
+- id: ui-settings-general
+  name: "@deepseek-ai/dsh-client-ui-settings-general"
+  config:
+    welcomeNoticeVersion: 2026-08-13.1
+- id: llm-pi-ai
+  name: "@deepseek-ai/dsh-llm-pi-ai"
+  config:
+    providers:
+      anthropic:
+        displayName: panpanpan new-api
+        apiKeyEnv: ANTHROPIC_API_KEY
+        api: openai-completions
+        baseURL: https://panpanpan.59188888.xyz/v1
+        compat:
+          thinkingFormat: openai
+          supportsReasoningEffort: true
+          supportsDeveloperRole: false
+        models:
+          - id: deepseek-flash
+            name: deepseek-flash
+            contextWindow: 1048576
+            maxTokens: 384000
+            input:
+              - text
+            reasoningEfforts:
+              off: null
+              low: low
+              medium: medium
+              high: high
+              max: max
+          - id: grok-4.6
+            name: grok-4.6
+            contextWindow: 500000
+            maxTokens: 64000
+            input:
+              - text
+              - image
+            reasoningEfforts:
+              off: null
+              low: low
+              medium: medium
+              high: high
+              xhigh: xhigh
+      deepseek:
+        models:
+          - id: deepseek-flash
+            name: DeepSeek V4 Flash
+            contextWindow: 1000000
+            maxTokens: 384000
+          - id: deepseek-v4-flash-vision-exp
+            name: DeepSeek V4 Flash Vision Exp
+            contextWindow: 1000000
+            maxTokens: 384000
+          - id: deepseek-v4-pro
+            name: DeepSeek V4 Pro
+            contextWindow: 1000000
+            maxTokens: 384000
+        apiKeyEnv: DEEPSEEK_API_KEY

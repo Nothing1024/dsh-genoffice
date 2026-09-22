@@ -5,7 +5,6 @@ import { spawn } from "node:child_process";
 import { accessSync, constants } from "node:fs";
 import { defineTool } from "@deepseek-ai/dsh-tools";
 import { BlockAssembler } from "@deepseek-ai/dsh-llm";
-import { createUserMessage } from "@deepseek-ai/dsh-llm/message";
 //#region src/host/lookup.ts
 function isLlmStreamService(v) {
 	if (typeof v !== "object" || v === null) return false;
@@ -1512,18 +1511,13 @@ function sessionPlanLlm(agentValue) {
 			provider: route.provider,
 			model: route.model,
 			system,
-			messages: [createUserMessage({
+			messages: [{
+				role: "user",
 				content: [{
 					type: "text",
 					text: user
-				}],
-				source: {
-					kind: "plugin",
-					plugin: "dsh-tab-genoffice",
-					form: "notice",
-					summary: "host page plan"
-				}
-			})],
+				}]
+			}],
 			signal
 		};
 		if (maxTokens !== void 0) options.maxTokens = maxTokens;
