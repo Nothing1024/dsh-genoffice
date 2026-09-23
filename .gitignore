@@ -3,6 +3,7 @@ node_modules/
 
 # test / tool caches
 .vite/
+__pycache__/
 coverage/
 *.tsbuildinfo
 # accidental tsc emit next to TypeScript sources
@@ -20,6 +21,7 @@ env/.anonymous-user-id
 env/sessions/
 env/storages/
 env/settings.yaml
+env/settings.yaml.imported
 env/AGENTS.md
 env/attachments/
 env/profiles/*/node_modules/
@@ -27,3 +29,7 @@ env/profiles/*/pnpm-lock.yaml
 
 # Finder
 .DS_Store
+
+# local-only artifacts: agent session exports, symlinks into /tmp
+omp-session-*.html
+docs/web-runtime-efficiency/isolated-engine
