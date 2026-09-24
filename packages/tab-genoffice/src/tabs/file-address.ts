@@ -3,7 +3,7 @@
  *
  * `@deepseek-ai/dsh-util-workspace-path` is not a frozen platform module, so
  * the client bundle cannot import it at runtime. The encoding rules match
- * 0.1.7-alpha.1 (`:` stays literal; session vs absolute scopes).
+ * 0.1.7-rc.1 (`:` stays literal; session vs absolute scopes).
  */
 
 const FILE_ADDRESS_PREFIX = 'dsh-resource://file/'

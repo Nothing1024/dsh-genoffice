@@ -4,7 +4,7 @@
   "main": "./lib/index.js",
   "description": "GenOffice sidebar tab: relay-backed file browser + control-mode docx/xlsx/pptx preview. Registers on the official right Sidebar (optional) and exposes the genoffice control tools on the host half.",
   "engines": {
-    "dsh": ">=0.1.7-alpha.1"
+    "dsh": ">=0.1.7-rc.1"
   },
   "contributes": {
     "tools": [],

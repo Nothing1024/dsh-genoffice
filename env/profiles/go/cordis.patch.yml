@@ -6,8 +6,9 @@
 # settings document does not start agents on deepseek-flash.
 - id: agent-default-model
   config:
-    provider: deepseek
+    provider: anthropic
     model: deepseek-flash
+    reasoningEffort: max
 
 # Official DeepSeek chat + search are disabled so they cannot bypass deepseek-flash.
 - id: llm-deepseek
@@ -57,6 +58,16 @@
               medium: medium
               high: high
               xhigh: xhigh
+          - id: claude-opus-5
+            name: claude-opus-5
+            input:
+              - text
+          - id: claude-opus-4-6
+            name: claude-opus-4-6
+            input:
+              - text
+        defaultContextWindow: 200000
+        defaultMaxTokens: 32768
       deepseek:
         models:
           - id: deepseek-flash

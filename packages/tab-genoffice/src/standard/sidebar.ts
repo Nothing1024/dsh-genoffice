@@ -3,7 +3,7 @@
  *
  * Types are local so the standard layer stays free of `@deepseek-ai/*` imports
  * (adapter-baseline + facet-entry purity). Runtime values come from
- * `ctx.sidebarRight` / `ctx.sidebarRightTabs` / `ctx.slots` in 0.1.7-alpha.1.
+ * `ctx.sidebarRight` / `ctx.sidebarRightTabs` / `ctx.slots` in 0.1.7-rc.1.
  */
 
 export const GENOFFICE_KIND = 'genoffice'
