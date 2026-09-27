@@ -22,4 +22,4 @@ cd "$GO"
 pnpm install --no-frozen-lockfile
 echo "env/setup: ok"
 echo "boot: $ROOT/boot.sh"
-echo "or:   DSH_HOME=$ROOT npx --yes @deepseek-ai/dsh@0.1.5-rc.2 --profile go --port 3082"
+echo "or:   DSH_HOME=$ROOT npx --yes @deepseek-ai/dsh@0.1.7-rc.2 --profile go --port 3082"
