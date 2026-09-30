@@ -59,7 +59,7 @@
 | git 提交身份未配置 | `git -C ../engine config user.name` | 空（unset） |
 | `fork/eat-official-engine` 比 origin 多 1 个未推送提交 874bd10 | `git -C ../engine rev-list --left-right --count fork/eat-official-engine...origin/fork/eat-official-engine` | `1 0` |
 | fork 当前 HEAD 落后官方 645 个提交；官方 tag 序列 | `git -C ../engine rev-list --count HEAD..upstream/main`；`git tag --merged upstream/main` | 645；v0.10.63 v0.10.488 v0.10.639 v0.10.915 v0.10.1038 v0.10.1467 v0.11.0；main=324b0477 |
-| 合并分支对各 tag 的冲突文件数 | `git merge-tree --write-tree --name-only official-sync-de139a0 <tag>` | 6 / 19 / 15 / 17 / 18 / 22 / 22 / 22 |
+| 合并分支对各 tag 的冲突文件数 | `git merge-tree --write-tree --name-only 1b58f608 <tag>`（原分支 `official-sync-de139a0` 已删，指向同一提交） | 6 / 19 / 15 / 17 / 18 / 22 / 22 / 22 |
 | 合并分支 typecheck、全量单测、7 个 app web:build、e2e-official-sync、e2e-control-session、插件 e2e-plugin-alignment 通过 | 本会话 `npm run typecheck`、`npm test`、`npm run web:build`、`node web/e2e-official-sync.mjs --all` 等 | 全部 exit 0 |
 | sheets-media 保存报 `conflict`，未合并的同步分支同样复现 | `node web/e2e-web-features.mjs --case sheets-media`（合并与基线 worktree 各一次） | `insert-save-ok` failed `{"error":"conflict"}` |
 | relay 跨站写盘：合并版带 `overwrite:true` 可改写已有文件；当前 fork 可新建任意文件 | 隔离端口 curl `Origin: https://evil.example`、`Content-Type: text/plain` POST `/api/file` | 合并版 victim→`pwned`；fork 版改写 `conflict`、新建 `ok:true` |
@@ -92,7 +92,7 @@
 | ASM-001 | 用户会提供 git 提交 name/email；执行前不得编造身份 | 无身份则所有 commit 任务阻塞 | Task 1 开头向用户确认；未给则该任务标 `已阻塞:缺提交身份` |
 | ASM-002 | 用户同意 relay 同源检查（安全改动需确认，已在对话中提出、未明确回复） | 未同意则 BR-003 相关任务不能执行 | Task 1 同时确认；未同意则 Task 3 标 `暂缓:待用户同意安全改动` |
 | ASM-003 | 已开放工具官方改了参数时，评审前"照常注册并在报告中标红"（用户未选定，取对 agent 可用性影响最小的做法） | 行为变化被忽略 | Task 14 实现前向用户确认一次；用户选"暂停注册"则按 BR-006 反例改实现 |
-| ASM-004 | 全部验证通过后把 `fork/eat-official-engine` 快进到合并结果并推送到 origin；本地 main 跟踪改为 origin/main | 改 git 配置与推送需用户同意 | 最终任务前向用户确认；不同意则只推 `sync/consolidate-fork` |
+| ASM-004 | 全部验证通过后把 `main` 快进到 `sync/consolidate-fork` 的合并结果并推送到 origin（origin 只保留 `main`，2026-09-30 已完成前置合并与分支收敛） | 推送需用户同意 | 最终任务前向用户确认；不同意则只保留本地结果 |
 | ASM-005 | 按 tag 合并时每轮冲突可在魔改文件内解决，不需要改动官方核心算法 | 某轮冲突需要重写官方逻辑 | 每轮合并任务记录冲突文件与解决理由；超出预期时阻塞并报告 |
 | ASM-006 | sheets 与 pdf 的编辑器工具定义在 Node 下无法直接 import，工具清单改为由 iframe 执行器在注册时上报（运行时 discovery） | 若浏览器端上报不可行需改方案 | Task 13 实测六个 app 执行器上报结果 |
 
@@ -301,7 +301,7 @@ start → collecting → diffing → report(0 = 无待评审 / 1 = 有待评审)
 | INV-003 | 不向官方仓库推送；不修改官方远程配置之外的 git 设置除非用户同意 | BR-001 | `git remote get-url --push upstream` 仍为 DISABLED |
 | INV-004 | relay 仅绑定 loopback；非本机对端仍 403 | BR-003、UF-004 | curl 从非 loopback 或伪造 Host 仍拒绝 |
 | INV-005 | agent 可见工具名与参数不因本次改造改变（新增评审通过的除外） | BR-002、BR-006 | 注册工具名与参数快照比对 |
-| INV-006 | 用户原工作区 `../engine`（fork/eat-official-engine）在收尾前不被修改 | BR-001 | `git -C ../engine status --short` 前后一致 |
+| INV-006 | 用户原工作区 `../engine`（`main`）在收尾前不被修改 | BR-001 | `git -C ../engine status --short` 前后一致 |
 
 ### 2.5 EVD 证据清单
 
@@ -865,7 +865,7 @@ P0 前置与基线 → P1 安全与已知缺陷 → P2 官方上游合并 → P3
 
 1. 跑 5.1 全部命令。
 2. 核对 INV-003（upstream push 仍禁用）、INV-006（`../engine` 状态未变）。
-3. 向用户确认 ASM-004 后：推送 `sync/consolidate-fork` 到 origin；经同意再快进 `fork/eat-official-engine`、调整本地 main 跟踪。
+3. 向用户确认 ASM-004 后：`git -C ../engine merge --ff-only sync/consolidate-fork`，再 `git -C ../engine push origin main`；不新建远端分支。
 
 **验证**：5.1 全部行 → 通过；`python3 $SPEC_SKILL/scripts/validate_package.py docs/upstream-sync-v011` → 0 FAIL
 
